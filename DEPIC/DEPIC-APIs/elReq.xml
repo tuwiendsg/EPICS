@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<dataElasticityRequirement>
+    <dataElCapSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="numericalElasticityCapability">
+        <dataElasticityConfiguration>
+            <currentValueURL>http://localhost:8080/DataGovernance/webresources/DataAccuracyValue</currentValueURL>
+            <monitoringInterval>60</monitoringInterval>
+            <priceURL>http://localhost:8080/DataGovernance/webresources/DataAccuracyPrice</priceURL>
+        </dataElasticityConfiguration>
+        <priorityOrder>1</priorityOrder>
+        <greaterThanValue>30.0</greaterThanValue>
+        <lessThanValue>70.0</lessThanValue>
+    </dataElCapSet>
+    <dataElCapSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="categoricalElasticityCapability">
+        <dataElasticityConfiguration>
+            <currentValueURL>http://localhost:8080/DataGovernance/webresources/DataAccuracyValue</currentValueURL>
+            <monitoringInterval>60</monitoringInterval>
+            <priceURL>http://localhost:8080/DataGovernance/webresources/DataAccuracyPrice</priceURL>
+        </dataElasticityConfiguration>
+        <priorityOrder>1</priorityOrder>
+        <currentElasticityValueIndex>0</currentElasticityValueIndex>
+        <greaterThanLevel>1</greaterThanLevel>
+        <lessThanLevel>3</lessThanLevel>
+    </dataElCapSet>
+    <dataElCapSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="dataSource">
+        <costURL>http://</costURL>
+        <dataSourceValues>
+            <cost>0.0</cost>
+            <sourceName>shop1</sourceName>
+        </dataSourceValues>
+        <dataSourceValues>
+            <cost>0.0</cost>
+            <sourceName>shop2</sourceName>
+        </dataSourceValues>
+    </dataElCapSet>
+    <dataElCapSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="cost">
+        <lessThan>30.0</lessThan>
+        <priorityOrder>2</priorityOrder>
+    </dataElCapSet>
+</dataElasticityRequirement>

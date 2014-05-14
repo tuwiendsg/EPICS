@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DataSources>
+    <DataSource>
+        <Cost>0.5</Cost>
+        <Name>shop1</Name>
+    </DataSource>
+    <DataSource>
+        <Cost>1.0</Cost>
+        <Name>shop2</Name>
+    </DataSource>
+    <DataSource>
+        <Cost>0.5</Cost>
+        <Name>shop3</Name>
+    </DataSource>
+    <DataSource>
+        <Cost>0.5</Cost>
+        <Name>shop4</Name>
+    </DataSource>
+    <DataSource>
+        <Cost>0.5</Cost>
+        <Name>shop5</Name>
+    </DataSource>
+</DataSources>

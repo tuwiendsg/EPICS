@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<dataElasticityRequirement>
+    <dataElCapSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="numericalElasticityCapability">
+        <dataElasticityConfiguration>
+            <currentValueURL>http://localhost:8080/DataGovernance/webresources/DataAccuracyValue</currentValueURL>
+            <monitoringInterval>60</monitoringInterval>
+            <priceURL>http://128.130.172.216/elfinder/files/download/dataAccuracyPrice.xml</priceURL>
+        </dataElasticityConfiguration>
+        <elasticityCapabilityName>DataAccuracy</elasticityCapabilityName>
+        <priorityOrder>1</priorityOrder>
+        <elasticityValues>
+            <Cost>1.5</Cost>
+            <fromValue>10.0</fromValue>
+            <toValue>30.0</toValue>
+        </elasticityValues>
+        <elasticityValues>
+            <Cost>2.5</Cost>
+            <fromValue>31.0</fromValue>
+            <toValue>70.0</toValue>
+        </elasticityValues>
+        <elasticityValues>
+            <Cost>3.5</Cost>
+            <fromValue>71.0</fromValue>
+            <toValue>90.0</toValue>
+        </elasticityValues>
+        <elastictyBoundary>
+            <lowerBoundary>10.0</lowerBoundary>
+            <upperBoundary>90.0</upperBoundary>
+        </elastictyBoundary>
+        <greaterThanValue>15.0</greaterThanValue>
+        <lessThanValue>85.0</lessThanValue>
+    </dataElCapSet>
+    <dataElCapSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="categoricalElasticityCapability">
+        <dataElasticityConfiguration>
+            <currentValueURL>http://localhost:8080/DataGovernance/webresources/DataAccuracyValue</currentValueURL>
+            <monitoringInterval>60</monitoringInterval>
+            <priceURL>http://128.130.172.216/elfinder/files/download/dataProcessingPrice.xml</priceURL>
+        </dataElasticityConfiguration>
+        <elasticityCapabilityName>DataProcessingSpeedLevel</elasticityCapabilityName>
+        <priorityOrder>2</priorityOrder>
+        <elasticityValues>
+            <Cost>1.0</Cost>
+            <Level>1</Level>
+        </elasticityValues>
+        <elasticityValues>
+            <Cost>2.0</Cost>
+            <Level>2</Level>
+        </elasticityValues>
+        <elasticityValues>
+            <Cost>3.0</Cost>
+            <Level>3</Level>
+        </elasticityValues>
+        <elastictyBoundary>
+            <lowerBoundary>1</lowerBoundary>
+            <upperBoundary>3</upperBoundary>
+        </elastictyBoundary>
+        <greaterThanLevel>2</greaterThanLevel>
+        <lessThanLevel>3</lessThanLevel>
+    </dataElCapSet>
+    <dataElCapSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="dataSource">
+        <costURL>http://128.130.172.216/elfinder/files/download/dataSourcePrice.xml</costURL>
+        <dataSourceValues>
+            <Cost>1.0</Cost>
+            <Name>shop2</Name>
+        </dataSourceValues>
+        <dataSourceValues>
+            <Cost>0.5</Cost>
+            <Name>shop3</Name>
+        </dataSourceValues>
+        <dataSourceValues>
+            <Cost>0.5</Cost>
+            <Name>shop5</Name>
+        </dataSourceValues>
+    </dataElCapSet>
+    <dataElCapSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="cost">
+        <lessThan>7.0</lessThan>
+        <priorityOrder>3</priorityOrder>
+    </dataElCapSet>
+</dataElasticityRequirement>
