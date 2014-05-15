@@ -11,5 +11,6 @@
     <module>DEPIC-APIs</module>
     <module>DataGovernance</module>
     <module>sMELA</module>
+    <module>Depic-Common</module>
   </modules>
 </project>
