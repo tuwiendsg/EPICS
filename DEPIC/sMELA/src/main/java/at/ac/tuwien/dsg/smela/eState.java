@@ -51,21 +51,9 @@ public class eState {
     @Produces("application/xml")
     public String getXml() {
         //TODO return proper representation object
-        String xmlString = "";
 
-        try {
-            File file = new File("eState.xml");
-
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            while ((line = br.readLine()) != null) {
-                xmlString += line;
-            }
-            br.close();
-
-        } catch (Exception ex) {
-
-        }
+        Utilities util = new Utilities();
+        String xmlString = util.getCurrentElasticState();
 
         return xmlString;
     }
@@ -82,7 +70,7 @@ public class eState {
     public void putXml(String content) {
         System.out.println("MELA recieve: " + content);
         Utilities util = new Utilities();
-        util.writeElasticStateXMLtoFile(content);
+        util.saveCurrentElasticState(content);
 
     }
 }

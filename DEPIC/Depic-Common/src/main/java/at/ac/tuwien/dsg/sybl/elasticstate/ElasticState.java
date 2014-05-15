@@ -54,6 +54,29 @@ public class ElasticState {
         this.status = status;
     }
 
+    public List getElCapStates() {
+        return elCapStates;
+    }
+    
+    
+    
+    
+    @XmlElement
+    public void setElCapStates(List elCapStates) {
+        this.elCapStates = elCapStates;
+    }
+
+    public double getCurrentBudget() {
+        return currentBudget;
+    }
+    
+    @XmlElement
+    public void setCurrentBudget(double currentBudget) {
+        this.currentBudget = currentBudget;
+    }
+
+  
+    
     
     
     public void addCost(double cost) {
@@ -72,22 +95,8 @@ public class ElasticState {
         elCapStates.add(elCapState);
     }
 
-    public List getElCapStates() {
-        return elCapStates;
-    }
-
-    @XmlElement
-    public void setElCapStates(List elCapStates) {
-        this.elCapStates = elCapStates;
-    }
-
-    public double getCurrentBudget() {
-        return currentBudget;
-    }
-
-    public void setCurrentBudget(double currentBudget) {
-        this.currentBudget = currentBudget;
-    }
+ 
+    
     
 
     public double getCurrentElCapValueFromElCapName(String elCapName) {

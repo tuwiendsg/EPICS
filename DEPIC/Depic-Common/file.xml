@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<elasticState>
+    <currentBudget>1.5</currentBudget>
+    <elCapStates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="categoricalElCapState">
+        <cost>1.5</cost>
+        <currentValue>80</currentValue>
+        <name>DataAccuracy</name>
+    </elCapStates>
+    <elCapStates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="numericalElCapState">
+        <cost>2.5</cost>
+        <currentValue>3.0</currentValue>
+        <name>DataPreprocessing</name>
+    </elCapStates>
+    <status>READY</status>
+    <totalCost>9.0</totalCost>
+</elasticState>

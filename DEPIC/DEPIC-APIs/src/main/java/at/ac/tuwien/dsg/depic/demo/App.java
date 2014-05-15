@@ -74,8 +74,8 @@ public class App
         eDO.submitElasticityRequirement();
         
         //get eState from MELA
-      //  ElasticState eState = eDO.getElasticState();
-        
+        ElasticState eState = eDO.getElasticStateFromMELA();
+        System.out.println("APP - eState: " + eState.getStatus());
         
         
         /*

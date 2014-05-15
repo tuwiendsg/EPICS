@@ -18,7 +18,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,22 +44,17 @@ public class Utilities {
 
         try {
 
-            File file = new File("file.xml");
+            StringWriter objWriter = new StringWriter();
 
             JAXBContext jaxbContext = JAXBContext.newInstance(DataElasticityRequirement.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(daElReq, file);
+            jaxbMarshaller.marshal(daElReq, objWriter);
             jaxbMarshaller.marshal(daElReq, System.out);
             
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            while ((line = br.readLine()) != null) {
-                xmlString +=line;              
-            }
-            br.close();
-
+            xmlString = objWriter.toString();
+            
         } catch (Exception e) {
      
         }
@@ -68,24 +68,16 @@ public class Utilities {
 
         try {
 
-            File file = new File("file.xml");
+            StringWriter objWriter = new StringWriter();
 
             JAXBContext jaxbContext = JAXBContext.newInstance(CategoricalElCapCostDB.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(javaObj, file);
+            jaxbMarshaller.marshal(javaObj, objWriter);
             jaxbMarshaller.marshal(javaObj, System.out);
-            
-            BufferedReader br;
-           
-                br = new BufferedReader(new FileReader(file));
           
-            String line;
-            while ((line = br.readLine()) != null) {
-                xmlString +=line;              
-            }
-            br.close();
+            xmlString = objWriter.toString();
 
         } catch (Exception e) {
      
@@ -102,21 +94,16 @@ public class Utilities {
 
         try {
 
-            File file = new File("file.xml");
+            StringWriter objWriter = new StringWriter();
 
             JAXBContext jaxbContext = JAXBContext.newInstance(ElasticState.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(eState, file);
-            jaxbMarshaller.marshal(eState, System.out);
-            
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            while ((line = br.readLine()) != null) {
-                xmlString +=line;              
-            }
-            br.close();
+            jaxbMarshaller.marshal(eState, objWriter);
+ 
+            //jaxbMarshaller.marshal(eState, System.out);
+           xmlString = objWriter.toString();
 
         } catch (Exception e) {
      
@@ -126,35 +113,7 @@ public class Utilities {
     }
     
     
-    public ElasticState unMarshalXML2ElasticState(String urlStr) {
-
-        
-           ElasticState javaObj=null;
-        
-         try {
- 
-                URL url = new URL(urlStr);
-		File file = new File("file.xml");
-                
-                FileUtils.copyURLToFile(url, file);
-                
-                
-		JAXBContext jaxbContext = JAXBContext.newInstance(ElasticState.class);
- 
-		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		javaObj = (ElasticState) jaxbUnmarshaller.unmarshal(file);
-                
-                
-
- 
-	  } catch (Exception e) {
-		
-	  }
-        
-        
-        return javaObj;
-        
-    }
+    
     
       public String convertNumericalElCostToXML(NumericalElCapCostDB javaObj) {
 
@@ -162,21 +121,16 @@ public class Utilities {
 
         try {
 
-            File file = new File("file.xml");
+            StringWriter objWriter = new StringWriter();
 
             JAXBContext jaxbContext = JAXBContext.newInstance(NumericalElCapCostDB.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(javaObj, file);
+            jaxbMarshaller.marshal(javaObj, objWriter);
             jaxbMarshaller.marshal(javaObj, System.out);
             
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            while ((line = br.readLine()) != null) {
-                xmlString +=line;              
-            }
-            br.close();
+            xmlString = objWriter.toString();
 
         } catch (Exception e) {
      
@@ -191,21 +145,16 @@ public class Utilities {
 
         try {
 
-            File file = new File("file.xml");
+            StringWriter objWriter = new StringWriter();
 
             JAXBContext jaxbContext = JAXBContext.newInstance(DataSourceCostDB.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(javaObj, file);
+            jaxbMarshaller.marshal(javaObj, objWriter);
             jaxbMarshaller.marshal(javaObj, System.out);
             
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            while ((line = br.readLine()) != null) {
-                xmlString +=line;              
-            }
-            br.close();
+            xmlString = objWriter.toString();
 
         } catch (Exception e) {
      
@@ -214,28 +163,38 @@ public class Utilities {
         return xmlString;
     }
       
+      public ElasticState unMarshalXML2ElasticState(String xmlStr) {
+
+        ElasticState javaObj = null;
+         try {
+            
+                StringReader reader = new StringReader(xmlStr);   
+		JAXBContext jaxbContext = JAXBContext.newInstance(ElasticState.class);
+ 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		javaObj = (ElasticState) jaxbUnmarshaller.unmarshal(reader);
+ 
+	  } catch (JAXBException e) {
+	
+	  }
+ 
+         return javaObj;
+         
+        
+    }
       
       public DataSourceCostDB unMarshalXML2DataSourceCostDB(String urlStr){
         
         DataSourceCostDB javaObj=null;
         
          try {
- 
-                URL url = new URL(urlStr);
-		File file = new File("file.xml");
-                
-                FileUtils.copyURLToFile(url, file);
-                
+             
+                StringReader reader = new StringReader(urlToString(urlStr));
                 
 		JAXBContext jaxbContext = JAXBContext.newInstance(DataSourceCostDB.class);
  
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		javaObj = (DataSourceCostDB) jaxbUnmarshaller.unmarshal(file);
-                
-                
-
-           
-                
+		javaObj = (DataSourceCostDB) jaxbUnmarshaller.unmarshal(reader);
+                  
                 List ls = javaObj.getDataSourceValues();
                 
                 for (int i=0;i<ls.size();i++){
@@ -265,16 +224,13 @@ public class Utilities {
         
          try {
  
-                URL url = new URL(urlStr);
-		File file = new File("file.xml");
-                
-                FileUtils.copyURLToFile(url, file);
+                StringReader reader = new StringReader(urlToString(urlStr)); 
                 
                 
 		JAXBContext jaxbContext = JAXBContext.newInstance(NumericalElCapCostDB.class);
  
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		javaObj = (NumericalElCapCostDB) jaxbUnmarshaller.unmarshal(file);
+		javaObj = (NumericalElCapCostDB) jaxbUnmarshaller.unmarshal(reader);
                 
                 String name = javaObj.getName();
                 double lowerBound = javaObj.getLowerBound();
@@ -308,22 +264,20 @@ public class Utilities {
     }
       
       
-      public DataElasticityRequirement unMarsharlXML2DataElasticityRequirement(String dataReqXML){
+      public DataElasticityRequirement unMarsharlXML2DataElasticityRequirement(String xmlStr){
         
         DataElasticityRequirement javaObj=null;
         
          try {
  
           
-		File file = new File("file.xml");
-                
-                FileUtils.writeStringToFile(file, dataReqXML);
+		StringReader reader = new StringReader(xmlStr);
                 
                 
 		JAXBContext jaxbContext = JAXBContext.newInstance(DataElasticityRequirement.class);
  
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		javaObj = (DataElasticityRequirement) jaxbUnmarshaller.unmarshal(file);
+		javaObj = (DataElasticityRequirement) jaxbUnmarshaller.unmarshal(reader);
                 
             
                 
@@ -345,16 +299,13 @@ public class Utilities {
         
          try {
  
-                URL url = new URL( urlStr);
-		File file = new File("file.xml");
-                
-                FileUtils.copyURLToFile(url, file);
+                StringReader reader = new StringReader(urlToString(urlStr));
                 
                 
 		JAXBContext jaxbContext = JAXBContext.newInstance(CategoricalElCapCostDB.class);
  
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		javaObj = (CategoricalElCapCostDB) jaxbUnmarshaller.unmarshal(file);
+		javaObj = (CategoricalElCapCostDB) jaxbUnmarshaller.unmarshal(reader);
                 
                 String name = javaObj.getName();
                 int lowerBound = javaObj.getLowerBound();
@@ -411,6 +362,71 @@ public class Utilities {
 		}
         
         
+    }
+      
+      
+    public String urlToString(String urlStr) {
+
+        String xmlString = "";
+        try {
+            URL website = new URL(urlStr);
+            URLConnection connection = website.openConnection();
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(
+                            connection.getInputStream()));
+
+            StringBuilder response = new StringBuilder();
+            String inputLine;
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+
+            in.close();
+
+            xmlString = response.toString();
+        } catch (Exception ex) {
+
+        }
+
+        return xmlString;
+
+    }
+    
+    public void saveCurrentElasticState(String xmlStr) {
+
+        try {
+        String encodedMessage = URLEncoder.encode(xmlStr, "UTF-8");
+        String urlStr = "http://128.130.172.216/elfinder/files/download/SaveElasticState.php?content=" + encodedMessage;
+        
+            URL website = new URL(urlStr);
+            URLConnection connection = website.openConnection();
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(
+                            connection.getInputStream()));
+
+            StringBuilder response = new StringBuilder();
+            String inputLine;
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+
+            in.close();
+
+          
+        } catch (Exception ex) {
+
+        }
+
+ 
+
+    }
+    
+    
+    public String getCurrentElasticState() {
+        
+        return urlToString("http://128.130.172.216/elfinder/files/download/eState.xml");
     }
 
 }

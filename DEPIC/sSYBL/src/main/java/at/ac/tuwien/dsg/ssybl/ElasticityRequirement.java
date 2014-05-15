@@ -8,12 +8,13 @@ package at.ac.tuwien.dsg.ssybl;
 
 import at.ac.tuwien.dsg.depic.dataelasticityrequirement.DataElasticityRequirement;
 import at.ac.tuwien.dsg.depic.utility.MELARestWS;
+
 import at.ac.tuwien.dsg.depic.utility.Utilities;
 import at.ac.tuwien.dsg.sybl.controller.DataElasticityController;
 import at.ac.tuwien.dsg.sybl.elasticstate.ElasticState;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.PathParam;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
