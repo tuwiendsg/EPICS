@@ -6,6 +6,7 @@
 
 package at.ac.tuwien.dsg.depic.demo;
 
+import at.ac.tuwien.dsg.depic.configuration.Configuration;
 import at.ac.tuwien.dsg.depic.dataelasticitycapabilities.CategoricalElasticityValue;
 import at.ac.tuwien.dsg.depic.dataelasticitycapabilities.DataSourceValue;
 import at.ac.tuwien.dsg.depic.dataelasticitycapabilities.NumericalElasticityValue;
@@ -19,7 +20,7 @@ import at.ac.tuwien.dsg.depic.utility.Utilities;
  *
  * @author Jun
  */
-public class TestGenerateCategoricalElCapXML {
+public class Test {
 
     /**
      * @param args the command line arguments
@@ -27,7 +28,9 @@ public class TestGenerateCategoricalElCapXML {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        testNumericalXML();
+        Configuration conf = new Configuration();
+        conf.setConf();
+        conf.getConf();
     }
     
     public static void testCategoricalXML(){

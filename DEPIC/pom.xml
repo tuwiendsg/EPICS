@@ -9,8 +9,8 @@
   <modules>
     <module>sSYBL</module>
     <module>DEPIC-APIs</module>
-    <module>DataGovernance</module>
     <module>sMELA</module>
     <module>Depic-Common</module>
+    <module>DataGovernance</module>
   </modules>
 </project>

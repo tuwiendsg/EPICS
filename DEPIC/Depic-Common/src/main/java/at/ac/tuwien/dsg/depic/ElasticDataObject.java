@@ -7,6 +7,7 @@
 package at.ac.tuwien.dsg.depic;
 
 import at.ac.tuwien.dsg.depic.dataelasticityrequirement.DataElasticityRequirement;
+import at.ac.tuwien.dsg.depic.utility.DataGovernanceRestWS;
 import at.ac.tuwien.dsg.depic.utility.MELARestWS;
 import at.ac.tuwien.dsg.depic.utility.SYBLRestWS;
 import at.ac.tuwien.dsg.depic.utility.Utilities;
@@ -55,6 +56,16 @@ public class ElasticDataObject {
 
         
     }
+    
+    public void startService(){
+        // call data governance with eState
+        DataGovernanceRestWS restWS = new DataGovernanceRestWS();
+        
+        
+        restWS.startDataService("eState", getDataFuct().getDataFunctionalityURL());
+        
+    }
+    
 
     public ElasticState geteState() {
         return eState;
@@ -63,6 +74,16 @@ public class ElasticDataObject {
     public void seteState(ElasticState eState) {
         this.eState = eState;
     }
+
+    public DataFunctionality getDataFuct() {
+        return dataFuct;
+    }
+
+    public void setDataFuct(DataFunctionality dataFuct) {
+        this.dataFuct = dataFuct;
+    }
+    
+    
     
    
     

@@ -41,7 +41,7 @@ public class App
                 .lessThanLevel(3)
                 .greaterThanLevel(2)
                 .withPriorityOrder(2);
-        
+            
         DataSource dataSource = new DataSource()
                 .withCostURL("http://128.130.172.216/elfinder/files/download/dataSourcePrice.xml");
     //    dataSource.addDataSource("shop1");
@@ -64,31 +64,22 @@ public class App
         
         
         DataFunctionality dataFunc = new DataFunctionality()
-                .withDataFunctionalityURL("http");
+                .withDataFunctionalityURL("http://localhost:8080/DataGovernance/webresources/bargraph");
         
         ElasticDataObject eDO = new ElasticDataObject()
                 .withDataElasticityRequirement(dataElReq)
                 .withDataFunctionality(dataFunc);
         
         //submit to SYBL
-        eDO.submitElasticityRequirement();
+        //eDO.submitElasticityRequirement();
         
         //get eState from MELA
-        ElasticState eState = eDO.getElasticStateFromMELA();
-        System.out.println("APP - eState: " + eState.getStatus());
+        //ElasticState eState = eDO.getElasticStateFromMELA();
+        //System.out.println("APP - eState: " + eState.getStatus());
         
         
-        /*
-        NumericalElasticityValue elVal1 = new NumericalElasticityValue(10, 90, 1.5);
-        NumericalElasticityValue elVal2 = new NumericalElasticityValue(50, 70, 2.5);
-        List elVals = new ArrayList();
-        elVals.add(elVal1);
-        elVals.add(elVal2);
-        dataAccuracy.setElasticityValues(elVals);
-        */
-        
-        
-        
+        //startService
+        eDO.startService();
         
         
                 

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.datagovernance.monitoring;
+package at.ac.tuwien.dsg.datagovernance;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -20,36 +20,39 @@ import javax.ws.rs.Produces;
  *
  * @author Jun
  */
-@Path("DataAccuracyPrice")
-public class DataAccuracyPrice {
+@Path("bargraph")
+public class RenderBarGraph {
 
     @Context
     private UriInfo context;
 
     /**
-     * Creates a new instance of DataAccuracyPrice
+     * Creates a new instance of RenderBarGraph
      */
-    public DataAccuracyPrice() {
+    public RenderBarGraph() {
     }
 
     /**
-     * Retrieves representation of an instance of at.ac.tuwien.dsg.datagovernance.monitoring.DataAccuracyPrice
+     * Retrieves representation of an instance of at.ac.tuwien.dsg.datagovernance.RenderBarGraph
      * @return an instance of java.lang.String
      */
     @GET
     @Produces("application/xml")
     public String getXml() {
-        DataAccuracy da = new DataAccuracy();
-        return da.getDataAccuracyPrice();
+        //TODO return proper representation object
+        throw new UnsupportedOperationException();
     }
 
     /**
-     * PUT method for updating or creating an instance of DataAccuracyPrice
+     * PUT method for updating or creating an instance of RenderBarGraph
      * @param content representation for the resource
      * @return an HTTP response with content of the updated or created resource.
      */
     @PUT
     @Consumes("application/xml")
-    public void putXml(String content) {
+    @Produces("application/xml")
+    public String putXml(String content) {
+        System.out.println("DataGovernance recieve: " + content);
+    return content;
     }
 }

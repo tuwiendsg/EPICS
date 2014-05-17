@@ -12,12 +12,24 @@ package at.ac.tuwien.dsg.depic;
  */
 public class DataFunctionality {
     String dataFunctionalityURL;
+
+    public DataFunctionality() {
+    }
+    
     
     
     public DataFunctionality withDataFunctionalityURL(String url) {
     
-            
+            this.dataFunctionalityURL = url;
             return this;
+    }
+
+    public String getDataFunctionalityURL() {
+        return dataFunctionalityURL;
+    }
+
+    public void setDataFunctionalityURL(String dataFunctionalityURL) {
+        this.dataFunctionalityURL = dataFunctionalityURL;
     }
     
     

@@ -1,3 +1,2 @@
-at/ac/tuwien/dsg/datagovernance/monitoring/DataAccuracyPrice.class
-at/ac/tuwien/dsg/datagovernance/monitoring/ApplicationConfig.class
-at/ac/tuwien/dsg/datagovernance/monitoring/DataAccuracy.class
+at/ac/tuwien/dsg/datagovernance/ApplicationConfig.class
+at/ac/tuwien/dsg/datagovernance/RenderBarGraph.class
