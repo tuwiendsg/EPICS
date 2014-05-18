@@ -53,6 +53,7 @@ public class RenderBarGraph {
     @Produces("application/xml")
     public String putXml(String content) {
         System.out.println("DataGovernance recieve: " + content);
+        System.out.println("Start Service ... ");
     return content;
     }
 }

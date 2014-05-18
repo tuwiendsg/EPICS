@@ -33,13 +33,15 @@ public class DataGovernanceRestWS {
     }
     
     
-    public void startDataService(String eStateXML, String funcURL)  {
+    public void startDataService(String dataFunctID)  {
+        
+        String funcURL="http://localhost:8080/DataGovernance/webresources/bargraph";
 
         System.out.println("call ... " + funcURL);
         try {
 
         //HttpGet method = new HttpGet(url);
-        StringEntity inputKeyspace = new StringEntity(eStateXML);
+        StringEntity inputKeyspace = new StringEntity(dataFunctID);
         
         
         HttpPut request = new HttpPut(funcURL);

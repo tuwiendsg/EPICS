@@ -36,7 +36,7 @@ public class App
         CategoricalElasticityCapability dataProcessingSpeedLevel = new CategoricalElasticityCapability()
                 .withDataElasticityConfiguration(new DataElasticityConfiguration()
                                                         .withCostURL("http://128.130.172.216/elfinder/files/download/dataProcessingPrice.xml")
-                                                        .withCurrentValueURL("http://localhost:8080/DataGovernance/webresources/DataAccuracyValue")
+                                                        .withCurrentValueURL("http://localhost:8080/DataGovernance/webresources/ProcessingSpeedLevel")
                                                         .withMonitoringInterval(60))
                 .lessThanLevel(3)
                 .greaterThanLevel(2)
@@ -64,7 +64,7 @@ public class App
         
         
         DataFunctionality dataFunc = new DataFunctionality()
-                .withDataFunctionalityURL("http://localhost:8080/DataGovernance/webresources/bargraph");
+                .withDataFunctionalityID("bargraph01");
         
         ElasticDataObject eDO = new ElasticDataObject()
                 .withDataElasticityRequirement(dataElReq)

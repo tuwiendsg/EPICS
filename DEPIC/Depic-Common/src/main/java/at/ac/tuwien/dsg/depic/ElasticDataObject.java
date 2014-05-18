@@ -62,7 +62,7 @@ public class ElasticDataObject {
         DataGovernanceRestWS restWS = new DataGovernanceRestWS();
         
         
-        restWS.startDataService("eState", getDataFuct().getDataFunctionalityURL());
+        restWS.startDataService(getDataFuct().getDataFunctionalityID());
         
     }
     

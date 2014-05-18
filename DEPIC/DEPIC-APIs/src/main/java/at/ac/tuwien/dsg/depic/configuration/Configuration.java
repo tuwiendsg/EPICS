@@ -67,6 +67,8 @@ public class Configuration {
                 prop.setProperty("sybl.port", "8080");
                 prop.setProperty("salsa.ip", "localhost");
                 prop.setProperty("salsa.port", "8080");
+                prop.setProperty("datagovernance.ip", "localhost");
+                prop.setProperty("datagovernance.port", "8080");
  
 		// save properties to project root folder
 		prop.store(output, null);

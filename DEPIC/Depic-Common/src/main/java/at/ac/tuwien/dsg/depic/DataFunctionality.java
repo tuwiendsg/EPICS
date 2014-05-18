@@ -11,28 +11,27 @@ package at.ac.tuwien.dsg.depic;
  * @author Jun
  */
 public class DataFunctionality {
-    String dataFunctionalityURL;
+    String dataFunctionalityID;
 
     public DataFunctionality() {
     }
     
     
     
-    public DataFunctionality withDataFunctionalityURL(String url) {
+    public DataFunctionality withDataFunctionalityID(String url) {
     
-            this.dataFunctionalityURL = url;
+            this.dataFunctionalityID = url;
             return this;
     }
 
-    public String getDataFunctionalityURL() {
-        return dataFunctionalityURL;
+    public String getDataFunctionalityID() {
+        return dataFunctionalityID;
     }
 
-    public void setDataFunctionalityURL(String dataFunctionalityURL) {
-        this.dataFunctionalityURL = dataFunctionalityURL;
+    public void setDataFunctionalityID(String dataFunctionalityID) {
+        this.dataFunctionalityID = dataFunctionalityID;
     }
-    
-    
+
     
     
 }
