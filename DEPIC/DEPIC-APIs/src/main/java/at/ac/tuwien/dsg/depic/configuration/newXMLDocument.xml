@@ -16,11 +16,7 @@
             <fromValue>31.0</fromValue>
             <toValue>70.0</toValue>
         </ElasticityRanges>
-        <ElasticityRanges>
-            <Cost>3.5</Cost>
-            <fromValue>71.0</fromValue>
-            <toValue>90.0</toValue>
-        </ElasticityRanges>
+        ...
         <elastictyBoundary>
             <lowerBoundary>10.0</lowerBoundary>
             <upperBoundary>90.0</upperBoundary>
