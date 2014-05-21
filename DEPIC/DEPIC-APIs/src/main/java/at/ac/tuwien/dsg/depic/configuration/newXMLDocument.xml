@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <DataElasticityRequirement>
-    <DataElasticityCapability xsi:type="numericalElasticityCapability" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <DataElasticityCapability xsi:type="numericalElasticityCapability" 
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <DataElasticityConfiguration>
            ...
         </DataElasticityConfiguration>
@@ -24,7 +25,8 @@
         <greaterThanValue>15.0</greaterThanValue>
         <lessThanValue>85.0</lessThanValue>
     </DataElasticityCapability>
-    <DataElasticityCapability xsi:type="categoricalElasticityCapability" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <DataElasticityCapability xsi:type="categoricalElasticityCapability" 
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         ...
     </DataElasticityCapability>
 </DataElasticityRequirement>
