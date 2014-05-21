@@ -2,28 +2,21 @@
 <DataElasticityRequirement>
     <DataElasticityCapability xsi:type="numericalElasticityCapability" 
                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <DataElasticityConfiguration>
-           ...
-        </DataElasticityConfiguration>
-        <ElasticityCapabilityName>DataAccuracy</ElasticityCapabilityName>
-        <PriorityOrder>1</PriorityOrder>
-        <ElasticityRanges>
-            <Cost>1.5</Cost>
-            <fromValue>10.0</fromValue>
-            <toValue>30.0</toValue>
-        </ElasticityRanges>
-        <ElasticityRanges>
-            <Cost>2.5</Cost>
-            <fromValue>31.0</fromValue>
-            <toValue>70.0</toValue>
-        </ElasticityRanges>
         ...
+        <ElasticityCapabilityName>DataAccuracy</ElasticityCapabilityName>
+        
+        <PriorityOrder>1</PriorityOrder>
+        ...
+        
         <elastictyBoundary>
             <lowerBoundary>10.0</lowerBoundary>
             <upperBoundary>90.0</upperBoundary>
         </elastictyBoundary>
+        
         <greaterThanValue>15.0</greaterThanValue>
         <lessThanValue>85.0</lessThanValue>
+    
+        
     </DataElasticityCapability>
     <DataElasticityCapability xsi:type="categoricalElasticityCapability" 
                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
