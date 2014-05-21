@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jun
  */
 
-@XmlRootElement
+@XmlRootElement (name = "NumericalElasticityValue")
 public class NumericalElasticityValue {
     double fromValue;
     double toValue;

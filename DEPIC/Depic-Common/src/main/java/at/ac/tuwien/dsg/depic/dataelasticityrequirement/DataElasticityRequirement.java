@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  */
 @XmlSeeAlso({NumericalElasticityCapability.class, CategoricalElasticityCapability.class, DataSource.class, Cost.class})
 
-@XmlRootElement
+@XmlRootElement (name = "DataElasticityRequirement")
 public class DataElasticityRequirement {
     
     
@@ -107,7 +107,7 @@ public class DataElasticityRequirement {
         return dataElCapSet;
     }
 
-    @XmlElement
+    @XmlElement (name = "DataElasticityCapability")
     public void setDataElCapSet(List dataElCapSet) {
         this.dataElCapSet = dataElCapSet;
     }

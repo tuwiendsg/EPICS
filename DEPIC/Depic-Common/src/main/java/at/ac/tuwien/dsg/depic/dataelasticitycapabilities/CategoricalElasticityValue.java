@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jun
  */
 
-@XmlRootElement
+@XmlRootElement (name = "CategoricalElasticityValue")
 public class CategoricalElasticityValue {
     int elValue;
     double cost;

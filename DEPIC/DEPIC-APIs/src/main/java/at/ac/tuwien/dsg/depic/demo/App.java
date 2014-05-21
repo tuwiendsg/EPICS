@@ -71,11 +71,11 @@ public class App
                 .withDataFunctionality(dataFunc);
         
         //submit to SYBL
-        //eDO.submitElasticityRequirement();
+        eDO.submitElasticityRequirement();
         
         //get eState from MELA
-        //ElasticState eState = eDO.getElasticStateFromMELA();
-        //System.out.println("APP - eState: " + eState.getStatus());
+        ElasticState eState = eDO.getElasticStateFromMELA();
+        System.out.println("APP - eState: " + eState.getStatus());
         
         
         //startService

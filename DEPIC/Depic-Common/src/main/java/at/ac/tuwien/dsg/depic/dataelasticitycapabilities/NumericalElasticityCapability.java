@@ -67,7 +67,7 @@ public class NumericalElasticityCapability extends DataElasticityCapability {
         return elasticityValues;
     }
 
-    @XmlElement
+    @XmlElement (name = "ElasticityRanges")
     public void setElasticityValues(List<NumericalElasticityValue> elasticityValues) {
         this.elasticityValues = elasticityValues;
     }

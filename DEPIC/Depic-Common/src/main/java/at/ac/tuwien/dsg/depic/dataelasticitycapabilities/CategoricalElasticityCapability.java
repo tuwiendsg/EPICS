@@ -61,7 +61,7 @@ public class CategoricalElasticityCapability extends DataElasticityCapability{
         return elastictyBoundary;
     }
 
-    @XmlElement
+    @XmlElement 
     public void setElastictyBoundary(CategoricalElasticityBoundary elastictyBoundary) {
         this.elastictyBoundary = elastictyBoundary;
     }
@@ -99,7 +99,7 @@ public class CategoricalElasticityCapability extends DataElasticityCapability{
         return elasticityValues;
     }
 
-    @XmlElement
+    @XmlElement (name = "ElasticityRanges")
     public void setElasticityValues(List<CategoricalElasticityValue> elasticityValues) {
         this.elasticityValues = elasticityValues;
     }

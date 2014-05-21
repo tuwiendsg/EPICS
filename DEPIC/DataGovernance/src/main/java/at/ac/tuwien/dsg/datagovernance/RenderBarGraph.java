@@ -67,7 +67,7 @@ public class RenderBarGraph {
         String deploymentXML = util.urlToString(conf.getDeploymentScript(content));
         System.out.println("Deployement Script: " + deploymentXML);
         SALSARestWS restWS = new SALSARestWS();
-        restWS.sendDeploymentDescription(deploymentXML);
+        //restWS.sendDeploymentDescription(deploymentXML);
         
         
         

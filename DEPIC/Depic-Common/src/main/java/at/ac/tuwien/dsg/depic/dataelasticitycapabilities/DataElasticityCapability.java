@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jun
  */
 
-@XmlRootElement
+@XmlRootElement (name = "DataElasticityCapability")
 public class DataElasticityCapability {
 
     private String elasticityCapabilityName;
@@ -31,7 +31,7 @@ public class DataElasticityCapability {
         return dataElasticityConfiguration;
     }
 
-    @XmlElement
+    @XmlElement (name = "DataElasticityConfiguration")
     public void setDataElasticityConfiguration(DataElasticityConfiguration dataElasticityConfiguration) {
         this.dataElasticityConfiguration = dataElasticityConfiguration;
     }
@@ -40,7 +40,7 @@ public class DataElasticityCapability {
         return priorityOrder;
     }
 
-    @XmlElement
+    @XmlElement (name = "PriorityOrder")
     public void setPriorityOrder(int priorityOrder) {
         this.priorityOrder = priorityOrder;
     }
@@ -53,7 +53,7 @@ public class DataElasticityCapability {
         return elasticityCapabilityName;
     }
 
-    @XmlElement
+    @XmlElement (name = "ElasticityCapabilityName")
     public void setElasticityCapabilityName(String elasticityCapabilityName) {
         this.elasticityCapabilityName = elasticityCapabilityName;
     }
