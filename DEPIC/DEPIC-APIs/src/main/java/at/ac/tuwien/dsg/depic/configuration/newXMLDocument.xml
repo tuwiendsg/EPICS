@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <DataElasticityRequirement>
-    <DataElasticityCapability xsi:type="numericalElasticityCapability" 
+    <DataElasticityMetric xsi:type="NumericalElasticityMetric" 
                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         ...
-        <ElasticityCapabilityName>DataAccuracy</ElasticityCapabilityName>
+        <ElasticityMetricName>DataAccuracy</ElasticityMetricName>
         ...
         
         <elastictyBoundary>
@@ -13,11 +13,11 @@
         
         <greaterThanValue>15.0</greaterThanValue>
         <lessThanValue>85.0</lessThanValue>
-        <PriorityOrder>3</PriorityOrder>
+        <priorityOrder>3</priorityOrder>
         
-    </DataElasticityCapability>
-    <DataElasticityCapability xsi:type="categoricalElasticityCapability" 
+    </DataElasticityMetric>
+    <DataElasticityMetric xsi:type="CategoricalElasticityMetric" 
                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         ...
-    </DataElasticityCapability>
+    </DataElasticityMetric>
 </DataElasticityRequirement>
