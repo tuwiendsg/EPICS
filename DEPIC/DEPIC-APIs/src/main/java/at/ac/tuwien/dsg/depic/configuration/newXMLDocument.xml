@@ -4,8 +4,6 @@
                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         ...
         <ElasticityCapabilityName>DataAccuracy</ElasticityCapabilityName>
-        
-        <PriorityOrder>1</PriorityOrder>
         ...
         
         <elastictyBoundary>
@@ -15,7 +13,7 @@
         
         <greaterThanValue>15.0</greaterThanValue>
         <lessThanValue>85.0</lessThanValue>
-    
+        <PriorityOrder>3</PriorityOrder>
         
     </DataElasticityCapability>
     <DataElasticityCapability xsi:type="categoricalElasticityCapability" 
