@@ -44,10 +44,10 @@ public class App
             
         DataSource dataSource = new DataSource()
                 .withCostURL("http://128.130.172.216/elfinder/files/download/dataSourcePrice.xml");
-    //    dataSource.addDataSource("shop1");
+        dataSource.addDataSource("shop1");
         dataSource.addDataSource("shop2");
         dataSource.addDataSource("shop3");
-  //      dataSource.addDataSource("shop4");
+        dataSource.addDataSource("shop4");
         dataSource.addDataSource("shop5");
      
         Cost cost = new Cost()
