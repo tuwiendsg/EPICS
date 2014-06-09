@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <DataElasticityRequirement>
-    <DataElasticityMetric xsi:type="NumericalElasticityMetric" 
-                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <DataElasticityMetric 
+        xsi:type="NumericalElasticityMetric" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         
         <elasticityMetricName>DataAccuracy</elasticityMetricName>
+        
         <greaterThanValue>90.0</greaterThanValue>
         <lessThanValue>95.0</lessThanValue>
         <priority>3</priority>
         
     </DataElasticityMetric>
     
-    <DataElasticityMetric xsi:type="CategoricalElasticityMetric" 
-                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <DataElasticityMetric 
+        xsi:type="CategoricalElasticityMetric" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         ...
     </DataElasticityMetric>
         ...
