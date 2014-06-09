@@ -15,7 +15,12 @@
     <DataElasticityMetric 
         xsi:type="CategoricalElasticityMetric" 
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        ...
+        
+        <elasticityMetricName>ProcessingSpeed</elasticityMetricName>
+        <equalValue>medium</equalValue>
+        <equalValue>high</equalValue>
+        <priority>2</priority>
+        
     </DataElasticityMetric>
         ...
 </DataElasticityRequirement>
