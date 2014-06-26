@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DEPICConfiguration>
+    ....
+    <DataElasticityMetrics>
+        <DataElasticityMetric xsi:type="NumericalElasticityMetric"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        ...
+            <ElasticityMetricName>DataCompleteness</ElasticityMetricName>
+            <ControlProcessMatrix>
+                    <ControlProcess>
+                        <Trigger>
+                            <FromRange fromValue=90 toValue=95 />
+                            <ToRange fromValue=95 toValue=100 />
+                        </Trigger>
+                        <ControlActions>
+                            <ControlAction>
+                                <RestURI>.../RestWS/LeastSquaresCurveFitting</RestURI>
+                                <Parameters>
+                                    <Param name="upperBound" value="12.8" />
+                                    <Param name="lowerBound" value="7.9" />
+                                </Parameters>
+                            </ControlAction>
+                        <ControlActions>
+                                
+                    </ControlProcess>
+                    
+                    <ControlProcess>
+                        ...
+                    </ControlProcess>
+                    
+            </ControlProcessMatrix>
+        ...
+        </DataElasticityMetric>
+        
+        ...
+    </DataElasticityMetrics>
+    
+    
+    ...
+</DEPICConfiguration>
