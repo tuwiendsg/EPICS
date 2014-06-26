@@ -32,7 +32,36 @@
         ...
         </DataElasticityMetric>
         
+        
         ...
+        
+        <DataElasticityMetric xsi:type="CategoricalElasticityMetric"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            ...
+            <ElasticityMetricName>Reliability</ElasticityMetricName>
+            <ControlProcessMatrix>
+                <ControlProcess>
+                    <Trigger>
+                        <FromValue val="low" />
+                        <ToValue val="high" />
+                    </Trigger>
+                    <ControlActions>
+                        <ControlAction>
+                            <RestURI>.../RestWS/DeploymentDescription</RestURI>
+                            <DeploymentDescription>.../toscaRelHigh.xml</DeploymentDescription>
+                        </ControlAction>
+                    <ControlActions>
+                            
+                </ControlProcess>
+                        
+                <ControlProcess>
+                            ...
+                </ControlProcess>
+                        
+            </ControlProcessMatrix>
+                    ...
+        </DataElasticityMetric>
+
     </DataElasticityMetrics>
     
     
