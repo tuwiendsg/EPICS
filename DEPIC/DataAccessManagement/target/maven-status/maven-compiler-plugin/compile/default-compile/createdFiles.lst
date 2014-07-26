@@ -1,0 +1,9 @@
+at/ac/tuwien/dsg/dataresourceaccess/demo/App.class
+at/ac/tuwien/dsg/dataresourceaccess/powerconsumption/ICU_DB.class
+at/ac/tuwien/dsg/dataresourceaccess/edorepository/EDORepoAccessManagement.class
+at/ac/tuwien/dsg/dataresourceaccess/ApplicationConfig.class
+at/ac/tuwien/dsg/dataresourceaccess/Configuration.class
+at/ac/tuwien/dsg/dataresourceaccess/PowerconsumptionResource.class
+at/ac/tuwien/dsg/dataresourceaccess/MySqlConnectionManager.class
+at/ac/tuwien/dsg/dataresourceaccess/powerconsumption/PowerConsumptionDB.class
+at/ac/tuwien/dsg/dataresourceaccess/EDORepoResource.class

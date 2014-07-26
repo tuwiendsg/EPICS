@@ -1,0 +1,5 @@
+at/ac/tuwien/dsg/qualityevaluator/datacompleteness/DataCompletenessMeasurement.class
+at/ac/tuwien/dsg/qualityevaluator/App.class
+at/ac/tuwien/dsg/qualityevaluator/restclient/DataObjectRequest.class
+at/ac/tuwien/dsg/qualityevaluator/ApplicationConfig.class
+at/ac/tuwien/dsg/qualityevaluator/QualityEvaluatorResource.class
