@@ -25,12 +25,17 @@ import java.util.logging.Logger;
  */
 public class MongoDBConnection {
     
+    
+ 
+    
     final static String DOMAIN= "ds053429.mongolab.com";
     final static int PORT = 53429;
     final static String USER="junnguyen";
     final static String PASSWORD="siunhan123";
     final static String DBNAME = "edo_repo";
     final static String COLLECTION = "edo";
+    
+    
     
     
     public void setupConnection(String rsID, String dataAndResultString) {
@@ -57,7 +62,7 @@ public class MongoDBConnection {
 
     }
     
-    
+  
 
     public String getRawEDOString(String rsID) {
    

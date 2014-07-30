@@ -25,7 +25,7 @@ public class QoSEvaluator {
     
     public void evaluate(int i, String userID){
         
-        System.out.println("START ...");
+       
         
         
    
@@ -39,16 +39,16 @@ public class QoSEvaluator {
             
             // start quality evaluator
             QualityEvaluatorREST qualityEvaluatorREST = new QualityEvaluatorREST();
-            qualityEvaluatorREST.putXml(key);
+            qualityEvaluatorREST.callQualityEvaluator(key);
              
             // start quality enforcement
-            QualityEnforcementREST qualityEnforcementREST = new QualityEnforcementREST();
-            qualityEnforcementREST.putXml(key);
+       //     QualityEnforcementREST qualityEnforcementREST = new QualityEnforcementREST();
+         //   qualityEnforcementREST.putXml(key);
         
             // start delivery service
-               DeliveryService deliveryService = new DeliveryService();
-               String edoXML = deliveryService.getDeliveryEDO(key);
-               System.out.println("EDO: " + key);
+         //      DeliveryService deliveryService = new DeliveryService();
+         //      String edoXML = deliveryService.getDeliveryEDO(key);
+         //      System.out.println("EDO: " + key);
             
             // reponseTime measurement stop
                monitor.removeOutstandingRequest(i, new Date());
@@ -56,7 +56,7 @@ public class QoSEvaluator {
         
         
         
-        System.out.println("DONE ...");
+       
     }
     
     

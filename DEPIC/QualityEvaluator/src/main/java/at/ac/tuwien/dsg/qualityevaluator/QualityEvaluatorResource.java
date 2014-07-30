@@ -63,14 +63,10 @@ public class QualityEvaluatorResource {
     public String putXml(String content) {
         
         System.out.println("QualityEvaluator: " + content);
-        String[] vals = content.split(";");
         
-        String userID = vals[0];
-        String objID = vals[1];
-        
-        QualityEvaluatorController qualityEvaluatorController = new QualityEvaluatorController();
-        qualityEvaluatorController.startQualityEvaluator(userID, objID);
-        
+         Thread thread = new Thread(new QualityEvaluatorController(content), content);
+        thread.start();
+  
         
         return "OK";
         

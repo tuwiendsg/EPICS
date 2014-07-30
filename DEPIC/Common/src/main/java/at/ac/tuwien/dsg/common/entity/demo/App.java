@@ -42,9 +42,8 @@ public class App {
         
         */
         MongoDBConnection mongoDBConnection = new MongoDBConnection();
-        String xmlStr = mongoDBConnection.getRawEDOString("0;110");
- 
-        System.out.println("xmlStr: " + xmlStr);
+        mongoDBConnection.setupConnection("111", "Ok content saved");
+        
         /*
         DataObject dataObject = new DataObject(itemList);
         

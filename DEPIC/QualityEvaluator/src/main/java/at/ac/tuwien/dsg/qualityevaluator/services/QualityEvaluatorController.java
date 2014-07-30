@@ -12,10 +12,32 @@ import at.ac.tuwien.dsg.qualityevaluator.edo.ElasticDataObjectConstructor;
  *
  * @author Jun
  */
-public class QualityEvaluatorController {
+public class QualityEvaluatorController implements Runnable {
     
-    
-    public void startQualityEvaluator(String userID, String objID){
+    Thread runner;
+    String userID;
+    String objID;
+       
+        
+	public QualityEvaluatorController() {
+	}
+	public QualityEvaluatorController(String content) {
+            
+            String[] vals = content.split(";");
+        
+            this.userID = vals[0];
+            this.objID = vals[1];
+            
+            
+            runner = new Thread(this); // (1) Create a new thread.
+                
+	
+	}
+	public void run() {
+		startQualityEvaluator();
+                
+        }
+    public void startQualityEvaluator(){
         
         
         ElasticDataObjectConstructor elasticDataObjectConstructor = new ElasticDataObjectConstructor();

@@ -3,51 +3,89 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package at.ac.tuwien.dsg.common.rest;
 
-import javax.ws.rs.ClientErrorException;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.WebTarget;
+import java.io.File;
+import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.http.*;
+import org.apache.http.client.*;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.client.methods.*;  //HttpHead, HttpPut, HttpGet, etc...
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 /**
  *
  * @author Jun
  */
+public class QualityEvaluatorREST {
 
+    private CloseableHttpClient httpClient = HttpClients.createDefault();
+    private String ip = "localhost";
+    private String port = "8080";
 
-
-    public  class QualityEvaluatorREST {
-
-        private WebTarget webTarget;
-        private Client client;
-        private static final String BASE_URI = "http://localhost:8080/QualityEvaluator/webresources";
-
-        public QualityEvaluatorREST() {
-            client = javax.ws.rs.client.ClientBuilder.newClient();
-            webTarget = client.target(BASE_URI).path("QualityEvaluator");
-        }
-
-        public String getXml() throws ClientErrorException {
-            WebTarget resource = webTarget;
-            return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(String.class);
-        }
-
-        public String putXml(Object requestEntity) throws ClientErrorException {
-            return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), String.class);
-        }
-
-        public void close() {
-            client.close();
-        }
+    public CloseableHttpClient getHttpClient() {
+        return httpClient;
     }
-    
 
-    
-    
+    public void setHttpClient(CloseableHttpClient httpClient) {
+        this.httpClient = httpClient;
+    }
 
+    public String getIp() {
+        return ip;
+    }
 
-    
-    
-    
-    
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
+
+    public void callQualityEvaluator(String xmlString) {
+
+        
+        try {
+            String url = "http://" + ip + ":" + port + "/QualityEvaluator/webresources/QualityEvaluator";
+
+            //HttpGet method = new HttpGet(url);
+            StringEntity inputKeyspace = new StringEntity(xmlString);
+
+            HttpPut request = new HttpPut(url);
+            request.addHeader("content-type", "application/xml; charset=utf-8");
+            request.addHeader("Accept", "application/xml, multipart/related");
+            request.setEntity(inputKeyspace);
+
+            HttpResponse methodResponse = this.getHttpClient().execute(request);
+
+            int statusCode = methodResponse.getStatusLine().getStatusCode();
+
+          //  System.out.println("Status Code: " + statusCode);
+
+            BufferedReader rd = new BufferedReader(
+                    new InputStreamReader(methodResponse.getEntity().getContent()));
+
+            StringBuilder result = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                result.append(line);
+            }
+
+           // System.out.println("Response String: " + result.toString());
+        } catch (Exception ex) {
+
+        }
+
+    }
+
+}

@@ -26,9 +26,14 @@ public class EDORepoAccessManagement {
         String xmlStr = jaxb.marshallingObject(edo);
         String key = String.valueOf(edo.getObjID()) + ";" + String.valueOf(edo.getUserID());
         
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        mySQLConnection.saveRawEDOStr(key, xmlStr);
+        
+        
+        /*
         MongoDBConnection mongoDBConnection = new MongoDBConnection();
         mongoDBConnection.setupConnection(key, xmlStr);
-        
+        */
     }
     
     

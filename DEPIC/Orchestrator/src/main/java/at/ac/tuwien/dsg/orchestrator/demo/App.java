@@ -10,7 +10,10 @@ import at.ac.tuwien.dsg.common.rest.QualityEvaluatorREST;
 import at.ac.tuwien.dsg.orchestrator.responsetime.Monitor;
 import at.ac.tuwien.dsg.orchestrator.responsetime.QoSEvaluator;
 import at.ac.tuwien.dsg.orchestrator.services.DeliveryService;
+import at.ac.tuwien.dsg.orchestrator.services.OrchestratorService;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -24,21 +27,32 @@ public class App {
     public static void main(String[] args) {
         // TODO code application logic here
 
-        QoSEvaluator eval = new QoSEvaluator();
         
-        int noOfDataObject = 100;
-        int i = 0;
-
-        String userID = "101";
-        while (i < noOfDataObject) {
+        int noOfUser = 100;
+        List<Thread> threadList = new ArrayList<>();
+                    
+                
             
-            eval.evaluate(i, userID);
-
-            System.out.println("AVG Throughput: " + eval.getMonitoringData().getAverageTroughput());
-            System.out.println("AVG response time: " + eval.getMonitoringData().getAverageResponseTime());
-
-            i++;
-        }
+                for (int i=0;i<noOfUser;i++) {
+                    
+                    String userID = String.valueOf(i+1);
+                    Thread ti = new Thread(new OrchestratorService(userID), userID);
+                    threadList.add(ti);
+                }
+                
+               
+                for (Thread t : threadList) {
+                    t.start();
+                }
+            
+             
+                
+		try {
+			//delay for one second
+			Thread.currentThread().sleep(2000);
+		} catch (InterruptedException e) {
+		}
+		
 
     }
 
