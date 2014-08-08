@@ -6,9 +6,16 @@
 
 package at.ac.tuwien.dsg.common.rest;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 /**
  *
@@ -18,27 +25,82 @@ import javax.ws.rs.client.WebTarget;
 
     public class QualityEnforcementREST {
 
-        private WebTarget webTarget;
-        private Client client;
-        private static final String BASE_URI = "http://localhost:8080/QualityEnforcement/webresources";
+     
+         private CloseableHttpClient httpClient = HttpClients.createDefault();
+    private String ip;
+    private String port;
 
-        public QualityEnforcementREST() {
-            client = javax.ws.rs.client.ClientBuilder.newClient();
-            webTarget = client.target(BASE_URI).path("QualityEnforcementService");
+    public QualityEnforcementREST(String ip, String port) {
+        this.ip = ip;
+        this.port = port;
+    }
+    
+    
+    
+    
+    
+
+    public CloseableHttpClient getHttpClient() {
+        return httpClient;
+    }
+
+    public void setHttpClient(CloseableHttpClient httpClient) {
+        this.httpClient = httpClient;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
+
+    public void callQualityEnforcement(String xmlString) {
+
+        
+        try {
+            String url = "http://" + ip + ":" + port + "/QualityEnforcement/webresources/QualityEnforcementService";
+
+          
+            //HttpGet method = new HttpGet(url);
+            StringEntity inputKeyspace = new StringEntity(xmlString);
+
+            HttpPut request = new HttpPut(url);
+            request.addHeader("content-type", "application/xml; charset=utf-8");
+            request.addHeader("Accept", "application/xml, multipart/related");
+            request.setEntity(inputKeyspace);
+
+            HttpResponse methodResponse = this.getHttpClient().execute(request);
+
+            int statusCode = methodResponse.getStatusLine().getStatusCode();
+
+          //  System.out.println("Status Code: " + statusCode);
+
+            BufferedReader rd = new BufferedReader(
+                    new InputStreamReader(methodResponse.getEntity().getContent()));
+
+            StringBuilder result = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                result.append(line);
+            }
+
+           // System.out.println("Response String: " + result.toString());
+        } catch (Exception ex) {
+
         }
 
-        public String getXml() throws ClientErrorException {
-            WebTarget resource = webTarget;
-            return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(String.class);
-        }
-
-        public String putXml(Object requestEntity) throws ClientErrorException {
-            return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), String.class);
-        }
-
-        public void close() {
-            client.close();
-        }
+    }
+        
     }
     
 

@@ -1,6 +1,9 @@
 /Volumes/DATA/NetBeansProjects/DEPIC GITHUB/EPICS/DEPIC/Orchestrator/src/main/java/at/ac/tuwien/dsg/orchestrator/demo/App.java
 /Volumes/DATA/NetBeansProjects/DEPIC GITHUB/EPICS/DEPIC/Orchestrator/src/main/java/at/ac/tuwien/dsg/orchestrator/services/DeliveryService.java
+/Volumes/DATA/NetBeansProjects/DEPIC GITHUB/EPICS/DEPIC/Orchestrator/src/main/java/at/ac/tuwien/dsg/orchestrator/properties/PropertiesConfiguration.java
+/Volumes/DATA/NetBeansProjects/DEPIC GITHUB/EPICS/DEPIC/Orchestrator/src/main/java/at/ac/tuwien/dsg/orchestrator/properties/VMCluster.java
 /Volumes/DATA/NetBeansProjects/DEPIC GITHUB/EPICS/DEPIC/Orchestrator/src/main/java/at/ac/tuwien/dsg/orchestrator/responsetime/Monitor.java
-/Volumes/DATA/NetBeansProjects/DEPIC GITHUB/EPICS/DEPIC/Orchestrator/src/main/java/at/ac/tuwien/dsg/orchestrator/responsetime/QoSEvaluator.java
+/Volumes/DATA/NetBeansProjects/DEPIC GITHUB/EPICS/DEPIC/Orchestrator/src/main/java/at/ac/tuwien/dsg/orchestrator/demo/Conf.java
+/Volumes/DATA/NetBeansProjects/DEPIC GITHUB/EPICS/DEPIC/Orchestrator/src/main/java/at/ac/tuwien/dsg/orchestrator/responsetime/OrchestratorServiceController.java
 /Volumes/DATA/NetBeansProjects/DEPIC GITHUB/EPICS/DEPIC/Orchestrator/src/main/java/at/ac/tuwien/dsg/orchestrator/demo/App2.java
 /Volumes/DATA/NetBeansProjects/DEPIC GITHUB/EPICS/DEPIC/Orchestrator/src/main/java/at/ac/tuwien/dsg/orchestrator/services/OrchestratorService.java

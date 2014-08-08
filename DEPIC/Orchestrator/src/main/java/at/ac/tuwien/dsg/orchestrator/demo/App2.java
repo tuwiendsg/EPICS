@@ -21,8 +21,8 @@ public class App2 {
         // TODO code application logic here
         
         
-        QualityEvaluatorREST qualityEvaluatorREST = new QualityEvaluatorREST();
-            qualityEvaluatorREST.callQualityEvaluator("102;0");
+     //   QualityEvaluatorREST qualityEvaluatorREST = new QualityEvaluatorREST();
+        //    qualityEvaluatorREST.callQualityEvaluator("102;0");
     }
     
 }

@@ -8,8 +8,11 @@ package at.ac.tuwien.dsg.orchestrator.responsetime;
 
 import at.ac.tuwien.dsg.common.rest.QualityEnforcementREST;
 import at.ac.tuwien.dsg.common.rest.QualityEvaluatorREST;
+import at.ac.tuwien.dsg.orchestrator.properties.PropertiesConfiguration;
+import at.ac.tuwien.dsg.orchestrator.properties.VMCluster;
 import at.ac.tuwien.dsg.orchestrator.services.DeliveryService;
 import java.util.Date;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -19,13 +22,25 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jun
  */
-public class QoSEvaluator {
+public class OrchestratorServiceController {
     
     private Monitor monitor = new Monitor(10);
+    private int noOfActiveClusters;
+
+    public OrchestratorServiceController() {
+    }
+
+    
+    
+    
+    
+    
+    
     
     public void evaluate(int i, String userID){
         
        
+        updateNoOfAtiveCluster();
         
         
    
@@ -37,13 +52,23 @@ public class QoSEvaluator {
             // reponseTime measurement start
             monitor.addOutstandingRequest(i, new Date());
             
+            PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
+            List<VMCluster> ls =  propertiesConfiguration.getProperties();
+            
+            VMCluster vmCluster = ls.get(0);
             // start quality evaluator
-            QualityEvaluatorREST qualityEvaluatorREST = new QualityEvaluatorREST();
+            QualityEvaluatorREST qualityEvaluatorREST = new QualityEvaluatorREST(vmCluster.getIp(),vmCluster.getPort());
             qualityEvaluatorREST.callQualityEvaluator(key);
              
-            // start quality enforcement
-       //     QualityEnforcementREST qualityEnforcementREST = new QualityEnforcementREST();
-         //   qualityEnforcementREST.putXml(key);
+          /*  
+            try {
+			//delay for one second
+			Thread.currentThread().sleep(2000);
+		} catch (InterruptedException e) {
+		}
+            */
+            
+            
         
             // start delivery service
          //      DeliveryService deliveryService = new DeliveryService();
@@ -59,7 +84,12 @@ public class QoSEvaluator {
        
     }
     
-    
+    public void updateNoOfAtiveCluster(){
+        
+        
+        
+        
+    }
     
     
     

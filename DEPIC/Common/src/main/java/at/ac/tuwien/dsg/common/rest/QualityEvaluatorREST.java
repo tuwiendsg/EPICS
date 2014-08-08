@@ -25,8 +25,15 @@ import org.apache.http.util.EntityUtils;
 public class QualityEvaluatorREST {
 
     private CloseableHttpClient httpClient = HttpClients.createDefault();
-    private String ip = "localhost";
-    private String port = "8080";
+    private String ip;
+    private String port;
+
+    public QualityEvaluatorREST(String ip, String port) {
+        this.ip = ip;
+        this.port = port;
+    }
+
+
 
     public CloseableHttpClient getHttpClient() {
         return httpClient;

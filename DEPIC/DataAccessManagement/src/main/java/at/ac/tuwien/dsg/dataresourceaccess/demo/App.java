@@ -27,12 +27,20 @@ public class App {
        // conf.printThemAll();
         
        // DataObject dataObject = PowerConsumptionDB.getDataItems();
-       EDORepo edo = new EDORepo(113, 911, "adasdasdasdas", 0.99, 0.0001);
+     /*
+        EDORepo edo = new EDORepo(113, 911, "adasdasdasdas", 0.99, 0.0001);
        
         EDODeliveryAccessManagement eDODeliveryAccessManagement = new EDODeliveryAccessManagement();
         eDODeliveryAccessManagement.save2DeliveryEDORepo(edo);
-
+*/
         
+        
+        String content="2;2";
+        System.out.println("DataAccessManagement: get EDO index " + content);
+        
+        EDORepoAccessManagement repoAccessManagement = new EDORepoAccessManagement();
+        String xmlStr = repoAccessManagement.getRawEDO(content);
+        System.out.println("DataAccessManagement: xmlStr " + xmlStr);
         
     }
 }

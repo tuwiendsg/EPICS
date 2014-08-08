@@ -23,7 +23,7 @@ public class QualityEnforcement {
         
         EDORepoAccessREST repoAccessManagement = new EDORepoAccessREST();
         String xmlString = repoAccessManagement.getElasticDataObjectString(String.valueOf(objectID), userID);
-        System.out.println("QualityEnforcement: " + xmlString);
+        System.out.println("Do QualityEnforcement: " + xmlString);
         
         
         EDORepoJAXB jAXB = new EDORepoJAXB();

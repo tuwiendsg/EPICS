@@ -19,20 +19,13 @@ public class App {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        int noOfDataObjects = 50;
         
-        int i = 0;
+        int objID =1;
+        String userID = "1"; 
         
-    
-        String userID="110";
         
-        while (i < noOfDataObjects) {
-
-            QualityEnforcement qualityEnforcement = new QualityEnforcement();
-            qualityEnforcement.doQualityEnforcement(i, userID);
-            i++;
-            
-        }
+        QualityEnforcement qualityEnforcement = new QualityEnforcement();
+        qualityEnforcement.doQualityEnforcement(objID, userID);
         
     }
     

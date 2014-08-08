@@ -6,7 +6,7 @@
 
 package at.ac.tuwien.dsg.orchestrator.services;
 
-import at.ac.tuwien.dsg.orchestrator.responsetime.QoSEvaluator;
+import at.ac.tuwien.dsg.orchestrator.responsetime.OrchestratorServiceController;
 
 /**
  *
@@ -45,17 +45,17 @@ public class OrchestratorService implements Runnable {
           
           
             
-        int noOfDataObject = 5;
+        int noOfDataObject = 100;
         int i = 0;
 
   
         while (i < noOfDataObject) {
             
            
-            QoSEvaluator eval = new QoSEvaluator();
+            OrchestratorServiceController eval = new OrchestratorServiceController();
             eval.evaluate(i, userID);
 
-            System.out.println("Thread: " + runner.getName() + " - obj: " + i);
+            System.out.println("User: " + runner.getName() + " - obj: " + i);
             System.out.println("Response time: " + eval.getMonitoringData().getAverageResponseTime() + " ms");
         
             

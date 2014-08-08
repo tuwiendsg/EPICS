@@ -54,10 +54,8 @@ public class QualityEnforcementServiceResource {
     @Produces("application/xml")
     public String putXml(String content) {
     
-        System.out.println("QualityEnforcement: " + content);
-        
-        QualityEnforcementController qualityEnforcementController = new QualityEnforcementController();
-        qualityEnforcementController.startQualityEnforcement(content);
+        Thread thread = new Thread(new QualityEnforcementController(content), content);
+        thread.start();
     
         
         return "ok";

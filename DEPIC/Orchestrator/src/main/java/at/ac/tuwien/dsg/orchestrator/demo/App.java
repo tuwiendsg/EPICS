@@ -8,7 +8,7 @@ package at.ac.tuwien.dsg.orchestrator.demo;
 import at.ac.tuwien.dsg.common.rest.QualityEnforcementREST;
 import at.ac.tuwien.dsg.common.rest.QualityEvaluatorREST;
 import at.ac.tuwien.dsg.orchestrator.responsetime.Monitor;
-import at.ac.tuwien.dsg.orchestrator.responsetime.QoSEvaluator;
+import at.ac.tuwien.dsg.orchestrator.responsetime.OrchestratorServiceController;
 import at.ac.tuwien.dsg.orchestrator.services.DeliveryService;
 import at.ac.tuwien.dsg.orchestrator.services.OrchestratorService;
 import java.util.ArrayList;

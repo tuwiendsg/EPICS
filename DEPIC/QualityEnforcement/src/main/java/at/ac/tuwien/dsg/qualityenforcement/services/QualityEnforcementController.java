@@ -12,16 +12,36 @@ import at.ac.tuwien.dsg.qualityenforcement.qodenforcement.QualityEnforcement;
  *
  * @author Jun
  */
-public class QualityEnforcementController {
+public class QualityEnforcementController implements Runnable {
+    
+    Thread runner;
+    String userID;
+    int objID;
+
+    public QualityEnforcementController() {
+    }
     
     
-    
-    public void startQualityEnforcement(String key){
+    public QualityEnforcementController(String content) {
         
-        String[] vals = key.split(";");
+        System.out.println("QualityEnforcement: " + content);
+        String[] vals = content.split(";");
         
-        int objID = Integer.parseInt(vals[1]);
-        String userID= vals[0];
+        objID = Integer.parseInt(vals[1]);
+        userID= vals[0];
+    }
+    
+    
+    public void run() {
+                
+        
+		startQualityEnforcement();
+                
+        }
+    
+    public void startQualityEnforcement(){
+        
+        
         
         QualityEnforcement qualityEnforcement = new QualityEnforcement();
         qualityEnforcement.doQualityEnforcement(objID, userID);

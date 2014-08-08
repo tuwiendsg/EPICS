@@ -6,6 +6,7 @@
 
 package at.ac.tuwien.dsg.qualityevaluator.services;
 
+import at.ac.tuwien.dsg.common.rest.QualityEnforcementREST;
 import at.ac.tuwien.dsg.qualityevaluator.edo.ElasticDataObjectConstructor;
 
 /**
@@ -23,6 +24,8 @@ public class QualityEvaluatorController implements Runnable {
 	}
 	public QualityEvaluatorController(String content) {
             
+            
+            System.out.println("QualityEvaluator: " + content);
             String[] vals = content.split(";");
         
             this.userID = vals[0];
@@ -34,6 +37,7 @@ public class QualityEvaluatorController implements Runnable {
 	
 	}
 	public void run() {
+                
 		startQualityEvaluator();
                 
         }
@@ -42,6 +46,14 @@ public class QualityEvaluatorController implements Runnable {
         
         ElasticDataObjectConstructor elasticDataObjectConstructor = new ElasticDataObjectConstructor();
         elasticDataObjectConstructor.constructEDO(Integer.parseInt(userID), Integer.parseInt(objID));
+        
+        // start quality enforcement
+            System.out.println("Start Enforcement, userUD: " + userID + " , objID: " + objID);
+            QualityEnforcementREST qualityEnforcementREST = new QualityEnforcementREST("localhost","8080");
+            String key = userID +";"+ objID;
+            qualityEnforcementREST.callQualityEnforcement(key);
+        
+        
         
         /*
         int noOfDataObjects = 100;

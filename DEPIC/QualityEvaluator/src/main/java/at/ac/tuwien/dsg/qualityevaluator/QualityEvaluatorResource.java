@@ -62,9 +62,9 @@ public class QualityEvaluatorResource {
     @Produces("application/xml")
     public String putXml(String content) {
         
-        System.out.println("QualityEvaluator: " + content);
         
-         Thread thread = new Thread(new QualityEvaluatorController(content), content);
+        
+        Thread thread = new Thread(new QualityEvaluatorController(content), content);
         thread.start();
   
         

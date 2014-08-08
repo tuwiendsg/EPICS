@@ -64,11 +64,11 @@ public class EDORepoResource {
     @Produces("application/xml")
     public String putXml(String content) {
         
-        System.out.println("DataAccessManagement: get EDO index " + content);
+        System.out.println("DataAccessManagement: EDO index " + content);
         
         EDORepoAccessManagement repoAccessManagement = new EDORepoAccessManagement();
         String xmlStr = repoAccessManagement.getRawEDO(content);
-        System.out.println("DataAccessManagement: xmlStr " + xmlStr);
+        System.out.println("DataAccessManagement: Raw EDO " + xmlStr);
         
         return xmlStr;
         

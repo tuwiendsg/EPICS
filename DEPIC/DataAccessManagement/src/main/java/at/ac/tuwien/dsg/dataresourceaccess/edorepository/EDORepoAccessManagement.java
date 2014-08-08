@@ -6,6 +6,7 @@
 
 package at.ac.tuwien.dsg.dataresourceaccess.edorepository;
 
+import at.ac.tuwien.dsg.common.entity.others.MySQLConnection;
 import at.ac.tuwien.dsg.common.entity.others.EDORepo;
 import at.ac.tuwien.dsg.common.entity.others.EDORepoJAXB;
 import at.ac.tuwien.dsg.common.entity.others.MongoDBConnection;
@@ -42,9 +43,15 @@ public class EDORepoAccessManagement {
         MongoDBConnection mongoDBConnection = new MongoDBConnection();
         String xmlString = mongoDBConnection.getRawEDOString(rsID);
         */
+        
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        String xmlString = mySQLConnection.getRawEDOStr(rsID);
+        
+        /*
+        
         MongoDBConnection mongoDBConnection = new MongoDBConnection();
         String xmlString = mongoDBConnection.getRawEDOString(rsID);
-        
+        */
         
         return xmlString;
     }
