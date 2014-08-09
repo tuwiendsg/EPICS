@@ -25,10 +25,8 @@ public class TimerTest extends TimerTask {
     private static int delta_t=2; // seconds
     private static int maxRunTime =60; // seconds
     private static int currentNoOfUser=0;
-
-    public TimerTest() {
-      
-    }
+    private static List<Thread> threadList;
+   
     
     
     
@@ -63,8 +61,32 @@ public class TimerTest extends TimerTask {
       
         double y = A*Math.sin(omega*t) +A;
         
-        currentNoOfUser = (int)Math.ceil(y);
-            System.out.println(t + " , " + currentNoOfUser);
+        int changeNoOfUser = (int)Math.ceil(y);
+        
+        
+        if (changeNoOfUser>currentNoOfUser) {
+            
+            
+            for (int i=currentNoOfUser;i<changeNoOfUser;i++) {
+                
+                Thread thread_i = threadList.get(i);
+                thread_i.start();
+                
+            }
+            
+            
+            currentNoOfUser = changeNoOfUser;
+            
+        } else {
+            
+            for (int i=changeNoOfUser-1;i<currentNoOfUser;i++) {
+                Thread thread_i = threadList.get(i);
+                thread_i.stop();
+            }
+            
+        }
+        
+            System.out.println(t + " , NoOfUsers:  " + currentNoOfUser);
             
             
         
@@ -73,8 +95,8 @@ public class TimerTest extends TimerTask {
     
     public static void main(String[] args) {
         // init 100 users
-        int maxNoOfUser = 100;
-        List<Thread> threadList = new ArrayList<>();
+        int maxNoOfUser = 5;
+        threadList = new ArrayList<>();
                     
                 
             
