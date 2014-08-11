@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class MySQLConnection {
     
-    private String ip="128.130.172.216";
+    private String ip="localhost";
     private String mySqlConf = "jdbc:mysql://"+ip+":3306/edo_repo?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false";
     private String userName = "root";
     private String password = "123";

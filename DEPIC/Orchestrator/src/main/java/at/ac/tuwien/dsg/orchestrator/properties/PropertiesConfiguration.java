@@ -37,9 +37,9 @@ public class PropertiesConfiguration {
         try {
  
 		output = new FileOutputStream("config.properties");
- 
+
 		// set the properties value
-		prop.setProperty("cluster1.ip", "127.0.0.1");
+		prop.setProperty("cluster1.ip", "128.130.172.216");
 		prop.setProperty("cluster1.port", "8080");
                 
                 prop.setProperty("cluster2.ip", "127.0.0.1");

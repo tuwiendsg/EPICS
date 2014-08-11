@@ -57,6 +57,7 @@ public class OrchestratorServiceController {
             
             VMCluster vmCluster = ls.get(0);
             // start quality evaluator
+            System.out.println("Call Quality Evaluator " + vmCluster.getIp()+":" + vmCluster.getPort());
             QualityEvaluatorREST qualityEvaluatorREST = new QualityEvaluatorREST(vmCluster.getIp(),vmCluster.getPort());
             qualityEvaluatorREST.callQualityEvaluator(key);
              

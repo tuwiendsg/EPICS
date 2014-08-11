@@ -29,7 +29,7 @@ import org.apache.http.util.EntityUtils;
 
 public class DataObjectRequest {
     private CloseableHttpClient httpClient = HttpClients.createDefault();
-    private String ip="128.130.172.216";
+    private String ip="localhost";
     private String port = "8080";
     
     public CloseableHttpClient getHttpClient() {
