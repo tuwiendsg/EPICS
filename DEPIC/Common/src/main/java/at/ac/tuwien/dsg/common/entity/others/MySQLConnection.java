@@ -19,13 +19,16 @@ import java.util.List;
  */
 public class MySQLConnection {
     
+    private String ip="128.130.172.216";
+    private String mySqlConf = "jdbc:mysql://"+ip+":3306/edo_repo?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false";
+    private String userName = "root";
+    private String password = "123";
+    
     
     public void saveRawEDOStr(String rsID, String dataAndResultString) {
 
   
-        String mySqlConf = "jdbc:mysql://localhost:3306/edo_repo?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false";
-        String userName = "root";
-        String password = "";
+        
 
         System.out.println("Raw EDO: " + dataAndResultString);
         String sql = "INSERT INTO edo VALUES ('"+rsID+ "', '"+dataAndResultString+"') ";
@@ -43,9 +46,7 @@ public class MySQLConnection {
     public void saveDeliveryEDOStr(String rsID, String dataAndResultString) {
 
   
-        String mySqlConf = "jdbc:mysql://localhost:3306/edo_repo?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false";
-        String userName = "root";
-        String password = "";
+      
 
         System.out.println("Delivery EDO: " + dataAndResultString);
         String sql = "INSERT INTO edo_delivery VALUES ('"+rsID+ "', '"+dataAndResultString+"') ";
@@ -62,9 +63,7 @@ public class MySQLConnection {
     public String getRawEDOStr(String key){
         
      
-        String mySqlConf = "jdbc:mysql://localhost:3306/edo_repo?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false";
-        String userName = "root";
-        String password = "";
+  
 
         String xmlStr = "";
         String sql = "select * from edo where edo.key='" + key + "'";
@@ -96,10 +95,7 @@ public class MySQLConnection {
     public String getDeliveryEDOStr(String key){
         
      
-        String mySqlConf = "jdbc:mysql://localhost:3306/edo_repo?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false";
-        String userName = "root";
-        String password = "";
-
+    
         String xmlStr = "";
         String sql = "select * from edo where edo.key='" + key + "'";
       

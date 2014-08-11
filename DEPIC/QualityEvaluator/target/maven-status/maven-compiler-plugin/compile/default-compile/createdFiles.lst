@@ -2,6 +2,7 @@ at/ac/tuwien/dsg/qualityevaluator/datacompleteness/DataCompletenessMeasurement.c
 at/ac/tuwien/dsg/qualityevaluator/App.class
 at/ac/tuwien/dsg/qualityevaluator/restclient/DataObjectRequest.class
 at/ac/tuwien/dsg/qualityevaluator/ApplicationConfig.class
+at/ac/tuwien/dsg/qualityevaluator/demo/App.class
 at/ac/tuwien/dsg/qualityevaluator/datacompleteness/ResponseTimeMeasurement.class
 at/ac/tuwien/dsg/qualityevaluator/edo/ElasticDataObjectConstructor.class
 at/ac/tuwien/dsg/qualityevaluator/services/QualityEvaluatorController.class

@@ -28,7 +28,7 @@ public class App {
         // TODO code application logic here
 
         
-        int noOfUser = 100;
+        int noOfUser = 1;
         List<Thread> threadList = new ArrayList<>();
                     
                 

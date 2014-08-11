@@ -10,7 +10,7 @@ import at.ac.tuwien.dsg.common.entity.others.EDORepo;
 import at.ac.tuwien.dsg.dataresourceaccess.Configuration;
 import at.ac.tuwien.dsg.dataresourceaccess.edorepository.EDODeliveryAccessManagement;
 import at.ac.tuwien.dsg.dataresourceaccess.edorepository.EDORepoAccessManagement;
-import at.ac.tuwien.dsg.dataresourceaccess.powerconsumption.ICU_DB;
+
 import at.ac.tuwien.dsg.dataresourceaccess.powerconsumption.PowerConsumptionDB;
 
 /**
@@ -33,7 +33,7 @@ public class App {
         EDODeliveryAccessManagement eDODeliveryAccessManagement = new EDODeliveryAccessManagement();
         eDODeliveryAccessManagement.save2DeliveryEDORepo(edo);
 */
-        
+        /*
         
         String content="2;2";
         System.out.println("DataAccessManagement: get EDO index " + content);
@@ -41,6 +41,11 @@ public class App {
         EDORepoAccessManagement repoAccessManagement = new EDORepoAccessManagement();
         String xmlStr = repoAccessManagement.getRawEDO(content);
         System.out.println("DataAccessManagement: xmlStr " + xmlStr);
+        */
+        
+        PowerConsumptionDB powerConsumptionDB = new PowerConsumptionDB();
+        powerConsumptionDB.getDataItems(0);
+        
         
     }
 }

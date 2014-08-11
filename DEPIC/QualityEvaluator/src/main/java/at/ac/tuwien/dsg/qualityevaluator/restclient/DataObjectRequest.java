@@ -29,7 +29,7 @@ import org.apache.http.util.EntityUtils;
 
 public class DataObjectRequest {
     private CloseableHttpClient httpClient = HttpClients.createDefault();
-    private String ip="localhost";
+    private String ip="128.130.172.216";
     private String port = "8080";
     
     public CloseableHttpClient getHttpClient() {
@@ -61,7 +61,7 @@ public class DataObjectRequest {
         StringBuilder result = new StringBuilder();
         try {
         String url = "http://"+ip+":"+port+"/DataAccessManagement/webresources/powerconsumption";
-
+        System.out.println("Setup Connection to " + url + " ...");
         StringEntity inputKeyspace = new StringEntity(dataObjectIndex);
             
             
@@ -95,7 +95,7 @@ public class DataObjectRequest {
         
         }
         catch (Exception ex) {
-            
+            System.out.println("ex: " + ex.toString());
         }
         
         return result.toString();

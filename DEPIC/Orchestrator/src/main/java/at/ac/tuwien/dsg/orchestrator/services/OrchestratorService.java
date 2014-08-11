@@ -45,7 +45,7 @@ public class OrchestratorService implements Runnable {
           
           
             
-        int noOfDataObject = 100;
+        int noOfDataObject = 5;
         int i = 0;
 
   

@@ -28,7 +28,7 @@ public class PowerConsumptionDB {
         int counter = dataObjectIndex*100;
         String mySqlConf = "jdbc:mysql://localhost:3306/Power?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false";
         String userName = "root";
-        String password = "";
+        String password = "123";
 
         String xmlStr = "";
         String sql = "select * from power_consumption where power_consumption.id>" + counter + " and power_consumption.id<" + (counter + numberOfDataObjects + 1);
