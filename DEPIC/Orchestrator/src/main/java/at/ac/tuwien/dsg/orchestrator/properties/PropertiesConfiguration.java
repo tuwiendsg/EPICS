@@ -13,7 +13,7 @@ package at.ac.tuwien.dsg.orchestrator.properties;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
- import java.io.IOException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class PropertiesConfiguration {
 		prop.setProperty("cluster1.ip", "128.130.172.216");
 		prop.setProperty("cluster1.port", "8080");
                 
-                prop.setProperty("cluster2.ip", "127.0.0.1");
+                prop.setProperty("cluster2.ip", "128.130.172.215");
 		prop.setProperty("cluster2.port", "8080");
                 
                 prop.setProperty("cluster3.ip", "127.0.0.1");

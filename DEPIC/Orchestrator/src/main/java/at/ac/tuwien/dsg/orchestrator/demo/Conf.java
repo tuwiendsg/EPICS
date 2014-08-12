@@ -22,8 +22,8 @@ public class Conf {
         
         
         PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
-        //propertiesConfiguration.writeProperties();
-        propertiesConfiguration.getProperties();
+        propertiesConfiguration.writeProperties();
+        //propertiesConfiguration.getProperties();
     }
     
 }
