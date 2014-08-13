@@ -61,12 +61,15 @@ public class ResponseTimeRest {
     }
     
     
-    public void updateResponseTime(String userID, int objID, double responseTime) {
+    public void updateResponseTime(String userID, int objID, double responseTime, int time) {
         
         EDORepo eDORepo = new EDORepo();
         eDORepo.setUserID(Integer.parseInt(userID));
         eDORepo.setObjID(objID);
         eDORepo.setResponseTime(responseTime);
+        eDORepo.setTime(time);
+        
+        
         
         EDORepoJAXB jAXB = new EDORepoJAXB();
         String xmlString = jAXB.marshallingObject(eDORepo);

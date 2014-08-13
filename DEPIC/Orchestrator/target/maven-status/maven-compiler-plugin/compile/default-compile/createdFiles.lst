@@ -9,5 +9,6 @@ at/ac/tuwien/dsg/orchestrator/services/OrchestratorService.class
 at/ac/tuwien/dsg/orchestrator/responsetime/Monitor$1.class
 at/ac/tuwien/dsg/orchestrator/demo/App.class
 at/ac/tuwien/dsg/orchestrator/properties/PropertiesConfiguration.class
+at/ac/tuwien/dsg/orchestrator/demo/EDORepoCleanApp.class
 at/ac/tuwien/dsg/orchestrator/services/DeliveryService.class
 at/ac/tuwien/dsg/orchestrator/properties/VMCluster.class

@@ -12,6 +12,7 @@ import at.ac.tuwien.dsg.orchestrator.responsetime.OrchestratorServiceController;
 import at.ac.tuwien.dsg.common.rest.ResponseTimeRest;
 import at.ac.tuwien.dsg.orchestrator.properties.PropertiesConfiguration;
 import at.ac.tuwien.dsg.orchestrator.properties.VMCluster;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -75,8 +76,14 @@ public class OrchestratorService implements Runnable {
             VMCluster vmCluster = ls.get(0);
         
    
+            Calendar calendar = Calendar.getInstance();
+        int second = calendar.get(Calendar.SECOND);
+        int minute = calendar.get(Calendar.MINUTE);
+        int time = minute*60 + second;
+            
+            
             ResponseTimeRest responseTimeRest = new ResponseTimeRest(vmCluster.getIp(), vmCluster.getPort());
-            responseTimeRest.updateResponseTime(userID, i, responseTime);
+            responseTimeRest.updateResponseTime(userID, i, responseTime, time);
             
             
             

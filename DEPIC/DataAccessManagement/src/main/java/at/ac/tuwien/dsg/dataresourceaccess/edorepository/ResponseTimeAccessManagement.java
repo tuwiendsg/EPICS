@@ -24,11 +24,21 @@ public class ResponseTimeAccessManagement {
         return xmlString;
     }
     
-    public void saveResponseTime(String key, double responseTime) {
+    
+    public int getTimeStamp(String key) {
 
         MySQLConnection mySQLConnection = new MySQLConnection();
 
-        mySQLConnection.saveResponseTime(key, responseTime);
+        int xmlString = mySQLConnection.getTimeStamp(key);
+
+        return xmlString;
+    }
+    
+    public void saveResponseTime(String key, double responseTime, int time) {
+
+        MySQLConnection mySQLConnection = new MySQLConnection();
+
+        mySQLConnection.saveResponseTime(key, responseTime, time);
 
        
     }

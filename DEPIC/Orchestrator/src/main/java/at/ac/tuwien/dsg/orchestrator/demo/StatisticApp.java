@@ -34,10 +34,10 @@ public class StatisticApp {
             
             
         
-        System.out.println("EDO: " + key + "- DataCompleteness: "+ eDORepo.getDataComplenetess() +"- ResponseTime: " + eDORepo.getResponseTime());
+     //   System.out.println("EDO: " + key + "- DataCompleteness: "+ eDORepo.getDataComplenetess() +"- ResponseTime: " + eDORepo.getResponseTime());
         
-        
-        
+           String logStr = String.valueOf(i) + "," +  eDORepo.getResponseTime() +"," + eDORepo.getTime();
+           System.out.println(logStr);
         
         }
         

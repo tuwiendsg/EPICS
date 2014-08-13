@@ -36,7 +36,7 @@ public class App2 {
         
    
             ResponseTimeRest responseTimeRest = new ResponseTimeRest(vmCluster.getIp(), vmCluster.getPort());
-            responseTimeRest.updateResponseTime("1", 0, 512);
+            responseTimeRest.updateResponseTime("1", 0, 512,1232123);
     }
     
 }

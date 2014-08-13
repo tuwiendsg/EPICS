@@ -61,11 +61,13 @@ public class MySQLConnection {
     }
     
     
-    public void saveResponseTime(String rsID, double responseTime) {
+    public void saveResponseTime(String rsID, double responseTime, int time) {
 
+        
+        
   
    
-        String sql = "INSERT INTO responsetime VALUES ('"+rsID+ "', "+responseTime+") ";
+        String sql = "INSERT INTO responsetime VALUES ('"+rsID+ "', "+responseTime+", "+time+") ";
       
 
         MySqlConnectionManager connectionManager = new MySqlConnectionManager(mySqlConf, userName, password);
@@ -183,6 +185,52 @@ public class MySQLConnection {
         
       
         return xmlStr;
+    }
+    
+    
+     public int getTimeStamp (String key) {
+        
+        int xmlStr=0;
+        String sql = "select * from responsetime where responsetime.key='" + key + "'";
+      
+
+        MySqlConnectionManager connectionManager = new MySqlConnectionManager(mySqlConf, userName, password);
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+        
+        
+        try {
+
+            while (rs.next()) {
+             
+                xmlStr = rs.getInt("time");
+         
+            }
+
+        } catch (Exception ex) {
+
+        }
+        
+      
+        return xmlStr;
+    }
+     
+     
+     public void emptyAllTables () {
+        
+     
+        String sql1 = "DELETE FROM responsetime WHERE 1";
+        String sql2 = "DELETE FROM edo WHERE 1"; 
+        String sql3 = "DELETE FROM edo_delivery WHERE 1"; 
+      
+
+        MySqlConnectionManager connectionManager = new MySqlConnectionManager(mySqlConf, userName, password);
+
+        connectionManager.ExecuteUpdate(sql1);
+        connectionManager.ExecuteUpdate(sql2);
+        connectionManager.ExecuteUpdate(sql3);
+        
+        
     }
     
 }

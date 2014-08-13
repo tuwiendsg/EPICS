@@ -9,6 +9,7 @@ package at.ac.tuwien.dsg.dataresourceaccess;
 import at.ac.tuwien.dsg.common.entity.others.EDORepo;
 import at.ac.tuwien.dsg.common.entity.others.EDORepoJAXB;
 import at.ac.tuwien.dsg.dataresourceaccess.edorepository.ResponseTimeAccessManagement;
+import java.util.Calendar;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -58,9 +59,10 @@ public class EDOResponseTimeResource {
         EDORepo eDORepo = jAXB.unmarshallingObject(content);
         
         
+        
         String key = String.valueOf(eDORepo.getObjID()) +";"+ String.valueOf(eDORepo.getUserID());
         ResponseTimeAccessManagement responseTimeAccessManagement = new ResponseTimeAccessManagement();
-        responseTimeAccessManagement.saveResponseTime(key, eDORepo.getResponseTime());
+        responseTimeAccessManagement.saveResponseTime(key, eDORepo.getResponseTime(), eDORepo.getTime());
         
         
     

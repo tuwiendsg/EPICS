@@ -12,4 +12,5 @@
 /Volumes/DATA/NetBeansProjects/DEPIC GITHUB/EPICS/DEPIC/DataAccessManagement/src/main/java/at/ac/tuwien/dsg/dataresourceaccess/Configuration.java
 /Volumes/DATA/NetBeansProjects/DEPIC GITHUB/EPICS/DEPIC/DataAccessManagement/src/main/java/at/ac/tuwien/dsg/dataresourceaccess/EDORepoResource.java
 /Volumes/DATA/NetBeansProjects/DEPIC GITHUB/EPICS/DEPIC/DataAccessManagement/src/main/java/at/ac/tuwien/dsg/dataresourceaccess/EDORepoMeasurementResource.java
+/Volumes/DATA/NetBeansProjects/DEPIC GITHUB/EPICS/DEPIC/DataAccessManagement/src/main/java/at/ac/tuwien/dsg/dataresourceaccess/EDORepoCleanResource.java
 /Volumes/DATA/NetBeansProjects/DEPIC GITHUB/EPICS/DEPIC/DataAccessManagement/src/main/java/at/ac/tuwien/dsg/dataresourceaccess/MySqlConnectionManager.java

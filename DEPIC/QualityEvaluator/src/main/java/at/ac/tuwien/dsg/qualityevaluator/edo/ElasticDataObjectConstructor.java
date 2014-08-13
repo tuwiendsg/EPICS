@@ -50,7 +50,7 @@ public class ElasticDataObjectConstructor {
        
  
         
-        EDORepo edo = new EDORepo(objID, userID, dataObjectStr, dataCompleteness, responseTime);
+        EDORepo edo = new EDORepo(objID, userID, dataObjectStr, dataCompleteness, responseTime,0);
         EDORepoJAXB jAXB = new EDORepoJAXB();
         String edoStr = jAXB.marshallingObject(edo);
         EDORepoREST rest = new EDORepoREST();

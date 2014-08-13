@@ -81,7 +81,7 @@ public class EDODelivery2RepoAccessREST {
             
             int statusCode = methodResponse.getStatusLine().getStatusCode();
             
-            System.out.println("Status Code: " + statusCode);
+            //System.out.println("Status Code: " + statusCode);
             
             
             BufferedReader rd = new BufferedReader(

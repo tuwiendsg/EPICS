@@ -65,11 +65,14 @@ public class EDODelivery2Resource {
         
         ResponseTimeAccessManagement responseTimeAccessManagement = new ResponseTimeAccessManagement();
         double responseTime= responseTimeAccessManagement.getResponseTime(key);
-        
+        int timeStamp = responseTimeAccessManagement.getTimeStamp(key);
         
         EDORepoJAXB jAXB = new EDORepoJAXB();
         EDORepo eDORepo = jAXB.unmarshallingObject(xmlStr);
         eDORepo.setResponseTime(responseTime);
+        eDORepo.setTime(timeStamp);
+        
+        
         
         xmlStr = jAXB.marshallingObject(eDORepo);
         

@@ -26,18 +26,21 @@ public class EDORepo {
     String dataObject;
     double dataComplenetess;
     double responseTime;
+    int time;
 
     public EDORepo() {
     }
 
-    public EDORepo(int objID, int userID, String dataObject, double dataComplenetess, double responseTime) {
+    public EDORepo(int objID, int userID, String dataObject, double dataComplenetess, double responseTime, int time) {
         this.objID = objID;
         this.userID = userID;
         this.dataObject = dataObject;
         this.dataComplenetess = dataComplenetess;
         this.responseTime = responseTime;
+        this.time = time;
     }
 
+    
     
     
     
@@ -84,6 +87,15 @@ public class EDORepo {
     @XmlElement (name ="responseTime")
     public void setResponseTime(double responseTime) {
         this.responseTime = responseTime;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    @XmlElement (name ="time")
+    public void setTime(int time) {
+        this.time = time;
     }
 
     

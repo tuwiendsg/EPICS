@@ -33,6 +33,7 @@ public class ApplicationConfig extends Application {
         resources.add(at.ac.tuwien.dsg.dataresourceaccess.EDODelivery2Resource.class);
         resources.add(at.ac.tuwien.dsg.dataresourceaccess.EDODelivery3Resource.class);
         resources.add(at.ac.tuwien.dsg.dataresourceaccess.EDODeliveryResource.class);
+        resources.add(at.ac.tuwien.dsg.dataresourceaccess.EDORepoCleanResource.class);
         resources.add(at.ac.tuwien.dsg.dataresourceaccess.EDORepoMeasurementResource.class);
         resources.add(at.ac.tuwien.dsg.dataresourceaccess.EDORepoResource.class);
         resources.add(at.ac.tuwien.dsg.dataresourceaccess.EDOResponseTimeResource.class);

@@ -22,9 +22,11 @@ public class TimerTest extends TimerTask {
      * @param args the command line arguments
      */
     
-    private static int delta_t=2; // seconds
+    private static int delta_t=10; // seconds
     private static int maxRunTime =60; // seconds
     private static int currentNoOfUser=0;
+    private static  int maxNoOfUser = 102;
+    private static  int minNoOfUser =1;
     private static List<Thread> threadList;
    
     
@@ -48,8 +50,9 @@ public class TimerTest extends TimerTask {
        //     System.out.println("do something ... ");
         
             
-             double A = 60; // amplitude
-        double f=15; // frequency
+             double A = maxNoOfUser/2; // amplitude
+             double B = minNoOfUser; // amplitude
+             double f=30; // frequency
         double omega= 2*Math.PI/f;
         
       
@@ -59,7 +62,7 @@ public class TimerTest extends TimerTask {
         int minute = calendar.get(Calendar.MINUTE);
         int t = minute*60 + second;
       
-        double y = A*Math.sin(omega*t) +A;
+        double y = (A-B)*Math.sin(omega*t) +A;
         
         int changeNoOfUser = (int)Math.ceil(y);
         
@@ -71,6 +74,7 @@ public class TimerTest extends TimerTask {
                 
                 Thread thread_i = threadList.get(i);
                 thread_i.start();
+              //  System.out.println("Start User " + i);
                 
             }
             
@@ -79,10 +83,14 @@ public class TimerTest extends TimerTask {
             
         } else {
             
-            for (int i=changeNoOfUser-1;i<currentNoOfUser;i++) {
+            for (int i=changeNoOfUser;i<currentNoOfUser;i++) {
                 Thread thread_i = threadList.get(i);
                 thread_i.stop();
+            //   System.out.println("Stop User " + i);
             }
+            
+            currentNoOfUser = changeNoOfUser;
+            
             
         }
         
@@ -95,7 +103,7 @@ public class TimerTest extends TimerTask {
     
     public static void main(String[] args) {
         // init 100 users
-        int maxNoOfUser = 5;
+      
         threadList = new ArrayList<>();
                     
                 
