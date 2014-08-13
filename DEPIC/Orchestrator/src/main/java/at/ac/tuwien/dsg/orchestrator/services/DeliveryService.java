@@ -5,8 +5,9 @@
  */
 package at.ac.tuwien.dsg.orchestrator.services;
 
-import at.ac.tuwien.dsg.common.entity.others.MongoDBDelivery;
-import at.ac.tuwien.dsg.common.entity.others.MySQLConnection;
+import at.ac.tuwien.dsg.common.rest.EDODelivery2RepoAccessREST;
+
+
 
 /**
  *
@@ -15,19 +16,11 @@ import at.ac.tuwien.dsg.common.entity.others.MySQLConnection;
 public class DeliveryService {
 
     public String getDeliveryEDO(String key) {
-        String[] vals = key.split(";");
-
-        key = vals[1] + ";" + vals[0];
-
-        MySQLConnection mySQLConnection = new MySQLConnection();
-
-        String edoXML = mySQLConnection.getDeliveryEDOStr(key);
-/*
-        MongoDBDelivery mongoDBDelivery = new MongoDBDelivery();
-        String edoXML = mongoDBDelivery.getDeliveryEDO(key);
-*/
+        String edoXML = "";
+        EDODelivery2RepoAccessREST eDODelivery2RepoAccessREST = new EDODelivery2RepoAccessREST("128.130.172.216", "8080");
+        edoXML = eDODelivery2RepoAccessREST.getEDO(key);
         
-        
+   
         return edoXML;
 
     }

@@ -33,12 +33,26 @@ public class QualityEnforcement {
         DataObjectJAXB dataObjectJAXB = new DataObjectJAXB();
         
         DataObject dataObject = dataObjectJAXB.unmarshallingObject(dataObjectXml);
-        double dataCompleteness = eDORepo.getDataComplenetess();
-        DataCompletenessEnforcement dataCompletenessEnforcement = new DataCompletenessEnforcement();
-        DataObject eDataObject = dataCompletenessEnforcement.improveDataCompleteness(dataObject, dataCompleteness);
         
-        eDORepo.setDataObject(dataObjectJAXB.marshallingObject(eDataObject));
-        eDORepo.setDataComplenetess(100);
+        double minCompleteness =75;
+        
+        double dataCompleteness = eDORepo.getDataComplenetess();
+        
+        if (dataCompleteness<minCompleteness) {
+        
+            DataCompletenessEnforcement dataCompletenessEnforcement = new DataCompletenessEnforcement();
+            DataObject eDataObject = dataCompletenessEnforcement.improveDataCompleteness(dataObject, dataCompleteness);
+            
+            dataObject = eDataObject;
+            
+            eDORepo.setDataObject(dataObjectJAXB.marshallingObject(dataObject));
+            eDORepo.setDataComplenetess(100);
+         }
+         
+         
+         
+         
+        
         String deliveryEDOStr ="";
         
         deliveryEDOStr =jAXB.marshallingObject(eDORepo);

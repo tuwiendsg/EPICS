@@ -60,6 +60,40 @@ public class MySQLConnection {
 
     }
     
+    
+    public void saveResponseTime(String rsID, double responseTime) {
+
+  
+   
+        String sql = "INSERT INTO responsetime VALUES ('"+rsID+ "', "+responseTime+") ";
+      
+
+        MySqlConnectionManager connectionManager = new MySqlConnectionManager(mySqlConf, userName, password);
+
+        connectionManager.ExecuteUpdate(sql);
+        
+   
+
+    }
+    
+    
+    public void updateDeliveryEDOStr(String rsID, String dataAndResultString) {
+
+  
+      
+
+        System.out.println("Delivery EDO: " + dataAndResultString);
+        String sql = "UPDATE edo_delivery SET edo_delivery.content='"+dataAndResultString+"' WHERE edo_delivery.key = '"+rsID+ "'";
+      
+
+        MySqlConnectionManager connectionManager = new MySqlConnectionManager(mySqlConf, userName, password);
+
+        connectionManager.ExecuteUpdate(sql);
+        
+   
+
+    }
+    
     public String getRawEDOStr(String key){
         
      
@@ -97,7 +131,7 @@ public class MySQLConnection {
      
     
         String xmlStr = "";
-        String sql = "select * from edo where edo.key='" + key + "'";
+        String sql = "select * from edo_delivery where edo_delivery.key='" + key + "'";
       
 
         MySqlConnectionManager connectionManager = new MySqlConnectionManager(mySqlConf, userName, password);
@@ -121,6 +155,34 @@ public class MySQLConnection {
       
         return xmlStr;
         
+    }
+    
+    
+    public double getResponseTime (String key) {
+        
+        double xmlStr=0;
+        String sql = "select * from responsetime where responsetime.key='" + key + "'";
+      
+
+        MySqlConnectionManager connectionManager = new MySqlConnectionManager(mySqlConf, userName, password);
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+        
+        
+        try {
+
+            while (rs.next()) {
+             
+                xmlStr = rs.getDouble("value");
+         
+            }
+
+        } catch (Exception ex) {
+
+        }
+        
+      
+        return xmlStr;
     }
     
 }

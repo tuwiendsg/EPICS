@@ -31,6 +31,22 @@ public class EDODeliveryAccessManagement {
          mongoDBDelivery.saveEDO2Repo(key, xmlStr);
          */
     }
+    
+     public void updateDeliveryEDORepo(EDORepo edo) {
+
+        EDORepoJAXB jaxb = new EDORepoJAXB();
+        String xmlStr = jaxb.marshallingObject(edo);
+        String key = String.valueOf(edo.getObjID()) + ";" + String.valueOf(edo.getUserID());
+
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        mySQLConnection.updateDeliveryEDOStr(key, xmlStr);
+
+        /*
+         MongoDBDelivery mongoDBDelivery = new MongoDBDelivery();
+         mongoDBDelivery.saveEDO2Repo(key, xmlStr);
+         */
+    }
+    
 
     public String getDeliveryEDOXML(String key) {
 
@@ -40,4 +56,7 @@ public class EDODeliveryAccessManagement {
 
         return xmlString;
     }
+    
+    
+    
 }

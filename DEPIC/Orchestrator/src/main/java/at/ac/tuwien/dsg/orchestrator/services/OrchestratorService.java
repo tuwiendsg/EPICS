@@ -6,7 +6,13 @@
 
 package at.ac.tuwien.dsg.orchestrator.services;
 
+import at.ac.tuwien.dsg.common.entity.others.EDORepo;
+import at.ac.tuwien.dsg.common.entity.others.EDORepoJAXB;
 import at.ac.tuwien.dsg.orchestrator.responsetime.OrchestratorServiceController;
+import at.ac.tuwien.dsg.common.rest.ResponseTimeRest;
+import at.ac.tuwien.dsg.orchestrator.properties.PropertiesConfiguration;
+import at.ac.tuwien.dsg.orchestrator.properties.VMCluster;
+import java.util.List;
 
 /**
  *
@@ -45,7 +51,7 @@ public class OrchestratorService implements Runnable {
           
           
             
-        int noOfDataObject = 5;
+        int noOfDataObject = 10;
         int i = 0;
 
   
@@ -54,10 +60,26 @@ public class OrchestratorService implements Runnable {
            
             OrchestratorServiceController eval = new OrchestratorServiceController();
             eval.evaluate(i, userID);
+            
+            
+            
 
             System.out.println("User: " + runner.getName() + " - obj: " + i);
-            System.out.println("Response time: " + eval.getMonitoringData().getAverageResponseTime() + " ms");
+            
+            double responseTime = eval.getMonitoringData().getAverageResponseTime();
+            System.out.println("Response time: " + responseTime + " ms");
+            
+            PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
+            List<VMCluster> ls =  propertiesConfiguration.getProperties();
+            
+            VMCluster vmCluster = ls.get(0);
         
+   
+            ResponseTimeRest responseTimeRest = new ResponseTimeRest(vmCluster.getIp(), vmCluster.getPort());
+            responseTimeRest.updateResponseTime(userID, i, responseTime);
+            
+            
+            
             
             i++;
         }

@@ -24,8 +24,7 @@ public class DataCompletenessEnforcement {
 
     public DataObject improveDataCompleteness(DataObject dataObject, double datacompleteness) {
 
-        double minCompleteness =0.8;
-
+     
         List<DataItem> listOfDataItems = dataObject.getListOfDataItems();
 
     
@@ -57,7 +56,7 @@ public class DataCompletenessEnforcement {
         double intercept;
         intercept = sum_y / n - slope * (sum_x / n);
    
-        if (datacompleteness<minCompleteness) {
+       
                  
             for (int i = 0; i < listOfDataItems.size() * 0.1; i++) {
                 DataItem item = listOfDataItems.get(i);
@@ -93,7 +92,7 @@ public class DataCompletenessEnforcement {
             }
 
 
-        } 
+        
 
         return dataObject;
     }
