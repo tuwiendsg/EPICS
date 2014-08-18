@@ -1,9 +1,8 @@
 at/ac/tuwien/dsg/qualityenforcement/qodenforcement/DataCompletenessEnforcement.class
 at/ac/tuwien/dsg/qualityenforcement/demo/App.class
-at/ac/tuwien/dsg/qualityenforcement/qodenforcement/QualityEnforcement.class
 at/ac/tuwien/dsg/qualityenforcement/ApplicationConfig.class
+at/ac/tuwien/dsg/qualityenforcement/qodenforcement/QualityEnforcement.class
 at/ac/tuwien/dsg/qualityenforcement/QualityEnforcementServiceResource.class
 at/ac/tuwien/dsg/qualityenforcement/services/QualityEnforcementController.class
 at/ac/tuwien/dsg/qualityenforcement/NonLinearLeastSquareCurveFittingResource.class
-at/ac/tuwien/dsg/qualityenforcement/repoaccessmanagement/EDORepoAccessREST.class
 at/ac/tuwien/dsg/qualityenforcement/repoaccessmanagement/EDODeliveryRepoAccessREST.class

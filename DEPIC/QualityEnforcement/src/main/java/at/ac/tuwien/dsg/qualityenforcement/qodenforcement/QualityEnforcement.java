@@ -11,7 +11,7 @@ import at.ac.tuwien.dsg.common.entity.others.EDORepo;
 import at.ac.tuwien.dsg.common.entity.others.EDORepoJAXB;
 import at.ac.tuwien.dsg.common.jaxb.DataObjectJAXB;
 import at.ac.tuwien.dsg.qualityenforcement.repoaccessmanagement.EDODeliveryRepoAccessREST;
-import at.ac.tuwien.dsg.qualityenforcement.repoaccessmanagement.EDORepoAccessREST;
+import at.ac.tuwien.dsg.common.rest.EDORepoMeasuredAccessREST;
 
 /**
  *
@@ -21,7 +21,7 @@ public class QualityEnforcement {
     
     public void doQualityEnforcement(int objectID, String userID ) {
         
-        EDORepoAccessREST repoAccessManagement = new EDORepoAccessREST();
+        EDORepoMeasuredAccessREST repoAccessManagement = new EDORepoMeasuredAccessREST("localhost","8080");
         String xmlString = repoAccessManagement.getElasticDataObjectString(String.valueOf(objectID), userID);
         System.out.println("Do QualityEnforcement: " + xmlString);
         
