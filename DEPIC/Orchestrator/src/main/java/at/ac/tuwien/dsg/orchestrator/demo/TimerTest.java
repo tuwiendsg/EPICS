@@ -22,11 +22,12 @@ public class TimerTest extends TimerTask {
      * @param args the command line arguments
      */
     
-    private static int delta_t=10; // seconds
-    private static int maxRunTime =60; // seconds
+    private static int delta_t=5; // seconds
+    private static int maxRunTime =50; // seconds
     private static int currentNoOfUser=0;
-    private static  int maxNoOfUser = 102;
+    private static  int maxNoOfUser = 6;
     private static  int minNoOfUser =1;
+    private static boolean isNoOfUserIncrease=true;
     private static List<Thread> threadList;
    
     
@@ -52,7 +53,7 @@ public class TimerTest extends TimerTask {
             
              double A = maxNoOfUser/2; // amplitude
              double B = minNoOfUser; // amplitude
-             double f=30; // frequency
+             double f=6; // frequency
         double omega= 2*Math.PI/f;
         
       
@@ -62,7 +63,29 @@ public class TimerTest extends TimerTask {
         int minute = calendar.get(Calendar.MINUTE);
         int t = minute*60 + second;
       
-        double y = (A-B)*Math.sin(omega*t) +A;
+      //  double y = (A-B)*Math.sin(omega*t) +A;
+        
+        
+        
+      //  currentNoOfUser++;
+        
+        if (currentNoOfUser==minNoOfUser) {
+            isNoOfUserIncrease = true;
+            
+        }
+        
+        if (currentNoOfUser==maxNoOfUser) {
+            isNoOfUserIncrease = false;
+        }
+        
+        
+        double y=0;
+        if (isNoOfUserIncrease) {
+            y = currentNoOfUser +1;
+        } else {
+            y = currentNoOfUser -1;
+            
+        }
         
         int changeNoOfUser = (int)Math.ceil(y);
         
@@ -74,7 +97,7 @@ public class TimerTest extends TimerTask {
                 
                 Thread thread_i = threadList.get(i);
                 thread_i.start();
-              //  System.out.println("Start User " + i);
+                System.out.println("Start User " + i);
                 
             }
             
@@ -86,7 +109,7 @@ public class TimerTest extends TimerTask {
             for (int i=changeNoOfUser;i<currentNoOfUser;i++) {
                 Thread thread_i = threadList.get(i);
                 thread_i.stop();
-            //   System.out.println("Stop User " + i);
+               System.out.println("Stop User " + i);
             }
             
             currentNoOfUser = changeNoOfUser;

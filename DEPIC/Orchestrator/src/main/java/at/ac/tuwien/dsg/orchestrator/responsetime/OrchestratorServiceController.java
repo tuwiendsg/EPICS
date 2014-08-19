@@ -26,6 +26,8 @@ public class OrchestratorServiceController {
     
     private Monitor monitor = new Monitor(10);
     private int noOfActiveClusters;
+    
+    private double responseTime;
 
     public OrchestratorServiceController() {
     }
@@ -50,7 +52,7 @@ public class OrchestratorServiceController {
     
             
             // reponseTime measurement start
-            monitor.addOutstandingRequest(i, new Date());
+            
             
             PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
             List<VMCluster> ls =  propertiesConfiguration.getProperties();
@@ -58,6 +60,12 @@ public class OrchestratorServiceController {
             VMCluster vmCluster = ls.get(0);
             // start quality evaluator
             System.out.println("Call Quality Evaluator " + vmCluster.getIp()+":" + vmCluster.getPort());
+            
+            
+          //  monitor.addOutstandingRequest(i, new Date());
+            
+            double startTime = System.currentTimeMillis();
+            
             QualityEvaluatorREST qualityEvaluatorREST = new QualityEvaluatorREST(vmCluster.getIp(),vmCluster.getPort());
             qualityEvaluatorREST.callQualityEvaluator(key);
              
@@ -69,6 +77,9 @@ public class OrchestratorServiceController {
 		}
             */
             
+            double endTime = System.currentTimeMillis();
+            
+            responseTime = endTime-startTime;
             
         
             // start delivery service
@@ -77,13 +88,24 @@ public class OrchestratorServiceController {
          //      System.out.println("EDO: " + key);
             
             // reponseTime measurement stop
-               monitor.removeOutstandingRequest(i, new Date());
+              // monitor.removeOutstandingRequest(i, new Date());
                
         
         
         
        
     }
+
+    public double getResponseTime() {
+        return responseTime;
+    }
+
+    public void setResponseTime(double responseTime) {
+        this.responseTime = responseTime;
+    }
+    
+    
+    
     
     public void updateNoOfAtiveCluster(){
         

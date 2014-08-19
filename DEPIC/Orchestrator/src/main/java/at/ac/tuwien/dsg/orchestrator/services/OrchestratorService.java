@@ -52,7 +52,7 @@ public class OrchestratorService implements Runnable {
           
           
             
-        int noOfDataObject = 100;
+        int noOfDataObject = 300;
         int i = 0;
 
   
@@ -67,7 +67,9 @@ public class OrchestratorService implements Runnable {
 
             System.out.println("User: " + runner.getName() + " - obj: " + i);
             
-            double responseTime = eval.getMonitoringData().getAverageResponseTime();
+            //double responseTime = eval.getMonitoringData().getAverageResponseTime();
+            double responseTime = eval.getResponseTime();
+            
             System.out.println("Response time: " + responseTime + " ms");
             
             PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
