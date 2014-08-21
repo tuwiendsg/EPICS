@@ -24,14 +24,14 @@ public class StatisticApp {
     public static void main(String[] args) {
         // TODO code application logic here
 
-        nomalizeResponseTime();
+        generalStatistic();
 
     }
     
     
     public static void generalStatistic(){
         
-        
+       
         String userID = "1";
         for (int i = 0; i < 200; i++) {
 
@@ -56,9 +56,11 @@ public class StatisticApp {
             EDORepo eDORepoRaw = eDORepoJAXB.unmarshallingObject(xmlString);
             
             
+            
+            
      //   System.out.println("EDO: " + key + "- DataCompleteness: "+ eDORepo.getDataComplenetess() +"- ResponseTime: " + eDORepo.getResponseTime());
             
-            String logStr = String.valueOf(i) + "," + eDORepo.getResponseTime() + "," + eDORepo.getTime();
+            String logStr = String.valueOf(i) + "," + eDORepo.getResponseTime() + "," + eDORepo.getTime()+"," +ObjectSizeFetcher.getObjectSize(eDORepo);;
           //  String logStr2 = String.valueOf(i) + ","+ eDORepoRaw.getDataComplenetess() + "," + eDORepo.getDataComplenetess();
 
             System.out.println(logStr);
