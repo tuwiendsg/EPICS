@@ -1,0 +1,36 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package at.ac.tuwien.dsg.common.tooling.edo.metric;
+
+import java.util.List;
+
+/**
+ *
+ * @author Jun
+ */
+public class ControlProcessMatrix {
+    List listOfControlProcesses;
+
+    public ControlProcessMatrix() {
+    }
+
+    public ControlProcessMatrix(List listOfControlProcesses) {
+        this.listOfControlProcesses = listOfControlProcesses;
+    }
+
+    public List getListOfControlProcesses() {
+        return listOfControlProcesses;
+    }
+
+    public void setListOfControlProcesses(List listOfControlProcesses) {
+        this.listOfControlProcesses = listOfControlProcesses;
+    }
+    
+    
+    
+    
+}

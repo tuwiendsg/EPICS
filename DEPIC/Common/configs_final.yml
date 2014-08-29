@@ -1,0 +1,69 @@
+!at.ac.tuwien.dsg.common.tooling.edo.DepicConfiguration
+listOfDataElasticityMetricConfs: 
+- !at.ac.tuwien.dsg.common.tooling.edo.metric.ElasticityMetricConf
+   controlProcessMatrix: 
+      listOfControlProcesses: 
+      - !at.ac.tuwien.dsg.common.tooling.edo.metric.ControlProcess
+         listOfActions: 
+         - !at.ac.tuwien.dsg.common.tooling.edo.metric.ControlAction
+            actionURI: /RestWS/LinearCurveFitting
+            listOfParameters: []
+         triggerValues: 
+            fromRange: r1
+            toRange: r2
+      - !at.ac.tuwien.dsg.common.tooling.edo.metric.ControlProcess
+         listOfActions: 
+         - !at.ac.tuwien.dsg.common.tooling.edo.metric.ControlAction
+            actionURI: /RestWS/LeastSquaresCurveFitting
+            listOfParameters: 
+            - !at.ac.tuwien.dsg.common.tooling.edo.metric.Parameter
+               name: upperBound
+               value: 12.8
+            - !at.ac.tuwien.dsg.common.tooling.edo.metric.Parameter
+               name: lowerBound
+               value: 7.9
+         triggerValues: 
+            fromRange: r2
+            toRange: r3
+      - !at.ac.tuwien.dsg.common.tooling.edo.metric.ControlProcess
+         listOfActions: 
+         - !at.ac.tuwien.dsg.common.tooling.edo.metric.ControlAction
+            actionURI: /RestWS/LeastSquaresCurveFitting
+            listOfParameters: 
+            - !at.ac.tuwien.dsg.common.tooling.edo.metric.Parameter
+               name: upperBound
+               value: 11.5
+            - !at.ac.tuwien.dsg.common.tooling.edo.metric.Parameter
+               name: lowerBound
+               value: 10.9
+         triggerValues: 
+            fromRange: r1
+            toRange: r3
+   info: 
+      name: DataCompleteness
+      listOfRanges: 
+      - !at.ac.tuwien.dsg.common.tooling.edo.metric.Range
+         rangeID: r1
+         toValue: 70.0
+      - !at.ac.tuwien.dsg.common.tooling.edo.metric.Range
+         fromValue: 71.0
+         rangeID: r2
+         toValue: 85.0
+      - !at.ac.tuwien.dsg.common.tooling.edo.metric.Range
+         fromValue: 86.0
+         rangeID: r3
+         toValue: 100.0
+   monitorConf: 
+      monitorInterval: 30
+      monitorURI: /RestWS/DataCompleteness
+   pricingScheme: 
+      listOfPricingPlans: 
+      - !at.ac.tuwien.dsg.common.tooling.edo.metric.PricingPlan
+         price: 0.03
+         rangeID: r1
+      - !at.ac.tuwien.dsg.common.tooling.edo.metric.PricingPlan
+         price: 0.05
+         rangeID: r2
+      - !at.ac.tuwien.dsg.common.tooling.edo.metric.PricingPlan
+         price: 0.08
+         rangeID: r3
