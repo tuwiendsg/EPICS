@@ -6,16 +6,17 @@
 
 package at.ac.tuwien.dsg.orchestrator.edo.configuration;
 
+
 /**
  *
  * @author Jun
  */
 
-
+// Interface Elastic Data Object 
 
 public interface ElasticDataObject {
-    List ListOfDataItems;
-    List ListOfDataElasticityMetrics;
+
+   
     
     
     

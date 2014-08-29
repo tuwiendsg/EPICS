@@ -11,6 +11,9 @@ package at.ac.tuwien.dsg.orchestrator.edo.configuration;
  * @author Jun
  */
 public class DataObjectMapping {
+
+    public DataObjectMapping() {
+    }
     
     
     
