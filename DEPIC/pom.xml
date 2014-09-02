@@ -12,6 +12,6 @@
     <module>QualityEvaluator</module>
     <module>QualityEnforcement</module>
     <module>Orchestrator</module>
-    <module>Client</module>
+    <module>Client/Client</module>
   </modules>
 </project>
