@@ -13,13 +13,23 @@ import java.util.List;
  * @author Jun
  */
 public class DepicConfiguration {
+    String edoID;
     List listOfDataElasticityMetricConfs;
 
     public DepicConfiguration() {
     }
 
-    public DepicConfiguration(List listOfDataElasticityMetricConfs) {
+    public DepicConfiguration(String edoID, List listOfDataElasticityMetricConfs) {
+        this.edoID = edoID;
         this.listOfDataElasticityMetricConfs = listOfDataElasticityMetricConfs;
+    }
+
+    public String getEdoID() {
+        return edoID;
+    }
+
+    public void setEdoID(String edoID) {
+        this.edoID = edoID;
     }
 
     public List getListOfDataElasticityMetricConfs() {
@@ -29,9 +39,6 @@ public class DepicConfiguration {
     public void setListOfDataElasticityMetricConfs(List listOfDataElasticityMetricConfs) {
         this.listOfDataElasticityMetricConfs = listOfDataElasticityMetricConfs;
     }
-    
-    
-    
-    
+   
     
 }

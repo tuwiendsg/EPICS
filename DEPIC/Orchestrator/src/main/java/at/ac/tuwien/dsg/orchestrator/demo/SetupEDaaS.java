@@ -6,7 +6,7 @@
 
 package at.ac.tuwien.dsg.orchestrator.demo;
 
-import at.ac.tuwien.dsg.orchestrator.edo.configuration.DataObjectMapping;
+
 
 /**
  *
@@ -22,16 +22,15 @@ public class SetupEDaaS {
         
         
         // mapping EDO
-        DataObjectMapping dataObjectMapping= new DataObjectMapping();
+       //
         
         
+        //DataObjectMapping dataObjectMapping= new DataObjectMapping();
+ 
+       String s = "some text here";
         
-        // define management processes 
-        
-        
-        
-        // generate User APIs
-        
+       
+        System.out.println(s.length());
         
         // setting up
         

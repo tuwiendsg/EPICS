@@ -1,4 +1,5 @@
 !at.ac.tuwien.dsg.common.tooling.edo.DepicConfiguration
+edoID: EDO TYPE1
 listOfDataElasticityMetricConfs: 
 - !at.ac.tuwien.dsg.common.tooling.edo.metric.ElasticityMetricConf
    controlProcessMatrix: 

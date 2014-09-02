@@ -28,7 +28,7 @@ public class App2 {
      //   QualityEvaluatorREST qualityEvaluatorREST = new QualityEvaluatorREST();
         //    qualityEvaluatorREST.callQualityEvaluator("102;0");
         
-        
+      /*  
         PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
             List<VMCluster> ls =  propertiesConfiguration.getProperties();
             
@@ -37,6 +37,8 @@ public class App2 {
    
             ResponseTimeRest responseTimeRest = new ResponseTimeRest(vmCluster.getIp(), vmCluster.getPort());
             responseTimeRest.updateResponseTime("1", 0, 512,1232123);
-    }
+    */
+              
+              }
     
 }

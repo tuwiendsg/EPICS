@@ -22,7 +22,11 @@ public class App
         
         listOfMetricConfs.add(ng.getNumericalMetricConfig());
         
-        DepicConfiguration conf = new DepicConfiguration(listOfMetricConfs);
+        String edoID="EDO TYPE1";
+        
+        
+        
+        DepicConfiguration conf = new DepicConfiguration(edoID, listOfMetricConfs);
         
        
         

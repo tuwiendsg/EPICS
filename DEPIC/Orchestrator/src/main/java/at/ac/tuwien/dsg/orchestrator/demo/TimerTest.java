@@ -22,8 +22,8 @@ public class TimerTest extends TimerTask {
      * @param args the command line arguments
      */
     
-    private static int delta_t=5; // seconds
-    private static int maxRunTime =50; // seconds
+    private static int delta_t=2; // seconds
+    private static int maxRunTime =400; // seconds
     private static int currentNoOfUser=0;
     private static  int maxNoOfUser = 6;
     private static  int minNoOfUser =1;
@@ -159,13 +159,31 @@ public class TimerTest extends TimerTask {
             Thread.sleep(maxRunTime*1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            System.out.println("Interrupt: " + e.toString());         
         }
         timer.cancel();
+        
+       
+        
+        
         System.out.println("TimerTask cancelled");
         try {
             Thread.sleep(maxRunTime*1000);
+            
+            
+            /*
+             for (Thread thread_i : threadList) {
+               // Thread thread_i = threadList.get(i);
+                thread_i.stop();
+              
+            }
+        */
         } catch (InterruptedException e) {
             e.printStackTrace();
+            
+            
+            
+            System.out.println("Interrupt: " + e.toString());         
         }
         
     }

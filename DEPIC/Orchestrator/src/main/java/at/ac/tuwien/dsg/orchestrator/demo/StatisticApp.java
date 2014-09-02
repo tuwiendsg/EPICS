@@ -24,8 +24,9 @@ public class StatisticApp {
     public static void main(String[] args) {
         // TODO code application logic here
 
-        generalStatistic();
-
+      //  generalStatistic();
+        nomalizeResponseTime();
+      //  getSizeOfEDO();
     }
     
     
@@ -33,7 +34,7 @@ public class StatisticApp {
         
        
         String userID = "1";
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 100; i++) {
 
             String key = String.valueOf(i) + ";" + userID;
             DeliveryService deliveryService = new DeliveryService();
@@ -58,10 +59,10 @@ public class StatisticApp {
             
             
             
-     //   System.out.println("EDO: " + key + "- DataCompleteness: "+ eDORepo.getDataComplenetess() +"- ResponseTime: " + eDORepo.getResponseTime());
+       // System.out.println("EDO: " + key + "- DataCompleteness: "+ eDORepo.getDataComplenetess() +"- ResponseTime: " + eDORepo.getResponseTime());
             
-            String logStr = String.valueOf(i) + "," + eDORepo.getResponseTime() + "," + eDORepo.getTime()+"," +ObjectSizeFetcher.getObjectSize(eDORepo);;
-          //  String logStr2 = String.valueOf(i) + ","+ eDORepoRaw.getDataComplenetess() + "," + eDORepo.getDataComplenetess();
+           // String logStr = String.valueOf(i) + "," + eDORepo.getResponseTime() + "," + eDORepo.getTime()+"," +ObjectSizeFetcher.getObjectSize(eDORepo);;
+            String logStr = String.valueOf(i) + ","+ eDORepoRaw.getDataComplenetess() + "," + eDORepo.getDataComplenetess();
 
             System.out.println(logStr);
 
@@ -73,6 +74,8 @@ public class StatisticApp {
     public static void nomalizeResponseTime(){
         
         String userID = "1";
+        int noOfVMs=1;
+        
         int timeInterval =5;
         
         int startTime =0;
@@ -80,9 +83,10 @@ public class StatisticApp {
         int checkTime=0;
         
         double sumOfResponseTime=0;
+        double sumOfSizes=0;
         int objectCounter=0;
         
-        for (int i = 1; i < 200; i++) {
+        for (int i = 0; i < 200; i++) {
             
             
            
@@ -122,7 +126,14 @@ public class StatisticApp {
              
              if (((currentTime-startTime)>=timeInterval) && !(i<timeInterval)) {
                  
-                 String lg = String.valueOf(currentTime-checkTime-timeInterval) +"," + String.valueOf(objectCounter);
+             
+                double throughput = sumOfSizes/sumOfResponseTime*objectCounter;
+                 
+                 
+                // String lg = String.valueOf(currentTime-checkTime-timeInterval) +"," + String.valueOf(objectCounter);
+                 
+                  String lg = String.valueOf(currentTime-checkTime-timeInterval) +"," + String.valueOf(throughput);
+                 
                  System.out.println(lg);
                  
                  startTime = eDORepo.getTime();
@@ -135,15 +146,64 @@ public class StatisticApp {
        //      System.out.println("+ : " +String.valueOf(i)+","+ eDORepo.getResponseTime() + "," + eDORepo.getTime());
              sumOfResponseTime +=eDORepo.getResponseTime();
              objectCounter++;
+             sumOfSizes =+edoXML.length();
              
             
-            
-            String logStr = String.valueOf(i) + "," + eDORepo.getResponseTime() + "," + eDORepo.getTime();
+                  
+                  
+                  
+                  
+        //    String logStr = String.valueOf(i) + "," + eDORepo.getResponseTime() + "," + eDORepo.getTime();
           //String logStr2 = String.valueOf(i) + ","+ eDORepoRaw.getDataComplenetess() + "," + eDORepo.getDataComplenetess();
 
-            //System.out.println(logStr);
+          //  System.out.println(logStr);
 
         }
+        
+    }
+    
+    
+    
+    public static void getSizeOfEDO(){
+        
+        
+        
+        String userID = "1";
+        for (int i = 0; i < 100; i++) {
+
+            String key = String.valueOf(i) + ";" + userID;
+            DeliveryService deliveryService = new DeliveryService();
+            String edoXML = deliveryService.getDeliveryEDO(key);
+
+            EDORepoJAXB eDORepoJAXB = new EDORepoJAXB();
+            EDORepo eDORepo = eDORepoJAXB.unmarshallingObject(edoXML);
+
+            
+            
+            
+            
+            EDORepoMeasuredAccessREST repoAccessManagement = new EDORepoMeasuredAccessREST("128.130.172.216","8080");
+            String xmlString = repoAccessManagement.getElasticDataObjectString(String.valueOf(i), userID);
+            
+            
+           // System.out.println("XML: "+xmlString);
+            
+            
+            EDORepo eDORepoRaw = eDORepoJAXB.unmarshallingObject(xmlString);
+            
+            
+            
+            
+       // System.out.println("EDO: " + key + "- DataCompleteness: "+ eDORepo.getDataComplenetess() +"- ResponseTime: " + eDORepo.getResponseTime());
+            
+           // String logStr = String.valueOf(i) + "," + eDORepo.getResponseTime() + "," + eDORepo.getTime()+"," +ObjectSizeFetcher.getObjectSize(eDORepo);;
+           // String logStr = String.valueOf(i) + ","+edoXML.length();
+            int noOfBts =edoXML.length();
+            double logStr = noOfBts/ 1024;
+            System.out.println(noOfBts);
+
+        }
+        
         
     }
 
