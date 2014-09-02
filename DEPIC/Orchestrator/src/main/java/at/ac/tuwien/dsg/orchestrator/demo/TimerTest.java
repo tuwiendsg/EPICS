@@ -23,17 +23,24 @@ public class TimerTest extends TimerTask {
      */
     
     private static int delta_t=2; // seconds
-    private static int maxRunTime =400; // seconds
+    private static int maxRunTime =600; // seconds
+    private static int changeUserInterval=50;
+    
+    
     private static int currentNoOfUser=0;
+    
+     private static int totalUsers=0;
     private static  int maxNoOfUser = 6;
     private static  int minNoOfUser =1;
     private static boolean isNoOfUserIncrease=true;
     private static List<Thread> threadList;
-   
+    private static int timeMilestone=0;
     
     
     
+    private static int noOfVMs=1;
     
+    private static int delpoyTime=32;
     
     
     @Override
@@ -50,6 +57,31 @@ public class TimerTest extends TimerTask {
         
        //     System.out.println("do something ... ");
         
+        Calendar calendar = Calendar.getInstance();
+        int second = calendar.get(Calendar.SECOND);
+        int minute = calendar.get(Calendar.MINUTE);
+        
+        if (timeMilestone==0) {
+            timeMilestone = minute*60 + second;
+        }
+        
+        
+        int t = minute*60 + second - timeMilestone;
+        
+        if (t==(changeUserInterval*7) || t==(changeUserInterval*9)) {
+            System.out.println(t+ " - Remove VMs");
+            noOfVMs--;
+      
+          
+            
+        }
+        
+        
+        if (t%changeUserInterval==0) {
+        
+        
+        
+        
             
              double A = maxNoOfUser/2; // amplitude
              double B = minNoOfUser; // amplitude
@@ -58,10 +90,7 @@ public class TimerTest extends TimerTask {
         
       
         System.out.println();
-        Calendar calendar = Calendar.getInstance();
-        int second = calendar.get(Calendar.SECOND);
-        int minute = calendar.get(Calendar.MINUTE);
-        int t = minute*60 + second;
+        
       
       //  double y = (A-B)*Math.sin(omega*t) +A;
         
@@ -69,25 +98,26 @@ public class TimerTest extends TimerTask {
         
       //  currentNoOfUser++;
         
-        if (currentNoOfUser==minNoOfUser) {
+        if (totalUsers==minNoOfUser) {
             isNoOfUserIncrease = true;
             
         }
         
-        if (currentNoOfUser==maxNoOfUser) {
+        if (totalUsers==maxNoOfUser) {
             isNoOfUserIncrease = false;
         }
         
         
         double y=0;
         if (isNoOfUserIncrease) {
-            y = currentNoOfUser +1;
+         
+            y = ++totalUsers;
         } else {
-            y = currentNoOfUser -1;
+            y = --totalUsers;
             
         }
         
-        int changeNoOfUser = (int)Math.ceil(y);
+        int changeNoOfUser = (int)Math.ceil(y/noOfVMs);
         
         
         if (changeNoOfUser>currentNoOfUser) {
@@ -104,7 +134,7 @@ public class TimerTest extends TimerTask {
             
             currentNoOfUser = changeNoOfUser;
             
-        } else {
+        } else if (changeNoOfUser<currentNoOfUser) {
             
             for (int i=changeNoOfUser;i<currentNoOfUser;i++) {
                 Thread thread_i = threadList.get(i);
@@ -120,6 +150,24 @@ public class TimerTest extends TimerTask {
             System.out.println(t + " , NoOfUsers:  " + currentNoOfUser);
             
             
+        }
+        
+        
+        if (t==(delpoyTime+changeUserInterval*2) || t==(delpoyTime+changeUserInterval*4)) {
+            System.out.println(t+ " - Finish Deployment");
+            noOfVMs++;
+      
+            int changeNoOfUser =currentNoOfUser-1;
+            
+            for (int i=changeNoOfUser;i<currentNoOfUser;i++) {
+                Thread thread_i = threadList.get(i);
+                thread_i.stop();
+               System.out.println("Stop User " + i);
+            }
+            currentNoOfUser = changeNoOfUser;
+            
+        }
+        
         
         
     }

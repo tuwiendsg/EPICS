@@ -86,7 +86,7 @@ public class StatisticApp {
         double sumOfSizes=0;
         int objectCounter=0;
         
-        for (int i = 0; i < 200; i++) {
+        for (int i = 1; i < 700; i++) {
             
             
            
@@ -115,7 +115,7 @@ public class StatisticApp {
      //   System.out.println("EDO: " + key + "- DataCompleteness: "+ eDORepo.getDataComplenetess() +"- ResponseTime: " + eDORepo.getResponseTime());
             
             
-             if (i==1) {
+             if (i==0) {
                 startTime = eDORepo.getTime();
                 checkTime = eDORepo.getTime();
                 
@@ -125,7 +125,7 @@ public class StatisticApp {
              currentTime = eDORepo.getTime();
              
              if (((currentTime-startTime)>=timeInterval) && !(i<timeInterval)) {
-                 
+                 startTime = currentTime;
              
                 double throughput = sumOfSizes/sumOfResponseTime*objectCounter;
                  
@@ -136,10 +136,11 @@ public class StatisticApp {
                  
                  System.out.println(lg);
                  
-                 startTime = eDORepo.getTime();
+               //  startTime = eDORepo.getTime();
 
                  sumOfResponseTime=0;
                  objectCounter=0;
+                 sumOfSizes=0;
              }
              
              
