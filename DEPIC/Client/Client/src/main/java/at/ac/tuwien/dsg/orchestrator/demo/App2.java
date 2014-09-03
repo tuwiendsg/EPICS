@@ -7,7 +7,7 @@
 package at.ac.tuwien.dsg.orchestrator.demo;
 
 import at.ac.tuwien.dsg.common.rest.QualityEvaluatorREST;
-import at.ac.tuwien.dsg.common.rest.ResponseTimeRest;
+
 import at.ac.tuwien.dsg.orchestrator.properties.PropertiesConfiguration;
 import at.ac.tuwien.dsg.orchestrator.properties.VMCluster;
 import java.util.List;

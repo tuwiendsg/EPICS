@@ -30,7 +30,7 @@ public class TimerTest extends TimerTask {
     private static int currentNoOfUser=0;
     
      private static int totalUsers=0;
-    private static  int maxNoOfUser = 6;
+    private static  int maxNoOfUser = 3;
     private static  int minNoOfUser =1;
     private static boolean isNoOfUserIncrease=true;
     private static List<Thread> threadList;

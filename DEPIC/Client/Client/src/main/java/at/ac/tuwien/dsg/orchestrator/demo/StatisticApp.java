@@ -86,7 +86,7 @@ public class StatisticApp {
         double sumOfSizes=0;
         int objectCounter=0;
         
-        for (int i = 1; i < 700; i++) {
+        for (int i = 1; i < 1000; i++) {
             
             
            
