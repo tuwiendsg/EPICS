@@ -7,11 +7,10 @@
   <packaging>pom</packaging>
   <name>DEPIC</name>
   <modules>
-    <module>DataAccessManagement</module>
     <module>Common</module>
     <module>QualityEvaluator</module>
-    <module>QualityEnforcement</module>
     <module>Orchestrator</module>
-    <module>Client/Client</module>
+    <module>DataObjectLoader</module>
+    <module>DataElasticityController</module>
   </modules>
 </project>

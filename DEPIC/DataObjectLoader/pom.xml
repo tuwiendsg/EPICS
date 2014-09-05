@@ -8,11 +8,11 @@
   </parent>
 
     <groupId>at.ac.tuwien.dsg</groupId>
-    <artifactId>Orchestrator</artifactId>
+    <artifactId>DataObjectLoader</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>Client</name>
+    <name>DataObjectLoader</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -21,26 +21,21 @@
     
     <dependencies>
         <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.31</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>Common</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.3.1</version>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.ning</groupId>
-            <artifactId>async-http-client</artifactId>
-            <version>1.8.12</version>
         </dependency>
     </dependencies>
 
@@ -91,7 +86,6 @@
                     </execution>
                 </executions>
             </plugin>
-            
         </plugins>
         <finalName>${project.artifactId}</finalName>
     </build>

@@ -86,7 +86,7 @@ public class StatisticApp {
         double sumOfSizes=0;
         int objectCounter=0;
         
-        for (int i = 1; i < 700; i++) {
+        for (int i = 1; i < 10000; i++) {
             
             
            
@@ -94,13 +94,17 @@ public class StatisticApp {
             String key = String.valueOf(i) + ";" + userID;
             DeliveryService deliveryService = new DeliveryService();
             String edoXML = deliveryService.getDeliveryEDO(key);
+            
+            
+            
+            
 
             EDORepoJAXB eDORepoJAXB = new EDORepoJAXB();
             EDORepo eDORepo = eDORepoJAXB.unmarshallingObject(edoXML);
 
+            if (eDORepo != null) { 
             
-            
-            
+       /*     
             
             EDORepoMeasuredAccessREST repoAccessManagement = new EDORepoMeasuredAccessREST("128.130.172.216","8080");
             String xmlString = repoAccessManagement.getElasticDataObjectString(String.valueOf(i), userID);
@@ -110,12 +114,12 @@ public class StatisticApp {
             
             
             EDORepo eDORepoRaw = eDORepoJAXB.unmarshallingObject(xmlString);
-            
+         */   
             
      //   System.out.println("EDO: " + key + "- DataCompleteness: "+ eDORepo.getDataComplenetess() +"- ResponseTime: " + eDORepo.getResponseTime());
             
             
-             if (i==0) {
+             if (i==1) {
                 startTime = eDORepo.getTime();
                 checkTime = eDORepo.getTime();
                 
@@ -158,7 +162,7 @@ public class StatisticApp {
           //String logStr2 = String.valueOf(i) + ","+ eDORepoRaw.getDataComplenetess() + "," + eDORepo.getDataComplenetess();
 
           //  System.out.println(logStr);
-
+            }
         }
         
     }
