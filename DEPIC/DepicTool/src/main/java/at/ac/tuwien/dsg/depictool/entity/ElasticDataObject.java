@@ -14,13 +14,20 @@ import java.util.List;
  */
 public class ElasticDataObject {
     List<DataObjectFunction> listOfDataObjectFunctions;
-
+    List<DataElasticityMetric> listOfDataElasticityMetrics;
+    List<ElasticState> listOfElasticStates;
+    
     public ElasticDataObject() {
     }
 
-    public ElasticDataObject(List<DataObjectFunction> listOfDataObjectFunctions) {
+    public ElasticDataObject(List<DataObjectFunction> listOfDataObjectFunctions, List<DataElasticityMetric> listOfDataElasticityMetrics, List<ElasticState> listOfElasticStates) {
         this.listOfDataObjectFunctions = listOfDataObjectFunctions;
+        this.listOfDataElasticityMetrics = listOfDataElasticityMetrics;
+        this.listOfElasticStates = listOfElasticStates;
     }
+
+    
+   
     
     
     
