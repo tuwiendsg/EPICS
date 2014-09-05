@@ -26,6 +26,36 @@ public class ElasticDataObject {
         this.listOfElasticStates = listOfElasticStates;
     }
 
+    public List<DataObjectFunction> getListOfDataObjectFunctions() {
+        return listOfDataObjectFunctions;
+    }
+
+    public void setListOfDataObjectFunctions(List<DataObjectFunction> listOfDataObjectFunctions) {
+        this.listOfDataObjectFunctions = listOfDataObjectFunctions;
+    }
+
+    public List<DataElasticityMetric> getListOfDataElasticityMetrics() {
+        return listOfDataElasticityMetrics;
+    }
+
+    public void setListOfDataElasticityMetrics(List<DataElasticityMetric> listOfDataElasticityMetrics) {
+        this.listOfDataElasticityMetrics = listOfDataElasticityMetrics;
+    }
+
+    public List<ElasticState> getListOfElasticStates() {
+        return listOfElasticStates;
+    }
+
+    public void setListOfElasticStates(List<ElasticState> listOfElasticStates) {
+        this.listOfElasticStates = listOfElasticStates;
+    }
+    
+    
+    
+    
+    
+    
+    
     
    
     

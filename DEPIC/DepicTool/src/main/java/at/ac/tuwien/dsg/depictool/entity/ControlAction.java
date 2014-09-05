@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.common.tooling.edo.metric;
+package at.ac.tuwien.dsg.depictool.entity;
 
 import java.util.List;
 
@@ -19,26 +19,6 @@ public class ControlAction {
     public ControlAction() {
     }
 
-    public ControlAction(String actionURI, List listOfParameters) {
-        this.actionURI = actionURI;
-        this.listOfParameters = listOfParameters;
-    }
-
-    public String getActionURI() {
-        return actionURI;
-    }
-
-    public void setActionURI(String actionURI) {
-        this.actionURI = actionURI;
-    }
-
-    public List getListOfParameters() {
-        return listOfParameters;
-    }
-
-    public void setListOfParameters(List listOfParameters) {
-        this.listOfParameters = listOfParameters;
-    }
     
     
     

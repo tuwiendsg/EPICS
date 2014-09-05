@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.common.tooling.edo.metric;
+package at.ac.tuwien.dsg.depictool.entity;
 
 import java.util.List;
 

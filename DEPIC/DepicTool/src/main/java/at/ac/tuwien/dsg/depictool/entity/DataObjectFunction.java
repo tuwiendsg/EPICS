@@ -13,12 +13,12 @@ package at.ac.tuwien.dsg.depictool.entity;
 public class DataObjectFunction {
     String name;
     String query;
-    String numberOfDataItems;
+    int numberOfDataItems;
 
     public DataObjectFunction() {
     }
 
-    public DataObjectFunction(String name, String query, String numberOfDataItems) {
+    public DataObjectFunction(String name, String query, int numberOfDataItems) {
         this.name = name;
         this.query = query;
         this.numberOfDataItems = numberOfDataItems;
@@ -40,13 +40,15 @@ public class DataObjectFunction {
         this.query = query;
     }
 
-    public String getNumberOfDataItems() {
+    public int getNumberOfDataItems() {
         return numberOfDataItems;
     }
 
-    public void setNumberOfDataItems(String numberOfDataItems) {
+    public void setNumberOfDataItems(int numberOfDataItems) {
         this.numberOfDataItems = numberOfDataItems;
     }
+
+    
     
     
 }

@@ -14,14 +14,16 @@ import java.util.List;
  */
 public class DataElasticityMetric {
     String name;
+    String unit;
     List<Range> listOfRanges;
 
     public DataElasticityMetric() {
         
     }
 
-    public DataElasticityMetric(String name, List<Range> listOfRanges) {
+    public DataElasticityMetric(String name, String unit, List<Range> listOfRanges) {
         this.name = name;
+        this.unit = unit;
         this.listOfRanges = listOfRanges;
     }
 
@@ -33,6 +35,14 @@ public class DataElasticityMetric {
         this.name = name;
     }
 
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
     public List<Range> getListOfRanges() {
         return listOfRanges;
     }
@@ -40,7 +50,7 @@ public class DataElasticityMetric {
     public void setListOfRanges(List<Range> listOfRanges) {
         this.listOfRanges = listOfRanges;
     }
-    
+
     
     
     
