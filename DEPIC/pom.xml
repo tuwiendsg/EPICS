@@ -12,5 +12,8 @@
     <module>Orchestrator</module>
     <module>DataObjectLoader</module>
     <module>DataElasticityController</module>
+    <module>Deployment</module>
+    <module>ToolParser</module>
+    <module>ToolGenerator</module>
   </modules>
 </project>
