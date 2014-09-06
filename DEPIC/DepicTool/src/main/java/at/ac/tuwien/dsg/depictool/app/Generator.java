@@ -123,10 +123,18 @@ public class Generator {
             String rangeVal_j = findRangeValueFromMetricName(metricName_i, listOfMetricRanges_j);
             ControlAction controlAction = findControlAction(metricName_i,rangeVal_i,rangeVal_j);
             
-            System.out.println("MEtric Name: " + metricName_i + " from: " + rangeVal_i + " to " + rangeVal_j) ;
             
-            if (controlAction!=null)
+             
+            if (controlAction==null && !rangeVal_i.equals(rangeVal_j)){
+                listOfControlActions.clear();
+                
+                break;
+            } 
+                
+            if (controlAction!=null)    
             listOfControlActions.add(controlAction);
+            
+            
             
             
         }
@@ -210,10 +218,11 @@ public class Generator {
             for (ControlAction controlAction : listOfControlActions){
                 TriggerValues triggerValues = controlAction.getTriggerValues();
                 
-                System.out.println("     - Control Action --- from: " + triggerValues.getFromRange() 
-                        + " - to: " + triggerValues.getToRange() 
-                        + " - id: " + controlAction.getActionID() + " - param: " 
-                        + controlAction.getListOfParameters().get(0).getParaName());
+                System.out.println("     - Control Action: "+ controlAction.getActionID() +" --- from: " + triggerValues.getFromRange() 
+                        + " - to: " + triggerValues.getToRange());
+                
+                System.out.println("               Param: " + controlAction.getListOfParameters().get(0).getParaName()
+                        + " Value: " + controlAction.getListOfParameters().get(0).getValue());
                 
                 
                 

@@ -198,7 +198,7 @@ public class SampleData {
         
         /////////////// data completeness
         String controlActionID1="LSR";
-        TriggerValues triggerValues1 = new TriggerValues("d1", "d2");
+        TriggerValues triggerValues1 = new TriggerValues("d1", "d3");
         List<Parameter> listOfParameters = new ArrayList<>();
         
         Parameter param1 = new Parameter("expectedDataCompleteness", "double","100");
@@ -208,7 +208,7 @@ public class SampleData {
                
         
         String controlActionID2="LSR";
-        TriggerValues triggerValues2 = new TriggerValues("d1", "d3");
+        TriggerValues triggerValues2 = new TriggerValues("d2", "d3");
         List<Parameter> listOfParameters2 = new ArrayList<>();
         
         Parameter param2 = new Parameter("expectedDataCompleteness", "double","100");
