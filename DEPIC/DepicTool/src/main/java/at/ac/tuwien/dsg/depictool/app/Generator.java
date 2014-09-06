@@ -12,8 +12,11 @@ import at.ac.tuwien.dsg.depictool.entity.DataElasticityProcessConfiguration;
 import at.ac.tuwien.dsg.depictool.entity.ElasticDataObject;
 import at.ac.tuwien.dsg.depictool.entity.ElasticState;
 import at.ac.tuwien.dsg.depictool.entity.MetricElasticityProcess;
+import at.ac.tuwien.dsg.depictool.entity.MetricRange;
 import at.ac.tuwien.dsg.depictool.entity.MonitorAction;
 import at.ac.tuwien.dsg.depictool.entity.MonitorProcess;
+import at.ac.tuwien.dsg.depictool.entity.Range;
+import at.ac.tuwien.dsg.depictool.entity.TriggerValues;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,31 +87,99 @@ public class Generator {
     
     private List<ControlProcess> generateControlProcesses(){
         
-         List<ElasticState> listOfElasticStates = elasticDataObject.getListOfElasticStates();
+        
+        List<ControlProcess> listOfControlProcesses = new ArrayList<>();
+        
+        List<ElasticState> listOfElasticStates = elasticDataObject.getListOfElasticStates();
          
         for (ElasticState eState_i : listOfElasticStates) {
             for (ElasticState eState_j : listOfElasticStates) {
 
                 if (!eState_i.equals(eState_j)) {
 
-                    
-                    System.out.println();
-
+                    ControlProcess controlProcess = findControlProcess(eState_i, eState_j);
+                    if (controlProcess!=null)
+                    listOfControlProcesses.add(controlProcess);
                 }
             }
         }
         
         
-        return null;
+        return listOfControlProcesses;
     }
 
-    private ControlProcess findControlProcess(ElasticState eStatei) {
+    private ControlProcess findControlProcess(ElasticState eStatei, ElasticState eStatej) {
 
+        ControlProcess controlProcess=null;
+        
         List<ControlAction> listOfControlActions = new ArrayList<>();
-
-        ControlProcess controlProcess = new ControlProcess(eStatei.geteStateID(), eStatei.geteStateID(), listOfControlActions);
-        System.out.println("from eState i: " + eStatei.geteStateID() + " --- to eState j: " + eStatei.geteStateID());
+        
+        List<MetricRange> listOfMetricRanges_i = eStatei.getListOfMetricRanges();
+        List<MetricRange> listOfMetricRanges_j = eStatej.getListOfMetricRanges();
+        
+        for (MetricRange metricRange_i : listOfMetricRanges_i) {
+            String metricName_i = metricRange_i.getMetricName();
+            String rangeVal_i = metricRange_i.getRange();        
+            String rangeVal_j = findRangeValueFromMetricName(metricName_i, listOfMetricRanges_j);
+            ControlAction controlAction = findControlAction(metricName_i,rangeVal_i,rangeVal_j);
+            
+            System.out.println("MEtric Name: " + metricName_i + " from: " + rangeVal_i + " to " + rangeVal_j) ;
+            
+            if (controlAction!=null)
+            listOfControlActions.add(controlAction);
+            
+            
+        }
+        
+        
+        
+        if (listOfControlActions.size()!=0)
+        controlProcess = new ControlProcess(eStatei.geteStateID(), eStatej.geteStateID(), listOfControlActions);
+       // System.out.println("from eState i: " + eStatei.geteStateID() + " --- to eState j: " + eStatei.geteStateID());
         return controlProcess;
+    }
+    
+    private ControlAction findControlAction(String metricName,String rangeVal_i,String rangeVal_j){
+        ControlAction returnControlAction = null;
+        
+        List<MetricElasticityProcess> listOfMetricElasticityProcesses = elasticityProcessConfiguration.getListOfMetricElasticityProcesses();
+        
+        for (MetricElasticityProcess elasticityProcess : listOfMetricElasticityProcesses) {
+            if (elasticityProcess.getMetricName().equals(metricName)){
+                
+                List<ControlAction> listOfControlActions = elasticityProcess.getListOfControlActions();
+                
+                for(ControlAction controlAction : listOfControlActions) {
+                    
+                    TriggerValues triggerValues= controlAction.getTriggerValues();
+                    
+                    if(triggerValues.getFromRange().equals(rangeVal_i) && triggerValues.getToRange().equals(rangeVal_j)) {
+                        returnControlAction = controlAction;
+                    }
+                    
+                }
+                
+                
+            }
+            
+        }
+        
+        
+        return returnControlAction;
+    }
+    
+    private String findRangeValueFromMetricName(String metricName,List<MetricRange> listOfMetricRanges){
+        
+        String rangeVal="";
+        
+        for (MetricRange metricRange : listOfMetricRanges) {
+            if (metricRange.getMetricName().equals(metricName)) {
+                rangeVal = metricRange.getRange();
+            }
+        }
+        
+        
+        return  rangeVal;
     }
     
     private void log(DataElasticityProcess dataElasticityProcess){
@@ -122,6 +193,32 @@ public class Generator {
         System.out.println("Monitor Process --- ");
         for (MonitorAction monitorAction : listOfMonitorActions) {
             System.out.println("Monitor Action: " + monitorAction.getMonitorActionID());
+            
+        }
+        
+        System.out.println("");
+        //print out control process;
+        
+        System.out.println("List of Control Processes --- ");
+        List<ControlProcess> listOfControlProcesses = dataElasticityProcess.getListOfControlProcesses();
+        
+        for (ControlProcess controlProcess : listOfControlProcesses) {
+            System.out.println("*** Control Process: --- from " + controlProcess.geteStateID_i() + " to " + controlProcess.geteStateID_j());
+            
+            
+            List<ControlAction> listOfControlActions = controlProcess.getListOfControlActions();
+            for (ControlAction controlAction : listOfControlActions){
+                TriggerValues triggerValues = controlAction.getTriggerValues();
+                
+                System.out.println("     - Control Action --- from: " + triggerValues.getFromRange() 
+                        + " - to: " + triggerValues.getToRange() 
+                        + " - id: " + controlAction.getActionID() + " - param: " 
+                        + controlAction.getListOfParameters().get(0).getParaName());
+                
+                
+                
+                
+            }
             
         }
         

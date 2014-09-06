@@ -15,13 +15,13 @@ import java.util.List;
 public class ElasticState {
     
     String eStateID;
-    List<String> listOfMetricRanges;
+    List<MetricRange> listOfMetricRanges;
     double price;
 
     public ElasticState() {
     }
 
-    public ElasticState(String eStateID, List<String> listOfMetricRanges, double price) {
+    public ElasticState(String eStateID, List<MetricRange> listOfMetricRanges, double price) {
         this.eStateID = eStateID;
         this.listOfMetricRanges = listOfMetricRanges;
         this.price = price;
@@ -35,11 +35,11 @@ public class ElasticState {
         this.eStateID = eStateID;
     }
 
-    public List<String> getListOfMetricRanges() {
+    public List<MetricRange> getListOfMetricRanges() {
         return listOfMetricRanges;
     }
 
-    public void setListOfMetricRanges(List<String> listOfMetricRanges) {
+    public void setListOfMetricRanges(List<MetricRange> listOfMetricRanges) {
         this.listOfMetricRanges = listOfMetricRanges;
     }
 
@@ -50,6 +50,7 @@ public class ElasticState {
     public void setPrice(double price) {
         this.price = price;
     }
+
     
     
     
