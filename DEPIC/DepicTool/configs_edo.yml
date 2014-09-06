@@ -36,7 +36,7 @@ listOfDataObjectFunctions:
    numberOfDataItems: 100
    query: Select * from PowerConsumption Where Time = Today
 - !at.ac.tuwien.dsg.depictool.entity.DataObjectFunction
-   name: pc-100
+   name: pc-200
    numberOfDataItems: 200
    query: Select * from PowerConsumption Where Time = Today
 listOfElasticStates: 

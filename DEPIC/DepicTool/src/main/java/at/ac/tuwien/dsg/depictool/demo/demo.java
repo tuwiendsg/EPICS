@@ -6,11 +6,17 @@
 
 package at.ac.tuwien.dsg.depictool.demo;
 
+import at.ac.tuwien.dsg.depictool.entity.ControlAction;
 import at.ac.tuwien.dsg.depictool.entity.DataElasticityMetric;
+import at.ac.tuwien.dsg.depictool.entity.DataElasticityProcessConfiguration;
 import at.ac.tuwien.dsg.depictool.entity.DataObjectFunction;
 import at.ac.tuwien.dsg.depictool.entity.ElasticDataObject;
 import at.ac.tuwien.dsg.depictool.entity.ElasticState;
+import at.ac.tuwien.dsg.depictool.entity.MetricElasticityProcess;
+import at.ac.tuwien.dsg.depictool.entity.MonitorAction;
+import at.ac.tuwien.dsg.depictool.entity.Parameter;
 import at.ac.tuwien.dsg.depictool.entity.Range;
+import at.ac.tuwien.dsg.depictool.entity.TriggerValues;
 import at.ac.tuwien.dsg.depictool.util.YamlUtils;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -29,7 +35,9 @@ public class demo {
         // TODO code application logic here
         
         YamlUtils yamlUtils = new YamlUtils();
-        yamlUtils.convertObject2Yaml(sampleEDO());
+        yamlUtils.convertElasticDataObject2Yaml(sampleEDO());
+        
+        yamlUtils.convertElasticProcessConfiguration2Yaml(sampleDEPConf());
         
         //System.out.println("EDO: " +xmlString);
         
@@ -59,7 +67,7 @@ public class demo {
         
         
         DataObjectFunction dataObjectFunction1 = new DataObjectFunction(dataFunctionName,query,numberOfDataItem);
-        DataObjectFunction dataObjectFunction2 = new DataObjectFunction(dataFunctionName,query,200);
+        DataObjectFunction dataObjectFunction2 = new DataObjectFunction("pc-200",query,200);
         
         List<DataObjectFunction> listOfDataObjectFunctions = new ArrayList<>();
         listOfDataObjectFunctions.add(dataObjectFunction1);
@@ -141,6 +149,45 @@ public class demo {
         return  listOfElasticStates;
     }
     
-    
+    public static DataElasticityProcessConfiguration sampleDEPConf(){
+        
+        String controlActionID1="ca1";
+        TriggerValues triggerValues1 = new TriggerValues("r1", "r2");
+        List<Parameter> listOfParameters = new ArrayList<>();
+        
+        Parameter param1 = new Parameter("expectedDataCompleteness", "double");
+        listOfParameters.add(param1);  
+        
+        ControlAction controlAction1 = new ControlAction(controlActionID1, triggerValues1, listOfParameters); 
+               
+        
+        String controlActionID2="ca2";
+        TriggerValues triggerValues2 = new TriggerValues("r1", "r3");
+        List<Parameter> listOfParameters2 = new ArrayList<>();
+        
+        Parameter param2 = new Parameter("expectedDataCompleteness", "double");
+        listOfParameters2.add(param2);  
+        
+        ControlAction controlAction2 = new ControlAction(controlActionID2, triggerValues2, listOfParameters2); 
+        
+        List<ControlAction> listOfControlActions = new ArrayList<>();
+        listOfControlActions.add(controlAction1);
+        listOfControlActions.add(controlAction2);
+                
+        MonitorAction monitorAction = new MonitorAction("dataCompletenessMeasurement");
+        
+        MetricElasticityProcess metricControlAction1 = new MetricElasticityProcess("data completeness",monitorAction, listOfControlActions);
+        List<MetricElasticityProcess> listOfMetricControlActions = new ArrayList<>();
+        listOfMetricControlActions.add(metricControlAction1);
+        
+        DataElasticityProcessConfiguration dataElasticityProcessConfiguration = new DataElasticityProcessConfiguration(listOfMetricControlActions);
+        
+        
+        
+        
+        
+        
+        return dataElasticityProcessConfiguration;
+    }
     
 }

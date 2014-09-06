@@ -1,0 +1,25 @@
+!at.ac.tuwien.dsg.depictool.entity.DataElasticityProcessConfiguration
+listOfMetricControlActions: 
+- !at.ac.tuwien.dsg.depictool.entity.MetricElasticityProcess
+   listOfControlActions: 
+   - !at.ac.tuwien.dsg.depictool.entity.ControlAction
+      actionID: ca1
+      listOfParameters: 
+      - !at.ac.tuwien.dsg.depictool.entity.Parameter
+         paraName: expectedDataCompleteness
+         type: double
+      triggerValues: 
+         fromRange: r1
+         toRange: r2
+   - !at.ac.tuwien.dsg.depictool.entity.ControlAction
+      actionID: ca2
+      listOfParameters: 
+      - !at.ac.tuwien.dsg.depictool.entity.Parameter
+         paraName: expectedDataCompleteness
+         type: double
+      triggerValues: 
+         fromRange: r1
+         toRange: r3
+   metricName: data completeness
+   monitorAction: 
+      monitorActionID: dataCompletenessMeasurement
