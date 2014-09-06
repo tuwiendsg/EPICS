@@ -13,23 +13,24 @@ import java.util.List;
  * @author Jun
  */
 public class DataElasticityProcessConfiguration {
-    List<MetricElasticityProcess> listOfMetricControlActions;
+    List<MetricElasticityProcess> listOfMetricElasticityProcesses;
 
     public DataElasticityProcessConfiguration() {
     }
 
     public DataElasticityProcessConfiguration(List<MetricElasticityProcess> listOfMetricControlActions) {
-        this.listOfMetricControlActions = listOfMetricControlActions;
+        this.listOfMetricElasticityProcesses = listOfMetricControlActions;
     }
 
-    public List<MetricElasticityProcess> getListOfMetricControlActions() {
-        return listOfMetricControlActions;
+    public List<MetricElasticityProcess> getListOfMetricElasticityProcesses() {
+        return listOfMetricElasticityProcesses;
     }
 
-    public void setListOfMetricControlActions(List<MetricElasticityProcess> listOfMetricControlActions) {
-        this.listOfMetricControlActions = listOfMetricControlActions;
+    public void setListOfMetricElasticityProcesses(List<MetricElasticityProcess> listOfMetricElasticityProcesses) {
+        this.listOfMetricElasticityProcesses = listOfMetricElasticityProcesses;
     }
-    
+
+
     
     
     
