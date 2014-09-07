@@ -25,7 +25,7 @@ public class ElasticityProcessRepositorty {
         
         String ip="localhost";
         String userName="root";
-        String password="123";
+        String password="";
         String database="ElasticityProcess";
         String connectionString = "jdbc:mysql://"+ip+":3306/"+database+"?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false";
         
