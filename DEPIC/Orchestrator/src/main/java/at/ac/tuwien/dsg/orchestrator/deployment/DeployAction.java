@@ -6,10 +6,14 @@
 
 package at.ac.tuwien.dsg.orchestrator.deployment;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  * @author Jun
  */
+@XmlRootElement (name = "DeployAction")
 public class DeployAction {
     String actionID;
     String actionName;
@@ -32,6 +36,7 @@ public class DeployAction {
         return actionID;
     }
 
+    @XmlElement (name ="actionID")
     public void setActionID(String actionID) {
         this.actionID = actionID;
     }
@@ -40,6 +45,7 @@ public class DeployAction {
         return actionName;
     }
 
+    @XmlElement (name ="actionName")
     public void setActionName(String actionName) {
         this.actionName = actionName;
     }
@@ -48,6 +54,7 @@ public class DeployAction {
         return ip;
     }
 
+    @XmlElement (name ="ip")
     public void setIp(String ip) {
         this.ip = ip;
     }
@@ -56,6 +63,7 @@ public class DeployAction {
         return port;
     }
 
+    @XmlElement (name ="port")
     public void setPort(String port) {
         this.port = port;
     }
@@ -64,6 +72,7 @@ public class DeployAction {
         return artifact;
     }
 
+    @XmlElement (name ="artifact")
     public void setArtifact(String artifact) {
         this.artifact = artifact;
     }

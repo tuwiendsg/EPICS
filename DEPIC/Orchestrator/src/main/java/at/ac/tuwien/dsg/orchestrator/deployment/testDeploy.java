@@ -24,9 +24,9 @@ public class testDeploy {
        
         DeploymentDescriptionJAXB deploymentDescriptionJAXB = new DeploymentDescriptionJAXB();      
         String xmlDeploymentDescription = deploymentDescriptionJAXB.marshallingObject(deploymentDescription);
-        
-        DeploymentRestWS deploymentRestWS = new DeploymentRestWS("salsa ip", "salsa port");
-        deploymentRestWS.callDeploymentService(xmlDeploymentDescription);
+        System.out.println(xmlDeploymentDescription);
+     //   DeploymentRestWS deploymentRestWS = new DeploymentRestWS("salsa ip", "salsa port");
+     //   deploymentRestWS.callDeploymentService(xmlDeploymentDescription);
         
         
         
@@ -35,9 +35,9 @@ public class testDeploy {
     public static DeploymentDescription sampleDeploymentDescription(){
         String actionID="LSR";
         String actionName="LeastSquareRegession";
-        String ip="";
-        String port="";
-        String artifact="";
+        String ip="1.1.1.1";
+        String port="8080";
+        String artifact="http://1.1.1.1/upload/lsw.war";
         
         DeployAction deployAction = new DeployAction(actionID, actionName, ip, port, artifact);
         
