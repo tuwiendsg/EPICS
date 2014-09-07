@@ -153,8 +153,26 @@ public class Generator {
         
         List<ControlAction> listOfActions = controlProcess.getListOfControlActions();
         ElasticityProcessRepositorty epRepo = new ElasticityProcessRepositorty();
-     
-        List<ActionDependency> listOfActionDependencies = epRepo.getControlActionDependencyDB("");
+        
+        for (ControlAction controlAction_i : listOfActions) {
+            
+            for (ControlAction controlAction_j : listOfActions) {
+                
+               
+                List<ActionDependency> listOfActionDependencies = epRepo.getControlActionDependencyDB(controlAction_j.getActionID());
+                for (ActionDependency actionDependency : listOfActionDependencies){
+                    
+                }
+            }
+            
+            
+            
+        }
+        
+        
+         
+        
+       
         
         
         
