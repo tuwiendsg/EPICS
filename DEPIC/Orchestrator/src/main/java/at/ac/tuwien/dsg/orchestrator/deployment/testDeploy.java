@@ -5,6 +5,9 @@
  */
 package at.ac.tuwien.dsg.orchestrator.deployment;
 
+import at.ac.tuwien.dsg.common.deployment.DeploymentDescriptionJAXB;
+import at.ac.tuwien.dsg.common.deployment.DeploymentDescription;
+import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import java.util.ArrayList;
 import java.util.List;
 

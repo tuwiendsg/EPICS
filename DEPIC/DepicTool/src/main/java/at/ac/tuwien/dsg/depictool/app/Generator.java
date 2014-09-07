@@ -5,6 +5,10 @@
  */
 package at.ac.tuwien.dsg.depictool.app;
 
+import at.ac.tuwien.dsg.common.deployment.DeployAction;
+import at.ac.tuwien.dsg.common.deployment.DeploymentDescription;
+import at.ac.tuwien.dsg.common.deployment.DeploymentDescriptionJAXB;
+import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.depictool.entity.ActionDependency;
 import at.ac.tuwien.dsg.depictool.entity.ControlAction;
 import at.ac.tuwien.dsg.depictool.entity.ControlProcess;
@@ -69,6 +73,11 @@ public class Generator {
         DataElasticityProcess dataElasticityProcess = new DataElasticityProcess(monitorProcess, listOfControlProcesses);
 
         log(dataElasticityProcess);
+        
+        
+        // deploy elasticity process
+        deployElasticityProcess(dataElasticityProcess);
+        
     }
 
     private MonitorProcess generateMonitorProcess() {
@@ -115,6 +124,63 @@ public class Generator {
 
         return listOfControlProcesses;
     }
+    
+    
+    private void deployElasticityProcess(DataElasticityProcess dataElasticityProcess){
+        
+        MonitorProcess monitorProcess = dataElasticityProcess.getMonitorProcess();
+        
+        // deploy monitor actions
+        deployMonitorActions(monitorProcess);
+        
+        
+        List<ControlProcess> listOfControlProcesses = dataElasticityProcess.getListOfControlProcesses();
+        //deploy control actions
+        deployControlActions(listOfControlProcesses);
+        
+        
+        
+        
+    }
+    
+    
+    private void deployMonitorActions(MonitorProcess monitorProcess){
+        List<MonitorAction> listOfMonitorActions = monitorProcess.getListOfMonitorActions();
+        List<DeployAction> listOfDeployActions = new ArrayList<>();
+        
+        for (MonitorAction monitorAction : listOfMonitorActions) {
+            
+            String actionID = monitorAction.getMonitorActionID();
+            ElasticityProcessRepositorty elasticityProcessRepositorty = new ElasticityProcessRepositorty();
+        
+            DeployAction deployAction = elasticityProcessRepositorty.getPrimitiveAction(actionID);
+            listOfDeployActions.add(deployAction);
+            
+        }
+        
+        DeploymentDescription deploymentDescription = new DeploymentDescription(listOfDeployActions);
+        
+        DeploymentDescriptionJAXB descriptionJAXB = new DeploymentDescriptionJAXB();
+        String xmlDescription = descriptionJAXB.marshallingObject(deploymentDescription);
+        
+        RestfulWSClient restfulWSClient = new RestfulWSClient("localhost", "8080", "/Orchestrator/webresources/DeploymentDescription");
+        restfulWSClient.callRestfulWebService(xmlDescription);
+
+        
+        
+        
+        
+        
+        
+    }
+    
+    
+    private void deployControlActions(List<ControlProcess> listOfControlProcesses){
+        
+    }
+    
+    
+    
 
     private ControlProcess findControlProcess(ElasticState eStatei, ElasticState eStatej) {
 

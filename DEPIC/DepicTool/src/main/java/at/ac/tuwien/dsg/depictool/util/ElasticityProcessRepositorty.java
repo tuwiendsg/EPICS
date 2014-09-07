@@ -6,6 +6,7 @@
 
 package at.ac.tuwien.dsg.depictool.util;
 
+import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import at.ac.tuwien.dsg.common.entity.others.MySqlConnectionManager;
 import at.ac.tuwien.dsg.depictool.entity.ActionDependency;
 import java.sql.ResultSet;
@@ -22,12 +23,25 @@ public class ElasticityProcessRepositorty {
     
     
     public ElasticityProcessRepositorty() {
+        /*
         
+        // localDB
         String ip="localhost";
         String userName="root";
         String password="";
         String database="ElasticityProcess";
         String connectionString = "jdbc:mysql://"+ip+":3306/"+database+"?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false";
+        
+        */
+        // remoteDB
+        String ip="166.62.8.6";
+        String userName="ElasProcess";
+        String password="aaA@@123";
+        String database="ElasProcess";
+        String connectionString = "jdbc:mysql://"+ip+":3306/"+database+"?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false";
+        
+        
+        
         
         mySqlConnectionManager = new MySqlConnectionManager(connectionString, userName, password);
         
@@ -56,6 +70,34 @@ public class ElasticityProcessRepositorty {
         }
         
         return listOfActionDependencies;
+    }
+    
+    
+    public DeployAction getPrimitiveAction(String actionID){
+        String sql = "select * from PrimitiveAction where actionID='" + actionID+"'";
+        DeployAction deployAction=null;
+        
+        List<ActionDependency> listOfActionDependencies = new ArrayList<>();
+        
+        ResultSet rs = mySqlConnectionManager.ExecuteQuery(sql);
+
+        try {
+
+            while (rs.next()) {
+            
+                String actionName = rs.getString("actionName");    
+                String artifact = rs.getString("artifact");
+                
+                deployAction = new DeployAction(actionID, actionName, "", "", artifact);
+                
+              
+            }
+
+        } catch (Exception ex) {
+
+        }
+        
+        return deployAction;
     }
     
     
