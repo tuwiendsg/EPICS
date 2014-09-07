@@ -3,8 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package at.ac.tuwien.dsg.common.rest;
+package at.ac.tuwien.dsg.orchestrator.deployment;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -16,29 +15,20 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-
 /**
  *
  * @author Jun
  */
+public class DeploymentRestWS {
 
-
-    public class QualityEnforcementREST {
-
-     
     private CloseableHttpClient httpClient = HttpClients.createDefault();
     private String ip;
     private String port;
 
-    public QualityEnforcementREST(String ip, String port) {
+    public DeploymentRestWS(String ip, String port) {
         this.ip = ip;
         this.port = port;
     }
-    
-    
-    
-    
-    
 
     public CloseableHttpClient getHttpClient() {
         return httpClient;
@@ -64,13 +54,11 @@ import org.apache.http.impl.client.HttpClients;
         this.port = port;
     }
 
-    public void callQualityEnforcement(String xmlString) {
+    public void callDeploymentService(String xmlString) {
 
-        
         try {
-            String url = "http://" + ip + ":" + port + "/QualityEnforcement/webresources/QualityEnforcementService";
+            String url = "http://" + ip + ":" + port + "/SALSA/PrimitiveControlAction";
 
-          
             //HttpGet method = new HttpGet(url);
             StringEntity inputKeyspace = new StringEntity(xmlString);
 
@@ -84,7 +72,6 @@ import org.apache.http.impl.client.HttpClients;
             int statusCode = methodResponse.getStatusLine().getStatusCode();
 
           //  System.out.println("Status Code: " + statusCode);
-
             BufferedReader rd = new BufferedReader(
                     new InputStreamReader(methodResponse.getEntity().getContent()));
 
@@ -94,16 +81,10 @@ import org.apache.http.impl.client.HttpClients;
                 result.append(line);
             }
 
-           // System.out.println("Response String: " + result.toString());
+            // System.out.println("Response String: " + result.toString());
         } catch (Exception ex) {
 
         }
 
     }
-        
-    }
-    
-
-
-
-
+}

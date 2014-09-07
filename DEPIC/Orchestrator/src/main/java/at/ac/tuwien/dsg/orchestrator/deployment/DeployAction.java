@@ -10,17 +10,17 @@ package at.ac.tuwien.dsg.orchestrator.deployment;
  *
  * @author Jun
  */
-public class DeploymentDescription {
+public class DeployAction {
     String actionID;
     String actionName;
     String ip;
     String port;
     String artifact;
 
-    public DeploymentDescription() {
+    public DeployAction() {
     }
 
-    public DeploymentDescription(String actionID, String actionName, String ip, String port, String artifact) {
+    public DeployAction(String actionID, String actionName, String ip, String port, String artifact) {
         this.actionID = actionID;
         this.actionName = actionName;
         this.ip = ip;
@@ -67,6 +67,7 @@ public class DeploymentDescription {
     public void setArtifact(String artifact) {
         this.artifact = artifact;
     }
+    
     
     
     
