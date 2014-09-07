@@ -23,7 +23,7 @@ public class ElasticityProcessRepositorty {
     
     
     public ElasticityProcessRepositorty() {
-        /*
+       
         
         // localDB
         String ip="localhost";
@@ -31,8 +31,8 @@ public class ElasticityProcessRepositorty {
         String password="";
         String database="ElasticityProcess";
         String connectionString = "jdbc:mysql://"+ip+":3306/"+database+"?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false";
+         /*
         
-        */
         // remoteDB
         String ip="166.62.8.6";
         String userName="ElasProcess";
@@ -40,7 +40,7 @@ public class ElasticityProcessRepositorty {
         String database="ElasProcess";
         String connectionString = "jdbc:mysql://"+ip+":3306/"+database+"?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false";
         
-        
+        */
         
         
         mySqlConnectionManager = new MySqlConnectionManager(connectionString, userName, password);

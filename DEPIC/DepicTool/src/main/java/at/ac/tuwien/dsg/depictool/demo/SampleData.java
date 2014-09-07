@@ -43,12 +43,12 @@ public class SampleData {
     private List<DataObjectFunction> sampleListDataObjectFunctions(){
         
         String dataFunctionName = "pc-100";
-        String query = "Select * from PowerConsumption Where Time = Today";
+        String query = "Select * from Power Where Date>='1/2/2014'";
         int numberOfDataItem = 100;
         
-        
+        String query2 = "Select * from Power Where Date>='1/3/2013'";
         DataObjectFunction dataObjectFunction1 = new DataObjectFunction(dataFunctionName,query,numberOfDataItem);
-        DataObjectFunction dataObjectFunction2 = new DataObjectFunction("pc-200",query,200);
+        DataObjectFunction dataObjectFunction2 = new DataObjectFunction("pc-200",query2,200);
         
         List<DataObjectFunction> listOfDataObjectFunctions = new ArrayList<>();
         listOfDataObjectFunctions.add(dataObjectFunction1);
