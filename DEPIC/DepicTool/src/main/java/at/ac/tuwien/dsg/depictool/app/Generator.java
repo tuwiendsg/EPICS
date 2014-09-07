@@ -5,6 +5,7 @@
  */
 package at.ac.tuwien.dsg.depictool.app;
 
+import at.ac.tuwien.dsg.depictool.entity.ActionDependency;
 import at.ac.tuwien.dsg.depictool.entity.ControlAction;
 import at.ac.tuwien.dsg.depictool.entity.ControlProcess;
 import at.ac.tuwien.dsg.depictool.entity.DataElasticityProcess;
@@ -17,6 +18,7 @@ import at.ac.tuwien.dsg.depictool.entity.MonitorAction;
 import at.ac.tuwien.dsg.depictool.entity.MonitorProcess;
 import at.ac.tuwien.dsg.depictool.entity.Range;
 import at.ac.tuwien.dsg.depictool.entity.TriggerValues;
+import at.ac.tuwien.dsg.depictool.util.ElasticityProcessRepositorty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -147,7 +149,15 @@ public class Generator {
         return controlProcess;
     }
     
-    private void sortControlActionOrder(){
+    private void sortControlActionOrder(ControlProcess controlProcess){
+        
+        List<ControlAction> listOfActions = controlProcess.getListOfControlActions();
+        ElasticityProcessRepositorty epRepo = new ElasticityProcessRepositorty();
+     
+        List<ActionDependency> listOfActionDependencies = epRepo.getControlActionDependencyDB("");
+        
+        
+        
         
     }
     
