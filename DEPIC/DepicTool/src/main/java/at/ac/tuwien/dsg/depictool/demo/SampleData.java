@@ -61,7 +61,7 @@ public class SampleData {
     private List<DataElasticityMetric> sampleListOfDataElasticityMetrics(){
         
         
-        String metricName1 = "data completeness";
+        String metricName1 = "DataCompleteness";
         String unit1="%";
         Range r1 = new Range("d1", 0, 75);
         Range r2 = new Range("d2", 76, 90);
@@ -73,7 +73,7 @@ public class SampleData {
         
         DataElasticityMetric metric1= new DataElasticityMetric(metricName1,unit1, listOfRanges1);
         
-        String metricName2 = "throughput";
+        String metricName2 = "Throughput";
         String unit2="Mbps";
         
         Range t1 = new Range("t1", 0, 0.1);
@@ -106,8 +106,8 @@ public class SampleData {
         
         String eStateID1="eState1";
         List<MetricRange> listOfMetricRanges1 = new ArrayList<>();
-        listOfMetricRanges1.add(new MetricRange("data completeness", "d1"));
-        listOfMetricRanges1.add(new MetricRange("throughput", "t1"));
+        listOfMetricRanges1.add(new MetricRange("DataCompleteness", "d1"));
+        listOfMetricRanges1.add(new MetricRange("Throughput", "t1"));
         double price1 =0.025;
         ElasticState elasticState1 = new ElasticState(eStateID1, listOfMetricRanges1, price1);
         listOfElasticStates.add(elasticState1);
@@ -116,16 +116,16 @@ public class SampleData {
         
         String eStateID2="eState2";
         List<MetricRange> listOfMetricRanges2 = new ArrayList<>();
-        listOfMetricRanges2.add(new MetricRange("data completeness", "d1"));
-        listOfMetricRanges2.add(new MetricRange("throughput", "t2"));
+        listOfMetricRanges2.add(new MetricRange("DataCompleteness", "d1"));
+        listOfMetricRanges2.add(new MetricRange("Throughput", "t2"));
         double price2 =0.035;
         ElasticState elasticState2 = new ElasticState(eStateID2, listOfMetricRanges2, price2);
         listOfElasticStates.add(elasticState2);
         
         String eStateID3="eState3";
         List<MetricRange> listOfMetricRanges3 = new ArrayList<>();
-        listOfMetricRanges3.add(new MetricRange("data completeness", "d1"));
-        listOfMetricRanges3.add(new MetricRange("throughput", "t3"));
+        listOfMetricRanges3.add(new MetricRange("DataCompleteness", "d1"));
+        listOfMetricRanges3.add(new MetricRange("Throughput", "t3"));
         double price3 =0.045;
         ElasticState elasticState3 = new ElasticState(eStateID3, listOfMetricRanges3, price3);
         listOfElasticStates.add(elasticState3);
@@ -133,8 +133,8 @@ public class SampleData {
         
         String eStateID4="eState4";
         List<MetricRange> listOfMetricRanges4 = new ArrayList<>();
-        listOfMetricRanges4.add(new MetricRange("data completeness", "d2"));
-        listOfMetricRanges4.add(new MetricRange("throughput", "t1"));
+        listOfMetricRanges4.add(new MetricRange("DataCompleteness", "d2"));
+        listOfMetricRanges4.add(new MetricRange("Throughput", "t1"));
 
         double price4 =0.035;
         ElasticState elasticState4 = new ElasticState(eStateID4, listOfMetricRanges4, price4);
@@ -143,24 +143,24 @@ public class SampleData {
         
         String eStateID5="eState5";
         List<MetricRange> listOfMetricRanges5 = new ArrayList<>();
-        listOfMetricRanges5.add(new MetricRange("data completeness", "d2"));
-        listOfMetricRanges5.add(new MetricRange("throughput", "t2"));
+        listOfMetricRanges5.add(new MetricRange("DataCompleteness", "d2"));
+        listOfMetricRanges5.add(new MetricRange("Throughput", "t2"));
         double price5 =0.045;
         ElasticState elasticState5 = new ElasticState(eStateID5, listOfMetricRanges5, price5);
         listOfElasticStates.add(elasticState5);
         
         String eStateID6="eState6";
         List<MetricRange> listOfMetricRanges6 = new ArrayList<>();
-        listOfMetricRanges6.add(new MetricRange("data completeness", "d2"));
-        listOfMetricRanges6.add(new MetricRange("throughput", "t3"));
+        listOfMetricRanges6.add(new MetricRange("DataCompleteness", "d2"));
+        listOfMetricRanges6.add(new MetricRange("Throughput", "t3"));
         double price6 =0.055;
         ElasticState elasticState6 = new ElasticState(eStateID6, listOfMetricRanges6, price6);
         listOfElasticStates.add(elasticState6);
         
         String eStateID7="eState7";
         List<MetricRange> listOfMetricRanges7 = new ArrayList<>();
-        listOfMetricRanges7.add(new MetricRange("data completeness", "d3"));
-        listOfMetricRanges7.add(new MetricRange("throughput", "t1"));
+        listOfMetricRanges7.add(new MetricRange("DataCompleteness", "d3"));
+        listOfMetricRanges7.add(new MetricRange("Throughput", "t1"));
         double price7 =0.045;
         
         ElasticState elasticState7 = new ElasticState(eStateID7, listOfMetricRanges7, price7);
@@ -168,16 +168,16 @@ public class SampleData {
         
         String eStateID8="eState8";
         List<MetricRange> listOfMetricRanges8 = new ArrayList<>();
-        listOfMetricRanges8.add(new MetricRange("data completeness", "d3"));
-        listOfMetricRanges8.add(new MetricRange("throughput", "t2"));
+        listOfMetricRanges8.add(new MetricRange("DataCompleteness", "d3"));
+        listOfMetricRanges8.add(new MetricRange("Throughput", "t2"));
         double price8 =0.055;
         ElasticState elasticState8 = new ElasticState(eStateID8, listOfMetricRanges8, price8);
         listOfElasticStates.add(elasticState8);
         
         String eStateID9="eState9";
         List<MetricRange> listOfMetricRanges9 = new ArrayList<>();
-        listOfMetricRanges9.add(new MetricRange("data completeness", "d3"));
-        listOfMetricRanges9.add(new MetricRange("throughput", "t3"));
+        listOfMetricRanges9.add(new MetricRange("DataCompleteness", "d3"));
+        listOfMetricRanges9.add(new MetricRange("Throughput", "t3"));
         double price9 =0.065;
         ElasticState elasticState9 = new ElasticState(eStateID9, listOfMetricRanges9, price9);
         listOfElasticStates.add(elasticState9);
