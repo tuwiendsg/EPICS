@@ -50,10 +50,9 @@ public class Generator {
         System.out.println("Start generate APIs ...");
         
         
-        APIGenerator apiGenerator = new APIGenerator(elasticDataObject);
-        apiGenerator.generateAPI();
+        DaaSGenerator daaSGenerator = new DaaSGenerator(elasticDataObject);
+        daaSGenerator.generateDaaS();
         
-
         // algorithm for generate APIs
         //Using Template, customize 
         // output  Java classes of Client Serivce

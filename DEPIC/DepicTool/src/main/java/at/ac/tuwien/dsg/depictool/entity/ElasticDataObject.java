@@ -13,6 +13,7 @@ import java.util.List;
  * @author Jun
  */
 public class ElasticDataObject {
+    DataSource dataSource;
     List<DataObjectFunction> listOfDataObjectFunctions;
     List<DataElasticityMetric> listOfDataElasticityMetrics;
     List<ElasticState> listOfElasticStates;
@@ -20,10 +21,19 @@ public class ElasticDataObject {
     public ElasticDataObject() {
     }
 
-    public ElasticDataObject(List<DataObjectFunction> listOfDataObjectFunctions, List<DataElasticityMetric> listOfDataElasticityMetrics, List<ElasticState> listOfElasticStates) {
+    public ElasticDataObject(DataSource dataSource, List<DataObjectFunction> listOfDataObjectFunctions, List<DataElasticityMetric> listOfDataElasticityMetrics, List<ElasticState> listOfElasticStates) {
+        this.dataSource = dataSource;
         this.listOfDataObjectFunctions = listOfDataObjectFunctions;
         this.listOfDataElasticityMetrics = listOfDataElasticityMetrics;
         this.listOfElasticStates = listOfElasticStates;
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public List<DataObjectFunction> getListOfDataObjectFunctions() {
@@ -49,7 +59,7 @@ public class ElasticDataObject {
     public void setListOfElasticStates(List<ElasticState> listOfElasticStates) {
         this.listOfElasticStates = listOfElasticStates;
     }
-    
+
     
     
     

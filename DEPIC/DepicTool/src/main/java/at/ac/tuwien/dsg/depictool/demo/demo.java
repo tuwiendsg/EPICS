@@ -46,17 +46,17 @@ public class demo {
         //generator.generateElasticityProcesses();
         generator.generateAPIs();
         
-      /*
+      
         
-        
+        /*
         YamlUtils yamlUtils = new YamlUtils();
         yamlUtils.convertElasticDataObject2Yaml( sampleData.sampleEDO());
         
         yamlUtils.convertElasticProcessConfiguration2Yaml( sampleData.sampleDEPConf());
-        
+        */
         //System.out.println("EDO: " +xmlString);
         
-    */
+    
     }
     
     

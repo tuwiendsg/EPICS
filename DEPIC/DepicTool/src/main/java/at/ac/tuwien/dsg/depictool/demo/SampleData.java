@@ -10,6 +10,7 @@ import at.ac.tuwien.dsg.depictool.entity.ControlAction;
 import at.ac.tuwien.dsg.depictool.entity.DataElasticityMetric;
 import at.ac.tuwien.dsg.depictool.entity.DataElasticityProcessConfiguration;
 import at.ac.tuwien.dsg.depictool.entity.DataObjectFunction;
+import at.ac.tuwien.dsg.depictool.entity.DataSource;
 import at.ac.tuwien.dsg.depictool.entity.ElasticDataObject;
 import at.ac.tuwien.dsg.depictool.entity.ElasticState;
 import at.ac.tuwien.dsg.depictool.entity.MetricElasticityProcess;
@@ -32,23 +33,36 @@ public class SampleData {
         List<DataObjectFunction> listOfDataObjectFunctions = sampleListDataObjectFunctions();
         List<DataElasticityMetric> listOfDataElasticityMetrics = sampleListOfDataElasticityMetrics();
         List<ElasticState> listOfElasticStates = sampleListOfElasticStates();
+        DataSource dataSource = sampleDataSource();
         
-        ElasticDataObject edo = new ElasticDataObject(listOfDataObjectFunctions, listOfDataElasticityMetrics, listOfElasticStates);
+        
+        ElasticDataObject edo = new ElasticDataObject(dataSource, listOfDataObjectFunctions, listOfDataElasticityMetrics, listOfElasticStates);
          
            return edo;
                 
     }
     
     
+    private DataSource sampleDataSource() {
+        String user="root";
+        String password="";
+        String ip="localhost";
+        String port="3306";
+        String database="Power";
+        DataSource dataSource = new DataSource(user, password, ip, port, database);
+        
+        return  dataSource;
+    }
+    
     private List<DataObjectFunction> sampleListDataObjectFunctions(){
         
-        String dataFunctionName = "pc-100";
-        String query = "Select * from Power Where Date>='1/2/2014'";
+        String dataFunctionName = "PC100";
+        String query = "Select * from power_consumption";
         int numberOfDataItem = 100;
         
-        String query2 = "Select * from Power Where Date>='1/3/2013'";
+        String query2 = "Select * from power_consumption";
         DataObjectFunction dataObjectFunction1 = new DataObjectFunction(dataFunctionName,query,numberOfDataItem);
-        DataObjectFunction dataObjectFunction2 = new DataObjectFunction("pc-200",query2,200);
+        DataObjectFunction dataObjectFunction2 = new DataObjectFunction("PC200",query2,200);
         
         List<DataObjectFunction> listOfDataObjectFunctions = new ArrayList<>();
         listOfDataObjectFunctions.add(dataObjectFunction1);
@@ -222,7 +236,7 @@ public class SampleData {
                 
         MonitorAction monitorAction = new MonitorAction("dataCompletenessMeasurement");
         
-        MetricElasticityProcess metricControlAction1 = new MetricElasticityProcess("data completeness",monitorAction, listOfControlActions);
+        MetricElasticityProcess metricControlAction1 = new MetricElasticityProcess("DataCompleteness",monitorAction, listOfControlActions);
         
         listOfMetricElasticityProcesses.add(metricControlAction1);
         
@@ -264,7 +278,7 @@ public class SampleData {
                 
         MonitorAction monitorAction2 = new MonitorAction("throughputMeasurement");
    
-        MetricElasticityProcess metricControlAction2 = new MetricElasticityProcess("throughput",monitorAction2, listOfControlActions2);
+        MetricElasticityProcess metricControlAction2 = new MetricElasticityProcess("Throughput",monitorAction2, listOfControlActions2);
   
         listOfMetricElasticityProcesses.add(metricControlAction2);
   

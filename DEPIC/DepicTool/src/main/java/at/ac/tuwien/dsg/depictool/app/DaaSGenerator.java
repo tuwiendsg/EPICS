@@ -6,7 +6,11 @@
 
 package at.ac.tuwien.dsg.depictool.app;
 
+import at.ac.tuwien.dsg.common.entity.others.MySQLConnection;
+import at.ac.tuwien.dsg.common.entity.others.MySqlConnectionManager;
 import at.ac.tuwien.dsg.depictool.entity.DataElasticityMetric;
+import at.ac.tuwien.dsg.depictool.entity.DataObjectFunction;
+import at.ac.tuwien.dsg.depictool.entity.DataSource;
 import at.ac.tuwien.dsg.depictool.entity.ElasticDataObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -18,6 +22,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Types;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,24 +34,34 @@ import java.util.logging.Logger;
  *
  * @author Jun
  */
-public class APIGenerator {
+public class DaaSGenerator {
     
     ElasticDataObject elasticDataObject;
     String templateFolder;
 
-    public APIGenerator() {
+    public DaaSGenerator() {
     }
 
-    public APIGenerator(ElasticDataObject elasticDataObject) {
+    public DaaSGenerator(ElasticDataObject elasticDataObject) {
         this.elasticDataObject = elasticDataObject;
         templateFolder="template/eDaaS/src/main/java/at/ac/tuwien/dsg/";
     }
     
-    public void generateAPI(){
+    public void generateDaaS(){
         
+        //genrate metric class 
         generateMetricClass();
         
+       
+        // get ResultSetMetaData -> generate DataItems
+        genrateDataItemClass();
         
+        
+        // setup description
+        
+        
+        
+        // 
         
         
        
@@ -52,11 +70,64 @@ public class APIGenerator {
         
     } 
     
-    private void genrateDataItemClass(){
+    private void deployDaaS(){
+    
+        // compile maven project
+        
+        // maven test -> document REST API
+        
+        
+        
         
         
     }
     
+    private void genrateDataItemClass() {
+        DataSource dataSource = elasticDataObject.getDataSource();
+        List<DataObjectFunction> listOfDataObjectFunctions = elasticDataObject.getListOfDataObjectFunctions();
+
+        for (DataObjectFunction dataObjectFunction : listOfDataObjectFunctions) {
+
+            dataObjectFunction.getName();
+            dataObjectFunction.getNumberOfDataItems();
+            String query = dataObjectFunction.getQuery();
+            query += " LIMIT 1";
+
+            MySqlConnectionManager connectionManager = new MySqlConnectionManager(dataSource.getIp(), dataSource.getPort(), dataSource.getDatabase(), dataSource.getUser(), dataSource.getPassword());
+            PrintStream out = System.out;
+            ResultSet rs = connectionManager.ExecuteQuery(query);
+            try {
+
+                while (rs.next()) {
+
+                    ResultSetMetaData rsmd = rs.getMetaData();
+                    for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                        if (i > 1) {
+                            out.print(",");
+                        }
+
+                        int type = rsmd.getColumnType(i);
+                        if (type == Types.VARCHAR || type == Types.CHAR) {
+                            out.print(rs.getString(i));
+                        } else if (type == Types.DOUBLE) {
+                            
+                        } else if (type == Types.INTEGER) {
+                            
+                        } else {
+                            out.print(rs.getLong(i));
+                        }
+                    }
+
+                out.println();
+                }
+
+            } catch (Exception ex) {
+
+            }
+        }
+
+    }
+
     
     private void generateMetricClass(){
         
@@ -113,7 +184,7 @@ public class APIGenerator {
             fstream = new FileInputStream(templateFolder+"edaas/userrequirement/TemplateConstraint.java");
             // FileInputStream fstream = new FileInputStream("covertype.csv");
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(APIGenerator.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DaaSGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         DataInputStream in = new DataInputStream(fstream);
@@ -128,7 +199,7 @@ public class APIGenerator {
                 
             }
         } catch (IOException ex) {
-            Logger.getLogger(APIGenerator.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DaaSGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
         
       

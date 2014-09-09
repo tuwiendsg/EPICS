@@ -22,7 +22,7 @@ listOfMetricElasticityProcesses:
       triggerValues: 
          fromRange: d2
          toRange: d3
-   metricName: data completeness
+   metricName: DataCompleteness
    monitorAction: 
       monitorActionID: dataCompletenessMeasurement
 - !at.ac.tuwien.dsg.depictool.entity.MetricElasticityProcess
@@ -57,6 +57,6 @@ listOfMetricElasticityProcesses:
       triggerValues: 
          fromRange: t3
          toRange: t2
-   metricName: throughput
+   metricName: Throughput
    monitorAction: 
       monitorActionID: throughputMeasurement

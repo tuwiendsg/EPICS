@@ -1,16 +1,13 @@
 !at.ac.tuwien.dsg.depictool.entity.ElasticDataObject
-listOfDataObjectFunctions: 
-- !at.ac.tuwien.dsg.depictool.entity.DataObjectFunction
-   name: pc-100
-   numberOfDataItems: 100
-   query: Select * from PowerConsumption Where Time = Today
-- !at.ac.tuwien.dsg.depictool.entity.DataObjectFunction
-   name: pc-200
-   numberOfDataItems: 200
-   query: Select * from PowerConsumption Where Time = Today
-listOfDataElasticityMetrics:
+dataSource: 
+   database: powerconsumption
+   ip: 128.130.172.216
+   password: password
+   port: 3306
+   user: user
+listOfDataElasticityMetrics: 
 - !at.ac.tuwien.dsg.depictool.entity.DataElasticityMetric
-   name: data completeness
+   name: DataCompleteness
    listOfRanges: 
    - !at.ac.tuwien.dsg.depictool.entity.Range
       rangeID: d1
@@ -25,7 +22,7 @@ listOfDataElasticityMetrics:
       toValue: 100.0
    unit: '%'
 - !at.ac.tuwien.dsg.depictool.entity.DataElasticityMetric
-   name: throughput
+   name: Throughput
    listOfRanges: 
    - !at.ac.tuwien.dsg.depictool.entity.Range
       rangeID: t1
@@ -39,94 +36,103 @@ listOfDataElasticityMetrics:
       rangeID: t3
       toValue: 1.0
    unit: Mbps
-listOfElasticStates:
+listOfDataObjectFunctions: 
+- !at.ac.tuwien.dsg.depictool.entity.DataObjectFunction
+   name: PC100
+   numberOfDataItems: 100
+   query: Select * from Power Where Date>='1/2/2014'
+- !at.ac.tuwien.dsg.depictool.entity.DataObjectFunction
+   name: PC200
+   numberOfDataItems: 200
+   query: Select * from Power Where Date>='1/3/2013'
+listOfElasticStates: 
 - !at.ac.tuwien.dsg.depictool.entity.ElasticState
    eStateID: eState1
    listOfMetricRanges: 
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: data completeness
+      metricName: DataCompleteness
       range: d1
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: throughput
+      metricName: Throughput
       range: t1
    price: 0.025
 - !at.ac.tuwien.dsg.depictool.entity.ElasticState
    eStateID: eState2
    listOfMetricRanges: 
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: data completeness
+      metricName: DataCompleteness
       range: d1
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: throughput
+      metricName: Throughput
       range: t2
    price: 0.035
 - !at.ac.tuwien.dsg.depictool.entity.ElasticState
    eStateID: eState3
    listOfMetricRanges: 
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: data completeness
+      metricName: DataCompleteness
       range: d1
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: throughput
+      metricName: Throughput
       range: t3
    price: 0.045
 - !at.ac.tuwien.dsg.depictool.entity.ElasticState
    eStateID: eState4
    listOfMetricRanges: 
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: data completeness
+      metricName: DataCompleteness
       range: d2
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: throughput
+      metricName: Throughput
       range: t1
    price: 0.035
 - !at.ac.tuwien.dsg.depictool.entity.ElasticState
    eStateID: eState5
    listOfMetricRanges: 
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: data completeness
+      metricName: DataCompleteness
       range: d2
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: throughput
+      metricName: Throughput
       range: t2
    price: 0.045
 - !at.ac.tuwien.dsg.depictool.entity.ElasticState
    eStateID: eState6
    listOfMetricRanges: 
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: data completeness
+      metricName: DataCompleteness
       range: d2
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: throughput
+      metricName: Throughput
       range: t3
    price: 0.055
 - !at.ac.tuwien.dsg.depictool.entity.ElasticState
    eStateID: eState7
    listOfMetricRanges: 
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: data completeness
+      metricName: DataCompleteness
       range: d3
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: throughput
+      metricName: Throughput
       range: t1
    price: 0.045
 - !at.ac.tuwien.dsg.depictool.entity.ElasticState
    eStateID: eState8
    listOfMetricRanges: 
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: data completeness
+      metricName: DataCompleteness
       range: d3
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: throughput
+      metricName: Throughput
       range: t2
    price: 0.055
 - !at.ac.tuwien.dsg.depictool.entity.ElasticState
    eStateID: eState9
    listOfMetricRanges: 
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: data completeness
+      metricName: DataCompleteness
       range: d3
    - !at.ac.tuwien.dsg.depictool.entity.MetricRange
-      metricName: throughput
+      metricName: Throughput
       range: t3
    price: 0.065
