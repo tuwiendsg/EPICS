@@ -43,17 +43,17 @@ public class demo {
         
         Generator generator = new Generator(edo, elasticityProcessConfiguration);
         
-        //generator.generateElasticityProcesses();
-        generator.generateAPIs();
+        generator.generateElasticityProcesses();
+        //generator.generateAPIs();
         
       
+     /*   
         
-        /*
         YamlUtils yamlUtils = new YamlUtils();
         yamlUtils.convertElasticDataObject2Yaml( sampleData.sampleEDO());
         
         yamlUtils.convertElasticProcessConfiguration2Yaml( sampleData.sampleDEPConf());
-        */
+       */ 
         //System.out.println("EDO: " +xmlString);
         
     

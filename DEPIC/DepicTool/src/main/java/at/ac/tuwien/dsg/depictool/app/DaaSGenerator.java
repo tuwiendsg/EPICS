@@ -58,7 +58,7 @@ public class DaaSGenerator {
         
         
         // setup description
-        
+        deployDaaS();
         
         
         // 
@@ -74,7 +74,7 @@ public class DaaSGenerator {
     
         // compile maven project
         
-        // maven test -> document REST API
+        // maven test -> document REST API with MireDot
         
         
         
@@ -107,6 +107,8 @@ public class DaaSGenerator {
                         }
 
                         int type = rsmd.getColumnType(i);
+                       
+                        out.print("column " + i + "; type : " + type);
                         if (type == Types.VARCHAR || type == Types.CHAR) {
                             out.print(rs.getString(i));
                         } else if (type == Types.DOUBLE) {
@@ -127,6 +129,42 @@ public class DaaSGenerator {
         }
 
     }
+    
+    public void getDataTypeFromCode(int typeCode) {
+        
+        String monthString;
+        switch (typeCode) {
+            case 1:  monthString = "January";
+                     break;
+            case 2:  monthString = "February";
+                     break;
+            case 3:  monthString = "March";
+                     break;
+            case 4:  monthString = "April";
+                     break;
+            case 5:  monthString = "May";
+                     break;
+            case 6:  monthString = "June";
+                     break;
+            case 7:  monthString = "July";
+                     break;
+            case 8:  monthString = "August";
+                     break;
+            case 9:  monthString = "September";
+                     break;
+            case 10: monthString = "October";
+                     break;
+            case 11: monthString = "November";
+                     break;
+            case 12: monthString = "December";
+                     break;
+            default: monthString = "Invalid month";
+                     break;
+        }
+        System.out.println(monthString);
+        
+    }
+    
 
     
     private void generateMetricClass(){
