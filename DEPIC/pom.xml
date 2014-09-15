@@ -8,9 +8,9 @@
     <modules>
         <module>Common</module>
     <module>Orchestrator</module>
-    <module>DepicTool</module>
-    <module>DataObjectLoader</module>
-  </modules>
+        <module>DepicTooling</module>
+        <module>DataAssetLoader</module>
+    </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
