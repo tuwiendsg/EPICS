@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<specificationSet xmlns="http://www.yawlfoundation.org/yawlschema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.0" xsi:schemaLocation="http://www.yawlfoundation.org/yawlschema http://www.yawlfoundation.org/yawlschema/YAWL_Schema3.0.xsd">
+  <specification uri="daw1">
+    <metaData>
+      <creator>Jun</creator>
+      <description>No description provided</description>
+      <version>0.1</version>
+      <persistent>false</persistent>
+      <identifier>UID_6e95a0de-1369-44ce-b106-f87f5c1c29c9</identifier>
+    </metaData>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" />
+    <decomposition id="Net" isRootNet="true" xsi:type="NetFactsType">
+      <processControlElements>
+        <inputCondition id="start">
+          <name>start</name>
+          <flowsInto>
+            <nextElementRef id="Clustering12" />
+          </flowsInto>
+        </inputCondition>
+        <task id="Clustering12">
+          <name>Clustering(1,2)</name>
+          <flowsInto>
+            <nextElementRef id="select__from_ABC" />
+          </flowsInto>
+          <join code="xor" />
+          <split code="and" />
+          <resourcing>
+            <offer initiator="user" />
+            <allocate initiator="user" />
+            <start initiator="user" />
+          </resourcing>
+        </task>
+        <task id="select__from_ABC">
+          <name>select * from ABC</name>
+          <flowsInto>
+            <nextElementRef id="end" />
+          </flowsInto>
+          <join code="xor" />
+          <split code="and" />
+          <resourcing>
+            <offer initiator="user" />
+            <allocate initiator="user" />
+            <start initiator="user" />
+          </resourcing>
+        </task>
+        <outputCondition id="end">
+          <name>end</name>
+        </outputCondition>
+      </processControlElements>
+    </decomposition>
+  </specification>
+  <layout>
+    <locale language="en" country="US"/>
+    <specification id="daw1">
+      <size w="58" h="26"/>
+      <net id="Net">
+        <bounds x="0" y="0" w="1122" h="472"/>
+        <frame x="0" y="0" w="1125" h="475"/>
+        <viewport x="0" y="0" w="1125" h="475"/>
+        <scale>1.5</scale>
+        <container id="start">
+          <vertex>
+            <attributes>
+              <bounds x="84" y="156" w="32" h="32"/>
+            </attributes>
+          </vertex>
+          <label>
+            <attributes>
+              <bounds x="54" y="192" w="97" h="19"/>
+            </attributes>
+          </label>
+        </container>
+        <container id="end">
+          <vertex>
+            <attributes>
+              <bounds x="552" y="156" w="32" h="32"/>
+            </attributes>
+          </vertex>
+          <label>
+            <attributes>
+              <bounds x="522" y="186" w="96" h="16"/>
+            </attributes>
+          </label>
+        </container>
+        <container id="select__from_ABC">
+          <vertex>
+            <attributes>
+              <bounds x="400" y="156" w="32" h="32"/>
+            </attributes>
+          </vertex>
+          <label>
+            <attributes>
+              <bounds x="372" y="192" w="97" h="31"/>
+            </attributes>
+          </label>
+        </container>
+        <container id="Clustering12">
+          <vertex>
+            <attributes>
+              <bounds x="252" y="156" w="32" h="32"/>
+            </attributes>
+          </vertex>
+          <label>
+            <attributes>
+              <bounds x="216" y="186" w="97" h="19"/>
+            </attributes>
+          </label>
+        </container>
+        <flow source="select__from_ABC" target="end">
+          <ports in="13" out="12"/>
+          <attributes>
+            <lineStyle>11</lineStyle>
+          </attributes>
+        </flow>
+        <flow source="Clustering12" target="select__from_ABC">
+          <ports in="13" out="12"/>
+          <attributes>
+            <lineStyle>11</lineStyle>
+          </attributes>
+        </flow>
+        <flow source="start" target="Clustering12">
+          <ports in="13" out="12"/>
+          <attributes>
+            <lineStyle>11</lineStyle>
+          </attributes>
+        </flow>
+      </net>
+    </specification>
+  </layout>
+</specificationSet>
