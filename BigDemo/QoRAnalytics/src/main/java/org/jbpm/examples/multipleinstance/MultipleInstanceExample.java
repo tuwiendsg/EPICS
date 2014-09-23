@@ -65,6 +65,9 @@ public class MultipleInstanceExample {
             .userGroupCallback(userGroupCallback)
             .addAsset(ResourceFactory.newClassPathResource(process), ResourceType.BPMN2)
             .get();
+        
+  
+        
         return RuntimeManagerFactory.Factory.get().newSingletonRuntimeManager(environment);
     }
     
