@@ -65,17 +65,6 @@ public class WorkflowEngine {
         return kbuilder.newKnowledgeBase();
     }
     
-    private static void startService(String service) {
-        
-        if (service.equals("KMeans")) {
-            
-            System.out.println("");
-            
-            KMeans km = new KMeans(2);
-            km.start();
-        }
-        
-        
-    }
+   
 
 }
