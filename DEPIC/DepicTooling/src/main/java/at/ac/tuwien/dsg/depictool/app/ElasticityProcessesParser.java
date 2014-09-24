@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.common.entity.control;
+package at.ac.tuwien.dsg.depictool.app;
 
 /**
  *
  * @author Jun
  */
-public class ControlAction {
+public class ElasticityProcessesParser {
     
 }

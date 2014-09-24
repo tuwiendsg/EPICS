@@ -12,13 +12,13 @@ import at.ac.tuwien.dsg.depictool.entity.eda.ElasticDataAsset;
  *
  * @author Jun
  */
-public class EDOParser {
+public class EDAParser {
     ElasticDataAsset edo;
 
-    public EDOParser() {
+    public EDAParser() {
     }
 
-    public EDOParser(ElasticDataAsset edo) {
+    public EDAParser(ElasticDataAsset edo) {
         this.edo = edo;
     }
     

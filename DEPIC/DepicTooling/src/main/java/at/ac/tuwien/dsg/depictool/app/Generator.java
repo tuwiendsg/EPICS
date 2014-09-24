@@ -68,7 +68,7 @@ public class Generator {
         System.out.println("Start generate Elasticity Processes");
 
         
-        ElasticityProcessGenerator elasticityProcessGenerator = new ElasticityProcessGenerator(elasticDataObject, elasticityProcessConfiguration);
+        ElasticityProcessesGenerator elasticityProcessGenerator = new ElasticityProcessesGenerator(elasticDataObject, elasticityProcessConfiguration);
         // generate monitor process
         MonitorProcess monitorProcess = elasticityProcessGenerator.generateMonitorProcess();
 

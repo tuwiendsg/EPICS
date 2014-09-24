@@ -31,15 +31,15 @@ import java.util.List;
  *
  * @author Jun
  */
-public class ElasticityProcessGenerator {
+public class ElasticityProcessesGenerator {
 
     ElasticDataAsset elasticDataObject;
     MetricProcess elasticityProcessConfiguration;
     
-    public ElasticityProcessGenerator() {
+    public ElasticityProcessesGenerator() {
     }
 
-    public ElasticityProcessGenerator(ElasticDataAsset elasticDataObject, MetricProcess elasticityProcessConfiguration) {
+    public ElasticityProcessesGenerator(ElasticDataAsset elasticDataObject, MetricProcess elasticityProcessConfiguration) {
         this.elasticDataObject = elasticDataObject;
         this.elasticityProcessConfiguration = elasticityProcessConfiguration;
     }
