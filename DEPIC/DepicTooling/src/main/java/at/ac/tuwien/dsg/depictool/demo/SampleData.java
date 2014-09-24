@@ -7,9 +7,9 @@
 package at.ac.tuwien.dsg.depictool.demo;
 
 import at.ac.tuwien.dsg.depictool.entity.ControlAction;
-import at.ac.tuwien.dsg.depictool.entity.DataElasticityMetric;
+import at.ac.tuwien.dsg.depictool.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.depictool.entity.DataElasticityProcessConfiguration;
-import at.ac.tuwien.dsg.depictool.entity.DataObjectFunction;
+import at.ac.tuwien.dsg.depictool.entity.DataAssetFunction;
 import at.ac.tuwien.dsg.depictool.entity.DataSource;
 import at.ac.tuwien.dsg.depictool.entity.ElasticDataObject;
 import at.ac.tuwien.dsg.depictool.entity.ElasticState;
@@ -30,8 +30,8 @@ public class SampleData {
     public ElasticDataObject sampleEDO(){
         
         
-        List<DataObjectFunction> listOfDataObjectFunctions = sampleListDataObjectFunctions();
-        List<DataElasticityMetric> listOfDataElasticityMetrics = sampleListOfDataElasticityMetrics();
+       List<DataAssetFunction> listOfDataObjectFunctions  = sampleListDataObjectFunctions();
+        List<QoRMetric> listOfDataElasticityMetrics = sampleListOfDataElasticityMetrics();
         List<ElasticState> listOfElasticStates = sampleListOfElasticStates();
         DataSource dataSource = sampleDataSource();
         
@@ -54,25 +54,26 @@ public class SampleData {
         return  dataSource;
     }
     
-    private List<DataObjectFunction> sampleListDataObjectFunctions(){
+    private List<DataAssetFunction> sampleListDataObjectFunctions(){
         
         String dataFunctionName = "PC100";
         String query = "Select * from power_consumption";
         int numberOfDataItem = 100;
-        
+        List<DataAssetFunction> listOfDataObjectFunctions  = new ArrayList<>();
+        /*
         String query2 = "Select * from power_consumption";
-        DataObjectFunction dataObjectFunction1 = new DataObjectFunction(dataFunctionName,query,numberOfDataItem);
-        DataObjectFunction dataObjectFunction2 = new DataObjectFunction("PC200",query2,200);
+        DataAssetFunction dataObjectFunction1 = new DataDataAssetFunctionaFunctionName,query,numberOfDataItem);
+        DataAssetFunction dataObjectFunction2 = new DataObDataAssetFunction0",query2,200);
         
-        List<DataObjectFunction> listOfDataObjectFunctions = new ArrayList<>();
+        
         listOfDataObjectFunctions.add(dataObjectFunction1);
         listOfDataObjectFunctions.add(dataObjectFunction2);
-        
+        */
         return  listOfDataObjectFunctions;    
     }
     
     
-    private List<DataElasticityMetric> sampleListOfDataElasticityMetrics(){
+    private List<QoRMetric> sampleListOfDataElasticityMetrics(){
         
         
         String metricName1 = "DataCompleteness";
@@ -85,7 +86,7 @@ public class SampleData {
         listOfRanges1.add(r2);
         listOfRanges1.add(r3);
         
-        DataElasticityMetric metric1= new DataElasticityMetric(metricName1,unit1, listOfRanges1);
+        QoRMetric metric1= new QoRMetric(metricName1,unit1, listOfRanges1);
         
         String metricName2 = "Throughput";
         String unit2="Mbps";
@@ -100,11 +101,11 @@ public class SampleData {
         listOfRanges2.add(t2);
         listOfRanges2.add(t3);
         
-        DataElasticityMetric metric2 = new DataElasticityMetric(metricName2,unit2, listOfRanges2);
+        QoRMetric metric2 = new QoRMetric(metricName2,unit2, listOfRanges2);
         
         
        
-        List<DataElasticityMetric> listOfDataElasticityMetrics = new ArrayList<>();
+        List<QoRMetric> listOfDataElasticityMetrics = new ArrayList<>();
         listOfDataElasticityMetrics.add(metric1);
         listOfDataElasticityMetrics.add(metric2);
         

@@ -6,6 +6,7 @@
 
 package at.ac.tuwien.dsg.depictool.entity;
 
+import at.ac.tuwien.dsg.depictool.entity.qor.QoRMetric;
 import java.util.List;
 
 /**
@@ -14,14 +15,14 @@ import java.util.List;
  */
 public class ElasticDataObject {
     DataSource dataSource;
-    List<DataObjectFunction> listOfDataObjectFunctions;
-    List<DataElasticityMetric> listOfDataElasticityMetrics;
+    List<DataAssetFunction> listOfDataObjectFunctions;
+    List<QoRMetric> listOfDataElasticityMetrics;
     List<ElasticState> listOfElasticStates;
     
     public ElasticDataObject() {
     }
 
-    public ElasticDataObject(DataSource dataSource, List<DataObjectFunction> listOfDataObjectFunctions, List<DataElasticityMetric> listOfDataElasticityMetrics, List<ElasticState> listOfElasticStates) {
+    public ElasticDataObject(DataSource dataSource, List<DataAssetFunction> listOfDataObjectFunctions, List<QoRMetric> listOfDataElasticityMetrics, List<ElasticState> listOfElasticStates) {
         this.dataSource = dataSource;
         this.listOfDataObjectFunctions = listOfDataObjectFunctions;
         this.listOfDataElasticityMetrics = listOfDataElasticityMetrics;
@@ -36,19 +37,19 @@ public class ElasticDataObject {
         this.dataSource = dataSource;
     }
 
-    public List<DataObjectFunction> getListOfDataObjectFunctions() {
+    public List<DataAssetFunction> getListOfDataObjectFunctions() {
         return listOfDataObjectFunctions;
     }
 
-    public void setListOfDataObjectFunctions(List<DataObjectFunction> listOfDataObjectFunctions) {
+    public void setListOfDataObjectFunctions(List<DataAssetFunction> listOfDataObjectFunctions) {
         this.listOfDataObjectFunctions = listOfDataObjectFunctions;
     }
 
-    public List<DataElasticityMetric> getListOfDataElasticityMetrics() {
+    public List<QoRMetric> getListOfDataElasticityMetrics() {
         return listOfDataElasticityMetrics;
     }
 
-    public void setListOfDataElasticityMetrics(List<DataElasticityMetric> listOfDataElasticityMetrics) {
+    public void setListOfDataElasticityMetrics(List<QoRMetric> listOfDataElasticityMetrics) {
         this.listOfDataElasticityMetrics = listOfDataElasticityMetrics;
     }
 

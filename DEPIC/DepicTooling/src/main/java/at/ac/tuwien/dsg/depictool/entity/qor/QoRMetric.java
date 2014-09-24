@@ -4,24 +4,25 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.depictool.entity;
+package at.ac.tuwien.dsg.depictool.entity.qor;
 
+import at.ac.tuwien.dsg.depictool.entity.Range;
 import java.util.List;
 
 /**
  *
  * @author Jun
  */
-public class DataElasticityMetric {
+public class QoRMetric {
     String name;
     String unit;
     List<Range> listOfRanges;
 
-    public DataElasticityMetric() {
+    public QoRMetric() {
         
     }
 
-    public DataElasticityMetric(String name, String unit, List<Range> listOfRanges) {
+    public QoRMetric(String name, String unit, List<Range> listOfRanges) {
         this.name = name;
         this.unit = unit;
         this.listOfRanges = listOfRanges;

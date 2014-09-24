@@ -8,8 +8,8 @@ package at.ac.tuwien.dsg.depictool.app;
 
 import at.ac.tuwien.dsg.common.entity.others.MySQLConnection;
 import at.ac.tuwien.dsg.common.entity.others.MySqlConnectionManager;
-import at.ac.tuwien.dsg.depictool.entity.DataElasticityMetric;
-import at.ac.tuwien.dsg.depictool.entity.DataObjectFunction;
+import at.ac.tuwien.dsg.depictool.entity.qor.QoRMetric;
+import at.ac.tuwien.dsg.depictool.entity.DataAssetFunction;
 import at.ac.tuwien.dsg.depictool.entity.DataSource;
 import at.ac.tuwien.dsg.depictool.entity.ElasticDataObject;
 import java.io.BufferedReader;
@@ -84,9 +84,9 @@ public class DaaSGenerator {
     
     private void genrateDataItemClass() {
         DataSource dataSource = elasticDataObject.getDataSource();
-        List<DataObjectFunction> listOfDataObjectFunctions = elasticDataObject.getListOfDataObjectFunctions();
+        List<DataAssetFunction> listOfDataObjectFunctions = elasticDataObject.getListOfDataObjectFunctions();
 
-        for (DataObjectFunction dataObjectFunction : listOfDataObjectFunctions) {
+        for (DataAssetFunction dataObjectFunction : listOfDataObjectFunctions) {
 
             dataObjectFunction.getName();
             dataObjectFunction.getNumberOfDataItems();
@@ -169,13 +169,13 @@ public class DaaSGenerator {
     
     private void generateMetricClass(){
         
-        List<DataElasticityMetric> listOfDataElasticityMetrics = elasticDataObject.getListOfDataElasticityMetrics();
+        List<QoRMetric> listOfDataElasticityMetrics = elasticDataObject.getListOfDataElasticityMetrics();
         
         
         String templateConstraintClass = loadTemplateConstraintClass();
         System.out.println("class: " + templateConstraintClass);
         
-        for (DataElasticityMetric metric : listOfDataElasticityMetrics) {
+        for (QoRMetric metric : listOfDataElasticityMetrics) {
             
             String metricName = metric.getName();
             System.out.println(metricName);
