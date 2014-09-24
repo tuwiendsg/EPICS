@@ -1,4 +1,6 @@
 org/jbpm/examples/multipleinstance/MultipleInstanceExample.class
 at/ac/tuwien/dsg/qoranalytics/connector/NoSQLConnector.class
+org/jbpm/examples/looping/LoopingExample.class
+at/ac/tuwien/dsg/qoranalytics/daw/demo/demo.class
 at/ac/tuwien/dsg/qoranalytics/connector/MOMConnector.class
 at/ac/tuwien/dsg/qoranalytics/connector/SmartComConnector.class
