@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.orchestrator.deployment.Hung;
+package at.ac.tuwien.dsg.orchestrator.deployment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Jun
  */
-public class testDeploy {
+public class testDeploy2 {
 
     /**
      * @param args the command line arguments

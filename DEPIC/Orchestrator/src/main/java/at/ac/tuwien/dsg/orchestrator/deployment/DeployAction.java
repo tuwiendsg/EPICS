@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.orchestrator.deployment.Hung;
+package at.ac.tuwien.dsg.orchestrator.deployment;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

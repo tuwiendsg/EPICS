@@ -1,4 +1,4 @@
-package at.ac.tuwien.dsg.orchestrator.deployment.Hung;
+package at.ac.tuwien.dsg.orchestrator.deployment;
 
 import generated.oasis.tosca.Definitions;
 import generated.oasis.tosca.TArtifactReference;
