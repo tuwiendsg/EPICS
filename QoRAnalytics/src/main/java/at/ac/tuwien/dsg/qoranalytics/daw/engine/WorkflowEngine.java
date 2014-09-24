@@ -9,6 +9,7 @@ package at.ac.tuwien.dsg.qoranalytics.daw.engine;
  *
  * @author Jun
  */
+import at.ac.tuwien.dsg.qoranalytics.analytic.KMeans;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,6 +63,19 @@ public class WorkflowEngine {
         KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
         kbuilder.add(ResourceFactory.newClassPathResource("daw/"+daw+".bpmn"), ResourceType.BPMN2);
         return kbuilder.newKnowledgeBase();
+    }
+    
+    private static void startService(String service) {
+        
+        if (service.equals("KMeans")) {
+            
+            System.out.println("");
+            
+            KMeans km = new KMeans(2);
+            km.start();
+        }
+        
+        
     }
 
 }
