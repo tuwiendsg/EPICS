@@ -10,7 +10,6 @@
     <module>Orchestrator</module>
         <module>DepicTooling</module>
         <module>DataAssetLoader</module>
-    <module>DataAssetFunctionManagement</module>
   </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
