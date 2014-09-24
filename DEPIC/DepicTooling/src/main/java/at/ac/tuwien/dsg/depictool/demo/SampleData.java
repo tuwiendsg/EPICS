@@ -6,19 +6,19 @@
 
 package at.ac.tuwien.dsg.depictool.demo;
 
-import at.ac.tuwien.dsg.depictool.entity.eda.ep.ControlAction;
-import at.ac.tuwien.dsg.depictool.entity.qor.QoRMetric;
-import at.ac.tuwien.dsg.depictool.entity.process.MetricProcess;
-import at.ac.tuwien.dsg.depictool.entity.eda.DataAssetFunction;
+import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
+import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
+import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
+import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
 import at.ac.tuwien.dsg.depictool.entity.others.DataSource;
-import at.ac.tuwien.dsg.depictool.entity.eda.ElasticDataAsset;
-import at.ac.tuwien.dsg.depictool.entity.eda.ElasticState;
-import at.ac.tuwien.dsg.depictool.entity.process.MetricElasticityProcess;
-import at.ac.tuwien.dsg.depictool.entity.qor.MetricRange;
-import at.ac.tuwien.dsg.depictool.entity.eda.ep.MonitorAction;
+import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
+import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
+import at.ac.tuwien.dsg.common.entity.process.MetricElasticityProcess;
+import at.ac.tuwien.dsg.common.entity.qor.MetricRange;
+import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
 import at.ac.tuwien.dsg.depictool.entity.others.Parameter;
-import at.ac.tuwien.dsg.depictool.entity.qor.Range;
-import at.ac.tuwien.dsg.depictool.entity.qor.TriggerValues;
+import at.ac.tuwien.dsg.common.entity.qor.Range;
+import at.ac.tuwien.dsg.common.entity.qor.TriggerValues;
 import java.util.ArrayList;
 import java.util.List;
 

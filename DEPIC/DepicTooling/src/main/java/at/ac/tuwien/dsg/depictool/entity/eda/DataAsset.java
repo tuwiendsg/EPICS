@@ -6,6 +6,7 @@
 
 package at.ac.tuwien.dsg.depictool.entity.eda;
 
+import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
 import java.util.List;
 
 /**

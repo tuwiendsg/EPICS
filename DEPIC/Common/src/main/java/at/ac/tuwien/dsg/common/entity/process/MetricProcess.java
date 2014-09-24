@@ -4,9 +4,8 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.depictool.entity.process;
+package at.ac.tuwien.dsg.common.entity.process;
 
-import at.ac.tuwien.dsg.common.entity.process.MetricElasticityProcess;
 import java.util.List;
 
 /**

@@ -4,9 +4,8 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.depictool.entity.qor;
+package at.ac.tuwien.dsg.common.entity.qor;
 
-import at.ac.tuwien.dsg.common.entity.qor.Range;
 import java.util.List;
 
 /**

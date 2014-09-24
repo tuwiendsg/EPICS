@@ -6,7 +6,7 @@
 
 package at.ac.tuwien.dsg.depictool.app;
 
-import at.ac.tuwien.dsg.depictool.entity.eda.ElasticDataAsset;
+import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 
 /**
  *

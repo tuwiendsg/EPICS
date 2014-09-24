@@ -4,10 +4,9 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.depictool.entity.eda;
+package at.ac.tuwien.dsg.common.entity.eda;
 
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
-import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.depictool.entity.others.DataSource;
 import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.depictool.entity.eda.ep;
+package at.ac.tuwien.dsg.common.entity.eda.ep;
 
 import at.ac.tuwien.dsg.depictool.entity.others.Parameter;
 import at.ac.tuwien.dsg.common.entity.qor.TriggerValues;

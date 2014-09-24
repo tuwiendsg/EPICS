@@ -7,8 +7,8 @@
 package at.ac.tuwien.dsg.depictool.util;
 
 
-import at.ac.tuwien.dsg.depictool.entity.process.MetricProcess;
-import at.ac.tuwien.dsg.depictool.entity.eda.ElasticDataAsset;
+import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
+import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import com.esotericsoftware.yamlbeans.YamlWriter;
 
 import java.io.FileWriter;
