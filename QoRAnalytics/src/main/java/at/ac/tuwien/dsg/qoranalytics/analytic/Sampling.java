@@ -10,23 +10,20 @@ package at.ac.tuwien.dsg.qoranalytics.analytic;
  *
  * @author Jun
  */
-public class LeastSquareRegression {
+public class Sampling {
+    private static final Sampling INSTANCE = new Sampling();
 
-    private static final LeastSquareRegression INSTANCE = new LeastSquareRegression();
-
-    public static LeastSquareRegression getInstance() {
+    public static Sampling getInstance() {
         return INSTANCE;
-    }
-
-    public LeastSquareRegression() {
     }
     
     public void start() {
-        System.out.println("LeastSquareRegression Starting ...");
+        System.out.println("Sampling Starting ...");
         //algorithm
         
         
-        System.out.println("LeastSquareRegression Completed ...");
+        System.out.println("Sampling Completed ...");
     }
+    
     
 }

@@ -103,44 +103,44 @@
       <processId>ac.at.tuwien.dsg.daw1</processId>
       <processName>daw1</processName>
       <processInstanceId>1</processInstanceId>
-      <nodeId>_3</nodeId>
-      <nodeName>KM</nodeName>
+      <nodeId>_5</nodeId>
+      <nodeName>Sampling</nodeName>
       <nodeInstanceId>2</nodeInstanceId>
     </org.drools.core.audit.event.RuleFlowNodeLogEvent>
     <org.drools.core.audit.event.RuleFlowNodeLogEvent>
       <type>26</type>
-      <processId>ac.at.tuwien.dsg.daw1</processId>
-      <processName>daw1</processName>
-      <processInstanceId>1</processInstanceId>
-      <nodeId>_3</nodeId>
-      <nodeName>KM</nodeName>
-      <nodeInstanceId>2</nodeInstanceId>
-    </org.drools.core.audit.event.RuleFlowNodeLogEvent>
-    <org.drools.core.audit.event.RuleFlowNodeLogEvent>
-      <type>24</type>
-      <processId>ac.at.tuwien.dsg.daw1</processId>
-      <processName>daw1</processName>
-      <processInstanceId>1</processInstanceId>
-      <nodeId>_2</nodeId>
-      <nodeName>LSR</nodeName>
-      <nodeInstanceId>3</nodeInstanceId>
-    </org.drools.core.audit.event.RuleFlowNodeLogEvent>
-    <org.drools.core.audit.event.RuleFlowNodeLogEvent>
-      <type>26</type>
-      <processId>ac.at.tuwien.dsg.daw1</processId>
-      <processName>daw1</processName>
-      <processInstanceId>1</processInstanceId>
-      <nodeId>_2</nodeId>
-      <nodeName>LSR</nodeName>
-      <nodeInstanceId>3</nodeInstanceId>
-    </org.drools.core.audit.event.RuleFlowNodeLogEvent>
-    <org.drools.core.audit.event.RuleFlowNodeLogEvent>
-      <type>24</type>
       <processId>ac.at.tuwien.dsg.daw1</processId>
       <processName>daw1</processName>
       <processInstanceId>1</processInstanceId>
       <nodeId>_5</nodeId>
-      <nodeName>Done</nodeName>
+      <nodeName>Sampling</nodeName>
+      <nodeInstanceId>2</nodeInstanceId>
+    </org.drools.core.audit.event.RuleFlowNodeLogEvent>
+    <org.drools.core.audit.event.RuleFlowNodeLogEvent>
+      <type>24</type>
+      <processId>ac.at.tuwien.dsg.daw1</processId>
+      <processName>daw1</processName>
+      <processInstanceId>1</processInstanceId>
+      <nodeId>_2</nodeId>
+      <nodeName>LeastSquareRegression</nodeName>
+      <nodeInstanceId>3</nodeInstanceId>
+    </org.drools.core.audit.event.RuleFlowNodeLogEvent>
+    <org.drools.core.audit.event.RuleFlowNodeLogEvent>
+      <type>26</type>
+      <processId>ac.at.tuwien.dsg.daw1</processId>
+      <processName>daw1</processName>
+      <processInstanceId>1</processInstanceId>
+      <nodeId>_2</nodeId>
+      <nodeName>LeastSquareRegression</nodeName>
+      <nodeInstanceId>3</nodeInstanceId>
+    </org.drools.core.audit.event.RuleFlowNodeLogEvent>
+    <org.drools.core.audit.event.RuleFlowNodeLogEvent>
+      <type>24</type>
+      <processId>ac.at.tuwien.dsg.daw1</processId>
+      <processName>daw1</processName>
+      <processInstanceId>1</processInstanceId>
+      <nodeId>_3</nodeId>
+      <nodeName>KMeans</nodeName>
       <nodeInstanceId>4</nodeInstanceId>
     </org.drools.core.audit.event.RuleFlowNodeLogEvent>
     <org.drools.core.audit.event.RuleFlowNodeLogEvent>
@@ -148,8 +148,8 @@
       <processId>ac.at.tuwien.dsg.daw1</processId>
       <processName>daw1</processName>
       <processInstanceId>1</processInstanceId>
-      <nodeId>_5</nodeId>
-      <nodeName>Done</nodeName>
+      <nodeId>_3</nodeId>
+      <nodeName>KMeans</nodeName>
       <nodeInstanceId>4</nodeInstanceId>
     </org.drools.core.audit.event.RuleFlowNodeLogEvent>
     <org.drools.core.audit.event.RuleFlowNodeLogEvent>
@@ -205,44 +205,44 @@
       <processId>ac.at.tuwien.dsg.daw1</processId>
       <processName>daw1</processName>
       <processInstanceId>1</processInstanceId>
-      <nodeId>_5</nodeId>
-      <nodeName>Done</nodeName>
+      <nodeId>_3</nodeId>
+      <nodeName>KMeans</nodeName>
       <nodeInstanceId>4</nodeInstanceId>
     </org.drools.core.audit.event.RuleFlowNodeLogEvent>
     <org.drools.core.audit.event.RuleFlowNodeLogEvent>
       <type>25</type>
-      <processId>ac.at.tuwien.dsg.daw1</processId>
-      <processName>daw1</processName>
-      <processInstanceId>1</processInstanceId>
-      <nodeId>_5</nodeId>
-      <nodeName>Done</nodeName>
-      <nodeInstanceId>4</nodeInstanceId>
-    </org.drools.core.audit.event.RuleFlowNodeLogEvent>
-    <org.drools.core.audit.event.RuleFlowNodeLogEvent>
-      <type>27</type>
-      <processId>ac.at.tuwien.dsg.daw1</processId>
-      <processName>daw1</processName>
-      <processInstanceId>1</processInstanceId>
-      <nodeId>_2</nodeId>
-      <nodeName>LSR</nodeName>
-      <nodeInstanceId>3</nodeInstanceId>
-    </org.drools.core.audit.event.RuleFlowNodeLogEvent>
-    <org.drools.core.audit.event.RuleFlowNodeLogEvent>
-      <type>25</type>
-      <processId>ac.at.tuwien.dsg.daw1</processId>
-      <processName>daw1</processName>
-      <processInstanceId>1</processInstanceId>
-      <nodeId>_2</nodeId>
-      <nodeName>LSR</nodeName>
-      <nodeInstanceId>3</nodeInstanceId>
-    </org.drools.core.audit.event.RuleFlowNodeLogEvent>
-    <org.drools.core.audit.event.RuleFlowNodeLogEvent>
-      <type>27</type>
       <processId>ac.at.tuwien.dsg.daw1</processId>
       <processName>daw1</processName>
       <processInstanceId>1</processInstanceId>
       <nodeId>_3</nodeId>
-      <nodeName>KM</nodeName>
+      <nodeName>KMeans</nodeName>
+      <nodeInstanceId>4</nodeInstanceId>
+    </org.drools.core.audit.event.RuleFlowNodeLogEvent>
+    <org.drools.core.audit.event.RuleFlowNodeLogEvent>
+      <type>27</type>
+      <processId>ac.at.tuwien.dsg.daw1</processId>
+      <processName>daw1</processName>
+      <processInstanceId>1</processInstanceId>
+      <nodeId>_2</nodeId>
+      <nodeName>LeastSquareRegression</nodeName>
+      <nodeInstanceId>3</nodeInstanceId>
+    </org.drools.core.audit.event.RuleFlowNodeLogEvent>
+    <org.drools.core.audit.event.RuleFlowNodeLogEvent>
+      <type>25</type>
+      <processId>ac.at.tuwien.dsg.daw1</processId>
+      <processName>daw1</processName>
+      <processInstanceId>1</processInstanceId>
+      <nodeId>_2</nodeId>
+      <nodeName>LeastSquareRegression</nodeName>
+      <nodeInstanceId>3</nodeInstanceId>
+    </org.drools.core.audit.event.RuleFlowNodeLogEvent>
+    <org.drools.core.audit.event.RuleFlowNodeLogEvent>
+      <type>27</type>
+      <processId>ac.at.tuwien.dsg.daw1</processId>
+      <processName>daw1</processName>
+      <processInstanceId>1</processInstanceId>
+      <nodeId>_5</nodeId>
+      <nodeName>Sampling</nodeName>
       <nodeInstanceId>2</nodeInstanceId>
     </org.drools.core.audit.event.RuleFlowNodeLogEvent>
     <org.drools.core.audit.event.RuleFlowNodeLogEvent>
@@ -250,8 +250,8 @@
       <processId>ac.at.tuwien.dsg.daw1</processId>
       <processName>daw1</processName>
       <processInstanceId>1</processInstanceId>
-      <nodeId>_3</nodeId>
-      <nodeName>KM</nodeName>
+      <nodeId>_5</nodeId>
+      <nodeName>Sampling</nodeName>
       <nodeInstanceId>2</nodeInstanceId>
     </org.drools.core.audit.event.RuleFlowNodeLogEvent>
     <org.drools.core.audit.event.RuleFlowNodeLogEvent>
