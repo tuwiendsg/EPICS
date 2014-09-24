@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.depictool.entity;
+package at.ac.tuwien.dsg.depictool.entity.eda.ep;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,15 +12,15 @@ import java.util.List;
  *
  * @author Jun
  */
-public class DataElasticityProcess {
+public class ElasticityProcess {
 
     MonitorProcess monitorProcess;
     List<ControlProcess> listOfControlProcesses;
 
-    public DataElasticityProcess() {
+    public ElasticityProcess() {
     }
 
-    public DataElasticityProcess(MonitorProcess monitorProcess, List<ControlProcess> listOfControlProcesses) {
+    public ElasticityProcess(MonitorProcess monitorProcess, List<ControlProcess> listOfControlProcesses) {
         this.monitorProcess = monitorProcess;
         this.listOfControlProcesses = listOfControlProcesses;
     }

@@ -10,18 +10,18 @@ import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import at.ac.tuwien.dsg.common.deployment.DeploymentDescription;
 import at.ac.tuwien.dsg.common.deployment.DeploymentDescriptionJAXB;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
-import at.ac.tuwien.dsg.depictool.entity.ActionDependency;
-import at.ac.tuwien.dsg.depictool.entity.ControlAction;
-import at.ac.tuwien.dsg.depictool.entity.ControlProcess;
-import at.ac.tuwien.dsg.depictool.entity.DataElasticityProcess;
-import at.ac.tuwien.dsg.depictool.entity.DataElasticityProcessConfiguration;
-import at.ac.tuwien.dsg.depictool.entity.ElasticDataObject;
-import at.ac.tuwien.dsg.depictool.entity.ElasticState;
-import at.ac.tuwien.dsg.depictool.entity.MetricElasticityProcess;
-import at.ac.tuwien.dsg.depictool.entity.MetricRange;
-import at.ac.tuwien.dsg.depictool.entity.MonitorAction;
-import at.ac.tuwien.dsg.depictool.entity.MonitorProcess;
-import at.ac.tuwien.dsg.depictool.entity.TriggerValues;
+import at.ac.tuwien.dsg.depictool.entity.others.ActionDependency;
+import at.ac.tuwien.dsg.depictool.entity.eda.ep.ControlAction;
+import at.ac.tuwien.dsg.depictool.entity.eda.ep.ControlProcess;
+import at.ac.tuwien.dsg.depictool.entity.eda.ep.ElasticityProcess;
+import at.ac.tuwien.dsg.depictool.entity.others.DataElasticityProcessConfiguration;
+import at.ac.tuwien.dsg.depictool.entity.eda.ElasticDataAsset;
+import at.ac.tuwien.dsg.depictool.entity.eda.ElasticState;
+import at.ac.tuwien.dsg.depictool.entity.others.MetricElasticityProcess;
+import at.ac.tuwien.dsg.depictool.entity.qor.MetricRange;
+import at.ac.tuwien.dsg.depictool.entity.eda.ep.MonitorAction;
+import at.ac.tuwien.dsg.depictool.entity.eda.ep.MonitorProcess;
+import at.ac.tuwien.dsg.depictool.entity.qor.TriggerValues;
 import at.ac.tuwien.dsg.depictool.util.ElasticityProcessRepositorty;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,13 +33,13 @@ import java.util.List;
  */
 public class ElasticityProcessGenerator {
 
-    ElasticDataObject elasticDataObject;
+    ElasticDataAsset elasticDataObject;
     DataElasticityProcessConfiguration elasticityProcessConfiguration;
     
     public ElasticityProcessGenerator() {
     }
 
-    public ElasticityProcessGenerator(ElasticDataObject elasticDataObject, DataElasticityProcessConfiguration elasticityProcessConfiguration) {
+    public ElasticityProcessGenerator(ElasticDataAsset elasticDataObject, DataElasticityProcessConfiguration elasticityProcessConfiguration) {
         this.elasticDataObject = elasticDataObject;
         this.elasticityProcessConfiguration = elasticityProcessConfiguration;
     }
@@ -92,7 +92,7 @@ public class ElasticityProcessGenerator {
     }
     
     
-    public void deployElasticityProcess(DataElasticityProcess dataElasticityProcess){
+    public void deployElasticityProcess(ElasticityProcess dataElasticityProcess){
         
         MonitorProcess monitorProcess = dataElasticityProcess.getMonitorProcess();
         

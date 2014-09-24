@@ -9,9 +9,9 @@ package at.ac.tuwien.dsg.depictool.app;
 import at.ac.tuwien.dsg.common.entity.others.MySQLConnection;
 import at.ac.tuwien.dsg.common.entity.others.MySqlConnectionManager;
 import at.ac.tuwien.dsg.depictool.entity.qor.QoRMetric;
-import at.ac.tuwien.dsg.depictool.entity.DataAssetFunction;
-import at.ac.tuwien.dsg.depictool.entity.DataSource;
-import at.ac.tuwien.dsg.depictool.entity.ElasticDataObject;
+import at.ac.tuwien.dsg.depictool.entity.eda.da.DataAssetFunction;
+import at.ac.tuwien.dsg.depictool.entity.others.DataSource;
+import at.ac.tuwien.dsg.depictool.entity.eda.ElasticDataAsset;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -36,13 +36,13 @@ import java.util.logging.Logger;
  */
 public class DaaSGenerator {
     
-    ElasticDataObject elasticDataObject;
+    ElasticDataAsset elasticDataObject;
     String templateFolder;
 
     public DaaSGenerator() {
     }
 
-    public DaaSGenerator(ElasticDataObject elasticDataObject) {
+    public DaaSGenerator(ElasticDataAsset elasticDataObject) {
         this.elasticDataObject = elasticDataObject;
         templateFolder="template/eDaaS/src/main/java/at/ac/tuwien/dsg/";
     }

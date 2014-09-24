@@ -4,8 +4,10 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.depictool.entity;
+package at.ac.tuwien.dsg.depictool.entity.eda;
 
+import at.ac.tuwien.dsg.depictool.entity.others.DataSource;
+import at.ac.tuwien.dsg.depictool.entity.eda.da.DataAssetFunction;
 import at.ac.tuwien.dsg.depictool.entity.qor.QoRMetric;
 import java.util.List;
 
@@ -13,16 +15,16 @@ import java.util.List;
  *
  * @author Jun
  */
-public class ElasticDataObject {
+public class ElasticDataAsset {
     DataSource dataSource;
     List<DataAssetFunction> listOfDataObjectFunctions;
     List<QoRMetric> listOfDataElasticityMetrics;
     List<ElasticState> listOfElasticStates;
     
-    public ElasticDataObject() {
+    public ElasticDataAsset() {
     }
 
-    public ElasticDataObject(DataSource dataSource, List<DataAssetFunction> listOfDataObjectFunctions, List<QoRMetric> listOfDataElasticityMetrics, List<ElasticState> listOfElasticStates) {
+    public ElasticDataAsset(DataSource dataSource, List<DataAssetFunction> listOfDataObjectFunctions, List<QoRMetric> listOfDataElasticityMetrics, List<ElasticState> listOfElasticStates) {
         this.dataSource = dataSource;
         this.listOfDataObjectFunctions = listOfDataObjectFunctions;
         this.listOfDataElasticityMetrics = listOfDataElasticityMetrics;

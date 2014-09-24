@@ -6,19 +6,19 @@
 
 package at.ac.tuwien.dsg.depictool.app;
 
-import at.ac.tuwien.dsg.depictool.entity.ElasticDataObject;
+import at.ac.tuwien.dsg.depictool.entity.eda.ElasticDataAsset;
 
 /**
  *
  * @author Jun
  */
 public class EDOParser {
-    ElasticDataObject edo;
+    ElasticDataAsset edo;
 
     public EDOParser() {
     }
 
-    public EDOParser(ElasticDataObject edo) {
+    public EDOParser(ElasticDataAsset edo) {
         this.edo = edo;
     }
     

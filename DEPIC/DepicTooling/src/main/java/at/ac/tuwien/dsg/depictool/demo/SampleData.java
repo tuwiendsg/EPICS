@@ -6,19 +6,19 @@
 
 package at.ac.tuwien.dsg.depictool.demo;
 
-import at.ac.tuwien.dsg.depictool.entity.ControlAction;
+import at.ac.tuwien.dsg.depictool.entity.eda.ep.ControlAction;
 import at.ac.tuwien.dsg.depictool.entity.qor.QoRMetric;
-import at.ac.tuwien.dsg.depictool.entity.DataElasticityProcessConfiguration;
-import at.ac.tuwien.dsg.depictool.entity.DataAssetFunction;
-import at.ac.tuwien.dsg.depictool.entity.DataSource;
-import at.ac.tuwien.dsg.depictool.entity.ElasticDataObject;
-import at.ac.tuwien.dsg.depictool.entity.ElasticState;
-import at.ac.tuwien.dsg.depictool.entity.MetricElasticityProcess;
-import at.ac.tuwien.dsg.depictool.entity.MetricRange;
-import at.ac.tuwien.dsg.depictool.entity.MonitorAction;
-import at.ac.tuwien.dsg.depictool.entity.Parameter;
-import at.ac.tuwien.dsg.depictool.entity.Range;
-import at.ac.tuwien.dsg.depictool.entity.TriggerValues;
+import at.ac.tuwien.dsg.depictool.entity.others.DataElasticityProcessConfiguration;
+import at.ac.tuwien.dsg.depictool.entity.eda.da.DataAssetFunction;
+import at.ac.tuwien.dsg.depictool.entity.others.DataSource;
+import at.ac.tuwien.dsg.depictool.entity.eda.ElasticDataAsset;
+import at.ac.tuwien.dsg.depictool.entity.eda.ElasticState;
+import at.ac.tuwien.dsg.depictool.entity.others.MetricElasticityProcess;
+import at.ac.tuwien.dsg.depictool.entity.qor.MetricRange;
+import at.ac.tuwien.dsg.depictool.entity.eda.ep.MonitorAction;
+import at.ac.tuwien.dsg.depictool.entity.others.Parameter;
+import at.ac.tuwien.dsg.depictool.entity.qor.Range;
+import at.ac.tuwien.dsg.depictool.entity.qor.TriggerValues;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +27,7 @@ import java.util.List;
  * @author Jun
  */
 public class SampleData {
-    public ElasticDataObject sampleEDO(){
+    public ElasticDataAsset sampleEDO(){
         
         
        List<DataAssetFunction> listOfDataObjectFunctions  = sampleListDataObjectFunctions();
@@ -36,7 +36,7 @@ public class SampleData {
         DataSource dataSource = sampleDataSource();
         
         
-        ElasticDataObject edo = new ElasticDataObject(dataSource, listOfDataObjectFunctions, listOfDataElasticityMetrics, listOfElasticStates);
+        ElasticDataAsset edo = new ElasticDataAsset(dataSource, listOfDataObjectFunctions, listOfDataElasticityMetrics, listOfElasticStates);
          
            return edo;
                 

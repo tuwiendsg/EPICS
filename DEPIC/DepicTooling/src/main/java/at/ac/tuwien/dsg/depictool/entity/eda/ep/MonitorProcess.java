@@ -4,8 +4,9 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.depictool.entity;
+package at.ac.tuwien.dsg.depictool.entity.eda.ep;
 
+import at.ac.tuwien.dsg.depictool.entity.eda.ep.MonitorAction;
 import java.util.List;
 
 /**

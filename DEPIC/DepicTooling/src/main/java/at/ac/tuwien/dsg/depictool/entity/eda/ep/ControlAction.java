@@ -4,8 +4,10 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.depictool.entity;
+package at.ac.tuwien.dsg.depictool.entity.eda.ep;
 
+import at.ac.tuwien.dsg.depictool.entity.others.Parameter;
+import at.ac.tuwien.dsg.depictool.entity.qor.TriggerValues;
 import java.util.List;
 
 /**

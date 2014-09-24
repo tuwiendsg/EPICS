@@ -7,8 +7,8 @@
 package at.ac.tuwien.dsg.depictool.util;
 
 
-import at.ac.tuwien.dsg.depictool.entity.DataElasticityProcessConfiguration;
-import at.ac.tuwien.dsg.depictool.entity.ElasticDataObject;
+import at.ac.tuwien.dsg.depictool.entity.others.DataElasticityProcessConfiguration;
+import at.ac.tuwien.dsg.depictool.entity.eda.ElasticDataAsset;
 import com.esotericsoftware.yamlbeans.YamlWriter;
 
 import java.io.FileWriter;
@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 public class YamlUtils {
     
     
-    public void convertElasticDataObject2Yaml(ElasticDataObject obj) {
+    public void convertElasticDataObject2Yaml(ElasticDataAsset obj) {
         try {
             YamlWriter writer = new YamlWriter(new FileWriter("configs_edo.yml"));
             writer.write(obj);

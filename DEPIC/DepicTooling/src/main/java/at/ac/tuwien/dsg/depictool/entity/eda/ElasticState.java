@@ -4,8 +4,9 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.depictool.entity;
+package at.ac.tuwien.dsg.depictool.entity.eda;
 
+import at.ac.tuwien.dsg.depictool.entity.qor.MetricRange;
 import java.util.List;
 
 /**

@@ -6,7 +6,6 @@
 
 package at.ac.tuwien.dsg.depictool.entity.qor;
 
-import at.ac.tuwien.dsg.depictool.entity.Range;
 import java.util.List;
 
 /**
