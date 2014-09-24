@@ -11,7 +11,7 @@ import at.ac.tuwien.dsg.depictool.entity.others.ActionDependency;
 import at.ac.tuwien.dsg.depictool.entity.eda.ep.ControlAction;
 import at.ac.tuwien.dsg.depictool.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.depictool.others.entity.DataElasticityProcessConfiguration;
-import at.ac.tuwien.dsg.depictool.entity.eda.da.DataAssetFunction;
+import at.ac.tuwien.dsg.depictool.entity.eda.DataAssetFunction;
 import at.ac.tuwien.dsg.depictool.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.depictool.entity.eda.ElasticState;
 import at.ac.tuwien.dsg.depothers.ictool.entity.MetricElasticityProcess;
@@ -38,7 +38,7 @@ public class demo {
         // TODO code application logic here
         
         SampleData sampleData = new SampleData();
-        EElasticDataAssetedo = sampleData.sampleEDO();
+        ElasticDataAsset edo = sampleData.sampleEDO();
         DataElasticityProcessConfiguration elasticityProcessConfiguration = sampleData.sampleDEPConf();
         
         Generator generator = new Generator(edo, elasticityProcessConfiguration);

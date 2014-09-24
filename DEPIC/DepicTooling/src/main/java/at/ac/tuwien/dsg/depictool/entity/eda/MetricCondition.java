@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.depictool.entity.qor;
+package at.ac.tuwien.dsg.depictool.entity.eda;
 
 /**
  *
  * @author Jun
  */
-public class QoR {
+public class MetricCondition {
     
 }

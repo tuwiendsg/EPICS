@@ -7,7 +7,7 @@
 package at.ac.tuwien.dsg.depictool.util;
 
 
-import at.ac.tuwien.dsg.depictool.entity.others.DataElasticityProcessConfiguration;
+import at.ac.tuwien.dsg.depictool.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.depictool.entity.eda.ElasticDataAsset;
 import com.esotericsoftware.yamlbeans.YamlWriter;
 
@@ -33,7 +33,7 @@ public class YamlUtils {
         }
     }
     
-    public void convertElasticProcessConfiguration2Yaml(DataElasticityProcessConfiguration obj) {
+    public void convertElasticProcessConfiguration2Yaml(MetricProcess obj) {
         try {
             YamlWriter writer = new YamlWriter(new FileWriter("configs_elasticprocess.yml"));
             writer.write(obj);

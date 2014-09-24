@@ -18,9 +18,6 @@ public class PricingScheme {
     public PricingScheme() {
       
     }
-
-    
-    
     
     public PricingScheme(List listOfPricingPlans) {
         this.listOfPricingPlans = listOfPricingPlans;

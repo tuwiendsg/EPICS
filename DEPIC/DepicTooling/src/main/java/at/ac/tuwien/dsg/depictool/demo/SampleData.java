@@ -8,12 +8,12 @@ package at.ac.tuwien.dsg.depictool.demo;
 
 import at.ac.tuwien.dsg.depictool.entity.eda.ep.ControlAction;
 import at.ac.tuwien.dsg.depictool.entity.qor.QoRMetric;
-import at.ac.tuwien.dsg.depictool.entity.others.DataElasticityProcessConfiguration;
-import at.ac.tuwien.dsg.depictool.entity.eda.da.DataAssetFunction;
+import at.ac.tuwien.dsg.depictool.entity.process.MetricProcess;
+import at.ac.tuwien.dsg.depictool.entity.eda.DataAssetFunction;
 import at.ac.tuwien.dsg.depictool.entity.others.DataSource;
 import at.ac.tuwien.dsg.depictool.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.depictool.entity.eda.ElasticState;
-import at.ac.tuwien.dsg.depictool.entity.others.MetricElasticityProcess;
+import at.ac.tuwien.dsg.depictool.entity.process.MetricElasticityProcess;
 import at.ac.tuwien.dsg.depictool.entity.qor.MetricRange;
 import at.ac.tuwien.dsg.depictool.entity.eda.ep.MonitorAction;
 import at.ac.tuwien.dsg.depictool.entity.others.Parameter;
@@ -205,7 +205,7 @@ public class SampleData {
         return  listOfElasticStates;
     }
     
-    public DataElasticityProcessConfiguration sampleDEPConf(){
+    public MetricProcess sampleDEPConf(){
         
         
         List<MetricElasticityProcess> listOfMetricElasticityProcesses = new ArrayList<>();
@@ -284,7 +284,7 @@ public class SampleData {
         listOfMetricElasticityProcesses.add(metricControlAction2);
   
         
-        DataElasticityProcessConfiguration dataElasticityProcessConfiguration = new DataElasticityProcessConfiguration(listOfMetricElasticityProcesses);  
+        MetricProcess dataElasticityProcessConfiguration = new MetricProcess(listOfMetricElasticityProcesses);  
         
         return dataElasticityProcessConfiguration;
     }

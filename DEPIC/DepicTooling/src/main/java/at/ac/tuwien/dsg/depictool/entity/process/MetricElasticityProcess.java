@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.depictool.entity.others;
+package at.ac.tuwien.dsg.depictool.entity.process;
 
 import at.ac.tuwien.dsg.depictool.entity.eda.ep.MonitorAction;
 import at.ac.tuwien.dsg.depictool.entity.eda.ep.ControlAction;

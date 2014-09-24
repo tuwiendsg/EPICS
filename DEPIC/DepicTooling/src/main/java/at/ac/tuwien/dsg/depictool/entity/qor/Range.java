@@ -32,10 +32,6 @@ public class Range {
         this.rangeID = rangeID;
     }
 
-    
-    
-    
-
     public double getFromValue() {
         return fromValue;
     }

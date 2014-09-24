@@ -6,8 +6,8 @@
 
 package at.ac.tuwien.dsg.depictool.entity.eda;
 
+import at.ac.tuwien.dsg.depictool.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.depictool.entity.others.DataSource;
-import at.ac.tuwien.dsg.depictool.entity.eda.da.DataAssetFunction;
 import at.ac.tuwien.dsg.depictool.entity.qor.QoRMetric;
 import java.util.List;
 
@@ -16,43 +16,34 @@ import java.util.List;
  * @author Jun
  */
 public class ElasticDataAsset {
-    DataSource dataSource;
-    List<DataAssetFunction> listOfDataObjectFunctions;
-    List<QoRMetric> listOfDataElasticityMetrics;
+
+    DataAsset dataAsset;
+    ElasticityProcess elasticityProcess;
     List<ElasticState> listOfElasticStates;
     
     public ElasticDataAsset() {
     }
 
-    public ElasticDataAsset(DataSource dataSource, List<DataAssetFunction> listOfDataObjectFunctions, List<QoRMetric> listOfDataElasticityMetrics, List<ElasticState> listOfElasticStates) {
-        this.dataSource = dataSource;
-        this.listOfDataObjectFunctions = listOfDataObjectFunctions;
-        this.listOfDataElasticityMetrics = listOfDataElasticityMetrics;
+    public ElasticDataAsset(DataAsset dataAsset, ElasticityProcess elasticityProcess, List<ElasticState> listOfElasticStates) {
+        this.dataAsset = dataAsset;
+        this.elasticityProcess = elasticityProcess;
         this.listOfElasticStates = listOfElasticStates;
     }
 
-    public DataSource getDataSource() {
-        return dataSource;
+    public DataAsset getDataAsset() {
+        return dataAsset;
     }
 
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public void setDataAsset(DataAsset dataAsset) {
+        this.dataAsset = dataAsset;
     }
 
-    public List<DataAssetFunction> getListOfDataObjectFunctions() {
-        return listOfDataObjectFunctions;
+    public ElasticityProcess getElasticityProcess() {
+        return elasticityProcess;
     }
 
-    public void setListOfDataObjectFunctions(List<DataAssetFunction> listOfDataObjectFunctions) {
-        this.listOfDataObjectFunctions = listOfDataObjectFunctions;
-    }
-
-    public List<QoRMetric> getListOfDataElasticityMetrics() {
-        return listOfDataElasticityMetrics;
-    }
-
-    public void setListOfDataElasticityMetrics(List<QoRMetric> listOfDataElasticityMetrics) {
-        this.listOfDataElasticityMetrics = listOfDataElasticityMetrics;
+    public void setElasticityProcess(ElasticityProcess elasticityProcess) {
+        this.elasticityProcess = elasticityProcess;
     }
 
     public List<ElasticState> getListOfElasticStates() {
@@ -62,16 +53,10 @@ public class ElasticDataAsset {
     public void setListOfElasticStates(List<ElasticState> listOfElasticStates) {
         this.listOfElasticStates = listOfElasticStates;
     }
+    
+    
+    
 
-    
-    
-    
-    
-    
-    
-    
-   
-    
     
     
 }

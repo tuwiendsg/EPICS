@@ -14,10 +14,10 @@ import at.ac.tuwien.dsg.depictool.entity.others.ActionDependency;
 import at.ac.tuwien.dsg.depictool.entity.eda.ep.ControlAction;
 import at.ac.tuwien.dsg.depictool.entity.eda.ep.ControlProcess;
 import at.ac.tuwien.dsg.depictool.entity.eda.ep.ElasticityProcess;
-import at.ac.tuwien.dsg.depictool.entity.others.DataElasticityProcessConfiguration;
+import at.ac.tuwien.dsg.depictool.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.depictool.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.depictool.entity.eda.ElasticState;
-import at.ac.tuwien.dsg.depictool.entity.others.MetricElasticityProcess;
+import at.ac.tuwien.dsg.depictool.entity.process.MetricElasticityProcess;
 import at.ac.tuwien.dsg.depictool.entity.qor.MetricRange;
 import at.ac.tuwien.dsg.depictool.entity.eda.ep.MonitorAction;
 import at.ac.tuwien.dsg.depictool.entity.eda.ep.MonitorProcess;
@@ -34,12 +34,12 @@ import java.util.List;
 public class ElasticityProcessGenerator {
 
     ElasticDataAsset elasticDataObject;
-    DataElasticityProcessConfiguration elasticityProcessConfiguration;
+    MetricProcess elasticityProcessConfiguration;
     
     public ElasticityProcessGenerator() {
     }
 
-    public ElasticityProcessGenerator(ElasticDataAsset elasticDataObject, DataElasticityProcessConfiguration elasticityProcessConfiguration) {
+    public ElasticityProcessGenerator(ElasticDataAsset elasticDataObject, MetricProcess elasticityProcessConfiguration) {
         this.elasticDataObject = elasticDataObject;
         this.elasticityProcessConfiguration = elasticityProcessConfiguration;
     }

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.depictool.entity.others;
+package at.ac.tuwien.dsg.depictool.entity.process;
 
 import java.util.List;
 
@@ -12,14 +12,14 @@ import java.util.List;
  *
  * @author Jun
  */
-public class DataElasticityProcessConfiguration {
+public class MetricProcess {
     List<MetricElasticityProcess> listOfMetricElasticityProcesses;
 
-    public DataElasticityProcessConfiguration() {
+    public MetricProcess() {
     }
 
-    public DataElasticityProcessConfiguration(List<MetricElasticityProcess> listOfMetricControlActions) {
-        this.listOfMetricElasticityProcesses = listOfMetricControlActions;
+    public MetricProcess(List<MetricElasticityProcess> listOfMetricElasticityProcesses) {
+        this.listOfMetricElasticityProcesses = listOfMetricElasticityProcesses;
     }
 
     public List<MetricElasticityProcess> getListOfMetricElasticityProcesses() {
@@ -30,6 +30,7 @@ public class DataElasticityProcessConfiguration {
         this.listOfMetricElasticityProcesses = listOfMetricElasticityProcesses;
     }
 
+    
 
     
     
