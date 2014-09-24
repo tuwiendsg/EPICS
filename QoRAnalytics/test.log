@@ -7,24 +7,6 @@
       <processId>ac.at.tuwien.dsg.daw1</processId>
       <processName>daw1</processName>
       <processInstanceId>1</processInstanceId>
-      <variableId>count</variableId>
-      <variableInstanceId>count</variableInstanceId>
-      <objectToString>5</objectToString>
-    </org.drools.core.audit.event.RuleFlowVariableLogEvent>
-    <org.drools.core.audit.event.RuleFlowVariableLogEvent>
-      <type>33</type>
-      <processId>ac.at.tuwien.dsg.daw1</processId>
-      <processName>daw1</processName>
-      <processInstanceId>1</processInstanceId>
-      <variableId>count</variableId>
-      <variableInstanceId>count</variableInstanceId>
-      <objectToString>5</objectToString>
-    </org.drools.core.audit.event.RuleFlowVariableLogEvent>
-    <org.drools.core.audit.event.RuleFlowVariableLogEvent>
-      <type>32</type>
-      <processId>ac.at.tuwien.dsg.daw1</processId>
-      <processName>daw1</processName>
-      <processInstanceId>1</processInstanceId>
       <variableId>ac.at.tuwien.dsg.daw1_P_1</variableId>
       <variableInstanceId>ac.at.tuwien.dsg.daw1_P_1</variableInstanceId>
       <objectToString>9.8</objectToString>
