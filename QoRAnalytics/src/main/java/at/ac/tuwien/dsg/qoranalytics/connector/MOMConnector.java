@@ -18,6 +18,9 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -68,6 +71,7 @@ public class MOMConnector {
                     String data = mapMessage.getString(sensorOperation);
 
                     System.out.println("Received " + sensorOperation + data);
+                    writeData(data);
 
                     if (sensorOperation.equals("INSERT_ROWS")) {
                         JAXBContext bContext = JAXBContext.newInstance(CreateRowsStatement.class);
@@ -91,5 +95,19 @@ public class MOMConnector {
         subject = Configuration.getConfig("MOM.QUEUE_NAME");
         limit = Integer.parseInt(Configuration.getConfig("MESSAGE.LIMIT"));
     }
+    
+    private void writeData(String data){
+     
+        
+        FileWriter fstream;
+        try {
+            fstream = new FileWriter("temp", false);
+            BufferedWriter out = new BufferedWriter(fstream);
+            out.write(data);
 
+            
+            out.close();
+        } catch (IOException ex) {
+        }
+    }
 }
