@@ -24,10 +24,11 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 
 public class MOMConnector {
 
-    private static String url;
-    private static String subject;
+    private String url;
+    private String subject;
+    private int limit;
     
-    public static void main(String[] args) {
+    public void openConnection() {
 
         try {
 
@@ -41,7 +42,7 @@ public class MOMConnector {
             Destination destination = session.createQueue(subject);
             MessageConsumer consumer = session.createConsumer(destination);
 
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < limit; i++) {
                 Message message = consumer.receive();
                 onMessage(message);
             }
@@ -53,7 +54,7 @@ public class MOMConnector {
         }
     }
 
-    private static void onMessage(Message message) {
+    private void onMessage(Message message) {
 
         try {
 
@@ -85,9 +86,10 @@ public class MOMConnector {
         }
     }
 
-    private static void configure() {
+    private void configure() {
         url = "tcp://" + Configuration.getConfig("MOM.IP") + ":" + Configuration.getConfig("MOM.PORT");
         subject = Configuration.getConfig("MOM.QUEUE_NAME");
+        limit = Integer.parseInt(Configuration.getConfig("MESSAGE.LIMIT"));
     }
 
 }
