@@ -18,6 +18,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
+import at.ac.tuwien.dsg.qoranalytics.daw.engine.WorkflowEngine;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -30,6 +31,7 @@ public class MOMConnector {
     private String url;
     private String subject;
     private int limit;
+    
     
     public void openConnection() {
 
@@ -70,15 +72,21 @@ public class MOMConnector {
                     String sensorOperation = fieldsNames.nextElement().toString();
                     String data = mapMessage.getString(sensorOperation);
 
-                    System.out.println("Received " + sensorOperation + data);
                     writeData(data);
-
+                    executeWorkflowEngine();
+                    storeAnalysisResult();
+                    sendCriticalMessage();
+         
+                    //System.out.println("Received " + sensorOperation + data);
+                    /*
                     if (sensorOperation.equals("INSERT_ROWS")) {
                         JAXBContext bContext = JAXBContext.newInstance(CreateRowsStatement.class);
                         Unmarshaller um = bContext.createUnmarshaller();
                         CreateRowsStatement crs = (CreateRowsStatement) um.unmarshal(new StringReader(data));
 
                     }
+                    */        
+                            
                 }
 
             } else {
@@ -88,6 +96,12 @@ public class MOMConnector {
         } catch (Exception ex) {
 
         }
+    }
+    
+    private void executeWorkflowEngine(){
+        
+        WorkflowEngine wfEngine = new WorkflowEngine(Configuration.getConfig("WF.DAW"));
+        wfEngine.startWFEngine();
     }
 
     private void configure() {
@@ -109,5 +123,16 @@ public class MOMConnector {
             out.close();
         } catch (IOException ex) {
         }
+    }
+    
+    private void storeAnalysisResult(){
+        CassandraConnector cc = new CassandraConnector();
+        
+    }
+    
+    
+    private void sendCriticalMessage(){
+        SmartComConnector scc = new SmartComConnector();
+        
     }
 }

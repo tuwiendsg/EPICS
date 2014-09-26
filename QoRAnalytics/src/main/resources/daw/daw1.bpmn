@@ -18,7 +18,7 @@
     <scriptTask completionQuantity="1" id="_5" isForCompensation="false" name="Sampling" scriptFormat="text/x-groovy" startQuantity="1">
       <incoming>_9</incoming>
       <outgoing>_10</outgoing>
-      <script><![CDATA[Sampling.getInstance().start();]]></script>
+      <script><![CDATA[Sampling.getInstance().start(10);]]></script>
     </scriptTask>
     <endEvent id="_6" name="End">
       <incoming>_12</incoming>
@@ -41,7 +41,7 @@ System.out.println("lowerBound " + lowerBound);]]></script>
     <scriptTask completionQuantity="1" id="_2" isForCompensation="false" name="LeastSquareRegression" scriptFormat="text/x-groovy" startQuantity="1">
       <incoming>_10</incoming>
       <outgoing>_11</outgoing>
-      <script><![CDATA[LeastSquareRegression.getInstance().start();]]></script>
+      <script><![CDATA[LeastSquareRegression.getInstance().start(5,2);]]></script>
     </scriptTask>
     <sequenceFlow id="_9" sourceRef="_7" targetRef="_5"/>
     <sequenceFlow id="_10" sourceRef="_5" targetRef="_2"/>
@@ -87,36 +87,36 @@ System.out.println("lowerBound " + lowerBound);]]></script>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="_1-_7" id="Yaoqiang-_1-_7" sourceElement="__1" targetElement="_7">
-        <di:waypoint x="43.93975027400225" y="100.0"/>
-        <di:waypoint x="151.72222222222223" y="156.5"/>
+        <di:waypoint x="44.5" y="100.0"/>
+        <di:waypoint x="152.5" y="156.5"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.955078125" width="6.0" x="95.0" y="119.27241271204602"/>
+          <dc:Bounds height="18.955078125" width="6.0" x="95.0" y="119.2724609375"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_12" id="Yaoqiang-_12" sourceElement="_3" targetElement="_6">
-        <di:waypoint x="801.7222222222222" y="146.5"/>
-        <di:waypoint x="942.8334291190586" y="144.0"/>
+        <di:waypoint x="802.5" y="146.5"/>
+        <di:waypoint x="943.5" y="144.0"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.955078125" width="6.0" x="869.5" y="135.27241271204605"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_11" id="Yaoqiang-_11" sourceElement="_2" targetElement="_3">
-        <di:waypoint x="626.1666666666666" y="147.4615384615384"/>
-        <di:waypoint x="717.2777777777777" y="146.5"/>
-        <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.955078125" width="6.0" x="668.3653846153846" y="137.36861478365384"/>
+          <dc:Bounds height="18.955078125" width="6.0" x="869.5" y="135.2724609375"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_9" id="Yaoqiang-_9" sourceElement="_7" targetElement="_5">
-        <di:waypoint x="237.27777777777777" y="156.5"/>
+        <di:waypoint x="237.5" y="156.5"/>
         <di:waypoint x="339.5" y="147.5"/>
         <bpmndi:BPMNLabel>
           <dc:Bounds height="18.955078125" width="6.0" x="285.0" y="142.0224609375"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_11" id="Yaoqiang-_11" sourceElement="_2" targetElement="_3">
+        <di:waypoint x="625.5" y="147.4615384615384"/>
+        <di:waypoint x="717.5" y="146.5"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="18.955078125" width="6.0" x="668.3653846153846" y="137.36861478365384"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_10" id="Yaoqiang-_10" sourceElement="_5" targetElement="_2">
-        <di:waypoint x="423.94444444444446" y="147.5"/>
-        <di:waypoint x="540.6111111111111" y="147.4615384615384"/>
+        <di:waypoint x="424.5" y="147.5"/>
+        <di:waypoint x="540.5" y="147.4615384615384"/>
         <bpmndi:BPMNLabel>
           <dc:Bounds height="18.955078125" width="6.0" x="479.48076923076917" y="137.9839993990384"/>
         </bpmndi:BPMNLabel>

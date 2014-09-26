@@ -45,6 +45,9 @@ public class Configuration {
                 case "MESSAGE.LIMIT":
                     configString = prop.getProperty("MESSAGE.LIMIT");
                     break;
+                case "WF.DAW":
+                    configString = prop.getProperty("WF.DAW");
+                    break;
 
             }
 
