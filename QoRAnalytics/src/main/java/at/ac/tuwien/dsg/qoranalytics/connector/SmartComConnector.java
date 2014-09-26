@@ -10,6 +10,7 @@ package at.ac.tuwien.dsg.qoranalytics.connector;
  * @author Jun
  */
 //import at.ac.tuwien.dsg.smartcom.adapters.DropboxInputAdapter;
+import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
 import at.ac.tuwien.dsg.smartcom.adapters.DropboxOutputAdapter;
 import at.ac.tuwien.dsg.smartcom.model.Identifier;
 import at.ac.tuwien.dsg.smartcom.model.Message;
@@ -47,12 +48,12 @@ public class SmartComConnector {
     public void sendMessage(Message message) throws Exception {
 
         List<Serializable> parameters = new ArrayList<>(2);
-        String code="j1a_4Gu4eRAAAAAAAAAAQrWUlBUAlScSNfVNcfiEn1oDtEh-Bf-MMT4fbUDd2e1d";
-        parameters.add(code);
-        parameters.add("smartcom");     //the folder name inside of dropbox 
-        PeerChannelAddress address = new PeerChannelAddress(Identifier.peer("test"), Identifier.adapter("Dropbox"), parameters);
+        
+        parameters.add(Configuration.getConfig("SMARTCOM.TOKEN"));
+        parameters.add(Configuration.getConfig("SMARTCOM.STORE"));     //the folder name inside of dropbox 
+        PeerChannelAddress address = new PeerChannelAddress(Identifier.peer(Configuration.getConfig("SMARTCOM.PEER")), Identifier.adapter(Configuration.getConfig("SMARTCOM.ADAPTER")), parameters);
 
-        System.out.println("Output Adapter: Connecting...");
+        System.out.println("SMARTCOM Output Adapter: Connecting...");
         DropboxOutputAdapter adapter = new DropboxOutputAdapter(address);
         adapter.push(message, null);
         System.out.println("File uploaded!");

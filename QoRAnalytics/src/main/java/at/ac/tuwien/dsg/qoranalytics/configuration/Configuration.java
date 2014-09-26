@@ -48,6 +48,18 @@ public class Configuration {
                 case "WF.DAW":
                     configString = prop.getProperty("WF.DAW");
                     break;
+                case "LOCAL.STORE":
+                    configString = prop.getProperty("LOCAL.STORE");
+                    break;  
+                case "SMARTCOM.TOKEN":
+                    configString = prop.getProperty("SMARTCOM.TOKEN");
+                    break;  
+                case "SMARTCOM.PEER":
+                    configString = prop.getProperty("SMARTCOM.PEER");
+                    break;  
+                case "SMARTCOM.ADAPTER":
+                    configString = prop.getProperty("SMARTCOM.ADAPTER");
+                    break;      
 
             }
 
