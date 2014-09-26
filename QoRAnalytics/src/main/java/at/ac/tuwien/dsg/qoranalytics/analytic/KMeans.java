@@ -34,10 +34,10 @@ public class KMeans {
         this.k = k;
     }
 
-    public void start() {
+    public void start(int k, String attributes) {
         System.out.println("K-Means Starting ...");
         //algorithm
-        
+        setK(k);
         
         System.out.println("K-Means Completed ...");
     }
