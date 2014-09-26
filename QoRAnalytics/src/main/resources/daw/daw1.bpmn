@@ -5,7 +5,7 @@
   <itemDefinition id="ID_1" isCollection="false" itemKind="Information" structureRef="Double"/>
   <process id="ac.at.tuwien.dsg.daw1" isClosed="false" isExecutable="true" name="daw1" processType="Private" tns:packageName="com.sample">
     <extensionElements>
-      <tns:import name="at.ac.tuwien.dsg.qoranalytics.analytic.KMeans"/>
+      <tns:import name="at.ac.tuwien.dsg.qoranalytics.analytic.StabilityEvaluation"/>
       <tns:import name="at.ac.tuwien.dsg.qoranalytics.analytic.LeastSquareRegression"/>
       <tns:import name="at.ac.tuwien.dsg.qoranalytics.analytic.Sampling"/>
     </extensionElements>
@@ -32,10 +32,10 @@ kcontext.setVariable("lowerBound", 10);
 System.out.println("INITIALIZATION ");]]></script>
     </scriptTask>
     <sequenceFlow id="_1-_7" sourceRef="__1" targetRef="_7"/>
-    <scriptTask completionQuantity="1" id="_3" isForCompensation="false" name="KMeans" scriptFormat="text/x-groovy" startQuantity="1">
+    <scriptTask completionQuantity="1" id="_3" isForCompensation="false" name="StabilityEvaluation" scriptFormat="text/x-groovy" startQuantity="1">
       <incoming>_11</incoming>
       <outgoing>_12</outgoing>
-      <script><![CDATA[KMeans.getInstance().start(2,"2");]]></script>
+      <script><![CDATA[StabilityEvaluation.getInstance().start(1.5);]]></script>
     </scriptTask>
     <scriptTask completionQuantity="1" id="_2" isForCompensation="false" name="LeastSquareRegression" scriptFormat="text/x-groovy" startQuantity="1">
       <incoming>_10</incoming>
@@ -76,7 +76,7 @@ System.out.println("INITIALIZATION ");]]></script>
       <bpmndi:BPMNShape bpmnElement="_3" id="Yaoqiang-_3">
         <dc:Bounds height="55.0" width="85.0" x="717.0" y="119.0"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.955078125" width="47.0" x="736.0" y="139.0224609375"/>
+          <dc:Bounds height="32.955078125" width="76.0" x="721.5" y="132.0224609375"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_2" id="Yaoqiang-_2">
@@ -99,18 +99,18 @@ System.out.println("INITIALIZATION ");]]></script>
           <dc:Bounds height="18.955078125" width="6.0" x="869.4999999999999" y="136.01158398806365"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_11" id="Yaoqiang-_11" sourceElement="_2" targetElement="_3">
-        <di:waypoint x="626.0217391304349" y="147.4615384615384"/>
-        <di:waypoint x="717.3260869565217" y="146.5"/>
-        <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.955078125" width="6.0" x="668.3653846153846" y="137.60774521843646"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_9" id="Yaoqiang-_9" sourceElement="_7" targetElement="_5">
         <di:waypoint x="237.32608695652175" y="156.5"/>
         <di:waypoint x="339.0652173913044" y="147.5"/>
         <bpmndi:BPMNLabel>
           <dc:Bounds height="18.955078125" width="6.0" x="285.0" y="142.76159137228262"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_11" id="Yaoqiang-_11" sourceElement="_2" targetElement="_3">
+        <di:waypoint x="626.0217391304349" y="147.4615384615384"/>
+        <di:waypoint x="717.3260869565217" y="146.5"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="18.955078125" width="6.0" x="668.3653846153846" y="137.60774521843646"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_10" id="Yaoqiang-_10" sourceElement="_5" targetElement="_2">

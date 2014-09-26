@@ -9,7 +9,7 @@ package at.ac.tuwien.dsg.qoranalytics.daw.engine;
  *
  * @author Jun
  */
-import at.ac.tuwien.dsg.qoranalytics.analytic.KMeans;
+
 import java.util.HashMap;
 import java.util.Map;
 
