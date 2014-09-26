@@ -134,7 +134,7 @@ public class MOMConnector {
     }
     
     
-    private void sendCriticalMessage(){
+    public void sendCriticalMessage(){
         SmartComConnector scc = new SmartComConnector();
         at.ac.tuwien.dsg.smartcom.model.Message message = buildMessage();
         try {
@@ -146,13 +146,13 @@ public class MOMConnector {
        
     }
     
-    private at.ac.tuwien.dsg.smartcom.model.Message buildMessage(){
-        String testId = "messageId"; //unique identifier of message
-            String testcontent = "messagecontent";  //unique identifier of message content
+    public at.ac.tuwien.dsg.smartcom.model.Message buildMessage(){
+        String testId = "m01"; //unique identifier of message
+            String testcontent = "High Temperature";  //unique identifier of message content
             String testType = "control message";      //the type of message
-            String testSubType = "Analytic";          //component specific
-            String sender = "senderId";               //unique identifier of sender
-            String receiver = "receiverId";           //unique identifier of receiver
+            String testSubType = "lower temperature";          //component specific
+            String sender = "QoRAnalytic";               //unique identifier of sender
+            String receiver = "smartcom01";           //unique identifier of receiver
             //String conversationId="conversationId"; //OPTIONAL  //If any two process run parallaly then they communicate with each other using this id
             long ttl = 3;                             //OPTIONAL  //the time duration to monitor the message
             String testLanguage = "English";          //OPTIONAL //the language of the message

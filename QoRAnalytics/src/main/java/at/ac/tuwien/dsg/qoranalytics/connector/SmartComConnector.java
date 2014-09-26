@@ -47,7 +47,8 @@ public class SmartComConnector {
     public void sendMessage(Message message) throws Exception {
 
         List<Serializable> parameters = new ArrayList<>(2);
-        //  parameters.add(code);
+        String code="j1a_4Gu4eRAAAAAAAAAAQrWUlBUAlScSNfVNcfiEn1oDtEh-Bf-MMT4fbUDd2e1d";
+        parameters.add(code);
         parameters.add("smartcom");     //the folder name inside of dropbox 
         PeerChannelAddress address = new PeerChannelAddress(Identifier.peer("test"), Identifier.adapter("Dropbox"), parameters);
 
@@ -55,7 +56,7 @@ public class SmartComConnector {
         DropboxOutputAdapter adapter = new DropboxOutputAdapter(address);
         adapter.push(message, null);
         System.out.println("File uploaded!");
-
+        
     }
 
     }
