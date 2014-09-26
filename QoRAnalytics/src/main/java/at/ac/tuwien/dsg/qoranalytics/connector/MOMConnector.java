@@ -19,9 +19,12 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
 import at.ac.tuwien.dsg.qoranalytics.daw.engine.WorkflowEngine;
+import at.ac.tuwien.dsg.smartcom.model.Identifier;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -133,6 +136,45 @@ public class MOMConnector {
     
     private void sendCriticalMessage(){
         SmartComConnector scc = new SmartComConnector();
+        at.ac.tuwien.dsg.smartcom.model.Message message = buildMessage();
+        try {
+            scc.sendMessage(message);
+        } catch (Exception ex) {
+            Logger.getLogger(MOMConnector.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
+       
     }
+    
+    private at.ac.tuwien.dsg.smartcom.model.Message buildMessage(){
+        String testId = "messageId"; //unique identifier of message
+            String testcontent = "messagecontent";  //unique identifier of message content
+            String testType = "control message";      //the type of message
+            String testSubType = "Analytic";          //component specific
+            String sender = "senderId";               //unique identifier of sender
+            String receiver = "receiverId";           //unique identifier of receiver
+            //String conversationId="conversationId"; //OPTIONAL  //If any two process run parallaly then they communicate with each other using this id
+            long ttl = 3;                             //OPTIONAL  //the time duration to monitor the message
+            String testLanguage = "English";          //OPTIONAL //the language of the message
+            String securityToken = "SecurityToken";   //OPTIONAL //information about the authenticity of the message
+            String code = null;
+            
+            at.ac.tuwien.dsg.smartcom.model.Message message = new at.ac.tuwien.dsg.smartcom.model.Message.MessageBuilder()
+                .setId(Identifier.message(testId))
+                .setContent(testcontent)
+                .setType(testType)
+                .setSubtype(testSubType)
+                .setSenderId(Identifier.peer(sender))
+                .setReceiverId(Identifier.peer(receiver))
+                .setConversationId("" + System.nanoTime())
+                .setTtl(ttl)
+                .setLanguage(testLanguage)
+                .setSecurityToken(securityToken)
+                .create();
+            
+            return message;
+    }
+    
+    
+    
 }
