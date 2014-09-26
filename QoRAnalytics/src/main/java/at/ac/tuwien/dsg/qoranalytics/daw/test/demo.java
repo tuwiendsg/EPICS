@@ -1,5 +1,6 @@
 package at.ac.tuwien.dsg.qoranalytics.daw.test;
 
+import at.ac.tuwien.dsg.qoranalytics.analytic.LeastSquareRegression;
 import at.ac.tuwien.dsg.qoranalytics.analytic.Sampling;
 import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
 import at.ac.tuwien.dsg.qoranalytics.connector.MOMConnector;
@@ -16,8 +17,14 @@ public class demo {
         connector.openConnection();
         */
         
+        /*
         Sampling s = new Sampling();
         s.start(10);
+        */
+        
+        LeastSquareRegression lsr = new LeastSquareRegression();
+        lsr.start(5, 2);
+        
         
     }
 
