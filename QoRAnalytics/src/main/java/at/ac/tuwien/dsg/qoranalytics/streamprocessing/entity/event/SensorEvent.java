@@ -14,22 +14,22 @@ import java.util.Date;
  */
 public class SensorEvent {
     
-    private int value;
+    private double value;
     private Date timeOfReading;
 
     public SensorEvent() {
     }
 
-    public SensorEvent(int value, Date timeOfReading) {
+    public SensorEvent(double value, Date timeOfReading) {
         this.value = value;
         this.timeOfReading = timeOfReading;
     }
 
-    public int getValue() {
+    public double getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(double value) {
         this.value = value;
     }
 

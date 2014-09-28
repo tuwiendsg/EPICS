@@ -10,6 +10,8 @@ package at.ac.tuwien.dsg.qoranalytics.connector;
  * @author Jun
  */
 import at.ac.tuwien.dsg.daas.entities.CreateRowsStatement;
+import at.ac.tuwien.dsg.daas.entities.RowColumn;
+import at.ac.tuwien.dsg.daas.entities.TableRow;
 import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
 import java.io.StringReader;
 import java.util.Enumeration;
@@ -19,10 +21,15 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
 import at.ac.tuwien.dsg.qoranalytics.batchjobprocessing.daw.engine.WorkflowEngine;
+import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event.SensorEvent;
+import at.ac.tuwien.dsg.qoranalytics.streamprocessing.handler.SensorEventHandler;
 import at.ac.tuwien.dsg.smartcom.model.Identifier;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,6 +41,14 @@ public class MOMConnector {
     private String url;
     private String subject;
     private int limit;
+    private SensorEventHandler sensorEventHandler;
+
+    public MOMConnector() {
+        sensorEventHandler = new SensorEventHandler();
+        sensorEventHandler.afterPropertiesSet();
+    }
+    
+    
     
     
     public void openConnection() {
@@ -52,7 +67,7 @@ public class MOMConnector {
 
             for (int i = 0; i < limit; i++) {
                 Message message = consumer.receive();
-                onMessage(message);
+                onMessageStream(message);
             }
 
             connection.close();
@@ -61,8 +76,59 @@ public class MOMConnector {
 
         }
     }
+    
+    
+    private void onMessageStream(Message message) {
 
-    private void onMessage(Message message) {
+        try {
+
+            if (message instanceof MapMessage) {
+
+                MapMessage mapMessage = (MapMessage) message;
+                Enumeration fieldsNames = mapMessage.getMapNames();
+                while (fieldsNames.hasMoreElements()) {
+
+                    String sensorOperation = fieldsNames.nextElement().toString();
+                    
+                    String data = mapMessage.getString(sensorOperation);
+                    
+                    if (sensorOperation.equals("INSERT_ROWS")) {
+                        JAXBContext bContext = JAXBContext.newInstance(CreateRowsStatement.class);
+                        Unmarshaller um = bContext.createUnmarshaller();
+                        CreateRowsStatement crs = (CreateRowsStatement) um.unmarshal(new StringReader(data));
+              
+                        Collection<TableRow> rows = crs.getRows();
+                        
+                        for(TableRow row : rows) {
+                            Collection<RowColumn> columns = row.getValues();
+                            for (RowColumn column : columns) {
+                                if (column.getName().equals("sensorValue")){
+                                    double sensorValue = Double.parseDouble(column.getValue());
+                                    SensorEvent sensorEvent = new SensorEvent(sensorValue, new Date());
+                                    sensorEventHandler.handle(sensorEvent);
+                                    
+                                }
+                            }
+                        }
+                            
+                    }
+                       
+                }
+
+            } else {
+                System.out.println("Unrecognized message: " + message);
+            }
+
+        } catch (Exception ex) {
+
+        }
+    }
+    
+        
+      
+    
+
+    private void onMessageBatchJob(Message message) {
 
         try {
 
@@ -78,17 +144,7 @@ public class MOMConnector {
                     writeData(data);
                     executeWorkflowEngine();
                     storeAnalysisResult();
-                    sendCriticalMessage();
-         
-                    //System.out.println("Received " + sensorOperation + data);
-                    /*
-                    if (sensorOperation.equals("INSERT_ROWS")) {
-                        JAXBContext bContext = JAXBContext.newInstance(CreateRowsStatement.class);
-                        Unmarshaller um = bContext.createUnmarshaller();
-                        CreateRowsStatement crs = (CreateRowsStatement) um.unmarshal(new StringReader(data));
-
-                    }
-                    */        
+                    sendCriticalMessage();     
                             
                 }
 

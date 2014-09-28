@@ -1,1 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><EventStatement statement="select avg(value) as avg_val from SensorEvent.win:time_batch(5 sec)"/>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><EventStatement statement="select avg(value) as avg_val from SensorEvent.win:time_batch(10 sec)"/>

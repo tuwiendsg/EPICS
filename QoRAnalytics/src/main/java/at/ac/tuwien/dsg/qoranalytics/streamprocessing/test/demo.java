@@ -6,6 +6,8 @@
 
 package at.ac.tuwien.dsg.qoranalytics.streamprocessing.test;
 
+import at.ac.tuwien.dsg.qoranalytics.connector.MOMConnector;
+
 /**
  *
  * @author Jun
@@ -17,9 +19,13 @@ public class demo {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        
+        /*
         EventGenerator generator = new EventGenerator();
         generator.startSendingData();
+         */
+        MOMConnector connector = new MOMConnector();
+        connector.openConnection();
+                
     }
     
 }
