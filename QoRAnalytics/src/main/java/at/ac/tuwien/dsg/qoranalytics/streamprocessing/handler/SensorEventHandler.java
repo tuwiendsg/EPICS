@@ -14,6 +14,7 @@ package at.ac.tuwien.dsg.qoranalytics.streamprocessing.handler;
 import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event.SensorEvent;
 import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.rule.MonitorEventSubscriber;
 import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.rule.StatementSubscriber;
+import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.rule.WarningEventSubscriber;
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
@@ -23,12 +24,15 @@ public class SensorEventHandler {
     
     private EPServiceProvider epService;
     private EPStatement monitorEventStatement;
+    private EPStatement warningEventStatement;
     private StatementSubscriber monitorEventSubscriber;
+    private StatementSubscriber warningEventSubscriber;
 
     
     public SensorEventHandler() {
 
         monitorEventSubscriber = new MonitorEventSubscriber();
+        warningEventSubscriber = new WarningEventSubscriber();
         
     }
 
@@ -40,16 +44,23 @@ public class SensorEventHandler {
         config.addEventTypeAutoName("at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event");
         epService = EPServiceProviderManager.getDefaultProvider(config);
 
-        createTemperatureMonitorExpression();
-
+        createMonitorExpression();
+        createWarningExpression();
     }
 
 
-    private void createTemperatureMonitorExpression() {
+    private void createMonitorExpression() {
 
-        System.out.println("create Timed Average Monitor");
+        System.out.println("create Average Value Monitor");
         monitorEventStatement = epService.getEPAdministrator().createEPL(monitorEventSubscriber.getStatement());
         monitorEventStatement.setSubscriber(monitorEventSubscriber);
+    }
+    
+    private void createWarningExpression() {
+        System.out.println("create Threshold Value Warning");
+        warningEventStatement = epService.getEPAdministrator().createEPL(warningEventSubscriber.getStatement());
+        warningEventStatement.setSubscriber(warningEventSubscriber);
+        
     }
 
 

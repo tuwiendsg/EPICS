@@ -23,9 +23,8 @@ public class EventGenerator {
    
     private SensorEventHandler sensorEventHandler;
 
-    /**
-     * Creates simple random Temperature events and lets the implementation class handle them.
-     */
+    
+    
     public EventGenerator() {
         sensorEventHandler = new SensorEventHandler();
         sensorEventHandler.afterPropertiesSet();
@@ -65,9 +64,7 @@ public class EventGenerator {
     private String getStartingMessage(){
         StringBuilder sb = new StringBuilder();
         sb.append("\n\n************************************************************");
-        sb.append("\n* STARTING - ");
-        sb.append("\n* PLEASE WAIT - TEMPERATURES ARE RANDOM SO MAY TAKE");
-        sb.append("\n* A WHILE TO SEE WARNING AND CRITICAL EVENTS!");
+        sb.append("\n* STARTING - GENERATING SENSOR DATA");
         sb.append("\n************************************************************\n");
         return sb.toString();
     }
