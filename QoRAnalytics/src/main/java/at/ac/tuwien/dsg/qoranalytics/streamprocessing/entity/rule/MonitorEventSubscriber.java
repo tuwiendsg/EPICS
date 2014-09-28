@@ -6,6 +6,7 @@
 
 package at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.rule;
 
+import at.ac.tuwien.dsg.qoranalytics.configuration.StatementConfig;
 import java.util.Map;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Map;
 public class MonitorEventSubscriber implements StatementSubscriber {
     public String getStatement() {
 
-        return "select avg(value) as avg_val from SensorEvent.win:time_batch(5 sec)";
+        return StatementConfig.getStatemement("MONITOR");
     }
 
     public void update(Map<String, Double> eventMap) {

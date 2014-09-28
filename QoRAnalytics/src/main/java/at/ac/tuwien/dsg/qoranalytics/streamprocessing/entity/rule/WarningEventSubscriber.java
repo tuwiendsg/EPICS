@@ -6,6 +6,7 @@
 
 package at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.rule;
 
+import at.ac.tuwien.dsg.qoranalytics.configuration.StatementConfig;
 import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event.SensorEvent;
 import java.util.Map;
 
@@ -15,18 +16,10 @@ import java.util.Map;
  */
 public class WarningEventSubscriber implements StatementSubscriber {
    
-    private static final String WARNING_EVENT_THRESHOLD = "400";
-
     public String getStatement() {
         
         // Example using 'Match Recognise' syntax.
-        String warningEventExpression = "select * from SensorEvent "
-                + "match_recognize ( "
-                + "       measures A as val1, B as val2 "
-                + "       pattern (A B) " 
-                + "       define " 
-                + "               A as A.value > " + WARNING_EVENT_THRESHOLD + ", "
-                + "               B as B.value > " + WARNING_EVENT_THRESHOLD + ")";
+        String warningEventExpression = StatementConfig.getStatemement("WARNING");
         
         return warningEventExpression;
     }

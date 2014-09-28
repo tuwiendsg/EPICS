@@ -5,6 +5,7 @@ import at.ac.tuwien.dsg.qoranalytics.batchjobprocessing.analytic.LeastSquareRegr
 import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
 import at.ac.tuwien.dsg.qoranalytics.connector.MOMConnector;
 import at.ac.tuwien.dsg.qoranalytics.batchjobprocessing.daw.engine.WorkflowEngine;
+import at.ac.tuwien.dsg.qoranalytics.configuration.StatementConfig;
 import at.ac.tuwien.dsg.smartcom.model.Message;
 
 public class demo {
@@ -15,10 +16,14 @@ public class demo {
         wfEngine.startWFEngine();
         */
         
+        
+        /*
         MOMConnector connector = new MOMConnector();
         connector.openConnection();
-       
-
+       */
+        /*
+        StatementConfig.saveConfig();
+        */
 
 // connector.sendCriticalMessage();
         

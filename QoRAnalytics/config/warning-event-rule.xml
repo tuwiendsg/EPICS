@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><EventStatement statement="select * from SensorEvent match_recognize ( measures A as val1, B as val2 pattern (A B) define A as A.value &gt; 400, B as B.value &gt; 400 )"/>
