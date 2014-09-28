@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.qoranalytics.analytic;
+package at.ac.tuwien.dsg.qoranalytics.batchjobprocessing.analytic;
 
 import at.ac.tuwien.dsg.daas.entities.CreateRowsStatement;
 import at.ac.tuwien.dsg.daas.entities.RowColumn;

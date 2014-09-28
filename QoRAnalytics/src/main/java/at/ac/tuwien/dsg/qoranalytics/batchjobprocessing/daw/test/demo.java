@@ -1,10 +1,10 @@
-package at.ac.tuwien.dsg.qoranalytics.daw.test;
+package at.ac.tuwien.dsg.qoranalytics.batchjobprocessing.daw.test;
 
-import at.ac.tuwien.dsg.qoranalytics.analytic.LeastSquareRegression;
-import at.ac.tuwien.dsg.qoranalytics.analytic.Sampling;
+import at.ac.tuwien.dsg.qoranalytics.batchjobprocessing.analytic.LeastSquareRegression;
+
 import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
 import at.ac.tuwien.dsg.qoranalytics.connector.MOMConnector;
-import at.ac.tuwien.dsg.qoranalytics.daw.engine.WorkflowEngine;
+import at.ac.tuwien.dsg.qoranalytics.batchjobprocessing.daw.engine.WorkflowEngine;
 import at.ac.tuwien.dsg.smartcom.model.Message;
 
 public class demo {

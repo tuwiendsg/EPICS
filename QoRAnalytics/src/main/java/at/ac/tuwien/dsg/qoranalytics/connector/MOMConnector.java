@@ -18,7 +18,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
-import at.ac.tuwien.dsg.qoranalytics.daw.engine.WorkflowEngine;
+import at.ac.tuwien.dsg.qoranalytics.batchjobprocessing.daw.engine.WorkflowEngine;
 import at.ac.tuwien.dsg.smartcom.model.Identifier;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
