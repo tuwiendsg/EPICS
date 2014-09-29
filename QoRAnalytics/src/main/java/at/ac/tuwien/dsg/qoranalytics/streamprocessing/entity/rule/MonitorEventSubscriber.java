@@ -6,17 +6,24 @@
 
 package at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.rule;
 
-import at.ac.tuwien.dsg.qoranalytics.configuration.StatementConfig;
+import at.ac.tuwien.dsg.qoranalytics.configuration.EventPatternLoader;
+import at.ac.tuwien.dsg.qoranalytics.connector.MOMConnector;
+import at.ac.tuwien.dsg.qoranalytics.connector.SmartComConnector;
+import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event.EventMessage;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Jun
  */
 public class MonitorEventSubscriber implements StatementSubscriber {
+    private String EventSubscriberType = "MONITOR";
+    
     public String getStatement() {
 
-        return StatementConfig.getStatemement("MONITOR");
+        return EventPatternLoader.getStatemement(EventSubscriberType);
     }
 
     public void update(Map<String, Double> eventMap) {
@@ -30,5 +37,22 @@ public class MonitorEventSubscriber implements StatementSubscriber {
 
         System.out.println(sb.toString());
         
+    }
+    
+     public void sendCriticalMessage(){
+        EventMessage eventMessage = EventPatternLoader.getEventMessage(EventSubscriberType);
+        
+        if (eventMessage!=null) {
+        
+        SmartComConnector scc = new SmartComConnector();
+        at.ac.tuwien.dsg.smartcom.model.Message message = scc.buildMessage(eventMessage);
+        
+        try {
+            scc.sendMessage(message);
+        } catch (Exception ex) {
+            Logger.getLogger(MOMConnector.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        }
     }
 }

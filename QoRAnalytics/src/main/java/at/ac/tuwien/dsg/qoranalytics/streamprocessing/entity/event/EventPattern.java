@@ -4,31 +4,37 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.rule;
+package at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event;
 
+import at.ac.tuwien.dsg.smartcom.model.Message;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Jun
  */
-@XmlRootElement(name = "EventStatement")
+@XmlRootElement(name = "EventPattern")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class EventStatement {
+public class EventPattern {
     
-    @XmlAttribute(name = "statement", required = true)
+    @XmlElement(name = "statement", required = true)
     String statement;
-
-    public EventStatement() {
-    }
     
-    public EventStatement(String statement) {
-        this.statement = statement;
+    @XmlElement(name = "message")
+    EventMessage message;
+
+    public EventPattern() {
     }
- 
+
+    public EventPattern(String statement, EventMessage message) {
+        this.statement = statement;
+        this.message = message;
+    }
+
     public String getStatement() {
         return statement;
     }
@@ -36,9 +42,18 @@ public class EventStatement {
     public void setStatement(String statement) {
         this.statement = statement;
     }
-    
-    
 
+    public EventMessage getMessage() {
+        return message;
+    }
+
+    public void setMessage(EventMessage message) {
+        this.message = message;
+    }
+    
+    
+    
+    
  
        
 }

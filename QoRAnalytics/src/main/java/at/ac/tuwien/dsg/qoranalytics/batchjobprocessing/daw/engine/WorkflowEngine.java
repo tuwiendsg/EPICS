@@ -63,6 +63,8 @@ public class WorkflowEngine {
         KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
         kbuilder.add(ResourceFactory.newClassPathResource("daw/"+daw+".bpmn"), ResourceType.BPMN2);
         return kbuilder.newKnowledgeBase();
+        
+       
     }
     
    

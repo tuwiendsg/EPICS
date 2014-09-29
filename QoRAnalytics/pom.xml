@@ -18,12 +18,12 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>smartcom-api</artifactId>
+            <artifactId>smartcom-impl</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>smartcom-impl</artifactId>
+            <artifactId>smartcom-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

@@ -11,6 +11,7 @@ package at.ac.tuwien.dsg.qoranalytics.connector;
  */
 //import at.ac.tuwien.dsg.smartcom.adapters.DropboxInputAdapter;
 import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
+import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event.EventMessage;
 import at.ac.tuwien.dsg.smartcom.adapters.DropboxOutputAdapter;
 import at.ac.tuwien.dsg.smartcom.model.Identifier;
 import at.ac.tuwien.dsg.smartcom.model.Message;
@@ -56,8 +57,26 @@ public class SmartComConnector {
         System.out.println("SMARTCOM Output Adapter: Connecting...");
         DropboxOutputAdapter adapter = new DropboxOutputAdapter(address);
         adapter.push(message, null);
-        System.out.println("File uploaded!");
+        System.out.println("Message sent!");
         
+    }
+    
+    public at.ac.tuwien.dsg.smartcom.model.Message buildMessage(EventMessage eventMessage){
+
+            at.ac.tuwien.dsg.smartcom.model.Message message = new at.ac.tuwien.dsg.smartcom.model.Message.MessageBuilder()
+                .setId(Identifier.message(eventMessage.getId()))
+                .setContent(eventMessage.getContent())
+                .setType(eventMessage.getType())
+                .setSubtype(eventMessage.getSubtype())
+                .setSenderId(Identifier.peer(eventMessage.getSenderId()))
+                .setReceiverId(Identifier.peer(eventMessage.getReceiverId()))
+                .setConversationId("" + System.nanoTime())
+                .setTtl(eventMessage.getTtl())
+                .setLanguage(eventMessage.getLanguage())
+                .setSecurityToken(eventMessage.getSecurityToken())
+                .create();
+            
+            return message;
     }
 
     }

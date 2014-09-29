@@ -19,13 +19,15 @@ public class demo {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        /*
+        
         EventGenerator generator = new EventGenerator();
         generator.startSendingData();
-         */
+         
+        
+        /*
         MOMConnector connector = new MOMConnector();
         connector.openConnection();
-                
+          */      
     }
     
 }
