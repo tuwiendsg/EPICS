@@ -140,7 +140,7 @@ public class WarningEventSubscriber implements StatementSubscriber {
                 permission = false;
             }
 
-        }
+        } 
 
         return permission;
     }
