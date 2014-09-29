@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.rule;
 
 import at.ac.tuwien.dsg.qoranalytics.configuration.EventPatternLoader;
@@ -19,8 +18,9 @@ import java.util.logging.Logger;
  * @author Jun
  */
 public class MonitorEventSubscriber implements StatementSubscriber {
+
     private String EventSubscriberType = "MONITOR";
-    
+
     public String getStatement() {
 
         return EventPatternLoader.getStatemement(EventSubscriberType);
@@ -36,23 +36,25 @@ public class MonitorEventSubscriber implements StatementSubscriber {
         sb.append("\n---------------------------------");
 
         System.out.println(sb.toString());
-        
+
     }
-    
-     public void sendCriticalMessage(){
+
+    public void sendCriticalMessage() {
         EventMessage eventMessage = EventPatternLoader.getEventMessage(EventSubscriberType);
-        
-        if (eventMessage!=null) {
-        
-        SmartComConnector scc = new SmartComConnector();
-        at.ac.tuwien.dsg.smartcom.model.Message message = scc.buildMessage(eventMessage);
-        
-        try {
-            scc.sendMessage(message);
-        } catch (Exception ex) {
-            Logger.getLogger(MOMConnector.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+
+        if (eventMessage != null) {
+
+            SmartComConnector scc = new SmartComConnector();
+            at.ac.tuwien.dsg.smartcom.model.Message message = scc.buildMessage(eventMessage);
+
+            try {
+                scc.sendMessage(message);
+            } catch (Exception ex) {
+                Logger.getLogger(MOMConnector.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+            System.out.println("No message !");
         }
     }
 }

@@ -6,6 +6,7 @@
 
 package at.ac.tuwien.dsg.qoranalytics.streamprocessing.test;
 
+import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
 import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event.SensorEvent;
 import at.ac.tuwien.dsg.qoranalytics.streamprocessing.handler.SensorEventHandler;
 import java.util.Date;
@@ -42,9 +43,10 @@ public class EventGenerator {
             public void run() {
 
                 System.out.println(getStartingMessage());
-                
                 int count = 0;
-                while (count < 1000) {
+                
+                int maxEvent = Integer.parseInt(Configuration.getConfig("MESSAGE.LIMIT"));
+                while (count < maxEvent) {
                     SensorEvent s11 = new SensorEvent("Sensor11",randomInteger(200,500), new Date());
                     SensorEvent s12 = new SensorEvent("Sensor12",randomInteger(200,500), new Date());
                     SensorEvent s13 = new SensorEvent("Sensor13",randomInteger(400,700), new Date());

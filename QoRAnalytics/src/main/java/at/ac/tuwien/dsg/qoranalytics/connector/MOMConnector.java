@@ -30,8 +30,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -204,7 +203,7 @@ public class MOMConnector {
         try {
             scc.sendMessage(message);
         } catch (Exception ex) {
-            Logger.getLogger(MOMConnector.class.getName()).log(Level.SEVERE, null, ex);
+           
         }
         
        

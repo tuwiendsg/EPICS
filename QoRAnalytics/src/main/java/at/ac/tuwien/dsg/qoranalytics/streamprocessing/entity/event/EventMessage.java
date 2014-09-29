@@ -52,11 +52,14 @@ public class EventMessage {
     
     @XmlElement(name = "securityToken", required = true)
     private String securityToken;
+    
+    @XmlElement(name = "waitingTime", required = true)
+    private double waitingTime;
 
     public EventMessage() {
     }
 
-    public EventMessage(String id, String content, String type, String subtype, String senderId, String receiverId, String conversationId, long ttl, String language, String securityToken) {
+    public EventMessage(String id, String content, String type, String subtype, String senderId, String receiverId, String conversationId, long ttl, String language, String securityToken, double waitingTime) {
         this.id = id;
         this.content = content;
         this.type = type;
@@ -67,6 +70,7 @@ public class EventMessage {
         this.ttl = ttl;
         this.language = language;
         this.securityToken = securityToken;
+        this.waitingTime = waitingTime;
     }
 
     public String getId() {
@@ -148,6 +152,15 @@ public class EventMessage {
     public void setSecurityToken(String securityToken) {
         this.securityToken = securityToken;
     }
-   
+
+    public double getWaitingTime() {
+        return waitingTime;
+    }
+
+    public void setWaitingTime(double waitingTime) {
+        this.waitingTime = waitingTime;
+    }
+
+    
     
 }

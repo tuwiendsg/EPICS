@@ -23,26 +23,7 @@ public class demo {
         MOMConnector connector = new MOMConnector();
         connector.openConnection();
        */
-        
-            String statement="select avg(value) as avg_val from SensorEvent.win:time_batch(5 sec) where name='Sensor12'";
-            String store="config/monitor-event-rule.xml";
-        
-            String testId = ""; //unique identifier of message
-            String testcontent = "Methane concentration is over admisible.";  //unique identifier of message content
-            String testType = "control message";      //the type of message
-            String testSubType = "";          //component specific
-            String sender = "QoRAnalytic";               //unique identifier of sender
-            String receiver = "operator";           //unique identifier of receiver
-            //String conversationId="conversationId"; //OPTIONAL  //If any two process run parallaly then they communicate with each other using this id
-            long ttl = 3;                             //OPTIONAL  //the time duration to monitor the message
-            String testLanguage = "English";          //OPTIONAL //the language of the message
-            String securityToken = "SecurityToken";   //OPTIONAL //information about the authenticity of the message
-            
-           // EventMessage message = new EventMessage(testId, testcontent, testType, testSubType, sender, receiver, "", ttl, testLanguage, securityToken);
-            
-            
-            
-            EventPatternLoader.saveConfig(statement, store, null);
+       
 // connector.sendCriticalMessage();
         
         /*
