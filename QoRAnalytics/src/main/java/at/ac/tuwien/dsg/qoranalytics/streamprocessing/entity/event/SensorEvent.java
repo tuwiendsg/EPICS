@@ -13,16 +13,25 @@ import java.util.Date;
  * @author Jun
  */
 public class SensorEvent {
-    
+    private String name;
     private double value;
     private Date timeOfReading;
 
     public SensorEvent() {
     }
 
-    public SensorEvent(double value, Date timeOfReading) {
+    public SensorEvent(String name, double value, Date timeOfReading) {
+        this.name = name;
         this.value = value;
         this.timeOfReading = timeOfReading;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getValue() {
@@ -40,11 +49,13 @@ public class SensorEvent {
     public void setTimeOfReading(Date timeOfReading) {
         this.timeOfReading = timeOfReading;
     }
+
+    
     
     
     
     @Override
     public String toString() {
-        return "SensorEvent [" + value + "]";
+        return "SensorEvent ["+name+": " + value + "]";
     }
 }

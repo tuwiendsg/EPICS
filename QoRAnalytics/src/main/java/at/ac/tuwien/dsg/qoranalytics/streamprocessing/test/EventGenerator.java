@@ -45,7 +45,7 @@ public class EventGenerator {
                 
                 int count = 0;
                 while (count < 1000) {
-                    SensorEvent ve = new SensorEvent(new Random().nextInt(500), new Date());
+                    SensorEvent ve = new SensorEvent("",new Random().nextInt(500), new Date());
              
                     sensorEventHandler.handle(ve);
                     count++;

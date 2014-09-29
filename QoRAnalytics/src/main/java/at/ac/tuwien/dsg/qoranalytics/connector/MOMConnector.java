@@ -101,14 +101,22 @@ public class MOMConnector {
                         
                         for(TableRow row : rows) {
                             Collection<RowColumn> columns = row.getValues();
+                            String sensorName ="";
+                            double sensorValue = 0;
+                            
                             for (RowColumn column : columns) {
-                                if (column.getName().equals("sensorValue")){
-                                    double sensorValue = Double.parseDouble(column.getValue());
-                                    SensorEvent sensorEvent = new SensorEvent(sensorValue, new Date());
-                                    sensorEventHandler.handle(sensorEvent);
-                                    
+                                if (column.getName().equals("sensorName")){
+                                    sensorName = column.getValue();           
                                 }
+                                
+                                if (column.getName().equals("sensorValue")){
+                                    sensorValue = Double.parseDouble(column.getValue());           
+                                }
+             
                             }
+                            
+                            SensorEvent sensorEvent = new SensorEvent(sensorName,sensorValue, new Date());
+                                    sensorEventHandler.handle(sensorEvent);
                         }
                             
                     }
