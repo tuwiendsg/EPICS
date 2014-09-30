@@ -25,7 +25,55 @@
        
         
         <!-- Internal dependencies -->
+        
+         <dependency>
+            <groupId>DaaS</groupId>
+            <artifactId>DaaS</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/DaaS-1.0.jar</systemPath>
+        </dependency>
+        
         <dependency>
+            <groupId>Smartcom</groupId>
+            <artifactId>Smartcom</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/smartcom-0.0.1-SNAPSHOT.jar</systemPath>
+        </dependency>
+        
+        
+        <dependency>
+            <groupId>ActiveMQ</groupId>
+            <artifactId>active-mq-all</artifactId>
+            <version>5.10.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/activemq-all-5.10.0.jar</systemPath>
+        </dependency>
+        
+        <dependency>
+            <groupId>ActiveMQ</groupId>
+            <artifactId>active-spring</artifactId>
+            <version>5.10.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/activemq-spring-5.10.0.jar</systemPath>
+        </dependency>
+       
+       
+       
+       <dependency>
+            <groupId>esper</groupId>
+            <artifactId>asper</artifactId>
+            <version>4.7.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/esper-4.7.0.jar</systemPath>
+        </dependency>
+        
+        
+  
+        
+        
+         <dependency>
             <groupId>org.jbpm</groupId>
             <artifactId>jbpm-bpmn2</artifactId>
             <version>6.1.0.Final</version>
@@ -34,20 +82,6 @@
             <groupId>org.jbpm</groupId>
             <artifactId>jbpm-test</artifactId>
             <version>6.1.0.Final</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jboss-transaction-api_1.1_spec</artifactId>
-                    <groupId>org.jboss.spec.javax.transaction</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jboss-logging</artifactId>
-                    <groupId>org.jboss.logging</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jboss-interceptors-api_1.1_spec</artifactId>
-                    <groupId>org.jboss.spec.javax.interceptor</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         
         <!--
@@ -90,7 +124,7 @@
             <version>2.1.0</version>
         </dependency>
       -->
-   
+    <!--
       
         <dependency>
             <groupId>org.apache.activemq</groupId>
@@ -104,34 +138,25 @@
             <version>5.10.0</version>
         </dependency>
       
-        
-        <!-- DaaS  -->
-         
-        <dependency>
-            <groupId>DaaS</groupId>
-            <artifactId>DaaS</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/DaaS-1.0.jar</systemPath>
+       <dependency>
+            <groupId>org.jbpm</groupId>
+            <artifactId>jbpm-bpmn2</artifactId>
+            <version>6.1.0.Final</version>
         </dependency>
-        
         <dependency>
-            <groupId>Smartcom</groupId>
-            <artifactId>Smartcom</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/smartcom-0.0.1-SNAPSHOT.jar</systemPath>
+            <groupId>org.jbpm</groupId>
+            <artifactId>jbpm-test</artifactId>
+            <version>6.1.0.Final</version>
         </dependency>
         
         
-        <!-- esper  -->
         <dependency>
             <groupId>com.espertech</groupId>
             <artifactId>esper</artifactId>
             <version>${esper-version}</version>
         </dependency>
 	
-       <!--
+      
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr</artifactId>
