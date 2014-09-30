@@ -192,7 +192,7 @@ public class MOMConnector {
     }
     
     private void storeAnalysisResult(){
-        CassandraConnector cc = new CassandraConnector();
+      
         
     }
     
