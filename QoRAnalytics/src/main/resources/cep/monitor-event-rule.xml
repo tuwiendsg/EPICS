@@ -1,1 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><EventPattern><statement>select avg(value) as avg_val from SensorEvent.win:time_batch(5 sec) where name='Sensor12'</statement></EventPattern>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><EventPattern><statement>select avg(value) as avg_val from SensorEvent.win:time_batch(10 sec) where name='SensorY'</statement></EventPattern>

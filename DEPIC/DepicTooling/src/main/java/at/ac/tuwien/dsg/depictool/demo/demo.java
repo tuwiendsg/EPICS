@@ -10,15 +10,15 @@ import at.ac.tuwien.dsg.depictool.app.Generator;
 import at.ac.tuwien.dsg.depictool.entity.others.ActionDependency;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
 import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
-import at.ac.tuwien.dsg.depictool.others.entity.DataElasticityProcessConfiguration;
+
 import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
-import at.ac.tuwien.dsg.depothers.ictool.entity.MetricElasticityProcess;
+
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
-import at.ac.tuwien.others.dsg.depictool.entity.Parameter;
+
 import at.ac.tuwien.dsg.common.entity.qor.Range;
-import at.ac.tuwien.dsg.depictool.en.qortity.TriggerValues;
+
 import at.ac.tuwien.dsg.depictool.util.ElasticityProcessRepositorty;
 import at.ac.tuwien.dsg.depictool.util.YamlUtils;
 import java.util.AbstractList;
@@ -36,7 +36,7 @@ public class demo {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        
+     /*   
         SampleData sampleData = new SampleData();
         ElasticDataAsset edo = sampleData.sampleEDO();
         DataElasticityProcessConfiguration elasticityProcessConfiguration = sampleData.sampleDEPConf();
@@ -45,7 +45,7 @@ public class demo {
         
         generator.generateElasticityProcesses();
         //generator.generateAPIs();
-        
+       */ 
       
      /*   
         

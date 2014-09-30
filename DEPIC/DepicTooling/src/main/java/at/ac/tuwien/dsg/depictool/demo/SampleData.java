@@ -27,6 +27,9 @@ import java.util.List;
  * @author Jun
  */
 public class SampleData {
+    
+    /*
+    
     public ElasticDataAsset sampleEDO(){
         
         
@@ -60,7 +63,7 @@ public class SampleData {
         String query = "Select * from power_consumption";
         int numberOfDataItem = 100;
         List<DataAssetFunction> listOfDataObjectFunctions  = new ArrayList<>();
-        /*
+        
         String query2 = "Select * from power_consumption";
         DataAssetFunction dataObjectFunction1 = new DataDataAssetFunctionaFunctionName,query,numberOfDataItem);
         DataAssetFunction dataObjectFunction2 = new DataObDataAssetFunction0",query2,200);
@@ -68,7 +71,7 @@ public class SampleData {
         
         listOfDataObjectFunctions.add(dataObjectFunction1);
         listOfDataObjectFunctions.add(dataObjectFunction2);
-        */
+        
         return  listOfDataObjectFunctions;    
     }
     
@@ -210,8 +213,7 @@ public class SampleData {
         
         List<MetricElasticityProcess> listOfMetricElasticityProcesses = new ArrayList<>();
         
-        
-        /////////////// data completeness
+  
         String controlActionID1="LSR";
         TriggerValues triggerValues1 = new TriggerValues("d1", "d3");
         List<Parameter> listOfParameters = new ArrayList<>();
@@ -241,7 +243,7 @@ public class SampleData {
         
         listOfMetricElasticityProcesses.add(metricControlAction1);
         
-        /////////////// throughput
+       
         
         String controlActionID21="AddCtrl";
         TriggerValues triggerValues21 = new TriggerValues("t1", "t2");
@@ -288,6 +290,6 @@ public class SampleData {
         
         return dataElasticityProcessConfiguration;
     }
-    
+    */
     
 }

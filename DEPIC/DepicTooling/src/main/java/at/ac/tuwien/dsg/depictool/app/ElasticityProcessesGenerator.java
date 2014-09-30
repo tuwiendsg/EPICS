@@ -9,19 +9,19 @@ package at.ac.tuwien.dsg.depictool.app;
 import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import at.ac.tuwien.dsg.common.deployment.DeploymentDescription;
 import at.ac.tuwien.dsg.common.deployment.DeploymentDescriptionJAXB;
+import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
+import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
+import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
+import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
+import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
+import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
+import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
+import at.ac.tuwien.dsg.common.entity.process.MetricElasticityProcess;
+import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
+import at.ac.tuwien.dsg.common.entity.qor.MetricRange;
+import at.ac.tuwien.dsg.common.entity.qor.TriggerValues;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.depictool.entity.others.ActionDependency;
-import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
-import at.ac.tuwien.dsg.depcommontity.eda.ep.ControlProcess;
-import at.ac.tuwien.dsg.depictcommony.eda.ep.ElasticityProcess;
-import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
-import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
-import at.ac.tuwien.dsg.depcommontity.eda.ElasticState;
-import at.ac.tuwien.dsg.depcommontity.process.MetricElasticityProcess;
-import at.ac.tuwien.dsg.common.entity.qor.MetricRange;
-import at.ac.tuwien.dsg.depictoolcommonda.ep.MonitorAction;
-import at.ac.tuwien.dsg.depictool.encommonep.MonitorProcess;
-import at.ac.tuwien.dsg.depcommontity.qor.TriggerValues;
 import at.ac.tuwien.dsg.depictool.util.ElasticityProcessRepositorty;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -153,10 +153,13 @@ public class ElasticityProcessesGenerator {
         ControlProcess controlProcess = null;
 
         List<ControlAction> listOfControlActions = new ArrayList<>();
-
+/*
         List<MetricRange> listOfMetricRanges_i = eStatei.getListOfMetricRanges();
         List<MetricRange> listOfMetricRanges_j = eStatej.getListOfMetricRanges();
-
+*/
+        
+              List<MetricRange> listOfMetricRanges_i = null;
+        List<MetricRange> listOfMetricRanges_j = null;
         for (MetricRange metricRange_i : listOfMetricRanges_i) {
             String metricName_i = metricRange_i.getMetricName();
             String rangeVal_i = metricRange_i.getRange();

@@ -6,8 +6,8 @@
 
 package at.ac.tuwien.dsg.depictool.entity.process;
 
+import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
-import at.ac.tuwien.dsg.depcommontity.eda.ep.ControlAction;
 import java.util.List;
 
 /**
