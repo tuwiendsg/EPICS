@@ -34,6 +34,20 @@
             <groupId>org.jbpm</groupId>
             <artifactId>jbpm-test</artifactId>
             <version>6.1.0.Final</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jboss-transaction-api_1.1_spec</artifactId>
+                    <groupId>org.jboss.spec.javax.transaction</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jboss-logging</artifactId>
+                    <groupId>org.jboss.logging</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jboss-interceptors-api_1.1_spec</artifactId>
+                    <groupId>org.jboss.spec.javax.interceptor</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         
         <!--
