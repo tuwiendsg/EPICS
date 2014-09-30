@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="US-ASCII" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:g="http://www.jboss.org/drools/flow/gpd" xmlns:tns="http://www.jboss.org/drools" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:yaoqiang="http://bpmn.sourceforge.net" exporter="Yaoqiang BPMN Editor" exporterVersion="2.2.18 (GPLv3, Non-Commercial)" expressionLanguage="http://www.mvel.org/2.0" id="Definition" name="" targetNamespace="" typeLanguage="http://www.java.com/javaTypes" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://bpmn.sourceforge.net/schemas/BPMN20.xsd">
+  <process id="ac.at.tuwien.dsg.daw1" isClosed="false" isExecutable="true" name="daw1" processType="Private" tns:packageName="com.sample">
+    <extensionElements>
+      <tns:import name="at.ac.tuwien.dsg.qoranalytics.analytic.Select"/>
+      <tns:import name="at.ac.tuwien.dsg.qoranalytics.analytic.Sampling"/>
+    </extensionElements>
+    <property id="count" itemSubjectRef="_countItem"/>
+    <property id="i" itemSubjectRef="_iItem"/>
+    <property id="ac.at.tuwien.dsg.daw1_P_1" itemSubjectRef="ID_1" name="lowerBound"/>
+    <startEvent id="__1" isInterrupting="true" name="Start" parallelMultiple="false">
+      <outgoing>_9</outgoing>
+    </startEvent>
+    <scriptTask completionQuantity="1" id="_5" isForCompensation="false" name="SAMPLING" scriptFormat="text/x-groovy" startQuantity="1">
+      <incoming>_10</incoming>
+      <outgoing>_11</outgoing>
+      <script><![CDATA[Sampling.getInstance().start("10");]]></script>
+    </scriptTask>
+    <endEvent id="_6" name="End">
+      <incoming>_11</incoming>
+      <terminateEventDefinition id="_6_ED_1"/>
+    </endEvent>
+    <scriptTask completionQuantity="1" id="_2" isForCompensation="false" name="SELECT" scriptFormat="text/x-groovy" startQuantity="1">
+      <incoming>_9</incoming>
+      <outgoing>_10</outgoing>
+      <script><![CDATA[Select.getInstance().start("select date, time, globalActivePower, voltage, globalIntensity from powerconsumption");]]></script>
+    </scriptTask>
+    <sequenceFlow id="_9" sourceRef="__1" targetRef="_2"/>
+    <sequenceFlow id="_10" sourceRef="_2" targetRef="_5"/>
+    <sequenceFlow id="_11" sourceRef="_5" targetRef="_6"/>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#FFFFFF;count=1;horizontalcount=1;orientation=0;width=597.6;height=842.4;imageableWidth=587.6;imageableHeight=832.4;imageableX=5.0;imageableY=5.0" id="Yaoqiang_Diagram-_1" name="New Diagram" resolution="96.0">
+    <bpmndi:BPMNPlane bpmnElement="ac.at.tuwien.dsg.daw1">
+      <bpmndi:BPMNShape bpmnElement="__1" id="Yaoqiang-__1">
+        <dc:Bounds height="32.0" width="32.0" x="104.0" y="169.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="18.955078125" width="31.0" x="104.5" y="209.5224609375"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_5" id="Yaoqiang-_5">
+        <dc:Bounds height="55.0" width="85.0" x="517.0" y="151.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="18.955078125" width="60.0" x="529.5" y="171.0224609375"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_6" id="Yaoqiang-_6">
+        <dc:Bounds height="32.0" width="32.0" x="749.0" y="173.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="18.955078125" width="26.0" x="752.0" y="213.5224609375"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_2" id="Yaoqiang-_2">
+        <dc:Bounds height="55.0" width="85.0" x="283.7307692307693" y="140.9615384615384"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="18.955078125" width="45.0" x="303.7307692307693" y="160.9839993990384"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_11" id="Yaoqiang-_11" sourceElement="_5" targetElement="_6">
+        <di:waypoint x="601.8076923076923" y="178.5"/>
+        <di:waypoint x="749.502136900543" y="189.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="18.955078125" width="6.0" x="672.5" y="174.7730388060039"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_9" id="Yaoqiang-_9" sourceElement="__1" targetElement="_2">
+        <di:waypoint x="135.6501369367855" y="185.00000000000003"/>
+        <di:waypoint x="283.3461538461538" y="168.4615384615384"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="18.955078125" width="6.0" x="206.86538461538464" y="167.11919265215772"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_10" id="Yaoqiang-_10" sourceElement="_2" targetElement="_5">
+        <di:waypoint x="369.5" y="168.4615384615384"/>
+        <di:waypoint x="517.1923076923076" y="178.5"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="18.955078125" width="6.0" x="439.86538461538464" y="164.13784555288456"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
