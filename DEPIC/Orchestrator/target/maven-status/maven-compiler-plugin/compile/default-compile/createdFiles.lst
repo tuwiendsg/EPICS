@@ -1,0 +1,12 @@
+at/ac/tuwien/dsg/orchestrator/deployment/testDeploy.class
+at/ac/tuwien/dsg/orchestrator/deployment/DeploymentDescriptionResource.class
+at/ac/tuwien/dsg/orchestrator/deployment/DeploymentDescription.class
+at/ac/tuwien/dsg/orchestrator/deployment/ApplicationConfig.class
+at/ac/tuwien/dsg/orchestrator/deployment/testDeploy2.class
+at/ac/tuwien/dsg/orchestrator/dataelasticitycontroller/DataElasticityController.class
+at/ac/tuwien/dsg/orchestrator/deployment/SALSAConnector$HTTPVerb.class
+at/ac/tuwien/dsg/orchestrator/deployment/DeployAction.class
+at/ac/tuwien/dsg/orchestrator/deployment/DeploymentRestWS.class
+at/ac/tuwien/dsg/orchestrator/deployment/SALSAConnector.class
+at/ac/tuwien/dsg/orchestrator/dataelasticitymonitor/DataElasticityMonitor.class
+at/ac/tuwien/dsg/orchestrator/deployment/SALSAConnector$1.class
