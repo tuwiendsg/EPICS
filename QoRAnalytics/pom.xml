@@ -31,6 +31,12 @@
     
     <dependencies>
         <dependency>
+            <groupId>org.kie</groupId>
+            <artifactId>kie-internal</artifactId>
+            <version>6.1.0.Final</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
@@ -58,7 +64,7 @@
         
     
   
-        
+        <!--
         
         <dependency>
             <groupId>org.jbpm</groupId>
@@ -71,7 +77,7 @@
             <version>6.1.0.Final</version>
         </dependency>
         
-        
+       
         
         <dependency>
             <groupId>org.subethamail</groupId>
@@ -109,7 +115,7 @@
             <version>2.1.0</version>
         </dependency>
     
-  
+   -->
       
         <dependency>
             <groupId>org.apache.activemq</groupId>
@@ -122,21 +128,7 @@
             <artifactId>activemq-spring</artifactId>
             <version>5.10.0</version>
         </dependency>
-        <!--
-       <dependency>
-            <groupId>org.jbpm</groupId>
-            <artifactId>jbpm-bpmn2</artifactId>
-            <version>6.1.0.Final</version>
-        </dependency>
-        -->
-        
-        
-        <dependency>
-            <groupId>org.jbpm</groupId>
-            <artifactId>jbpm-test</artifactId>
-            <version>6.1.0.Final</version>
-        </dependency>
-        
+      
         
         <dependency>
             <groupId>com.espertech</groupId>
