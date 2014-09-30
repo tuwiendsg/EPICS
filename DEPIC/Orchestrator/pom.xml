@@ -37,11 +37,6 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>tosca</groupId>
-            <artifactId>tosca-description</artifactId>
-            <version>1.0</version>
-        </dependency>
     </dependencies>
 
     <build>
