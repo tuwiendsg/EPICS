@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.depictool.app;
+package at.ac.tuwien.dsg.depictool.parser;
 
 import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 
