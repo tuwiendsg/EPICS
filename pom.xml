@@ -17,6 +17,7 @@
 	<modules>
 		<module>DEPIC</module>
 		<module>EDASICH</module>
+	 <module>Utils</module>
 	</modules>
     
 </project>

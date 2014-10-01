@@ -11,3 +11,6 @@
 /EDASICH/log/
 /DEPIC/DepicTooling/src/main/java/at/ac/tuwien/dsg/depictool/demo
 /DEPIC/TestMOMConnector/nbproject/private/
+/Utils/LeastSquareRegression/target/
+/Utils/Sampling/target/
+/Utils/ESPERStreamProcessing/target/

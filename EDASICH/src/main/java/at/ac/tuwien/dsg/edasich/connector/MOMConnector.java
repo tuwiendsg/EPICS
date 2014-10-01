@@ -20,9 +20,9 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import at.ac.tuwien.dsg.edasich.configuration.Configuration;
-import at.ac.tuwien.dsg.edasich.batchjobprocessing.daw.engine.WorkflowEngine;
-import at.ac.tuwien.dsg.edasich.streamprocessing.entity.event.SensorEvent;
-import at.ac.tuwien.dsg.edasich.streamprocessing.handler.SensorEventHandler;
+
+
+
 import at.ac.tuwien.dsg.smartcom.model.Identifier;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -40,11 +40,11 @@ public class MOMConnector {
     private String url;
     private String subject;
     private int limit;
-    private SensorEventHandler sensorEventHandler;
+//    private SensorEventHandler sensorEventHandler;
 
     public MOMConnector() {
-        sensorEventHandler = new SensorEventHandler();
-        sensorEventHandler.afterPropertiesSet();
+  //      sensorEventHandler = new SensorEventHandler();
+    //    sensorEventHandler.afterPropertiesSet();
     }
     
     
@@ -114,8 +114,8 @@ public class MOMConnector {
              
                             }
                             
-                            SensorEvent sensorEvent = new SensorEvent(sensorName,sensorValue, new Date());
-                                    sensorEventHandler.handle(sensorEvent);
+                           // SensorEvent sensorEvent = new SensorEvent(sensorName,sensorValue, new Date());
+                        //            sensorEventHandler.handle(sensorEvent);
                         }
                             
                     }
@@ -150,8 +150,7 @@ public class MOMConnector {
 
                     writeData(data);
                     executeWorkflowEngine();
-                    storeAnalysisResult();
-                    sendCriticalMessage();     
+                
                             
                 }
 
@@ -165,9 +164,13 @@ public class MOMConnector {
     }
     
     private void executeWorkflowEngine(){
-        
+   /*     
         WorkflowEngine wfEngine = new WorkflowEngine(Configuration.getConfig("WF.DAW"));
         wfEngine.startWFEngine();
+           */
+        
+        // pass the data asset function to the workflow engine here
+           
     }
 
     private void configure() {
@@ -191,26 +194,5 @@ public class MOMConnector {
         }
     }
     
-    private void storeAnalysisResult(){
-      
-        
-    }
-    
-    
-    public void sendCriticalMessage(){
-        SmartComConnector scc = new SmartComConnector();
-        at.ac.tuwien.dsg.smartcom.model.Message message = scc.buildMessage(null);
-        try {
-            scc.sendMessage(message);
-        } catch (Exception ex) {
-           
-        }
-        
-       
-    }
-    
-    
-    
-    
-    
+
 }

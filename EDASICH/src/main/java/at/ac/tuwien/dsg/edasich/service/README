@@ -1,6 +1,0 @@
-this is where you put the code for the service. 
-create the following subdirectory
- - core: which is the core APIs of the service
- - engines: which includes possible interfaces/plug-ins to existing engines (such as jBPM, Esper and Drain)
- 
- (remove this file when you are done)
