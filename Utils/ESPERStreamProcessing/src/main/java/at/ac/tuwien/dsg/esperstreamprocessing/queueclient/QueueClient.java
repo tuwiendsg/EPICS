@@ -32,8 +32,9 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
-public class QueueClient {
+public class QueueClient implements Runnable {
 
+    Thread runner;
     private String url;
     private String subject;
     private int limit;
@@ -42,6 +43,11 @@ public class QueueClient {
     public QueueClient() {
         sensorEventHandler = new SensorEventHandler();
         sensorEventHandler.afterPropertiesSet();
+    }
+
+    public void run() {
+
+        openConnection();
     }
 
     public void openConnection() {

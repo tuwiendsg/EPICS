@@ -148,10 +148,7 @@ public class MOMConnector {
                     String sensorOperation = fieldsNames.nextElement().toString();
                     String data = mapMessage.getString(sensorOperation);
 
-                    writeData(data);
-                    executeWorkflowEngine();
-                
-                            
+   
                 }
 
             } else {
@@ -162,16 +159,7 @@ public class MOMConnector {
 
         }
     }
-    
-    private void executeWorkflowEngine(){
-   /*     
-        WorkflowEngine wfEngine = new WorkflowEngine(Configuration.getConfig("WF.DAW"));
-        wfEngine.startWFEngine();
-           */
-        
-        // pass the data asset function to the workflow engine here
-           
-    }
+
 
     private void configure() {
         url = "tcp://" + Configuration.getConfig("MOM.IP") + ":" + Configuration.getConfig("MOM.PORT");
@@ -179,20 +167,6 @@ public class MOMConnector {
         limit = Integer.parseInt(Configuration.getConfig("MESSAGE.LIMIT"));
     }
     
-    private void writeData(String data){
-     
-        
-        FileWriter fstream;
-        try {
-            fstream = new FileWriter("temp", false);
-            BufferedWriter out = new BufferedWriter(fstream);
-            out.write(data);
-
-            
-            out.close();
-        } catch (IOException ex) {
-        }
-    }
-    
+ 
 
 }
