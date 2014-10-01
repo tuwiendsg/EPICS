@@ -6,11 +6,8 @@
 /DEPIC/DataAssetLoader/target/
 /DEPIC/DepicTooling/target/
 /DEPIC/DepicTooling/template/eDaaS/target/
-/QoRAnalytics/target/
-/QoRAnalytics/config/
-/QoRAnalytics/log/
+/EDASICH/target/
+/EDASICH/config/
+/EDASICH/log/
 /DEPIC/DepicTooling/src/main/java/at/ac/tuwien/dsg/depictool/demo
-/BigDemo/QoRAnalytics/target/
-/TestActiviti/nbproject/private/
-/TestActiviti/build/
 /DEPIC/TestMOMConnector/nbproject/private/
