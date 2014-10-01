@@ -15,6 +15,8 @@ import at.ac.tuwien.dsg.edasich.streamprocessing.entity.event.EventPattern;
 import at.ac.tuwien.dsg.edasich.streamprocessing.entity.event.SensorEvent;
 */
 
+import at.ac.tuwien.dsg.edasich.entity.stream.EventPattern;
+import at.ac.tuwien.dsg.edasich.entity.stream.Task;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;

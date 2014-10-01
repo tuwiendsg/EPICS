@@ -13,7 +13,7 @@ package at.ac.tuwien.dsg.esperstreamprocessing.handler;
 
 
 
-import at.ac.tuwien.dsg.esperstreamprocessing.entity.EventPattern;
+import at.ac.tuwien.dsg.edasich.entity.stream.EventPattern;
 import at.ac.tuwien.dsg.esperstreamprocessing.entity.EventSubscriber;
 import at.ac.tuwien.dsg.esperstreamprocessing.entity.SensorEvent;
 import at.ac.tuwien.dsg.esperstreamprocessing.entity.StatementSubscriber;

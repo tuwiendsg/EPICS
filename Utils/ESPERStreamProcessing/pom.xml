@@ -61,6 +61,15 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/smartcom-0.0.1-SNAPSHOT.jar</systemPath>
         </dependency>
+        
+        <dependency>
+            <groupId>eda</groupId>
+            <artifactId>eda</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/eda-0.0.1-SNAPSHOT.jar</systemPath>
+        </dependency>
+        
          <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-all</artifactId>

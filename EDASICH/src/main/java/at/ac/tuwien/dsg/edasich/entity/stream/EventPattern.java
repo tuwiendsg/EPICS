@@ -6,7 +6,6 @@
 
 package at.ac.tuwien.dsg.edasich.entity.stream;
 
-import at.ac.tuwien.dsg.smartcom.model.Message;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
