@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.rule;
+package at.ac.tuwien.dsg.edasich.streamprocessing.entity.rule;
 
-import at.ac.tuwien.dsg.qoranalytics.configuration.EventPatternLoader;
-import at.ac.tuwien.dsg.qoranalytics.connector.MOMConnector;
-import at.ac.tuwien.dsg.qoranalytics.connector.SmartComConnector;
-import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event.EventMessage;
+import at.ac.tuwien.dsg.edasich.configuration.EventPatternLoader;
+import at.ac.tuwien.dsg.edasich.connector.MOMConnector;
+import at.ac.tuwien.dsg.edasich.connector.SmartComConnector;
+import at.ac.tuwien.dsg.edasich.streamprocessing.entity.event.EventMessage;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;

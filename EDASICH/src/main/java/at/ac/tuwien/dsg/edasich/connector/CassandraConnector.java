@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.cep;
+package at.ac.tuwien.dsg.edasich.connector;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Host;

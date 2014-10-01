@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.qoranalytics.batchjobprocessing.daw.engine;
+package at.ac.tuwien.dsg.edasich.batchjobprocessing.daw.engine;
 
 /**
  *

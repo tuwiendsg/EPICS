@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.qoranalytics.batchjobprocessing.analytic;
+package at.ac.tuwien.dsg.edasich.batchjobprocessing.analytic;
 
 /**
  *

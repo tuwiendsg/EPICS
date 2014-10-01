@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event;
+package at.ac.tuwien.dsg.edasich.streamprocessing.entity.event;
 
 import at.ac.tuwien.dsg.smartcom.model.Message;
 import javax.xml.bind.annotation.XmlAccessType;

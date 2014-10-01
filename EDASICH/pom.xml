@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>at.ac.tuwien.dsg</groupId>
-    <artifactId>QoRAnalytics</artifactId>
+    <artifactId>EDASICH</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>QoRAnalytics</name>
+    <name>EDASICH</name>
 
     <repositories>
   

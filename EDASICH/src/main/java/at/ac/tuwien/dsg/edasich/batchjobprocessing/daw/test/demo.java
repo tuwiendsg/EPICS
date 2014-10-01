@@ -1,12 +1,12 @@
-package at.ac.tuwien.dsg.qoranalytics.batchjobprocessing.daw.test;
+package at.ac.tuwien.dsg.edasich.batchjobprocessing.daw.test;
 
-import at.ac.tuwien.dsg.qoranalytics.batchjobprocessing.analytic.LeastSquareRegression;
+import at.ac.tuwien.dsg.edasich.batchjobprocessing.analytic.LeastSquareRegression;
 
-import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
-import at.ac.tuwien.dsg.qoranalytics.connector.MOMConnector;
-import at.ac.tuwien.dsg.qoranalytics.batchjobprocessing.daw.engine.WorkflowEngine;
-import at.ac.tuwien.dsg.qoranalytics.configuration.EventPatternLoader;
-import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event.EventMessage;
+import at.ac.tuwien.dsg.edasich.configuration.Configuration;
+import at.ac.tuwien.dsg.edasich.connector.MOMConnector;
+import at.ac.tuwien.dsg.edasich.batchjobprocessing.daw.engine.WorkflowEngine;
+import at.ac.tuwien.dsg.edasich.configuration.EventPatternLoader;
+import at.ac.tuwien.dsg.edasich.streamprocessing.entity.event.EventMessage;
 import at.ac.tuwien.dsg.smartcom.model.Identifier;
 import at.ac.tuwien.dsg.smartcom.model.Message;
 

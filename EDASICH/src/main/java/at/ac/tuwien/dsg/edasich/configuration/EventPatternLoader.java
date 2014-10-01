@@ -4,11 +4,11 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.qoranalytics.configuration;
+package at.ac.tuwien.dsg.edasich.configuration;
 
 
-import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event.EventMessage;
-import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event.EventPattern;
+import at.ac.tuwien.dsg.edasich.streamprocessing.entity.event.EventMessage;
+import at.ac.tuwien.dsg.edasich.streamprocessing.entity.event.EventPattern;
 import at.ac.tuwien.dsg.smartcom.model.Message;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

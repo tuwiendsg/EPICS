@@ -16,7 +16,7 @@
 	
 	<modules>
 		<module>DEPIC</module>
-		<module>QoRAnalytics</module>
+		<module>EDASICH</module>
 	</modules>
     
 </project>

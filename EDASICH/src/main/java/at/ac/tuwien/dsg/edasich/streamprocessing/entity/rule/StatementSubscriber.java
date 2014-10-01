@@ -1,4 +1,4 @@
-package at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.rule;
+package at.ac.tuwien.dsg.edasich.streamprocessing.entity.rule;
 
 
 public interface StatementSubscriber {

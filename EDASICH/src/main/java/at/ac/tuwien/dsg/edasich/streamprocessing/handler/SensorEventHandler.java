@@ -4,17 +4,17 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.qoranalytics.streamprocessing.handler;
+package at.ac.tuwien.dsg.edasich.streamprocessing.handler;
 
 /**
  *
  * @author Jun
  */
 
-import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event.SensorEvent;
-import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.rule.MonitorEventSubscriber;
-import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.rule.StatementSubscriber;
-import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.rule.WarningEventSubscriber;
+import at.ac.tuwien.dsg.edasich.streamprocessing.entity.event.SensorEvent;
+import at.ac.tuwien.dsg.edasich.streamprocessing.entity.rule.MonitorEventSubscriber;
+import at.ac.tuwien.dsg.edasich.streamprocessing.entity.rule.StatementSubscriber;
+import at.ac.tuwien.dsg.edasich.streamprocessing.entity.rule.WarningEventSubscriber;
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;

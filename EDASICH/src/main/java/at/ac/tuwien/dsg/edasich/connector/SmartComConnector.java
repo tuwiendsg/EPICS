@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.qoranalytics.connector;
+package at.ac.tuwien.dsg.edasich.connector;
 
 /**
  *
  * @author Jun
  */
 //import at.ac.tuwien.dsg.smartcom.adapters.DropboxInputAdapter;
-import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
-import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event.EventMessage;
+import at.ac.tuwien.dsg.edasich.configuration.Configuration;
+import at.ac.tuwien.dsg.edasich.streamprocessing.entity.event.EventMessage;
 import at.ac.tuwien.dsg.smartcom.adapters.DropboxOutputAdapter;
 import at.ac.tuwien.dsg.smartcom.model.Identifier;
 import at.ac.tuwien.dsg.smartcom.model.Message;

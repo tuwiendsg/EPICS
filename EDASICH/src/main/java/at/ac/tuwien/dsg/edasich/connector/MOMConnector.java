@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.qoranalytics.connector;
+package at.ac.tuwien.dsg.edasich.connector;
 
 /**
  *
@@ -12,17 +12,17 @@ package at.ac.tuwien.dsg.qoranalytics.connector;
 import at.ac.tuwien.dsg.daas.entities.CreateRowsStatement;
 import at.ac.tuwien.dsg.daas.entities.RowColumn;
 import at.ac.tuwien.dsg.daas.entities.TableRow;
-import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
+import at.ac.tuwien.dsg.edasich.configuration.Configuration;
 import java.io.StringReader;
 import java.util.Enumeration;
 import javax.jms.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import at.ac.tuwien.dsg.qoranalytics.configuration.Configuration;
-import at.ac.tuwien.dsg.qoranalytics.batchjobprocessing.daw.engine.WorkflowEngine;
-import at.ac.tuwien.dsg.qoranalytics.streamprocessing.entity.event.SensorEvent;
-import at.ac.tuwien.dsg.qoranalytics.streamprocessing.handler.SensorEventHandler;
+import at.ac.tuwien.dsg.edasich.configuration.Configuration;
+import at.ac.tuwien.dsg.edasich.batchjobprocessing.daw.engine.WorkflowEngine;
+import at.ac.tuwien.dsg.edasich.streamprocessing.entity.event.SensorEvent;
+import at.ac.tuwien.dsg.edasich.streamprocessing.handler.SensorEventHandler;
 import at.ac.tuwien.dsg.smartcom.model.Identifier;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
