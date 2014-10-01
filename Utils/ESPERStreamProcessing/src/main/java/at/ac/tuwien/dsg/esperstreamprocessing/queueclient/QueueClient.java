@@ -14,6 +14,7 @@ import at.ac.tuwien.dsg.daas.entities.RowColumn;
 import at.ac.tuwien.dsg.daas.entities.TableRow;
 import at.ac.tuwien.dsg.esperstreamprocessing.entity.SensorEvent;
 import at.ac.tuwien.dsg.esperstreamprocessing.handler.SensorEventHandler;
+import at.ac.tuwien.dsg.esperstreamprocessing.utils.Configuration;
 
 import at.ac.tuwien.dsg.smartcom.model.Identifier;
 import java.io.BufferedWriter;
@@ -46,7 +47,7 @@ public class QueueClient implements Runnable {
     }
 
     public void run() {
-
+        configure();
         openConnection();
     }
 
@@ -127,5 +128,11 @@ public class QueueClient implements Runnable {
         } catch (Exception ex) {
 
         }
+    }
+    
+    private void configure() {
+        url = "tcp://" + Configuration.getConfig("MOM.IP") + ":" + Configuration.getConfig("MOM.PORT");
+        subject = Configuration.getConfig("MOM.QUEUE_NAME");
+        limit = Integer.parseInt(Configuration.getConfig("MESSAGE.LIMIT"));
     }
 }

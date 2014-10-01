@@ -47,6 +47,18 @@ public class Configuration {
                 case "MESSAGE.LIMIT":
                     configString = prop.getProperty("MESSAGE.LIMIT");
                     break;
+                case "DAAS.IP":
+                    configString = prop.getProperty("DAAS.IP");
+                    break;
+                case "DAAS.PORT":
+                    configString = prop.getProperty("DAAS.PORT");
+                    break;
+                case "DAAS.SENSOR.START":
+                    configString = prop.getProperty("DAAS.SENSOR.START");
+                    break;
+                case "DAAS.SENSOR.STOP":
+                    configString = prop.getProperty("DAAS.SENSOR.STOP");
+                    break;    
                 case "WF.DAW":
                     configString = prop.getProperty("WF.DAW");
                     break;
