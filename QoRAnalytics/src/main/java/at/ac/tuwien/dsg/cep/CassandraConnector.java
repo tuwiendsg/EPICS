@@ -22,7 +22,7 @@ import java.util.UUID;
 
 /**
  *
- * @author dsg
+ * @author Anindita
  */
 public class CassandraConnector {
     
@@ -109,34 +109,28 @@ public class CassandraConnector {
              if(columnsdatatype.get(i).equals("text"))
              {
              rowsquery+=",'"+rows.get(i)+"'";
-             System.out.println("@@@@@from insertdata@@@@@@"+rows.get(i));
+             
              }
              
              if(columnsdatatype.get(i).equals("varchar"))
              {
              rowsquery+=",'"+rows.get(i)+"'";
-             System.out.println("@@@@@from insertdata@@@@@@"+rows.get(i));
              }
              
              if(columnsdatatype.get(i).equals("double"))
              {
                  rowsquery+=","+Double.parseDouble(rows.get(i));
-                 System.out.println("@@@@@from insertdata@@@@@@"+rows.get(i));
              }
              if(columnsdatatype.get(i).equals("int"))
              {
                  rowsquery+=","+Integer.parseInt(rows.get(i));
-                 System.out.println("@@@@@from insertdata@@@@@@"+rows.get(i));
              }
              if(columnsdatatype.get(i).equals("float"))
              {
                  rowsquery+=","+Float.parseFloat(rows.get(i));
-                 System.out.println("@@@@@from insertdata@@@@@@"+rows.get(i));
              }
              
           }
-          System.out.println("@@@@@from insertdata ||||||columnsquery@@@@@@"+columnsquery);
-          System.out.println("@@@@@from insertdata?????rowsquery@@@@@@"+rowsquery);
           
           insertquery+=columnsquery+") VALUES ("+UUID.randomUUID()+rowsquery+");";
           session.execute(insertquery);
@@ -268,7 +262,7 @@ public class CassandraConnector {
       return this.session;
    }
 
-   /** Close cluster. */
+   //Close cluster. 
    public void close()
    {
        cluster.close();
