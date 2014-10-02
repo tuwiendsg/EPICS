@@ -81,7 +81,7 @@ public class RestfulWSClient {
 
             //HttpGet method = new HttpGet(url);
             StringEntity inputKeyspace = new StringEntity(xmlString);
-
+            System.out.println("Connection .. " + url);
             HttpPut request = new HttpPut(url);
             request.addHeader("content-type", "application/xml; charset=utf-8");
             request.addHeader("Accept", "application/xml, multipart/related");
@@ -91,7 +91,7 @@ public class RestfulWSClient {
 
             int statusCode = methodResponse.getStatusLine().getStatusCode();
 
-          //  System.out.println("Status Code: " + statusCode);
+            System.out.println("Status Code: " + statusCode);
             BufferedReader rd = new BufferedReader(
                     new InputStreamReader(methodResponse.getEntity().getContent()));
 

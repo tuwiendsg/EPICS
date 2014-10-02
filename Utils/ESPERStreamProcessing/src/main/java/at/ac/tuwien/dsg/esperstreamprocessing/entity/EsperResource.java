@@ -44,11 +44,14 @@ public class EsperResource {
     }
 
 
-    @GET
+    @PUT
     @Path("/start")
     @Consumes("application/xml")
-    public void startEsper() {
-        String xmlData = IOUtils.readData("daf1");
+    public void startEsper(String xmlString) {
+        
+        System.out.println("Recieved:" + xmlString);
+        
+        String xmlData = IOUtils.readData(xmlString);
         System.out.println(""+xmlData);
          DataAssetFunctionStreamingData daf=null;
         try {
@@ -65,7 +68,8 @@ public class EsperResource {
         
         Thread thread = new Thread(qc, "ESPER");
         thread.start();
-    }
+    
+                }
 
 
     @PUT
@@ -91,6 +95,7 @@ public class EsperResource {
     @Consumes("application/xml")
     public void submitDataAssetFunction(String dafXML) {
         try {
+            System.out.println("Recieved:" + dafXML);
             DataAssetFunctionStreamingData daf = JAXBUtils.unmarshal(dafXML, DataAssetFunctionStreamingData.class);
             IOUtils.writeData(dafXML, daf.getDaFunctionID());
             
@@ -105,15 +110,10 @@ public class EsperResource {
     @Path("/momconf")
     @Consumes("application/xml")
     public void submitMOMConf(String xmltring) {
-        try {
-            System.out.println("Recieved: " + xmltring);
-            
-            MOMConfiguration obj = JAXBUtils.unmarshal(xmltring, MOMConfiguration.class);
+    
+            System.out.println("Recieved: " + xmltring);       
             IOUtils.writeData(xmltring, "momconf");
-            
-                    } catch (JAXBException ex) {
-            Logger.getLogger(EsperResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
+          
         
     }
     

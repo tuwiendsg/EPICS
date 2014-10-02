@@ -37,10 +37,10 @@ public class AnalyticController {
     public AnalyticController(){
     }
 
-    public void startAnalyticEngine(String analyticEngineID) {
+    public void startAnalyticEngine(String analyticEngineID, String daf) {
         AnalyticEngineConfiguration aec = Configuration.getAnalyticEngineConfiguration(analyticEngineID);
         RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/start");
-        restClient.callRestfulWebService("");
+        restClient.callRestfulWebService(daf);
     }
     
     public void stopAnalyticEngine(String analyticEngineID){
