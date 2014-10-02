@@ -14,3 +14,5 @@
 /Utils/LeastSquareRegression/target/
 /Utils/Sampling/target/
 /Utils/ESPERStreamProcessing/target/
+/Utils/ESPERStreamProcessings/src/main/java/at/ac/tuwien/dsg/esperstreamprocessing/test
+/Utils/ESPERStreamProcessings/config
