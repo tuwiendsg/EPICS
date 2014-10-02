@@ -74,6 +74,20 @@ public class Configuration {
                 case "SMARTCOM.ADAPTER":
                     configString = prop.getProperty("SMARTCOM.ADAPTER");
                     break;
+                case "SALAM.IP":
+                    configString = prop.getProperty("SMARTCOM.ADAPTER");
+                    break;
+                case "SALAM.PORT":
+                    configString = prop.getProperty("SMARTCOM.ADAPTER");
+                    break;
+                case "SALAM.TASK.API":
+                    configString = prop.getProperty("SMARTCOM.ADAPTER");
+                    break;    
+               
+                    
+                    
+                    
+                    
                 case "DB.CONTROLACTIONS.IP":
                     configString = prop.getProperty("DB.CONTROLACTIONS.IP");
                     break;
