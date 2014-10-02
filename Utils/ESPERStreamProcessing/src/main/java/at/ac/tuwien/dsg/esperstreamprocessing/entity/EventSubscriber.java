@@ -76,7 +76,7 @@ public class EventSubscriber implements StatementSubscriber {
         SensorEvent val1 = (SensorEvent) eventMap.get("val1");
         SensorEvent val2 = (SensorEvent) eventMap.get("val2");
 
-
+// enrich data - monitoring object specified enrich info by  developer
         System.out.println(sb.toString());
         
         forwardTask();

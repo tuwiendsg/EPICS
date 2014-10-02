@@ -27,9 +27,6 @@ public class Task {
     @XmlElement(name = "taskContent", required = true)
     String taskContent;
     
-    @XmlElement(name = "responseInterface", required = true)
-    String responseInterface;
-    
     @XmlElement(name = "tag", required = true)
     String tag; 
     
@@ -43,11 +40,10 @@ public class Task {
     public Task() {
     }
 
-    public Task(String taskID, String taskName, String taskContent, String responseInterface, String tag, SeverityLevel severity) {
+    public Task(String taskID, String taskName, String taskContent, String tag, SeverityLevel severity) {
         this.taskID = taskID;
         this.taskName = taskName;
         this.taskContent = taskContent;
-        this.responseInterface = responseInterface;
         this.tag = tag;
         this.severity = severity;
     }
@@ -76,14 +72,6 @@ public class Task {
         this.taskContent = taskContent;
     }
 
-    public String getResponseInterface() {
-        return responseInterface;
-    }
-
-    public void setResponseInterface(String responseInterface) {
-        this.responseInterface = responseInterface;
-    }
-
     public String getTag() {
         return tag;
     }
@@ -99,8 +87,7 @@ public class Task {
     public void setSeverity(SeverityLevel severity) {
         this.severity = severity;
     }
-    
-    
 
+    
    
 }
