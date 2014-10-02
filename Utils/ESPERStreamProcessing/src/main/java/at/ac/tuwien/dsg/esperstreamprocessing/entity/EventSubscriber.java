@@ -17,6 +17,7 @@ import at.ac.tuwien.dsg.edasich.streamprocessing.entity.event.SensorEvent;
 
 import at.ac.tuwien.dsg.edasich.entity.stream.EventPattern;
 import at.ac.tuwien.dsg.edasich.entity.stream.Task;
+import at.ac.tuwien.dsg.esperstreamprocessing.utils.IOUtils;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -38,6 +39,7 @@ import javax.xml.bind.Unmarshaller;
  */
 public class EventSubscriber implements StatementSubscriber {
 
+
     private EventPattern eventPattern;   
     
     public EventSubscriber() {
@@ -46,6 +48,9 @@ public class EventSubscriber implements StatementSubscriber {
     public EventSubscriber(EventPattern eventPattern) {
         this.eventPattern = eventPattern;
     }
+
+    
+    
     
     @Override
     public String getStatement() {
@@ -58,8 +63,19 @@ public class EventSubscriber implements StatementSubscriber {
         
         StringBuilder sb = new StringBuilder();
         sb.append("--------------------------------------------------");
-        sb.append("\n- [WARNING] : PATTERN DETECTED ");
+        sb.append("\n- ["+eventPattern.getTask().getSeverity()+"]  ");
+        
+
+        
+        for (Map.Entry<String, SensorEvent> entry : eventMap.entrySet()) {
+            SensorEvent sensorEvent = entry.getValue();
+            sb.append("\n- "+sensorEvent.getName()+"  - Value: " + sensorEvent.getValue());
+        }
+
         sb.append("\n--------------------------------------------------");
+        SensorEvent val1 = (SensorEvent) eventMap.get("val1");
+        SensorEvent val2 = (SensorEvent) eventMap.get("val2");
+
 
         System.out.println(sb.toString());
         
@@ -77,10 +93,11 @@ public class EventSubscriber implements StatementSubscriber {
                 task.setTaskID(String.valueOf(System.nanoTime()));
                 logTask(task);
                 
+                System.out.println("Forward Task !");
               
 
             } else {
-                System.out.println("Replication of messages. NO message sent !");
+                System.out.println("Duplications of Pattern within Interval Time !");
             }
 
         }
@@ -88,13 +105,10 @@ public class EventSubscriber implements StatementSubscriber {
 
     private void logTask(Task task) {
 
-        FileWriter fstream;
+       
         try {
-            String xmlData = marshal(task, Task.class);
-            fstream = new FileWriter("log/" + task.getTaskID(), false);
-            BufferedWriter out = new BufferedWriter(fstream);
-            out.write(xmlData);
-            out.close();
+            String logData = marshal(task, Task.class);
+            IOUtils.writeData(logData, "log");
         } catch (Exception ex) {
             System.out.println("" + ex.toString());
         }
@@ -105,22 +119,12 @@ public class EventSubscriber implements StatementSubscriber {
         Task task = null;
 
         try {
-            FileReader inputFile = new FileReader("log/" + task.getTaskID());
-            BufferedReader bufferReader = new BufferedReader(inputFile);
-            String dataStr = "";
-            String line = "";
-            while ((line = bufferReader.readLine()) != null) {
-                //  System.out.println(line);
-                dataStr += line;
-            }
-
+            String logData = IOUtils.readData("log");
             JAXBContext bContext = JAXBContext.newInstance(Task.class);
             Unmarshaller um = bContext.createUnmarshaller();
-            task = (Task) um.unmarshal(new StringReader(dataStr));
-
-            bufferReader.close();
+            task = (Task) um.unmarshal(new StringReader(logData));
         } catch (Exception e) {
-
+            System.out.println("" + e.toString());
         }
 
         return task;
@@ -136,8 +140,8 @@ public class EventSubscriber implements StatementSubscriber {
             long currentTime = System.nanoTime();
             double different = ((currentTime - previousTime) / Math.pow(10, 6));
             double waitingTime = eventPattern.getIntervalTime();
-            System.out.println("waiting time: " + waitingTime);
-            System.out.println("different time: " + different);
+            System.out.println("Interval time: " + waitingTime);
+            System.out.println("Remaining time: " + different);
             if (different < waitingTime) {
                 permission = false;
             }

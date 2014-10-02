@@ -51,7 +51,7 @@ public class SensorEventHandler {
         }
         
         Configuration config = new Configuration();
-        config.addEventTypeAutoName("at.ac.tuwien.streamprocessing");
+        config.addEventTypeAutoName("at.ac.tuwien.dsg.esperstreamprocessing.entity");
         epService = EPServiceProviderManager.getDefaultProvider(config);
 
         createExpressions();

@@ -12,11 +12,12 @@ package at.ac.tuwien.dsg.esperstreamprocessing.queueclient;
 import at.ac.tuwien.dsg.daas.entities.CreateRowsStatement;
 import at.ac.tuwien.dsg.daas.entities.RowColumn;
 import at.ac.tuwien.dsg.daas.entities.TableRow;
+import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
 import at.ac.tuwien.dsg.esperstreamprocessing.entity.SensorEvent;
 import at.ac.tuwien.dsg.esperstreamprocessing.handler.SensorEventHandler;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.Configuration;
 
-import at.ac.tuwien.dsg.smartcom.model.Identifier;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -42,8 +43,7 @@ public class QueueClient implements Runnable {
     private SensorEventHandler sensorEventHandler;
 
     public QueueClient() {
-        sensorEventHandler = new SensorEventHandler();
-        sensorEventHandler.afterPropertiesSet();
+     
     }
 
     public void run() {
@@ -134,5 +134,10 @@ public class QueueClient implements Runnable {
         url = "tcp://" + Configuration.getConfig("MOM.IP") + ":" + Configuration.getConfig("MOM.PORT");
         subject = Configuration.getConfig("MOM.QUEUE_NAME");
         limit = Integer.parseInt(Configuration.getConfig("MESSAGE.LIMIT"));
+    }
+    
+    public void configureDataAssetFunction(DataAssetFunctionStreamingData daf){
+        sensorEventHandler = new SensorEventHandler(daf.getListOfEventPatterns());
+        sensorEventHandler.afterPropertiesSet();
     }
 }

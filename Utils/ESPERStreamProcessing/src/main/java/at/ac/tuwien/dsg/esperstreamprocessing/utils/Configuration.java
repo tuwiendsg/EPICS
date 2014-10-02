@@ -10,6 +10,7 @@ package at.ac.tuwien.dsg.esperstreamprocessing.utils;
  * @author Jun
  */
 
+import at.ac.tuwien.dsg.edasich.configuration.MOMConfiguration;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,47 +24,37 @@ public class Configuration {
 
     public static String getConfig(String configureName) {
 
-        Properties prop = new Properties();
         String configString = "";
-        InputStream input = null;
-
+        
         try {
+            String momXML = IOUtils.readData("momconf");
+            MOMConfiguration conf = at.ac.tuwien.dsg.edasich.utils.JAXBUtils.unmarshal(momXML, MOMConfiguration.class);
 
-            input = new FileInputStream("config/config.properties");
-
-            // load a properties file
-            prop.load(input);
 
             switch (configureName) {
                 case "MOM.IP":
-                    configString = prop.getProperty("MOM.IP");
+                    configString = conf.getIp();
                     break;
                 case "MOM.PORT":
-                    configString = prop.getProperty("MOM.PORT");
+                    configString = conf.getPort();
                     break;
                 case "MOM.QUEUE_NAME":
-                    configString = prop.getProperty("MOM.QUEUE_NAME");
+                    configString = conf.getQueue();
                     break;
                 case "MESSAGE.LIMIT":
-                    configString = prop.getProperty("MESSAGE.LIMIT");
+                    configString = String.valueOf(conf.getLimit());
                     break;
 
             }
 
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        } 
 
         return configString;
     }
+    
+ 
     
 
 

@@ -9,12 +9,15 @@ package at.ac.tuwien.dsg.edasich.configuration;
  *
  * @author Jun
  */
+import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
+import at.ac.tuwien.dsg.edasich.utils.JAXBUtils;
 import at.ac.tuwien.dsg.edasich.utils.MySqlConnectionManager;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.ResultSet;
 import java.util.Properties;
+import javax.xml.bind.JAXBException;
 
 public class Configuration {
 
@@ -83,9 +86,15 @@ public class Configuration {
                 case "SALAM.TASK.API":
                     configString = prop.getProperty("SMARTCOM.ADAPTER");
                     break;    
-               
-                    
-                    
+                case "TASK.DISTRIBUTION.IP":
+                    configString = prop.getProperty("TASK.DISTRIBUTION.IP");
+                    break;
+                case "TASK.DISTRIBUTION.PORT":
+                    configString = prop.getProperty("TASK.DISTRIBUTION.PORT");
+                    break;    
+                case "TASK.DISTRIBUTION.API":
+                    configString = prop.getProperty("TASK.DISTRIBUTION.API");
+                    break;    
                     
                     
                 case "DB.CONTROLACTIONS.IP":
@@ -131,7 +140,7 @@ public class Configuration {
         
         MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, database, username, password);
         
-        String sql = "Select * from ControlAction where analyticEngineID='"+analyticEngineID+"'";
+        String sql = "Select * from AnalyticEngine where analyticEngineID='"+analyticEngineID+"'";
         
         ResultSet rs = connectionManager.ExecuteQuery(sql);
 
@@ -152,5 +161,45 @@ public class Configuration {
         
         return  analyticEngineConfiguration;
     }
+    
+    public static void submitMOMConf(String analyticEngineID) {
+        
+        
+        String ip= getConfig("MOM.IP");
+    String port= getConfig("MOM.PORT");
+    String queue= getConfig("MOM.QUEUE_NAME");
+    int limit= Integer.parseInt(getConfig("MESSAGE.LIMIT"));
+    
+        MOMConfiguration momConf = new MOMConfiguration(ip, port, queue, limit);
+        
+        try {
+            AnalyticEngineConfiguration aec = getAnalyticEngineConfiguration(analyticEngineID);
+            RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/momconf");
+            String xmlStr = JAXBUtils.marshal(momConf, MOMConfiguration.class);
+            restClient.callRestfulWebService(xmlStr);
+        } catch (JAXBException ex) {
+       
+        }    
+    }
+    
+    public static void submitTaskDistributionConf(String analyticEngineID) {
+        
+        String ip = getConfig("TASK.DISTRIBUTION.IP");
+        String port = getConfig("TASK.DISTRIBUTION.PORT");
+        String api = getConfig("TASK.DISTRIBUTION.API"); 
+        
+        TaskDistributionConfiguration taskDConf = new TaskDistributionConfiguration(ip, port, api);
+        
+        
+        try {
+            AnalyticEngineConfiguration aec = getAnalyticEngineConfiguration(analyticEngineID);
+            RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/taskdistributionconf");
+            String xmlStr = JAXBUtils.marshal(taskDConf, TaskDistributionConfiguration.class);
+            restClient.callRestfulWebService(xmlStr);
+        } catch (JAXBException ex) {
+       
+        }    
+    }
+    
 
 }

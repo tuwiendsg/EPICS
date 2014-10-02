@@ -6,9 +6,12 @@
 
 package at.ac.tuwien.dsg.esperstreamprocessing.entity;
 
+import at.ac.tuwien.dsg.edasich.configuration.MOMConfiguration;
+import at.ac.tuwien.dsg.edasich.configuration.TaskDistributionConfiguration;
 import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
 import at.ac.tuwien.dsg.edasich.utils.JAXBUtils;
 import at.ac.tuwien.dsg.esperstreamprocessing.queueclient.QueueClient;
+import at.ac.tuwien.dsg.esperstreamprocessing.test.test;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.IOUtils;
 import java.util.Set;
 import java.util.logging.Level;
@@ -45,7 +48,22 @@ public class EsperResource {
     @Path("/start")
     @Consumes("application/xml")
     public void startEsper() {
-        Thread thread = new Thread(new QueueClient(), "ESPER");
+        String xmlData = IOUtils.readData("daf1");
+        System.out.println(""+xmlData);
+         DataAssetFunctionStreamingData daf=null;
+        try {
+            daf = JAXBUtils.unmarshal(xmlData, DataAssetFunctionStreamingData.class);
+            System.out.println("" + daf.getDaFunctionName());
+        
+        
+        } catch (JAXBException ex) {
+            
+        }
+        
+        QueueClient qc = new QueueClient();
+        qc.configureDataAssetFunction(daf);
+        
+        Thread thread = new Thread(qc, "ESPER");
         thread.start();
     }
 
@@ -82,4 +100,35 @@ public class EsperResource {
         
     }
     
+    
+    @PUT
+    @Path("/momconf")
+    @Consumes("application/xml")
+    public void submitMOMConf(String xmltring) {
+        try {
+            System.out.println("Recieved: " + xmltring);
+            
+            MOMConfiguration obj = JAXBUtils.unmarshal(xmltring, MOMConfiguration.class);
+            IOUtils.writeData(xmltring, "momconf");
+            
+                    } catch (JAXBException ex) {
+            Logger.getLogger(EsperResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    
+    @PUT
+    @Path("/taskdistributionconf")
+    @Consumes("application/xml")
+    public void submitTaskDistributionConf(String xmltring) {
+        try {
+            TaskDistributionConfiguration obj = JAXBUtils.unmarshal(xmltring, TaskDistributionConfiguration.class);
+            IOUtils.writeData(xmltring, "taskdistributionconf");
+            
+                    } catch (JAXBException ex) {
+            Logger.getLogger(EsperResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
 }

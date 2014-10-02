@@ -3,8 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package at.ac.tuwien.dsg.esperstreamprocessing.utils;
+package at.ac.tuwien.dsg.edasich.utils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -17,22 +16,20 @@ import java.io.IOException;
  * @author Jun
  */
 public class IOUtils {
-    
-    public static void writeData(String data,String fileName){
-     
-        
+
+    public static void writeData(String data, String fileName) {
+
         FileWriter fstream;
         try {
             fstream = new FileWriter(fileName, false);
             BufferedWriter out = new BufferedWriter(fstream);
             out.write(data);
 
-            
             out.close();
         } catch (IOException ex) {
         }
     }
-    
+
     public static String readData(String fileName) {
 
         String data = "";
@@ -53,5 +50,5 @@ public class IOUtils {
         }
         return data;
     }
-    
+
 }
