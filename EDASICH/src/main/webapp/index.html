@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Start Page</title>
+        <title>EDASICH</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h3>Please upload data asset function</h3>
+        <form action="Uploader" method="post" enctype="multipart/form-data"> <br>
+            <select name="dafType">
+                <option value="stream" selected>Streaming Data</option>
+                <option value="batch">Batch Data</option>
+            </select> <br>
+            <input type="file" name="file" /> <br>
+            <input type="submit" />
+        </form>
     </body>
 </html>
