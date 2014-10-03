@@ -40,7 +40,7 @@ public class Task {
     public Task() {
     }
 
-    public Task(String taskID, String taskName, String taskContent, String tag, SeverityLevel severity) {
+    public Task(String taskID, String taskName, String taskContent, String responseInterface, String tag, SeverityLevel severity) {
         this.taskID = taskID;
         this.taskName = taskName;
         this.taskContent = taskContent;
@@ -87,7 +87,8 @@ public class Task {
     public void setSeverity(SeverityLevel severity) {
         this.severity = severity;
     }
-
     
+    
+
    
 }

@@ -29,8 +29,6 @@ public class EventPattern {
     
     @XmlElement(name = "intervalTime")
     Long intervalTime;
-    
-   
 
     public EventPattern() {
     }

@@ -6,6 +6,7 @@
 
 package at.ac.tuwien.dsg.esperstreamprocessing.entity;
 
+
 import at.ac.tuwien.dsg.edasich.configuration.MOMConfiguration;
 import at.ac.tuwien.dsg.edasich.configuration.TaskDistributionConfiguration;
 import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
@@ -94,7 +95,9 @@ public class EsperResource {
     @Consumes("application/xml")
     public void submitDataAssetFunction(String dafXML) {
         try {
-            System.out.println("Recieved:" + dafXML);
+          
+            Logger.getLogger(EsperResource.class.getName()).log(Level.OFF, "Recieved:" + dafXML);
+            
             DataAssetFunctionStreamingData daf = JAXBUtils.unmarshal(dafXML, DataAssetFunctionStreamingData.class);
             IOUtils.writeData(dafXML, daf.getDaFunctionID());
             
