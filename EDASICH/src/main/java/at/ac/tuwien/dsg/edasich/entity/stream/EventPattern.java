@@ -27,15 +27,22 @@ public class EventPattern {
     @XmlElement(name = "task")
     Task task;
     
+    @XmlElement(name = "enrichmentInfo")
+    String enrichmentInfo;
+    
+    
     @XmlElement(name = "intervalTime")
     Long intervalTime;
 
     public EventPattern() {
     }
 
-    public EventPattern(String statement, Task task, Long intervalTime) {
+    
+    
+    public EventPattern(String statement, Task task, String enrichmentInfo, Long intervalTime) {
         this.statement = statement;
         this.task = task;
+        this.enrichmentInfo = enrichmentInfo;
         this.intervalTime = intervalTime;
     }
 
@@ -55,6 +62,14 @@ public class EventPattern {
         this.task = task;
     }
 
+    public String getEnrichmentInfo() {
+        return enrichmentInfo;
+    }
+
+    public void setEnrichmentInfo(String enrichmentInfo) {
+        this.enrichmentInfo = enrichmentInfo;
+    }
+
     public Long getIntervalTime() {
         return intervalTime;
     }
@@ -65,6 +80,8 @@ public class EventPattern {
 
     
 
+    
+    
     
     
     

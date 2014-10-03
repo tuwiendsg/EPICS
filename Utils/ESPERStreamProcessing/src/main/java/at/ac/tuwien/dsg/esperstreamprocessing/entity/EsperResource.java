@@ -96,7 +96,8 @@ public class EsperResource {
     public void submitDataAssetFunction(String dafXML) {
         try {
           
-            Logger.getLogger(EsperResource.class.getName()).log(Level.OFF, "Recieved:" + dafXML);
+            String log= "Recieved:" + dafXML;
+            Logger.getLogger(EsperResource.class.getName()).log(Level.INFO, log);
             
             DataAssetFunctionStreamingData daf = JAXBUtils.unmarshal(dafXML, DataAssetFunctionStreamingData.class);
             IOUtils.writeData(dafXML, daf.getDaFunctionID());
