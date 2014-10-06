@@ -63,17 +63,5 @@ public class EventPattern {
     public void setEnrichmentInfo(String enrichmentInfo) {
         this.enrichmentInfo = enrichmentInfo;
     }
-
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
- 
        
 }

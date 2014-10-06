@@ -6,12 +6,15 @@
 package at.ac.tuwien.dsg.edasich.utils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import static java.lang.System.in;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -82,45 +85,45 @@ public class Uploader extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-        try {
+        
+        if (ServletFileUpload.isMultipartContent(request)) {
+            try {
+                List<FileItem> multiparts = new ServletFileUpload(
+                        new DiskFileItemFactory()).parseRequest(request);
 
-            List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
-            for (FileItem item : items) {
-                if (item.isFormField()) {
-                    // Process regular form field (input type="text|radio|checkbox|etc", select, etc).
-                    String fieldName = item.getFieldName();
-                    String fieldValue = item.getString();
+                for (FileItem item : multiparts) {
+                    if (!item.isFormField()) {
+                        String name = new File(item.getName()).getName();
+                       // item.write( new File(UPLOAD_DIRECTORY + File.separator + name));
 
-                    System.out.println(fieldName + ": " + fieldValue);
+                        InputStream filecontent = item.getInputStream();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(filecontent));
+                        StringBuilder out = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            out.append(line);
+                        }
 
-                    // ... (do your job here)
-                } else {
-                    // Process form file field (input type="file").
-                    String fieldname = item.getFieldName();
-                    String filename = FilenameUtils.getName(item.getName());
-                    
-                    
-                    
-                    InputStream filecontent = item.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(filecontent));
-                    StringBuilder out = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        out.append(line);
+                        reader.close();
+                        String log = "file name: " + name + " - content: " + out.toString();
+                        Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
+
                     }
-           
-                    reader.close();
-
-                    System.out.println("File Name: " + filename);
-                    System.out.println("File Content: " + out.toString());
-
-                    // ... (do your job here)
                 }
+
+                //File uploaded successfully
+                request.setAttribute("message", "File Uploaded Successfully");
+            } catch (Exception ex) {
+                request.setAttribute("message", "File Upload Failed due to " + ex);
             }
-        } catch (FileUploadException e) {
-            throw new ServletException("Cannot parse multipart request.", e);
+
+        } else {
+            request.setAttribute("message",
+                    "Sorry this Servlet only handles file upload request");
         }
+        
+        
+        
     }
 
     /**
