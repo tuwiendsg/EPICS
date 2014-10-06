@@ -11,16 +11,18 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import java.io.FileWriter;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author dsg
  */
 public class MonitoredObjectDataModel {
-    public void dataModelGeneration(String buildingName, Map<String, List<String,String>> LinkedList<String> sensorInformation)
+    public void dataModelGeneration(String buildingName, Map<String, List<String>> sensor)
    {
        
-       
+       Map<String, List<String, String>> sensor
        String uri="http://somewhere/index#";
        Model model=ModelFactory.createDefaultModel();
        Resource building=model.createResource(uri+buildingName);
