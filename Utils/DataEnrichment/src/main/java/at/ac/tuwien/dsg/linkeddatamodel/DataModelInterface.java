@@ -19,13 +19,8 @@ public class DataModelInterface {
     //public static Map<String, List<String>> monitoringInformation;
     
     
-    public void addDataModelURI(String dataModelURI)
-    {
-        //this.dataModeluri=dataModelURI;
-       //return dataModelURI; 
-    }
-    
-    public void addBuildingName(String buildingName)
+   
+    public void addBuildingName(String uri,String buildingName)
     {
         //this.buildingName=buildingName;
         //return buildingName;
@@ -34,8 +29,10 @@ public class DataModelInterface {
     {
        new MonitoredObjectDataModel().dataModelGeneration(uri, buildingName, monitoringInformation);
     }
-    public void addRetrieveInformation(String sensorName)
+    public LinkedList<String> addRetrieveInformation(String subject,String predicate)
     {
-        new DataModelManipulation().queryResult();
+        LinkedList<String> monitoreddata=new DataModelManipulation().queryResult(subject, predicate);
+       
+        return monitoreddata;
     }
 }

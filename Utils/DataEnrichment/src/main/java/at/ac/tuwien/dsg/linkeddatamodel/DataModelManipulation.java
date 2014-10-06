@@ -14,6 +14,7 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import java.util.LinkedList;
+import java.util.StringTokenizer;
 import javax.persistence.Tuple;
 import virtuoso.jena.driver.VirtGraph;
 import virtuoso.jena.driver.VirtuosoQueryExecution;
@@ -24,11 +25,14 @@ import virtuoso.jena.driver.VirtuosoQueryExecutionFactory;
  * @author Anindita
  */
 public class DataModelManipulation {
-    public LinkedList<String> queryResult()
+    public LinkedList<String> queryResult(String subject1,String predicate1)
     {
-        String subject="http://somewhere/index#SensorA";
-        String predicate="MonitoredObjectName";
-    Query sparql = QueryFactory.create("SELECT ?s ?p ?o FROM <test1> WHERE { ?s ?p ?o }");
+        //String subject="http://somewhere/index#SensorA";
+        //String predicate="MonitoredObjectName";
+        String storageName=new StringTokenizer(subject1,"#").nextToken();
+        //System.out.println("String tokenizer@@@@@"+test1.nextToken());
+        //String test1="http://somewhere/index";
+    Query sparql = QueryFactory.create("SELECT ?s ?p ?o FROM <"+storageName+"> WHERE { ?s ?p ?o }");
     String url="jdbc:virtuoso://localhost:1111";
     VirtGraph graph=new VirtGraph("test1",url,"dba","dba");
     LinkedList<String> monitoringInformation=new LinkedList<String>();
@@ -37,8 +41,8 @@ public class DataModelManipulation {
 	System.out.println("graph.getCount() = " + graph.getCount());
         VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (sparql, graph);
         
-        Node subjectNode=Node.createURI(subject);
-        Node predicateNode=Node.createURI(predicate);
+        Node subjectNode=Node.createURI(subject1);
+        Node predicateNode=Node.createURI(predicate1);
         ExtendedIterator iter=graph.find(subjectNode, predicateNode, Node.ANY);
 
         

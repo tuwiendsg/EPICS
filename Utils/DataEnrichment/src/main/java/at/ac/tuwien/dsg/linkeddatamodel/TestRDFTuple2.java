@@ -31,13 +31,15 @@ public class TestRDFTuple2 {
         Model model=new ModelMem();
         
         model.read(fr,RDFS.getURI());
+        //System.out.println("RDFS.getURI="+RDFS.getURI());
         StmtIterator iter=model.listStatements();
         Statement stmt;
-        Property predicate;
-        RDFNode obj;
-        Resource subj;
+        //Property predicate;
+        //RDFNode obj;
+        //Resource subj;
+        String test1="http://somewhere/index";
         String url="jdbc:virtuoso://localhost:1111";
-        VirtGraph virtgraph=new VirtGraph("test1",url,"dba","dba");
+        VirtGraph virtgraph=new VirtGraph(test1,url,"dba","dba");
         virtgraph.clear();
         //virtgraph.add(graph);
         while (iter.hasNext())

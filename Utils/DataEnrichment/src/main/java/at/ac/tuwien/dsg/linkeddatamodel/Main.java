@@ -30,6 +30,8 @@ public class Main {
        objectName.add("ObjectC");
     new MonitoredObjectModel().dataModelGeneration(buildingName, sensorName, objectName);*/
         
+        
+        //for rdf data model generation
         String uri="http://somewhere/index#";
         String buildingName="BuildingB";
         Map<String, List<String>> monitoringInformation=new HashMap<String, List<String>>();
@@ -47,6 +49,7 @@ public class Main {
         
         new MonitoredObjectDataModel().dataModelGeneration(uri,buildingName,monitoringInformation); 
         
+        //for graph storage
         String fileName="./example/BuildingBTest.rdf";
         try
         {
@@ -57,10 +60,13 @@ public class Main {
             System.out.println("exception occured="+e);
         }
         
-        LinkedList<String> monitoringInformation2=new DataModelManipulation().queryResult();
-        for(int i=0;i<monitoringInformation.size();i++)
+        //for data extraction
+        String subject="http://somewhere/index#SensorA";
+        String predicate="MonitoredObjectName";
+        LinkedList<String> monitoringInformation2=new DataModelManipulation().queryResult(subject,predicate);
+        for(int i=0;i<monitoringInformation2.size();i++)
         {
-            System.out.println("monitoring object="+monitoringInformation.get(i));
+            System.out.println("monitoring object="+monitoringInformation2.get(i));
         }
 	
     

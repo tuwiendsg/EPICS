@@ -52,21 +52,15 @@ public class ServiceResource {
         return "Sensor 11 monitors Methane gas in block 1";
     }
     
-    @PUT
-    @Path("/uri")
-    @Consumes("text/plain")
-    public void putURI(String uri)
-    {
-       api.addDataModelURI(uri);
-    }
+    
     
     
     @PUT
     @Path("/buildingName")
     @Consumes("text/plain")
-    public void putBuildingName(String buildingName)
+    public void putBuildingName(String uri,String buildingName)
     {
-        api.addBuildingName(buildingName);
+        api.addBuildingName(uri,buildingName);
     }
     
     @PUT
@@ -81,9 +75,10 @@ public class ServiceResource {
     @Path("/monitoringInformation")
     @Consumes("text/plain")
     @Produces("text/plain")
-    public void postRetrieve(String sensorName)
+    public LinkedList<String> postRetrieve(String subject,String predicate)
     {
-        api.addRetrieveInformation(sensorName);
+        LinkedList<String> monitoredInformation=api.addRetrieveInformation(subject,predicate);
+        return monitoredInformation;
     }
 
     /**
