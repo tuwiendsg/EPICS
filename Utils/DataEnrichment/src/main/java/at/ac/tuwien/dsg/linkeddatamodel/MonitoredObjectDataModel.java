@@ -17,7 +17,7 @@ import java.util.LinkedList;
  * @author dsg
  */
 public class MonitoredObjectDataModel {
-    public void dataModelGeneration(String buildingName, LinkedList<String> sensorName, LinkedList<String> objectName)
+    public void dataModelGeneration(String buildingName, Map<String, List<String,String>> LinkedList<String> sensorInformation)
    {
        
        
