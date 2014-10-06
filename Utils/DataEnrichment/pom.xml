@@ -20,6 +20,66 @@
     </properties>
     
     <dependencies>
+        
+        <!-- for the use of virtuous server of java-->
+        <dependency>
+            <groupId>virtuoso</groupId>
+            <artifactId>virtjdbc4</artifactId>
+            <version>4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>tr.com.srdc</groupId>
+            <artifactId>virt-jena</artifactId>
+            <version>2.6.2-srdc</version>
+        </dependency>
+        <dependency>
+            <groupId>com.openlink.virtuoso</groupId>
+            <artifactId>virtjdbc3</artifactId>
+            <version>6.1.2</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.hp.hpl.jena</groupId>
+            <artifactId>arq</artifactId>
+            <version>2.8.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.axis</groupId>
+            <artifactId>axis</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>53.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hp.hpl.jena</groupId>
+            <artifactId>iri</artifactId>
+            <version>0.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hp.hpl.jena</groupId>
+            <artifactId>jena</artifactId>
+            <version>2.5.5</version>
+        </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+
+        <!-- end-->
+        <dependency>
+            <groupId>com.openlink.virtuoso</groupId>
+            <artifactId>virt_jena2</artifactId>
+            <version>7.1.0</version>
+        </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>

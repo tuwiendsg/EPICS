@@ -14,10 +14,10 @@ import java.util.LinkedList;
 
 /**
  *
- * @author Anindita
+ * @author dsg
  */
-public class MonitoredObjectModel {
-   public void dataModelGeneration(String buildingName, LinkedList<String> sensorName, LinkedList<String> objectName)
+public class MonitoredObjectDataModel {
+    public void dataModelGeneration(String buildingName, LinkedList<String> sensorName, LinkedList<String> objectName)
    {
        
        
@@ -62,4 +62,3 @@ public class MonitoredObjectModel {
       
    }
 }
-

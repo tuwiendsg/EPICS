@@ -5,6 +5,8 @@
  */
 package at.ac.tuwien.dsg.service;
 
+import at.ac.tuwien.dsg.linkeddatamodel.DataModelInterface;
+import java.util.LinkedList;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.PathParam;
@@ -24,6 +26,7 @@ public class ServiceResource {
 
     @Context
     private UriInfo context;
+    public DataModelInterface api=new DataModelInterface();
 
     /**
      * Creates a new instance of ServiceResource
@@ -41,6 +44,30 @@ public class ServiceResource {
         //TODO return proper representation object
         //throw new UnsupportedOperationException();
         return("<a>hello</a>");
+    }
+    
+    @PUT
+    @Path("/uri")
+    @Consumes("text/plain")
+    public void setURI(String uri)
+    {
+       api.addDataModelURI(uri);
+    }
+    
+    @PUT
+    @Path("/property")
+    @Consumes("text/plain")
+    public void putProperty(LinkedList<String> property)
+    {
+       api.addDataModelProperty(property);
+    }
+    
+    @PUT
+    @Path("/buildingName")
+    @Consumes("text/plain")
+    public void putBuildingName(String buildingName)
+    {
+        api.addBuildingName(buildingName);
     }
 
     /**

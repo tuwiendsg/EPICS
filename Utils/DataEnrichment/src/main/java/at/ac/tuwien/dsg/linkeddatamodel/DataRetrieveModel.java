@@ -5,12 +5,15 @@
  */
 package at.ac.tuwien.dsg.linkeddatamodel;
 
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.FileManager;
+import virtuoso.jena.driver.VirtGraph;
 
 
 /**
@@ -59,6 +62,19 @@ public class DataRetrieveModel {
 }
        System.out.println("object has some problem :"+objectName);
 
+       
+       
+       /*VirtGraph graph=new VirtGraph("test1","jdbc:virtuoso://localhost:1111", "dba", "dba");
+       
+       Node nodebuildingsubject=Node.createURI(uri+buildingName);
+       Node nodebuildingpredicat=Node.createURI(uri+"BuildingName");
+       Node nodebuildingname=Node.createLiteral(buildingName);
+       graph.add(new Triple(nodebuildingsubject,nodebuildingpredicat,nodebuildingname));
+       //Triple triple1=
+       
+       graph.add(Triple.ANY);*/
+       
+       
        
        
        
