@@ -16,16 +16,15 @@ import java.util.List;
 public class ElasticState {
     
     String eStateID;
-    MetricCondition condition;
+    List<MetricCondition> listOfConditions;
 
     public ElasticState() {
     }
 
-    public ElasticState(String eStateID, MetricCondition condition) {
+    public ElasticState(String eStateID, List<MetricCondition> listOfConditions) {
         this.eStateID = eStateID;
-        this.condition = condition;
+        this.listOfConditions = listOfConditions;
     }
-    
 
     public String geteStateID() {
         return eStateID;
@@ -35,14 +34,16 @@ public class ElasticState {
         this.eStateID = eStateID;
     }
 
-    public MetricCondition getCondition() {
-        return condition;
+    public List<MetricCondition> getListOfConditions() {
+        return listOfConditions;
     }
 
-    public void setCondition(MetricCondition condition) {
-        this.condition = condition;
+    public void setListOfConditions(List<MetricCondition> listOfConditions) {
+        this.listOfConditions = listOfConditions;
     }
 
+    
+    
     
     
     

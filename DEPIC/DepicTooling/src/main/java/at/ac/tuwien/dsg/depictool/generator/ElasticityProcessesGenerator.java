@@ -11,6 +11,7 @@ import at.ac.tuwien.dsg.common.deployment.DeploymentDescription;
 import at.ac.tuwien.dsg.common.deployment.DeploymentDescriptionJAXB;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
+import at.ac.tuwien.dsg.common.entity.eda.MetricCondition;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
@@ -22,7 +23,10 @@ import at.ac.tuwien.dsg.common.entity.qor.MetricRange;
 import at.ac.tuwien.dsg.common.entity.qor.TriggerActions;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.common.entity.process.ActionDependency;
+import at.ac.tuwien.dsg.common.entity.qor.QElement;
+import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
+import at.ac.tuwien.dsg.common.entity.qor.Range;
 import at.ac.tuwien.dsg.depictool.util.ElasticityProcessRepositorty;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,19 +38,19 @@ import java.util.List;
  */
 public class ElasticityProcessesGenerator {
 
+    QoRModel qorModel;
     MetricProcess metricProcess;
+    
     
     
     public ElasticityProcessesGenerator() {
     }
 
-    public ElasticityProcessesGenerator(MetricProcess metricProcess) {
+    public ElasticityProcessesGenerator(QoRModel qorModel, MetricProcess metricProcess) {
+        this.qorModel = qorModel;
         this.metricProcess = metricProcess;
     }
 
-    
-    
-     
 
     public MonitorProcess generateMonitorProcess() {
 
@@ -69,34 +73,15 @@ public class ElasticityProcessesGenerator {
     public List<ControlProcess> generateControlProcesses() {
 
         List<ControlProcess> listOfControlProcesses = new ArrayList<>();
-        
-        
-        List<MetricElasticityProcess> listOfMetricElasticityProcesses = metricProcess.getListOfMetricElasticityProcesses();
-        
-        
-        for (MetricElasticityProcess metric : listOfMetricElasticityProcesses) {
-            List<TriggerActions> listOfTriggerActions =  metric.getListOfTriggerActions();
-            
-            for (TriggerActions ta : listOfTriggerActions) {
-                String fromRange = ta.getFromRange();
-                String toRange = ta.getToRange();
-                List<ControlAction> listOfControlActions = ta.getListOfControlActions();
-                
-                
-            }
 
-        }
-        
-        
+        List<QElement> listOfQElements = qorModel.getListOfQElements();
 
-        List<ElasticState> listOfElasticStates = metricProcess.getListOfElasticStates();
+        for (QElement qE_i : listOfQElements) {
+            for (QElement qE_j : listOfQElements) {
 
-        for (ElasticState eState_i : listOfElasticStates) {
-            for (ElasticState eState_j : listOfElasticStates) {
+                if (!qE_i.equals(qE_j)) {
 
-                if (!eState_i.equals(eState_j)) {
-
-                    ControlProcess controlProcess = findControlProcess(eState_i, eState_j);
+                    ControlProcess controlProcess = findControlProcess(qE_i, qE_j);
                     if (controlProcess != null) {
                         listOfControlProcesses.add(controlProcess);
                     }
@@ -170,18 +155,15 @@ public class ElasticityProcessesGenerator {
     
     
 
-    private ControlProcess findControlProcess(ElasticState eStatei, ElasticState eStatej) {
+    private ControlProcess findControlProcess(QElement qE_i, QElement qE_j) {
 
         ControlProcess controlProcess = null;
 
         List<ControlAction> listOfControlActions = new ArrayList<>();
-/*
-        List<MetricRange> listOfMetricRanges_i = eStatei.getListOfMetricRanges();
-        List<MetricRange> listOfMetricRanges_j = eStatej.getListOfMetricRanges();
-*/
+     
+        List<MetricRange> listOfMetricRanges_i = qE_i.getListOfMetricRanges();
+        List<MetricRange> listOfMetricRanges_j = qE_j.getListOfMetricRanges();
         
-              List<MetricRange> listOfMetricRanges_i = null;
-        List<MetricRange> listOfMetricRanges_j = null;
         for (MetricRange metricRange_i : listOfMetricRanges_i) {
             String metricName_i = metricRange_i.getMetricName();
             String rangeVal_i = metricRange_i.getRange();
@@ -201,7 +183,10 @@ public class ElasticityProcessesGenerator {
         }
 
         if (listOfControlActions.size() != 0) {
-            controlProcess = new ControlProcess(eStatei.geteStateID(), eStatej.geteStateID(), listOfControlActions);
+            ElasticState eState_i = eStateMap(qE_i);
+            ElasticState eState_j = eStateMap(qE_j);
+            
+            controlProcess = new ControlProcess(eState_i, eState_j, listOfControlActions);
         }
        // System.out.println("from eState i: " + eStatei.geteStateID() + " --- to eState j: " + eStatei.geteStateID());
 
@@ -290,6 +275,41 @@ public class ElasticityProcessesGenerator {
         }
 
         return rangeVal;
+    }
+    
+    private ElasticState eStateMap(QElement qElement) {
+        
+        List<QoRMetric> listOfMetrics = qorModel.getListOfMetrics();
+        List<MetricRange> listOfMetricRanges =  qElement.getListOfMetricRanges();
+        
+        List<MetricCondition> listOfMetricConditions = new ArrayList<>();
+        
+        for (MetricRange metricRange : listOfMetricRanges) {
+            String metricName = metricRange.getMetricName();
+            String rangeID = metricRange.getRange();
+            
+            for (QoRMetric metric : listOfMetrics) {
+                if (metric.equals(metricName)){
+                   List<Range> listOfRanges =  metric.getListOfRanges();              
+                   for (Range r : listOfRanges) {
+                       if (r.getRangeID().equals(rangeID)){
+                           double lowerBound = r.getFromValue();
+                           double upperBound = r.getToValue();
+                           MetricCondition metricCondition = new MetricCondition(metricName, upperBound, lowerBound);
+                           listOfMetricConditions.add(metricCondition);
+                           break;
+                       }              
+                   } 
+                   
+                }
+                
+            }
+            
+        }
+        
+        String eStateID = qElement.getqElementID();
+        ElasticState elasticState = new ElasticState(eStateID, listOfMetricConditions);
+        return  elasticState;
     }
     
 }

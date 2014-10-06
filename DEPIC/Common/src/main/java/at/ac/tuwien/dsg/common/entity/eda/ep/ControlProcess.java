@@ -6,6 +6,7 @@
 
 package at.ac.tuwien.dsg.common.entity.eda.ep;
 
+import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
 import java.util.List;
 
@@ -14,33 +15,33 @@ import java.util.List;
  * @author Jun
  */
 public class ControlProcess {
-    String eStateID_i;
-    String eStateID_j;
+    ElasticState eStateID_i;
+    ElasticState eStateID_j;
     
     List<ControlAction> listOfControlActions;
 
     public ControlProcess() {
     }
 
-    public ControlProcess(String eStateID_i, String eStateID_j, List<ControlAction> listOfControlActions) {
+    public ControlProcess(ElasticState eStateID_i, ElasticState eStateID_j, List<ControlAction> listOfControlActions) {
         this.eStateID_i = eStateID_i;
         this.eStateID_j = eStateID_j;
         this.listOfControlActions = listOfControlActions;
     }
 
-    public String geteStateID_i() {
+    public ElasticState geteStateID_i() {
         return eStateID_i;
     }
 
-    public void seteStateID_i(String eStateID_i) {
+    public void seteStateID_i(ElasticState eStateID_i) {
         this.eStateID_i = eStateID_i;
     }
 
-    public String geteStateID_j() {
+    public ElasticState geteStateID_j() {
         return eStateID_j;
     }
 
-    public void seteStateID_j(String eStateID_j) {
+    public void seteStateID_j(ElasticState eStateID_j) {
         this.eStateID_j = eStateID_j;
     }
 
@@ -51,6 +52,6 @@ public class ControlProcess {
     public void setListOfControlActions(List<ControlAction> listOfControlActions) {
         this.listOfControlActions = listOfControlActions;
     }
-    
+
     
 }
