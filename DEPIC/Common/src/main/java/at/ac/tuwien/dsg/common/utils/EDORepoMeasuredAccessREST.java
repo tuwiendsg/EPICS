@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.common.rest;
+package at.ac.tuwien.dsg.common.utils;
 
 /**
  *

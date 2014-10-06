@@ -21,7 +21,7 @@ import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.common.entity.qor.MetricRange;
 import at.ac.tuwien.dsg.common.entity.qor.TriggerValues;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
-import at.ac.tuwien.dsg.depictool.entity.others.ActionDependency;
+import at.ac.tuwien.dsg.common.entity.process.ActionDependency;
 import at.ac.tuwien.dsg.depictool.util.ElasticityProcessRepositorty;
 import java.util.ArrayList;
 import java.util.Collections;

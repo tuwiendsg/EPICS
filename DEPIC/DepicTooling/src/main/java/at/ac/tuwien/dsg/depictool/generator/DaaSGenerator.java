@@ -10,7 +10,7 @@ package at.ac.tuwien.dsg.depictool.generator;
 import at.ac.tuwien.dsg.common.entity.others.MySqlConnectionManager;
 import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
-import at.ac.tuwien.dsg.depictool.entity.others.DataSource;
+import at.ac.tuwien.dsg.common.entity.process.DataSource;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
 import java.io.BufferedReader;

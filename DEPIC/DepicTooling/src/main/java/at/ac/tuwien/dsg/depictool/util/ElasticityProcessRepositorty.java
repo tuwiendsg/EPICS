@@ -8,7 +8,7 @@ package at.ac.tuwien.dsg.depictool.util;
 
 import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import at.ac.tuwien.dsg.common.entity.others.MySqlConnectionManager;
-import at.ac.tuwien.dsg.depictool.entity.others.ActionDependency;
+import at.ac.tuwien.dsg.common.entity.process.ActionDependency;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;

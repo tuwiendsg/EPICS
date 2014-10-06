@@ -9,7 +9,7 @@ import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import at.ac.tuwien.dsg.common.deployment.DeploymentDescription;
 import at.ac.tuwien.dsg.common.deployment.DeploymentDescriptionJAXB;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
-import at.ac.tuwien.dsg.depictool.entity.others.ActionDependency;
+import at.ac.tuwien.dsg.common.entity.process.ActionDependency;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;

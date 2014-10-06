@@ -99,6 +99,9 @@ public class Uploader extends HttpServlet {
                     // Process form file field (input type="file").
                     String fieldname = item.getFieldName();
                     String filename = FilenameUtils.getName(item.getName());
+                    
+                    
+                    
                     InputStream filecontent = item.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(filecontent));
                     StringBuilder out = new StringBuilder();

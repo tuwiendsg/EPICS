@@ -8,7 +8,7 @@ package at.ac.tuwien.dsg.common.entity.eda;
 
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
-import at.ac.tuwien.dsg.depictool.entity.others.DataSource;
+import at.ac.tuwien.dsg.common.entity.process.DataSource;
 import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
 import java.util.List;
 
