@@ -23,25 +23,35 @@ import virtuoso.jena.driver.VirtGraph;
  *
  * @author dsg
  */
-public class TestRDFTuple2 {
-    public void GraphStore(String fileName)throws Exception 
+public class RDFGraphGeneration {
+    public void GraphStore(String fileName,String fileURI)throws Exception 
     {
-        File f=new File("./example/BuildingBTest.rdf");
-        FileReader fr=new FileReader(f);
-        Model model=new ModelMem();
         
-        model.read(fr,RDFS.getURI());
-        //System.out.println("RDFS.getURI="+RDFS.getURI());
+        //consider the rdf file
+        File rdfFileName=new File(fileName);
+        FileReader rdfFileRead=new FileReader(rdfFileName);
+        
+        Model model=new ModelMem();
+        model.read(rdfFileRead,RDFS.getURI());
+        
         StmtIterator iter=model.listStatements();
         Statement stmt;
-        //Property predicate;
-        //RDFNode obj;
-        //Resource subj;
-        String test1="http://somewhere/index";
+        
+        
+        //store the generated graph in virtuous storage
         String url="jdbc:virtuoso://localhost:1111";
-        VirtGraph virtgraph=new VirtGraph(test1,url,"dba","dba");
-        virtgraph.clear();
-        //virtgraph.add(graph);
+        VirtGraph virtgraph=new VirtGraph(fileURI,url,"dba","dba");
+         if(!virtgraph.isEmpty())
+            {
+                System.out.println("clean the graph");
+                virtgraph.clear();
+            }
+         else
+            {
+                System.out.println("do not need to clean the graph");
+            }
+        
+        
         while (iter.hasNext())
         {
             stmt=(Statement)iter.next();

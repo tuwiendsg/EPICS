@@ -37,14 +37,14 @@ public class MonitoredObjectDataModel {
        
        
        
-       //for(int i=0;i<sensorName.size();i++)
+       
        for(Map.Entry<String, List<String>> entry : sensor.entrySet())
        {
        
        List<String> monitoredObjectName=entry.getValue();
        Resource sensorStructure=model.createResource(uri+entry.getKey());
        building.addProperty(sensorProperty, sensorStructure);
-       //Resource sensorStructureResource=building.addProperty(sensorProperty, sensorStructure)
+       
        sensorStructure.addProperty(sensorPropertyName, entry.getKey());
        for(int i=0;i<monitoredObjectName.size();i++)
        {

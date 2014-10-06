@@ -51,9 +51,10 @@ public class Main {
         
         //for graph storage
         String fileName="./example/BuildingBTest.rdf";
+        String fileuri="http://somewhere/index";
         try
         {
-        new TestRDFTuple2().GraphStore(fileName);
+        new RDFGraphGeneration().GraphStore(fileName,fileuri);
         }
         catch(Exception e)
         {
@@ -71,9 +72,7 @@ public class Main {
 	
     
     
-      /*String sensorName1="SensorA";
-      String buildingName1="BuildingA";
-      System.out.println("Monitored Object Name : "+new DataRetrieveModel().monitoredObjectName(sensorName1, buildingName1));*/
+     
     
     
     

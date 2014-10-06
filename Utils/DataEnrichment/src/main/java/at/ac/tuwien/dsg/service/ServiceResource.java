@@ -71,6 +71,14 @@ public class ServiceResource {
         api.addMonitoringInformation(uri, buildingName, monitoringInformation);
     }
     
+    @PUT
+    @Path("/rdfGraphStorage")
+    @Consumes("text/plain")
+    public void putGraphStorage(String fileName,String fileuri)
+    {
+        api.addRDFGraphGeneration(fileName, fileuri);
+    }
+    
     @POST
     @Path("/monitoringInformation")
     @Consumes("text/plain")
@@ -81,13 +89,5 @@ public class ServiceResource {
         return monitoredInformation;
     }
 
-    /**
-     * PUT method for updating or creating an instance of ServiceResource
-     * @param content representation for the resource
-     * @return an HTTP response with content of the updated or created resource.
-     */
-    @PUT
-    @Consumes("application/xml")
-    public void putXml(String content) {
-    }
+    
 }

@@ -35,4 +35,15 @@ public class DataModelInterface {
        
         return monitoreddata;
     }
+    public void addRDFGraphGeneration(String fileName,String fileuri)
+    {
+        try
+        {
+             new RDFGraphGeneration().GraphStore(fileName,fileuri);
+        }
+        catch(Exception e)
+        {
+            System.out.println("Exception occured :"+e);
+        }
+    }
 }
