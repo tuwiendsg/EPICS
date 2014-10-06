@@ -31,7 +31,7 @@ public class Main {
     new MonitoredObjectModel().dataModelGeneration(buildingName, sensorName, objectName);*/
         
         String uri="http://somewhere/index#";
-        String buildingName="Building B";
+        String buildingName="BuildingB";
         Map<String, List<String>> monitoringInformation=new HashMap<String, List<String>>();
         
         List<String> monitoringObject1=new ArrayList<String>();
@@ -47,11 +47,23 @@ public class Main {
         
         new MonitoredObjectDataModel().dataModelGeneration(uri,buildingName,monitoringInformation); 
         
+        String fileName="./example/BuildingBTest.rdf";
+        try
+        {
+        new TestRDFTuple2().GraphStore(fileName);
+        }
+        catch(Exception e)
+        {
+            System.out.println("exception occured="+e);
+        }
+        
+        new DataModelManipulation().queryResult();
+        
     
     
-      String sensorName1="SensorA";
+      /*String sensorName1="SensorA";
       String buildingName1="BuildingA";
-      System.out.println("Monitored Object Name : "+new DataRetrieveModel().monitoredObjectName(sensorName1, buildingName1));
+      System.out.println("Monitored Object Name : "+new DataRetrieveModel().monitoredObjectName(sensorName1, buildingName1));*/
     
     
     

@@ -6,6 +6,7 @@
 package at.ac.tuwien.dsg.service;
 
 import at.ac.tuwien.dsg.linkeddatamodel.DataModelInterface;
+import javax.ws.rs.POST;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
+
 import javax.ws.rs.Produces;
 
 /**
@@ -41,11 +43,13 @@ public class ServiceResource {
      * @return an instance of java.lang.String
      */
     @GET
-    @Produces("application/xml")
+    @Path("/enrichinfo/monitoringobject")
+    @Produces("text/plain")
     public String getXml() {
         //TODO return proper representation object
         //throw new UnsupportedOperationException();
-        return("<a>hello</a>");
+        //String hello=new TestGet().hello();
+        return "Sensor 11 monitors Methane gas in block 1";
     }
     
     @PUT
@@ -68,9 +72,18 @@ public class ServiceResource {
     @PUT
     @Path("/monitoringInformation")
     @Consumes("text/plain")
-    public void putMonitoringInformation(Map<String,List<String>> monitoringInformation)
+    public void putMonitoringInformation(String uri, String buildingName, Map<String,List<String>> monitoringInformation)
     {
-        api.addMonitoringInformation(monitoringInformation);
+        api.addMonitoringInformation(uri, buildingName, monitoringInformation);
+    }
+    
+    @POST
+    @Path("/monitoringInformation")
+    @Consumes("text/plain")
+    @Produces("text/plain")
+    public void postRetrieve(String sensorName)
+    {
+        api.addRetrieveInformation(sensorName);
     }
 
     /**

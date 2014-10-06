@@ -14,20 +14,28 @@ import java.util.Map;
  * @author dsg
  */
 public class DataModelInterface {
-    public String addDataModelURI(String dataModelURI)
+    //public static String dataModeluri;
+    //public static String buildingName;
+    //public static Map<String, List<String>> monitoringInformation;
+    
+    
+    public void addDataModelURI(String dataModelURI)
     {
-       return dataModelURI; 
+        //this.dataModeluri=dataModelURI;
+       //return dataModelURI; 
     }
-    public LinkedList<String> addDataModelProperty(LinkedList<String> dataModelProperty)
+    
+    public void addBuildingName(String buildingName)
     {
-        return dataModelProperty;
+        //this.buildingName=buildingName;
+        //return buildingName;
     }
-    public String addBuildingName(String buildingName)
+    public void addMonitoringInformation(String uri, String buildingName, Map<String,List<String>> monitoringInformation)
     {
-        return buildingName;
+       new MonitoredObjectDataModel().dataModelGeneration(uri, buildingName, monitoringInformation);
     }
-    public Map<String,List<String>> addMonitoringInformation(Map<String,List<String>> monitoringInformation)
+    public void addRetrieveInformation(String sensorName)
     {
-      return monitoringInformation;  
+        new DataModelManipulation().queryResult();
     }
 }
