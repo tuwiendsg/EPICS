@@ -10,9 +10,10 @@ package at.ac.tuwien.dsg.esperstreamprocessing.entity;
 import at.ac.tuwien.dsg.edasich.configuration.MOMConfiguration;
 import at.ac.tuwien.dsg.edasich.configuration.TaskDistributionConfiguration;
 import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
-import at.ac.tuwien.dsg.edasich.utils.JAXBUtils;
+
 import at.ac.tuwien.dsg.esperstreamprocessing.queueclient.QueueClient;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.IOUtils;
+import at.ac.tuwien.dsg.esperstreamprocessing.utils.JAXBUtils;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,25 +50,23 @@ public class EsperResource {
     @Consumes("application/xml")
     public void startEsper(String xmlString) {
         
-        System.out.println("Recieved:" + xmlString);
-        
-        String xmlData = IOUtils.readData(xmlString);
-        System.out.println(""+xmlData);
-         DataAssetFunctionStreamingData daf=null;
         try {
+            System.out.println("Recieved:" + xmlString);
+            
+            String xmlData = IOUtils.readData(xmlString);
+            System.out.println(""+xmlData);
+            DataAssetFunctionStreamingData daf=null;
             daf = JAXBUtils.unmarshal(xmlData, DataAssetFunctionStreamingData.class);
             System.out.println("" + daf.getDaFunctionName());
-        
-        
-        } catch (JAXBException ex) {
             
+            QueueClient qc = new QueueClient();
+            qc.configureDataAssetFunction(daf);
+            
+            Thread thread = new Thread(qc, "ESPER");
+            thread.start();
+        } catch (JAXBException ex) {
+            Logger.getLogger(EsperResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        QueueClient qc = new QueueClient();
-        qc.configureDataAssetFunction(daf);
-        
-        Thread thread = new Thread(qc, "ESPER");
-        thread.start();
     
                 }
 
@@ -95,17 +94,13 @@ public class EsperResource {
     @Consumes("application/xml")
     public void submitDataAssetFunction(String dafXML) {
         try {
-          
-            String log= "Recieved:" + dafXML;
-            Logger.getLogger(EsperResource.class.getName()).log(Level.INFO, log);
-            
-            DataAssetFunctionStreamingData daf = JAXBUtils.unmarshal(dafXML, DataAssetFunctionStreamingData.class);
-            IOUtils.writeData(dafXML, daf.getDaFunctionID());
-            
-                    } catch (JAXBException ex) {
+        String log= "Recieved:" + dafXML;
+        Logger.getLogger(EsperResource.class.getName()).log(Level.INFO, log);
+        DataAssetFunctionStreamingData daf = JAXBUtils.unmarshal(dafXML, DataAssetFunctionStreamingData.class);
+        IOUtils.writeData(dafXML, daf.getDaFunctionID());
+        } catch (JAXBException ex) {
             Logger.getLogger(EsperResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
     
     
@@ -128,8 +123,7 @@ public class EsperResource {
         try {
             TaskDistributionConfiguration obj = JAXBUtils.unmarshal(xmltring, TaskDistributionConfiguration.class);
             IOUtils.writeData(xmltring, "taskdistributionconf");
-            
-                    } catch (JAXBException ex) {
+        } catch (JAXBException ex) {
             Logger.getLogger(EsperResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         

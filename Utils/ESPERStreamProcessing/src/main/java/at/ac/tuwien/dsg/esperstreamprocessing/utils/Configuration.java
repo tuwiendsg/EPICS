@@ -28,7 +28,7 @@ public class Configuration {
         
         try {
             String momXML = IOUtils.readData("momconf");
-            MOMConfiguration conf = at.ac.tuwien.dsg.edasich.utils.JAXBUtils.unmarshal(momXML, MOMConfiguration.class);
+            MOMConfiguration conf = JAXBUtils.unmarshal(momXML, MOMConfiguration.class);
 
 
             switch (configureName) {

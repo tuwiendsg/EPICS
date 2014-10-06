@@ -8,6 +8,7 @@ package at.ac.tuwien.dsg.common.entity.process;
 
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
+import at.ac.tuwien.dsg.common.entity.qor.TriggerActions;
 import java.util.List;
 
 /**
@@ -17,17 +18,18 @@ import java.util.List;
 public class MetricElasticityProcess {
     String metricName;
     MonitorAction monitorAction;
-    List<ControlAction> listOfControlActions;
+    List<TriggerActions> listOfTriggerActions;
 
     public MetricElasticityProcess() {
     }
 
-    public MetricElasticityProcess(String metricName, MonitorAction monitorAction, List<ControlAction> listOfControlActions) {
+    public MetricElasticityProcess(String metricName, MonitorAction monitorAction, List<TriggerActions> listOfTriggerActions) {
         this.metricName = metricName;
         this.monitorAction = monitorAction;
-        this.listOfControlActions = listOfControlActions;
+        this.listOfTriggerActions = listOfTriggerActions;
     }
 
+  
     public String getMetricName() {
         return metricName;
     }
@@ -44,12 +46,12 @@ public class MetricElasticityProcess {
         this.monitorAction = monitorAction;
     }
 
-    public List<ControlAction> getListOfControlActions() {
-        return listOfControlActions;
+    public List<TriggerActions> getListOfTriggerActions() {
+        return listOfTriggerActions;
     }
 
-    public void setListOfControlActions(List<ControlAction> listOfControlActions) {
-        this.listOfControlActions = listOfControlActions;
+    public void setListOfTriggerActions(List<TriggerActions> listOfTriggerActions) {
+        this.listOfTriggerActions = listOfTriggerActions;
     }
 
     

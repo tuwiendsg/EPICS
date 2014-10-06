@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.edasich.utils;
+package at.ac.tuwien.dsg.esperstreamprocessing.utils;
 
 import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
 import java.io.StringReader;

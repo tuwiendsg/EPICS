@@ -7,7 +7,7 @@
 package at.ac.tuwien.dsg.common.entity.eda.ep;
 
 import at.ac.tuwien.dsg.common.entity.process.Parameter;
-import at.ac.tuwien.dsg.common.entity.qor.TriggerValues;
+import at.ac.tuwien.dsg.common.entity.qor.TriggerActions;
 import java.util.List;
 
 /**
@@ -16,32 +16,22 @@ import java.util.List;
  */
 public class ControlAction {
     String controlActionID;
-    TriggerValues triggerValues;
     List<Parameter> listOfParameters;
 
     public ControlAction() {
     }
 
-    public ControlAction(String actionID, TriggerValues triggerValues, List<Parameter> listOfParameters) {
-        this.controlActionID = actionID;
-        this.triggerValues = triggerValues;
+    public ControlAction(String controlActionID, List<Parameter> listOfParameters) {
+        this.controlActionID = controlActionID;
         this.listOfParameters = listOfParameters;
     }
 
-    public String getActionID() {
+    public String getControlActionID() {
         return controlActionID;
     }
 
-    public void setActionID(String actionID) {
-        this.controlActionID = actionID;
-    }
-
-    public TriggerValues getTriggerValues() {
-        return triggerValues;
-    }
-
-    public void setTriggerValues(TriggerValues triggerValues) {
-        this.triggerValues = triggerValues;
+    public void setControlActionID(String controlActionID) {
+        this.controlActionID = controlActionID;
     }
 
     public List<Parameter> getListOfParameters() {

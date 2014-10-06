@@ -21,7 +21,7 @@ import at.ac.tuwien.dsg.common.entity.qor.MetricRange;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
 import at.ac.tuwien.dsg.common.entity.qor.Range;
-import at.ac.tuwien.dsg.common.entity.qor.TriggerValues;
+import at.ac.tuwien.dsg.common.entity.qor.TriggerActions;
 import at.ac.tuwien.dsg.depictool.util.ElasticityProcessRepositorty;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -110,7 +110,7 @@ public class Generator {
 
             List<ControlAction> listOfControlActions = controlProcess.getListOfControlActions();
             for (ControlAction controlAction : listOfControlActions) {
-                TriggerValues triggerValues = controlAction.getTriggerValues();
+                TriggerActions triggerValues = controlAction.getTriggerValues();
 
                 System.out.println("     - Control Action: " + controlAction.getActionID() + " --- from: " + triggerValues.getFromRange()
                         + " - to: " + triggerValues.getToRange());

@@ -19,9 +19,10 @@ import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
 import at.ac.tuwien.dsg.common.entity.process.MetricElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.common.entity.qor.MetricRange;
-import at.ac.tuwien.dsg.common.entity.qor.TriggerValues;
+import at.ac.tuwien.dsg.common.entity.qor.TriggerActions;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.common.entity.process.ActionDependency;
+import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.depictool.util.ElasticityProcessRepositorty;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,24 +34,26 @@ import java.util.List;
  */
 public class ElasticityProcessesGenerator {
 
-    ElasticDataAsset elasticDataObject;
-    MetricProcess elasticityProcessConfiguration;
+    MetricProcess metricProcess;
+    
     
     public ElasticityProcessesGenerator() {
     }
 
-    public ElasticityProcessesGenerator(ElasticDataAsset elasticDataObject, MetricProcess elasticityProcessConfiguration) {
-        this.elasticDataObject = elasticDataObject;
-        this.elasticityProcessConfiguration = elasticityProcessConfiguration;
+    public ElasticityProcessesGenerator(MetricProcess metricProcess) {
+        this.metricProcess = metricProcess;
     }
+
+    
     
      
 
     public MonitorProcess generateMonitorProcess() {
 
         List<MonitorAction> listOfMonitorActions = new ArrayList<>();
-
-        List<MetricElasticityProcess> listOfMetricElasticityProcesses = elasticityProcessConfiguration.getListOfMetricElasticityProcesses();
+        
+        
+        List<MetricElasticityProcess> listOfMetricElasticityProcesses = metricProcess.getListOfMetricElasticityProcesses();
 
         for (MetricElasticityProcess metric : listOfMetricElasticityProcesses) {
             MonitorAction monitorAction = metric.getMonitorAction();
@@ -66,8 +69,27 @@ public class ElasticityProcessesGenerator {
     public List<ControlProcess> generateControlProcesses() {
 
         List<ControlProcess> listOfControlProcesses = new ArrayList<>();
+        
+        
+        List<MetricElasticityProcess> listOfMetricElasticityProcesses = metricProcess.getListOfMetricElasticityProcesses();
+        
+        
+        for (MetricElasticityProcess metric : listOfMetricElasticityProcesses) {
+            List<TriggerActions> listOfTriggerActions =  metric.getListOfTriggerActions();
+            
+            for (TriggerActions ta : listOfTriggerActions) {
+                String fromRange = ta.getFromRange();
+                String toRange = ta.getToRange();
+                List<ControlAction> listOfControlActions = ta.getListOfControlActions();
+                
+                
+            }
 
-        List<ElasticState> listOfElasticStates = elasticDataObject.getListOfElasticStates();
+        }
+        
+        
+
+        List<ElasticState> listOfElasticStates = metricProcess.getListOfElasticStates();
 
         for (ElasticState eState_i : listOfElasticStates) {
             for (ElasticState eState_j : listOfElasticStates) {
@@ -242,7 +264,7 @@ public class ElasticityProcessesGenerator {
 
                 for (ControlAction controlAction : listOfControlActions) {
 
-                    TriggerValues triggerValues = controlAction.getTriggerValues();
+                    TriggerActions triggerValues = controlAction.getTriggerValues();
 
                     if (triggerValues.getFromRange().equals(rangeVal_i) && triggerValues.getToRange().equals(rangeVal_j)) {
                         returnControlAction = controlAction;

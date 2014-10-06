@@ -6,22 +6,25 @@
 
 package at.ac.tuwien.dsg.common.entity.qor;
 
+import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
+import java.util.List;
+
 /**
  *
  * @author Jun
  */
-public class TriggerValues {
+public class TriggerActions {
     String fromRange;
     String toRange;
+    List<ControlAction> listOfControlActions;
 
-   
-
-    public TriggerValues() {
+    public TriggerActions() {
     }
-    
-     public TriggerValues(String fromRange, String toRange) {
+
+    public TriggerActions(String fromRange, String toRange, List<ControlAction> listOfControlActions) {
         this.fromRange = fromRange;
         this.toRange = toRange;
+        this.listOfControlActions = listOfControlActions;
     }
 
     public String getFromRange() {
@@ -39,5 +42,19 @@ public class TriggerValues {
     public void setToRange(String toRange) {
         this.toRange = toRange;
     }
+
+    public List<ControlAction> getListOfControlActions() {
+        return listOfControlActions;
+    }
+
+    public void setListOfControlActions(List<ControlAction> listOfControlActions) {
+        this.listOfControlActions = listOfControlActions;
+    }
+    
+    
+    
+
+   
+    
     
 }
