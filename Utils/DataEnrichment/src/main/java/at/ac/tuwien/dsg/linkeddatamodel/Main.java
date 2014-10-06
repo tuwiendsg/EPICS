@@ -57,8 +57,12 @@ public class Main {
             System.out.println("exception occured="+e);
         }
         
-        new DataModelManipulation().queryResult();
-        
+        LinkedList<String> monitoringInformation2=new DataModelManipulation().queryResult();
+        for(int i=0;i<monitoringInformation.size();i++)
+        {
+            System.out.println("monitoring object="+monitoringInformation.get(i));
+        }
+	
     
     
       /*String sensorName1="SensorA";

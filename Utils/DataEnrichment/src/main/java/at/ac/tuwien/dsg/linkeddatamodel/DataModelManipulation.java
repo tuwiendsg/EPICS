@@ -24,7 +24,7 @@ import virtuoso.jena.driver.VirtuosoQueryExecutionFactory;
  * @author Anindita
  */
 public class DataModelManipulation {
-    public void queryResult()
+    public LinkedList<String> queryResult()
     {
         String subject="http://somewhere/index#SensorA";
         String predicate="MonitoredObjectName";
@@ -45,14 +45,13 @@ public class DataModelManipulation {
 		
         for(;iter.hasNext();)
                 {
-                    //monitoringInformation.add(iter.next().toString());
-                    System.out.println((Triple)iter.next());
+                    
+                    Triple tr=(Triple)iter.next();
+                    String object=tr.getObject().toString();
+                    monitoringInformation.add(object);
+                    System.out.println("object="+object);
                 }
-        /*for(int i=0;i<monitoringInformation.size();i++)
-        {
-            System.out.println("monitoring object="+monitoringInformation.get(i));
-        }
-		ResultSet results = vqe.execSelect();
+        	/*ResultSet results = vqe.execSelect();
 		
                 while (results.hasNext()) {
 			QuerySolution result = results.nextSolution();
@@ -63,5 +62,6 @@ public class DataModelManipulation {
 		    RDFNode o = result.get("o");
 		    System.out.println("Subject="+s+" Predicate="+p+" object="+o);
 		}*/
+        return monitoringInformation;
 }
 }
