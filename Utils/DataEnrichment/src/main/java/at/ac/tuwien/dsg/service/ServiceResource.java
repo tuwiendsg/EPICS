@@ -7,6 +7,8 @@ package at.ac.tuwien.dsg.service;
 
 import at.ac.tuwien.dsg.linkeddatamodel.DataModelInterface;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.PathParam;
@@ -49,18 +51,11 @@ public class ServiceResource {
     @PUT
     @Path("/uri")
     @Consumes("text/plain")
-    public void setURI(String uri)
+    public void putURI(String uri)
     {
        api.addDataModelURI(uri);
     }
     
-    @PUT
-    @Path("/property")
-    @Consumes("text/plain")
-    public void putProperty(LinkedList<String> property)
-    {
-       api.addDataModelProperty(property);
-    }
     
     @PUT
     @Path("/buildingName")
@@ -68,6 +63,14 @@ public class ServiceResource {
     public void putBuildingName(String buildingName)
     {
         api.addBuildingName(buildingName);
+    }
+    
+    @PUT
+    @Path("/monitoringInformation")
+    @Consumes("text/plain")
+    public void putMonitoringInformation(Map<String,List<String>> monitoringInformation)
+    {
+        api.addMonitoringInformation(monitoringInformation);
     }
 
     /**

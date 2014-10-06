@@ -19,11 +19,11 @@ import java.util.Map;
  * @author dsg
  */
 public class MonitoredObjectDataModel {
-    public void dataModelGeneration(String buildingName, Map<String, List<String>> sensor)
+    public void dataModelGeneration(String uri,String buildingName, Map<String, List<String>> sensor)
    {
        
-       Map<String, List<String, String>> sensor
-       String uri="http://somewhere/index#";
+       
+       
        Model model=ModelFactory.createDefaultModel();
        Resource building=model.createResource(uri+buildingName);
        
@@ -37,14 +37,21 @@ public class MonitoredObjectDataModel {
        
        
        
-       for(int i=0;i<sensorName.size();i++)
+       //for(int i=0;i<sensorName.size();i++)
+       for(Map.Entry<String, List<String>> entry : sensor.entrySet())
        {
        
-       
-       building.addProperty(sensorProperty, 
-                                     model.createResource(uri+sensorName.get(i))
-                                              .addProperty(sensorPropertyName, sensorName.get(i))
-                                              .addProperty(objectPropertyName,objectName.get(i)));
+       List<String> monitoredObjectName=entry.getValue();
+       Resource sensorStructure=model.createResource(uri+entry.getKey());
+       building.addProperty(sensorProperty, sensorStructure);
+       //Resource sensorStructureResource=building.addProperty(sensorProperty, sensorStructure)
+       sensorStructure.addProperty(sensorPropertyName, entry.getKey());
+       for(int i=0;i<monitoredObjectName.size();i++)
+       {
+         sensorStructure.addProperty(objectPropertyName,monitoredObjectName.get(i)); 
+       }
+               
+                                              
        }
        
        
@@ -52,7 +59,7 @@ public class MonitoredObjectDataModel {
        model.write(System.out);
        try
        {
-       FileWriter fw=new FileWriter("./example/"+buildingName+".rdf");
+       FileWriter fw=new FileWriter("./example/"+buildingName+"Test.rdf");
        model.write(fw);
        }
        catch(Exception e)

@@ -5,7 +5,11 @@
  */
 package at.ac.tuwien.dsg.linkeddatamodel;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -14,7 +18,7 @@ import java.util.LinkedList;
 public class Main {
     public static void main(String []p)
     {
-        String buildingName="BuildingA";
+        /*String buildingName="BuildingA";
        LinkedList<String> sensorName=new LinkedList<String>();
        sensorName.add("SensorA");
        sensorName.add("SensorB");
@@ -24,7 +28,25 @@ public class Main {
        objectName.add("ObjectA");
        objectName.add("ObjectB");
        objectName.add("ObjectC");
-    new MonitoredObjectModel().dataModelGeneration(buildingName, sensorName, objectName);
+    new MonitoredObjectModel().dataModelGeneration(buildingName, sensorName, objectName);*/
+        
+        String uri="http://somewhere/index#";
+        String buildingName="Building B";
+        Map<String, List<String>> monitoringInformation=new HashMap<String, List<String>>();
+        
+        List<String> monitoringObject1=new ArrayList<String>();
+        monitoringObject1.add("ObjectA");
+        monitoringObject1.add("ObjectB");
+        
+        List<String> monitoringObject2=new ArrayList<String>();
+        monitoringObject2.add("ObjectA");
+        monitoringObject2.add("ObjectB");
+        
+        monitoringInformation.put("SensorA", monitoringObject1);
+        monitoringInformation.put("SensorB", monitoringObject2);
+        
+        new MonitoredObjectDataModel().dataModelGeneration(uri,buildingName,monitoringInformation); 
+        
     
     
       String sensorName1="SensorA";
