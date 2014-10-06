@@ -14,7 +14,7 @@
 /EDASICH/target/
 /EDASICH/config/
 /EDASICH/log/
-
+/EDASICH/src/main/java/at/ac/tuwien/dsg/edasich/test/
 
 
 /Utils/LeastSquareRegression/target/
