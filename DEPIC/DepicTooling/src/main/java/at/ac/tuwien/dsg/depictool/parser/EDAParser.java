@@ -22,5 +22,9 @@ public class EDAParser {
         this.edo = edo;
     }
     
+    public void parseEDA(){
+        
+    }
+    
     
 }
