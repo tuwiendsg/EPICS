@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mkyong.rest;
+package at.ac.tuwien.dsg.esperstreamprocessing.rest;
 
 /**
  *
@@ -37,7 +37,7 @@ public class EsperRESTWS {
     @Path("/{param}")
     public String printMessage(@PathParam("param") String msg) {
 
-        String log = "Restful example : " + msg;
+        String log = "DAF : " + msg;
         Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
         return log;
 
@@ -45,7 +45,7 @@ public class EsperRESTWS {
     
     @PUT
     @Path("/start")
-    @Consumes("application/xml")
+    @Consumes(MediaType.APPLICATION_XML)
     public void startEsper(String xmlString) {
         
         try {
@@ -71,7 +71,7 @@ public class EsperRESTWS {
 
     @PUT
     @Path("/stop")
-    @Consumes("application/xml")
+    @Consumes(MediaType.APPLICATION_XML)
     public void stopEsper() {
         Thread thread = null;
 
@@ -104,7 +104,7 @@ public class EsperRESTWS {
     
     @PUT
     @Path("/momconf")
-    @Consumes("application/xml")
+    @Consumes(MediaType.APPLICATION_XML)
     public void submitMOMConf(String xmltring) {
     
             System.out.println("Recieved: " + xmltring);       
@@ -116,7 +116,7 @@ public class EsperRESTWS {
     
     @PUT
     @Path("/taskdistributionconf")
-    @Consumes("application/xml")
+    @Consumes(MediaType.APPLICATION_XML)
     public void submitTaskDistributionConf(String xmltring) {
         try {
             TaskDistributionConfiguration obj = JAXBUtils.unmarshal(xmltring, TaskDistributionConfiguration.class);

@@ -1,17 +1,17 @@
-package com.mkyong.app;
+package at.ac.tuwien.dsg.esperstreamprocessing.rest;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-import com.mkyong.rest.MessageRestService;
 
-public class MessageApplication extends Application {
+
+public class EsperApplication extends Application {
 	private Set<Object> singletons = new HashSet<Object>();
 
-	public MessageApplication() {
-		singletons.add(new MessageRestService());
+	public EsperApplication() {
+		singletons.add(new EsperRESTWS());
 	}
 
 	@Override
