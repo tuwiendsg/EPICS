@@ -10,7 +10,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import java.io.FileWriter;
-import java.util.LinkedList;
+//import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -70,4 +70,25 @@ public class MonitoredObjectDataModel {
        
       
    }
+    public void dataModelGeneration(String uri,String buildingName)
+    {
+       Model model=ModelFactory.createDefaultModel();
+       Resource building=model.createResource(uri+buildingName);
+       
+       Property buildingPropertyName=model.createProperty(uri+"BuildingName");
+       building.addProperty(buildingPropertyName, buildingName); 
+       
+       model.setNsPrefix("Building", uri);
+       model.write(System.out);
+       try
+       {
+       FileWriter fw=new FileWriter("./example/"+buildingName+".rdf");
+       model.write(fw);
+       }
+       catch(Exception e)
+       {
+           System.out.println();
+       }
+       
+    }
 }

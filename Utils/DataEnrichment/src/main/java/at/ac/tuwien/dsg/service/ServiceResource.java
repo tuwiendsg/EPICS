@@ -46,9 +46,7 @@ public class ServiceResource {
     @Path("/enrichinfo/monitoringobject")
     @Produces("text/plain")
     public String getXml() {
-        //TODO return proper representation object
-        //throw new UnsupportedOperationException();
-        //String hello=new TestGet().hello();
+       
         return "Sensor 11 monitors Methane gas in block 1";
     }
     
@@ -80,13 +78,23 @@ public class ServiceResource {
     }
     
     @POST
-    @Path("/monitoringInformation")
+    @Path("/monitoringObjectInformation")
     @Consumes("text/plain")
     @Produces("text/plain")
     public LinkedList<String> postRetrieve(String subject,String predicate)
     {
-        LinkedList<String> monitoredInformation=api.addRetrieveInformation(subject,predicate);
+        LinkedList<String> monitoredInformation=api.getRetrieveInformation(subject,predicate);
         return monitoredInformation;
+    }
+    
+    @POST
+    @Path("/monitoredFacilityInformation")
+    @Consumes("text/plain")
+    @Produces("text/plain")
+    public Map<String, List<String>> postReceiveInformation(String subject, String predicate)
+    {
+        Map<String, List<String>> monitoredFacilityInformation=api.getMonitoringInformation(subject, predicate);
+        return monitoredFacilityInformation;
     }
 
     

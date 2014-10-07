@@ -18,18 +18,12 @@ import java.util.Map;
 public class Main {
     public static void main(String []p)
     {
-        /*String buildingName="BuildingA";
-       LinkedList<String> sensorName=new LinkedList<String>();
-       sensorName.add("SensorA");
-       sensorName.add("SensorB");
-       sensorName.add("SensorC");
-       
-       LinkedList<String> objectName=new LinkedList<String>();
-       objectName.add("ObjectA");
-       objectName.add("ObjectB");
-       objectName.add("ObjectC");
-    new MonitoredObjectModel().dataModelGeneration(buildingName, sensorName, objectName);*/
         
+        //for rdf model generation of a building
+        
+        String uri1="http://somewhere/index#";
+        String buildingName1="BuildingB";
+        new MonitoredObjectDataModel().dataModelGeneration(uri1,buildingName1); 
         
         //for rdf data model generation
         String uri="http://somewhere/index#";
@@ -71,8 +65,20 @@ public class Main {
         }
 	
     
-    
-     
+       //for data about monitored object extraction
+        
+        String subject1="http://somewhere/index#SensorA";
+        String predicate1="MonitoredObjectName";
+        Map<String, List<String>> monitoredInformation=new ObjectMonitor().monitoredObjectInformation(subject1, predicate1);
+        
+       for(Map.Entry<String, List<String>> entry : monitoredInformation.entrySet() )
+       {
+           System.out.println("Object Name : "+entry.getKey());
+           System.out.println(" Monitored Sensor Name : "+entry.getValue());
+            System.out.println("Object Name : "+entry.getKey());
+           System.out.println(" Monitored Sensor Name : "+entry.getValue());
+           
+       }
     
     
     
