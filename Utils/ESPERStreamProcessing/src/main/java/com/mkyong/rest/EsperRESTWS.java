@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package com.mkyong.rest;
 
-package at.ac.tuwien.dsg.esperstreamprocessing.entity;
-
-
-import at.ac.tuwien.dsg.edasich.configuration.MOMConfiguration;
+/**
+ *
+ * @author Jun
+ */
 import at.ac.tuwien.dsg.edasich.configuration.TaskDistributionConfiguration;
 import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
 
@@ -23,28 +24,25 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBException;
 
-/**
- * REST Web Service
- *
- * @author Jun
- */
-@Path("esper")
-public class EsperResource {
+//http://localhost:8080/RESTfulExample/rest/message/hello%20world
+@Path("/esper")
+public class EsperRESTWS {
 
-    @Context
-    private UriInfo context;
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/{param}")
+    public String printMessage(@PathParam("param") String msg) {
 
-    /**
-     * Creates a new instance of EsperResource
-     */
-    public EsperResource() {
+        String log = "Restful example : " + msg;
+        Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
+        return log;
+
     }
-
-
+    
     @PUT
     @Path("/start")
     @Consumes("application/xml")
@@ -65,7 +63,7 @@ public class EsperResource {
             Thread thread = new Thread(qc, "ESPER");
             thread.start();
         } catch (JAXBException ex) {
-            Logger.getLogger(EsperResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EsperRESTWS.class.getName()).log(Level.SEVERE, null, ex);
         }
     
                 }
@@ -91,15 +89,15 @@ public class EsperResource {
 
     @PUT
     @Path("/dataassetfunction")
-    @Consumes("application/xml")
+    @Consumes(MediaType.APPLICATION_XML)
     public void submitDataAssetFunction(String dafXML) {
         try {
         String log= "Recieved:" + dafXML;
-        Logger.getLogger(EsperResource.class.getName()).log(Level.INFO, log);
+        Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
         DataAssetFunctionStreamingData daf = JAXBUtils.unmarshal(dafXML, DataAssetFunctionStreamingData.class);
         IOUtils.writeData(dafXML, daf.getDaFunctionID());
         } catch (JAXBException ex) {
-            Logger.getLogger(EsperResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EsperRESTWS.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -124,8 +122,9 @@ public class EsperResource {
             TaskDistributionConfiguration obj = JAXBUtils.unmarshal(xmltring, TaskDistributionConfiguration.class);
             IOUtils.writeData(xmltring, "taskdistributionconf");
         } catch (JAXBException ex) {
-            Logger.getLogger(EsperResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EsperRESTWS.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
+
 }
