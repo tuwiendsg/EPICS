@@ -21,7 +21,7 @@ import virtuoso.jena.driver.VirtGraph;
 
 /**
  *
- * @author dsg
+ * @author Anindita
  */
 public class RDFGraphGeneration {
     public void GraphStore(String fileName,String fileURI)throws Exception 

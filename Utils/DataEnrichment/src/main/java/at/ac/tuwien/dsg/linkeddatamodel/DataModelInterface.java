@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  *
- * @author dsg
+ * @author Anindita
  */
 public class DataModelInterface {
     //for generating rdf data model only for building

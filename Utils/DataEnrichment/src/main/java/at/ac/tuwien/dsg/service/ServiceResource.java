@@ -23,7 +23,7 @@ import javax.ws.rs.Produces;
 /**
  * REST Web Service
  *
- * @author dsg
+ * @author Anindita
  */
 @Path("service")
 public class ServiceResource {

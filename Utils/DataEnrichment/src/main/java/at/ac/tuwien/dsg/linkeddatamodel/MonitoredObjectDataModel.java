@@ -10,13 +10,12 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import java.io.FileWriter;
-//import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 /**
  *
- * @author dsg
+ * @author Anindita
  */
 public class MonitoredObjectDataModel {
     public void dataModelGeneration(String uri,String buildingName, Map<String, List<String>> sensor)
