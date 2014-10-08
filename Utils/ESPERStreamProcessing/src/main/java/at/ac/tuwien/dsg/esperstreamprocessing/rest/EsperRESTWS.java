@@ -76,7 +76,7 @@ public class EsperRESTWS {
             Thread thread = new Thread(qc, "ESPER");
             thread.start();
         } catch (JAXBException ex) {
-            Logger.getLogger(EsperRESTWS.class.getName()).log(Level.SEVERE, null, ex);
+           // Logger.getLogger(EsperRESTWS.class.getName()).log(Level.SEVERE, null, ex);
         }
     
                 }
@@ -106,11 +106,11 @@ public class EsperRESTWS {
     public void submitDataAssetFunction(String dafXML) {
         try {
         String log= "Recieved:" + dafXML;
-        Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
+       Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
         DataAssetFunctionStreamingData daf = JAXBUtils.unmarshal(dafXML, DataAssetFunctionStreamingData.class);
         IOUtils.writeData(dafXML, daf.getDaFunctionID());
         } catch (JAXBException ex) {
-            Logger.getLogger(EsperRESTWS.class.getName()).log(Level.SEVERE, null, ex);
+           // Logger.getLogger(EsperRESTWS.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

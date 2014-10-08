@@ -17,7 +17,10 @@ import at.ac.tuwien.dsg.edasich.streamprocessing.entity.event.SensorEvent;
 
 import at.ac.tuwien.dsg.edasich.entity.stream.EventPattern;
 import at.ac.tuwien.dsg.edasich.entity.stream.Task;
+import at.ac.tuwien.dsg.esperstreamprocessing.handler.SensorEventHandler;
+import at.ac.tuwien.dsg.esperstreamprocessing.utils.Configuration;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.IOUtils;
+import at.ac.tuwien.dsg.esperstreamprocessing.utils.RestHttpClient;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -26,12 +29,16 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 /**
  *
@@ -73,12 +80,11 @@ public class EventSubscriber implements StatementSubscriber {
         }
 
         sb.append("\n--------------------------------------------------");
-        SensorEvent val1 = (SensorEvent) eventMap.get("val1");
-        SensorEvent val2 = (SensorEvent) eventMap.get("val2");
+
 
 // enrich data - monitoring object specified enrich info by  developer
-        System.out.println(sb.toString());
-        
+     
+        Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, sb.toString());
         forwardTask();
 
     }
@@ -89,26 +95,20 @@ public class EventSubscriber implements StatementSubscriber {
         
         if (task != null) {
 
-            if (sendTaskPermission()) {
-                task.setTaskID(String.valueOf(System.nanoTime()));
-                
-                int taskID = Integer.parseInt(task.getTaskID());
-                String taskName = task.getTaskName();
-                String tag = task.getTag();
-                String content = task.getTaskContent();
-               
-                
-                SalamTask sTask = new SalamTask(taskID, taskName, content, tag, SalamTask.SeverityLevel.valueOf(tag));
-               
-                logTask(task);
-                
-                System.out.println("Forward Task !");
-              
+            List<NameValuePair> paramList = new ArrayList<NameValuePair>();
+            paramList.add(new BasicNameValuePair("name", task.getName()));
+            paramList.add(new BasicNameValuePair("content", task.getContent()));
+            paramList.add(new BasicNameValuePair("tag", task.getTag()));
+            paramList.add(new BasicNameValuePair("severity", task.getSeverity().name()));
 
-            } else {
-                System.out.println("Duplications of Pattern within Interval Time !");
-            }
+            String ip = Configuration.getConfiguration("SALAM.IP");
+            String port = Configuration.getConfiguration("SALAM.PORT");
+            String resouce = Configuration.getConfiguration("SALAM.RESOURCE");
 
+            RestHttpClient ws = new RestHttpClient(ip, port, resouce);
+            ws.callPostMethod(paramList);
+            System.out.println("Forward Task !");
+            Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, "Forward Task !" + paramList.toString());
         }
     }
 
@@ -139,26 +139,7 @@ public class EventSubscriber implements StatementSubscriber {
         return task;
     }
 
-    private boolean sendTaskPermission() {
-        boolean permission = true;
 
-        Task task = getLogTask();
-        if (task != null) {
-
-            long previousTime = Long.parseLong(task.getTaskID());
-            long currentTime = System.nanoTime();
-            double different = ((currentTime - previousTime) / Math.pow(10, 6));
-            double waitingTime = 15000;
-            System.out.println("Interval time: " + waitingTime);
-            System.out.println("Remaining time: " + different);
-            if (different < waitingTime) {
-                permission = false;
-            }
-
-        } 
-
-        return permission;
-    }
     
     
 

@@ -49,6 +49,15 @@ public class Task {
         this.severity = severity;
     }
 
+    public Task(String name, String content, String tag, SeverityLevel severity) {
+        this.name = name;
+        this.content = content;
+        this.tag = tag;
+        this.severity = severity;
+    }
+    
+    
+
     public Integer getId() {
         return id;
     }

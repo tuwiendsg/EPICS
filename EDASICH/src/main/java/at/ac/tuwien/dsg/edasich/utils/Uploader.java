@@ -5,6 +5,7 @@
  */
 package at.ac.tuwien.dsg.edasich.utils;
 
+import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -107,9 +109,7 @@ public class Uploader extends HttpServlet {
                         reader.close();
                         String log = "file name: " + name + " - content: " + out.toString();
                         
-                        
-                        
-                        
+                        IOUtils.writeData(out.toString(), name);
                         Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
 
                     } else {

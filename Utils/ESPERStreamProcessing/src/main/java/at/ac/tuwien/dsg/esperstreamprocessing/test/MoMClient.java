@@ -16,6 +16,7 @@ import java.io.StringReader;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.logging.Logger;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
@@ -40,7 +41,7 @@ public class MoMClient {
     private String url;
     private String subject;
     private int limit;
- 
+    private Logger logger;
     
     
     public void run() {
@@ -138,6 +139,7 @@ public class MoMClient {
         url = "tcp://128.130.172.216:9124";
         subject = "DB_LOG";
         limit = 1000000;
+        logger = Logger.getLogger(this.getClass().getName());
     }
     
     

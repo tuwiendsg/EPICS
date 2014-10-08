@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Random;
+import java.util.logging.Logger;
 import javax.jms.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -41,6 +42,7 @@ public class QueueClient implements Runnable {
     private String subject;
     private int limit;
     private SensorEventHandler sensorEventHandler;
+
 
     public QueueClient() {
      
@@ -134,6 +136,7 @@ public class QueueClient implements Runnable {
         url = "tcp://" + Configuration.getConfig("MOM.IP") + ":" + Configuration.getConfig("MOM.PORT");
         subject = Configuration.getConfig("MOM.QUEUE_NAME");
         limit = Integer.parseInt(Configuration.getConfig("MESSAGE.LIMIT"));
+        
     }
     
     public void configureDataAssetFunction(DataAssetFunctionStreamingData daf){

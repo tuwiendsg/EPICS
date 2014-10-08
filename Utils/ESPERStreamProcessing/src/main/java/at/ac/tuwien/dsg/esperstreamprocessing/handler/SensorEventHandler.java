@@ -17,12 +17,15 @@ import at.ac.tuwien.dsg.edasich.entity.stream.EventPattern;
 import at.ac.tuwien.dsg.esperstreamprocessing.entity.EventSubscriber;
 import at.ac.tuwien.dsg.esperstreamprocessing.entity.SensorEvent;
 import at.ac.tuwien.dsg.esperstreamprocessing.entity.StatementSubscriber;
+import at.ac.tuwien.dsg.esperstreamprocessing.rest.EsperRESTWS;
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SensorEventHandler {
     
@@ -30,12 +33,15 @@ public class SensorEventHandler {
     private List<StatementSubscriber> listOfEventSubscribers;
     private List<EventPattern> listOfEventPatterns;
     private EPServiceProvider epService;
-
+ 
+    
+    
     public SensorEventHandler() {
     }
 
     public SensorEventHandler(List<EventPattern> listOfEventPatterns) {
         this.listOfEventPatterns = listOfEventPatterns;
+      
     }
 
     public void initService() {
@@ -69,7 +75,8 @@ public class SensorEventHandler {
 
     public void handle(SensorEvent event) {
 
-        System.out.println(event.toString());
+        Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, event.toString());
+        //System.out.println(event.toString());
         epService.getEPRuntime().sendEvent(event);
 
     }
@@ -77,7 +84,7 @@ public class SensorEventHandler {
    
     public void afterPropertiesSet() {
         
-        System.out.println("Configuring..");
+        Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, "Configuring..");
         initService();
     }
     

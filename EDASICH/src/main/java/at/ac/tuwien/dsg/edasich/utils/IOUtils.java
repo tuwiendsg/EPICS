@@ -19,8 +19,8 @@ public class IOUtils {
 
     public static void writeData(String data, String fileName) {
 
-        //String tomcatTempFolder = System.getProperty("java.io.tmpdir");
-        String tomcatTempFolder="/Volumes/DATA/BigData";
+        String tomcatTempFolder = System.getProperty("java.io.tmpdir");
+        //String tomcatTempFolder="/Volumes/DATA/BigData";
         fileName =  tomcatTempFolder +"/" + fileName;
         FileWriter fstream;
         try {
@@ -35,8 +35,8 @@ public class IOUtils {
 
     public static String readData(String fileName) {
 
-        //String tomcatTempFolder = System.getProperty("java.io.tmpdir");
-        String tomcatTempFolder="/Volumes/DATA/BigData";
+        String tomcatTempFolder = System.getProperty("java.io.tmpdir");
+        //String tomcatTempFolder="/Volumes/DATA/BigData";
         fileName =  tomcatTempFolder +"/" + fileName;
         String data = "";
         try {

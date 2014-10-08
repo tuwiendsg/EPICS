@@ -4,8 +4,9 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.edasich.utils;
+package at.ac.tuwien.dsg.esperstreamprocessing.utils;
 
+import at.ac.tuwien.dsg.esperstreamprocessing.handler.SensorEventHandler;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
@@ -27,14 +28,14 @@ public class RestfulWSClient {
     private String port;
     private String resource;
     private String url;
-    private Logger logger;
+
 
     public RestfulWSClient(String ip, String port, String resource) {
         this.ip = ip;
         this.port = port;
         this.resource = resource;
         url = "http://" + ip + ":" + port + resource;
-        logger = Logger.getLogger(this.getClass().getName());
+ 
     }
 
     public CloseableHttpClient getHttpClient() {
@@ -86,8 +87,9 @@ public class RestfulWSClient {
 
             //HttpGet method = new HttpGet(url);
             StringEntity inputKeyspace = new StringEntity(xmlString);
-            logger.log(Level.INFO, "Connection .. " + url);
-     
+  
+      
+         //   Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO,  "Connection .. " + url);
             HttpPut request = new HttpPut(url);
             request.addHeader("content-type", "application/xml; charset=utf-8");
             request.addHeader("Accept", "application/xml, multipart/related");
@@ -97,8 +99,8 @@ public class RestfulWSClient {
 
             int statusCode = methodResponse.getStatusLine().getStatusCode();
 
-            logger.log(Level.INFO, "Status Code: " + statusCode);
-
+        //    Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, "Status Code: " + statusCode);
+      
             BufferedReader rd = new BufferedReader(
                     new InputStreamReader(methodResponse.getEntity().getContent()));
 
@@ -127,9 +129,8 @@ public class RestfulWSClient {
             //HttpPut request = new HttpPut(url);
             
             HttpPost request=new HttpPost(url);
-            request.addHeader("content-type", "application/json");
-          // request.addHeader("content-type", "application/x-www-form-urlencoded");
-      
+     
+            request.addHeader("content-type", "application/json; charset=utf-8");
            // request.addHeader("Accept", "application/json, multipart/related");
             request.setEntity(inputKeyspace);
 
@@ -147,9 +148,9 @@ public class RestfulWSClient {
                 result.append(line);
             }
 
-             System.out.println("Response String: " + result.toString());
+            // System.out.println("Response String: " + result.toString());
         } catch (Exception ex) {
-             System.out.println("Exception: " + ex.toString());
+
         }
 
     }

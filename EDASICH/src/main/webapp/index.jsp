@@ -19,13 +19,7 @@
         <h3>EDASICH</h3>
         <form action="Uploader" method="post" enctype="multipart/form-data"> <br>
             <table border="0">
-                <tr>
-                    <td>Type</td>
-                    <td><select name="dafType">
-                            <option value="stream" selected>Streaming Data</option>
-                            <option value="batch">Batch Data</option>
-                        </select></td> 
-                </tr>
+                
                 <tr>
                     <td>Data Asset Function</td>
                     <td><input type="file" name="file" /></td> 
