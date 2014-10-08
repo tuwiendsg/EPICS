@@ -11,17 +11,19 @@
 /DEPIC/DepicTooling/src/main/java/at/ac/tuwien/dsg/depictool/demo/
 /DEPIC/TestMOMConnector/nbproject/private/
 
+/EDASICH/src/main/webapp/WEB-INF/config.properties
 /EDASICH/target/
 /EDASICH/config/
 /EDASICH/log/
 /EDASICH/src/main/java/at/ac/tuwien/dsg/edasich/test/
-
+/EDASICH/log/
 
 /Utils/LeastSquareRegression/target/
 /Utils/Sampling/target/
 /Utils/ESPERStreamProcessing/target/
 /Utils/ESPERStreamProcessings/src/main/java/at/ac/tuwien/dsg/esperstreamprocessing/test/
 /Utils/ESPERStreamProcessings/config/
+/Utils/ESPERStreamProcessing/src/main/webapp/WEB-INF/config.properties
 /Utils/DataEnrichment/target/
 /Utils/DataEnrichment/src/main/java/Test/
 
