@@ -106,8 +106,21 @@ public class Uploader extends HttpServlet {
 
                         reader.close();
                         String log = "file name: " + name + " - content: " + out.toString();
+                        
+                        
+                        
+                        
                         Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
 
+                    } else {
+                        
+                        String fieldname = item.getFieldName();
+                        String fieldvalue = item.getString();
+             
+                        
+                        // String log = "att name: " + fieldname + " - value: " + fieldvalue;
+                        // Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
+                        
                     }
                 }
 
@@ -122,8 +135,7 @@ public class Uploader extends HttpServlet {
                     "Sorry this Servlet only handles file upload request");
         }
         
-        
-        
+        response.sendRedirect("analytic.jsp");
     }
 
     /**

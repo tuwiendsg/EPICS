@@ -1,47 +1,36 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package at.ac.tuwien.dsg.edasich.entity.stream;
+package at.ac.tuwien.dsg.esperstreamprocessing.entity;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 
-/**
- *
- * @author Jun
- */
-@XmlRootElement(name = "Task")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class Task {
+@ApiModel(value = "Task", description = "Task representation")
+public class SalamTask {
     
-    @XmlElement(name = "taskID", required = true)
+    @ApiModelProperty(value = "Task's id", required = true)
     private Integer id;
 
-    @XmlElement(name = "taskName", required = true)
+    @ApiModelProperty(value = "Task's name", required = true)
     private String name;
 
-    @XmlElement(name = "taskContent", required = true)
+    @ApiModelProperty(value = "Task's content", required = true)
     private String content;
 
-    @XmlElement(name = "tag", required = true)
+    @ApiModelProperty(value = "Task's tag, e.g., a category", required = true)
     private String tag; 
 
-    @XmlElement(name = "severity", required = true)
+    @ApiModelProperty(value = "Task's severity", required = true)
     private SeverityLevel severity;
 
     public enum SeverityLevel {
         NOTICE, WARNING, CRITICAL, ALERT, EMERGENCY
     }
-    
-   
-    public Task() {
+
+    public SalamTask() {
     }
 
-    public Task(Integer id, String name, String content, String tag, SeverityLevel severity) {
+    public SalamTask(Integer id, String name, String content,
+            String tag, SeverityLevel severity) {
+        super();
         this.id = id;
         this.name = name;
         this.content = content;
@@ -89,6 +78,4 @@ public class Task {
         this.severity = severity;
     }
 
-    
-   
 }

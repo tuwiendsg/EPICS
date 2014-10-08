@@ -20,7 +20,8 @@ public class IOUtils {
     
     public static void writeData(String data,String fileName){
      
-        
+        String tomcatTempFolder = System.getProperty("java.io.tmpdir");
+        fileName =  tomcatTempFolder +"/" + fileName;
         FileWriter fstream;
         try {
             fstream = new FileWriter(fileName, false);
@@ -35,6 +36,8 @@ public class IOUtils {
     
     public static String readData(String fileName) {
 
+        String tomcatTempFolder = System.getProperty("java.io.tmpdir");
+        fileName =  tomcatTempFolder +"/" + fileName;
         String data = "";
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));

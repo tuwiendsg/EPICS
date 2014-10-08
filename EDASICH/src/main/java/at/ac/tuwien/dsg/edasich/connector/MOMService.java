@@ -5,7 +5,7 @@
  */
 package at.ac.tuwien.dsg.edasich.connector;
 
-import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
+import at.ac.tuwien.dsg.edasich.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.edasich.configuration.AnalyticEngineConfiguration;
 import at.ac.tuwien.dsg.edasich.configuration.Configuration;
 import at.ac.tuwien.dsg.edasich.utils.JAXBUtils;
@@ -34,7 +34,7 @@ public class MOMService {
             RestfulWSClient restClient = new RestfulWSClient(daasIP, daasPort, daasAPI);      
             String sensorsXML = JAXBUtils.marshal(sensors, Sensors.class);
             
-            restClient.callRestfulWebService(sensorsXML);
+            restClient.callPutMethod(sensorsXML);
         } catch (JAXBException ex) {
             Logger.getLogger(MOMService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -49,7 +49,7 @@ public class MOMService {
             RestfulWSClient restClient = new RestfulWSClient(daasIP, daasPort, daasAPI);      
             String sensorsXML = JAXBUtils.marshal(sensors, Sensors.class);
             
-            restClient.callRestfulWebService(sensorsXML);
+            restClient.callPutMethod(sensorsXML);
         } catch (JAXBException ex) {
             Logger.getLogger(MOMService.class.getName()).log(Level.SEVERE, null, ex);
         }

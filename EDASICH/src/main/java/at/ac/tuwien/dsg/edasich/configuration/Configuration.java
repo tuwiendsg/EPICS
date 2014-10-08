@@ -9,7 +9,7 @@ package at.ac.tuwien.dsg.edasich.configuration;
  *
  * @author Jun
  */
-import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
+import at.ac.tuwien.dsg.edasich.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.edasich.utils.JAXBUtils;
 import at.ac.tuwien.dsg.edasich.utils.MySqlConnectionManager;
 import java.io.FileInputStream;
@@ -176,7 +176,7 @@ public class Configuration {
             AnalyticEngineConfiguration aec = getAnalyticEngineConfiguration(analyticEngineID);
             RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/momconf");
             String xmlStr = JAXBUtils.marshal(momConf, MOMConfiguration.class);
-            restClient.callRestfulWebService(xmlStr);
+            restClient.callPutMethod(xmlStr);
         } catch (JAXBException ex) {
        
         }    
@@ -195,7 +195,7 @@ public class Configuration {
             AnalyticEngineConfiguration aec = getAnalyticEngineConfiguration(analyticEngineID);
             RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/taskdistributionconf");
             String xmlStr = JAXBUtils.marshal(taskDConf, TaskDistributionConfiguration.class);
-            restClient.callRestfulWebService(xmlStr);
+            restClient.callPutMethod(xmlStr);
         } catch (JAXBException ex) {
        
         }    

@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jun
  */
-@XmlRootElement(name = "EventPattern")
+@XmlRootElement(name = "Sensors")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Sensors {
     

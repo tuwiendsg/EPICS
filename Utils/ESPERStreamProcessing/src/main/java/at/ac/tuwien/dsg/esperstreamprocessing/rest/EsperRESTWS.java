@@ -36,9 +36,17 @@ public class EsperRESTWS {
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/{param}")
     public String printMessage(@PathParam("param") String msg) {
-
+        
+        String tempdir = System.getProperty("java.io.tmpdir");
+        
+        Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, tempdir);
         String log = "DAF : " + msg;
+        
         Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
+        
+        
+        
+        
         return log;
 
     }
@@ -49,13 +57,18 @@ public class EsperRESTWS {
     public void startEsper(String xmlString) {
         
         try {
-            System.out.println("Recieved:" + xmlString);
-            
+     
+            String log = "Recieved:" + xmlString;
+            Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
             String xmlData = IOUtils.readData(xmlString);
-            System.out.println(""+xmlData);
+            
+            Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, xmlData);
+            
             DataAssetFunctionStreamingData daf=null;
             daf = JAXBUtils.unmarshal(xmlData, DataAssetFunctionStreamingData.class);
-            System.out.println("" + daf.getDaFunctionName());
+      
+            log = daf.getDaFunctionName();
+            Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, xmlData);
             
             QueueClient qc = new QueueClient();
             qc.configureDataAssetFunction(daf);

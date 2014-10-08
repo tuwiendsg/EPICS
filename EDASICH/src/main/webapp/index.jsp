@@ -1,3 +1,12 @@
+<%-- 
+    Document   : index
+    Created on : Oct 8, 2014, 6:30:11 AM
+    Author     : Jun
+--%>
+
+<%@page import="java.util.logging.Level"%>
+<%@page import="java.util.logging.Logger"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -5,6 +14,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
+        
+        <% Logger logger=Logger.getLogger(this.getClass().getName());%>
         <h3>EDASICH</h3>
         <form action="Uploader" method="post" enctype="multipart/form-data"> <br>
             <table border="0">
@@ -22,13 +33,13 @@
 
                 <tr>
                     <td></td>
-                    <td><input type="submit" /></td> 
+                    <td><input type="submit" name="submit"/></td> 
                 </tr>
+
             </table>
         </form>
-
-
-
-
+        
+     
+      
     </body>
 </html>

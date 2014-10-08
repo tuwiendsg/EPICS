@@ -91,6 +91,15 @@ public class EventSubscriber implements StatementSubscriber {
 
             if (sendTaskPermission()) {
                 task.setTaskID(String.valueOf(System.nanoTime()));
+                
+                int taskID = Integer.parseInt(task.getTaskID());
+                String taskName = task.getTaskName();
+                String tag = task.getTag();
+                String content = task.getTaskContent();
+               
+                
+                SalamTask sTask = new SalamTask(taskID, taskName, content, tag, SalamTask.SeverityLevel.valueOf(tag));
+               
                 logTask(task);
                 
                 System.out.println("Forward Task !");
@@ -139,7 +148,7 @@ public class EventSubscriber implements StatementSubscriber {
             long previousTime = Long.parseLong(task.getTaskID());
             long currentTime = System.nanoTime();
             double different = ((currentTime - previousTime) / Math.pow(10, 6));
-            double waitingTime = eventPattern.getIntervalTime();
+            double waitingTime = 15000;
             System.out.println("Interval time: " + waitingTime);
             System.out.println("Remaining time: " + different);
             if (different < waitingTime) {

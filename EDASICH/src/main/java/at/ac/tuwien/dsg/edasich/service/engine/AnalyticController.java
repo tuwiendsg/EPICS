@@ -6,7 +6,7 @@
 
 package at.ac.tuwien.dsg.edasich.service.engine;
 
-import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
+
 import at.ac.tuwien.dsg.edasich.configuration.AnalyticEngineConfiguration;
 import at.ac.tuwien.dsg.edasich.configuration.Configuration;
 import at.ac.tuwien.dsg.edasich.configuration.MOMConfiguration;
@@ -16,6 +16,7 @@ import at.ac.tuwien.dsg.edasich.connector.Sensors;
 import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
 import at.ac.tuwien.dsg.edasich.entity.stream.EventPattern;
 import at.ac.tuwien.dsg.edasich.utils.JAXBUtils;
+import at.ac.tuwien.dsg.edasich.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.edasich.utils.TextParser;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,13 +41,13 @@ public class AnalyticController {
     public void startAnalyticEngine(String analyticEngineID, String daf) {
         AnalyticEngineConfiguration aec = Configuration.getAnalyticEngineConfiguration(analyticEngineID);
         RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/start");
-        restClient.callRestfulWebService(daf);
+        restClient.callPutMethod(daf);
     }
     
     public void stopAnalyticEngine(String analyticEngineID){
         AnalyticEngineConfiguration aec = Configuration.getAnalyticEngineConfiguration(analyticEngineID);
         RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/stop");
-        restClient.callRestfulWebService("");
+        restClient.callPutMethod("");
     }
     
     public void submitDataAssetFunctionStreamingData(String analyticEngineID, DataAssetFunctionStreamingData daf) {
@@ -55,7 +56,7 @@ public class AnalyticController {
             AnalyticEngineConfiguration aec = Configuration.getAnalyticEngineConfiguration(analyticEngineID);
             RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/dataassetfunction");
             String dafXML = JAXBUtils.marshal(daf, DataAssetFunctionStreamingData.class);
-            restClient.callRestfulWebService(dafXML);
+            restClient.callPutMethod(dafXML);
         } catch (JAXBException ex) {
        
         }    

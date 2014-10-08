@@ -4,11 +4,12 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.common.utils;
+package at.ac.tuwien.dsg.edasich.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -74,7 +75,7 @@ public class RestfulWSClient {
     
     
 
-    public void callRestfulWebService(String xmlString) {
+    public void callPutMethod(String xmlString) {
 
         try {
             
@@ -107,4 +108,44 @@ public class RestfulWSClient {
         }
 
     }
+    
+    
+    public void callPostMethod(String xmlString) {
+
+        try {
+            
+
+            //HttpGet method = new HttpGet(url);
+            StringEntity inputKeyspace = new StringEntity(xmlString);
+            System.out.println("Connection .. " + url);
+            //HttpPut request = new HttpPut(url);
+            
+            HttpPost request=new HttpPost(url);
+     
+            request.addHeader("content-type", "application/xml; charset=utf-8");
+            request.addHeader("Accept", "application/xml, multipart/related");
+            request.setEntity(inputKeyspace);
+
+            HttpResponse methodResponse = this.getHttpClient().execute(request);
+
+            int statusCode = methodResponse.getStatusLine().getStatusCode();
+
+            System.out.println("Status Code: " + statusCode);
+            BufferedReader rd = new BufferedReader(
+                    new InputStreamReader(methodResponse.getEntity().getContent()));
+
+            StringBuilder result = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                result.append(line);
+            }
+
+            // System.out.println("Response String: " + result.toString());
+        } catch (Exception ex) {
+
+        }
+
+    }
+    
+    
 }

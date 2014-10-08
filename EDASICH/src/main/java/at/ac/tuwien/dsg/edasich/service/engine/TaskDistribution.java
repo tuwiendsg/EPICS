@@ -6,7 +6,7 @@
 
 package at.ac.tuwien.dsg.edasich.service.engine;
 
-import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
+import at.ac.tuwien.dsg.edasich.utils.RestfulWSClient;
 
 import at.ac.tuwien.dsg.edasich.configuration.Configuration;
 import at.ac.tuwien.dsg.edasich.entity.stream.Task;
@@ -31,7 +31,7 @@ public class TaskDistribution {
             RestfulWSClient restClient = new RestfulWSClient(salamIp, salamPort, salamApi);
             String taskXML = JAXBUtils.marshal(task, Task.class);
             
-            restClient.callRestfulWebService(taskXML);
+            restClient.callPutMethod(taskXML);
         } catch (JAXBException ex) {
             Logger.getLogger(TaskDistribution.class.getName()).log(Level.SEVERE, null, ex);
         }
