@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.linkeddatamodel;
+package com.mkyong.app;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -20,16 +20,22 @@ import virtuoso.jena.driver.VirtuosoQueryExecutionFactory;
  *
  * @author Anindita
  */
-public class DataModelManipulation {
-    public LinkedList<String> queryResult(String subject1,String predicate1)
+public class DataModelManipulation1 {
+    public LinkedList<String> queryResult(String subject2)
     {
         
         LinkedList<String> monitoringInformation=new LinkedList<String>();
-        String storageName=new StringTokenizer(subject1,"#").nextToken();
+        LinkedList<String> monitoringPredicatParameter=new LinkedList<String>();
+        //String storageName=new StringTokenizer(subject1,"#").nextToken();
+        String storageName="http://somewhere/index";
+        String subject1=storageName+"#"+subject2;
+        String predicate1="MonitoredObjectInformation";
+        
+        String predicate3="SensorLocation";
         
         Query sparql = QueryFactory.create("SELECT ?s ?p ?o FROM <"+storageName+"> WHERE { ?s ?p ?o }");
         
-        String url="jdbc:virtuoso://localhost:1111";
+        String url="jdbc:virtuoso://128.130.172.230:1111";
         VirtGraph graph=new VirtGraph(storageName,url,"dba","dba");
         if(graph.isEmpty())
             {
@@ -41,16 +47,32 @@ public class DataModelManipulation {
                 VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (sparql, graph);
 
                 Node subjectNode=Node.createURI(subject1);
-                Node predicateNode=Node.createURI(predicate1);
-                ExtendedIterator iter=graph.find(subjectNode, predicateNode, Node.ANY);
+                //Node predicateNode=Node.createURI(predicate1);
+                //ExtendedIterator iter=graph.find(subjectNode, predicateNode, Node.ANY);
+                ExtendedIterator iter=graph.find(subjectNode, Node.ANY, Node.ANY);
                 for(;iter.hasNext();)
                     {
 
                         Triple tr=(Triple)iter.next();
+                        String predicate=tr.getPredicate().toString();
+                        monitoringInformation.add(predicate);
+                        System.out.println("predicate="+predicate);
                         String object=tr.getObject().toString();
                         monitoringInformation.add(object);
                         System.out.println("object="+object);
                     }
+          
+        
+                /*Node predicateNode3=Node.createURI(predicate3);
+                ExtendedIterator iter3=graph.find(subjectNode, predicateNode3, Node.ANY);
+                for(;iter3.hasNext();)
+                    {
+
+                        Triple tr=(Triple)iter.next();
+                        String Location=tr.getObject().toString();
+                        monitoringInformation.add(Location);
+                        System.out.println("Location="+Location);
+                    }*/
         }
         	
         return monitoringInformation;

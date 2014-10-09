@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.linkeddatamodel;
+package com.mkyong.app;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -39,7 +39,7 @@ public class RDFGraphGeneration {
         
         
         //store the generated graph in virtuous storage
-        String url="jdbc:virtuoso://localhost:1111";
+        String url="jdbc:virtuoso://128.130.172.230:1111";
         VirtGraph virtgraph=new VirtGraph(fileURI,url,"dba","dba");
          if(!virtgraph.isEmpty())
             {

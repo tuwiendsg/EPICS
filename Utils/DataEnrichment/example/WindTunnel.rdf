@@ -1,7 +1,7 @@
 <rdf:RDF
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:Building="http://somewhere/index#" > 
-  <rdf:Description rdf:about="http://somewhere/index#BuildingB">
-    <Building:BuildingName>BuildingB</Building:BuildingName>
+  <rdf:Description rdf:about="http://somewhere/index#WindTunnel">
+    <Building:BuildingName>WindTunnel</Building:BuildingName>
   </rdf:Description>
 </rdf:RDF>

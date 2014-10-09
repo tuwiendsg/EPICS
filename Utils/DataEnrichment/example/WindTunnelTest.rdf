@@ -1,0 +1,88 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:Building="http://somewhere/index#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" > 
+  <rdf:Description rdf:about="http://somewhere/index#Metanol">
+    <rdfs:seeAlso>http://monitoredobject</rdfs:seeAlso>
+    <Building:MonitoredObjectName>Metanol</Building:MonitoredObjectName>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://somewhere/index#Ammonia">
+    <rdfs:seeAlso>http://monitoredobject</rdfs:seeAlso>
+    <Building:MonitoredObjectName>Ammonia</Building:MonitoredObjectName>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://somewhere/index#Benze">
+    <rdfs:seeAlso>http://monitoredobject</rdfs:seeAlso>
+    <Building:MonitoredObjectName>Benze</Building:MonitoredObjectName>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://somewhere/index#Sensor2">
+    <Building:MonitoredObjectInformation rdf:resource="http://somewhere/index#Carbonmonooxide"/>
+    <Building:MonitoredObjectInformation rdf:resource="http://somewhere/index#Metanol"/>
+    <Building:MonitoredObjectInformation rdf:resource="http://somewhere/index#Methane"/>
+    <Building:MonitoredObjectInformation rdf:resource="http://somewhere/index#Ethylene"/>
+    <Building:SensorLocation>Sile No.2</Building:SensorLocation>
+    <geo:long>7.1</geo:long>
+    <geo:lat>8.11</geo:lat>
+    <rdfs:seeAlso>http://sensorName</rdfs:seeAlso>
+    <Building:SensorName>Sensor2</Building:SensorName>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://somewhere/index#Acetone">
+    <rdfs:seeAlso>http://monitoredobject</rdfs:seeAlso>
+    <Building:MonitoredObjectName>Acetone</Building:MonitoredObjectName>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://somewhere/index#Ethylene">
+    <rdfs:seeAlso>http://monitoredobject</rdfs:seeAlso>
+    <Building:MonitoredObjectName>Ethylene</Building:MonitoredObjectName>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://somewhere/index#Carbonmonooxide">
+    <rdfs:seeAlso>http://monitoredobject</rdfs:seeAlso>
+    <Building:MonitoredObjectName>Carbonmonooxide</Building:MonitoredObjectName>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://somewhere/index#WindTunnel">
+    <Building:SensorInformation rdf:resource="http://somewhere/index#Sensor1"/>
+    <Building:SensorInformation rdf:resource="http://somewhere/index#Sensor2"/>
+    <Building:SensorInformation rdf:resource="http://somewhere/index#Sensor3"/>
+    <geo:long>6.78</geo:long>
+    <geo:lat>8.90</geo:lat>
+    <Building:BuildingName>WindTunnel</Building:BuildingName>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://somewhere/index#Sensor3">
+    <Building:MonitoredObjectInformation rdf:resource="http://somewhere/index#Toluene"/>
+    <Building:MonitoredObjectInformation rdf:resource="http://somewhere/index#Benze"/>
+    <Building:MonitoredObjectInformation rdf:resource="http://somewhere/index#Methane"/>
+    <Building:MonitoredObjectInformation rdf:resource="http://somewhere/index#Ethylene"/>
+    <Building:SensorLocation>Sile No.3</Building:SensorLocation>
+    <geo:long>7.0</geo:long>
+    <geo:lat>8.01</geo:lat>
+    <rdfs:seeAlso>http://sensorName</rdfs:seeAlso>
+    <Building:SensorName>Sensor3</Building:SensorName>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://somewhere/index#Toluene">
+    <rdfs:seeAlso>http://monitoredobject</rdfs:seeAlso>
+    <Building:MonitoredObjectName>Toluene</Building:MonitoredObjectName>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://somewhere/index#Sensor1">
+    <Building:MonitoredObjectInformation rdf:resource="http://somewhere/index#Ammonia"/>
+    <Building:MonitoredObjectInformation rdf:resource="http://somewhere/index#Acetone"/>
+    <Building:MonitoredObjectInformation rdf:resource="http://somewhere/index#Methane"/>
+    <Building:MonitoredObjectInformation rdf:resource="http://somewhere/index#Butanol"/>
+    <Building:SensorName>Sensor1</Building:SensorName>
+    <geo:long>7.2</geo:long>
+    <geo:lat>8.209999999999999</geo:lat>
+    <Building:SensorLocation>Sile No.1</Building:SensorLocation>
+    <rdfs:seeAlso>http://sensorName</rdfs:seeAlso>
+    <Building:MonitoredObjectInformation rdf:resource="http://somewhere/index#Acetal dehyde"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://somewhere/index#Acetal dehyde">
+    <rdfs:seeAlso>http://monitoredobject</rdfs:seeAlso>
+    <Building:MonitoredObjectName>Acetal dehyde</Building:MonitoredObjectName>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://somewhere/index#Butanol">
+    <rdfs:seeAlso>http://monitoredobject</rdfs:seeAlso>
+    <Building:MonitoredObjectName>Butanol</Building:MonitoredObjectName>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://somewhere/index#Methane">
+    <rdfs:seeAlso>http://monitoredobject</rdfs:seeAlso>
+    <Building:MonitoredObjectName>Methane</Building:MonitoredObjectName>
+  </rdf:Description>
+</rdf:RDF>
