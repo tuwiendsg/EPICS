@@ -25,7 +25,7 @@ public class EventLog {
         
         MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, database, username, password);
         
-        String sql = "Select * from Event where daf='"+dafName+"'";
+        String sql = "Select * from Event where daf='"+dafName+"' ORDER BY id DESC";
         
         ResultSet rs = connectionManager.ExecuteQuery(sql);
         

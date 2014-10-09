@@ -55,13 +55,18 @@
 
         <%
             if (request.getParameter("start") != null) {
-                logger.log(Level.INFO, "Start button pressed");
-                String dafName = request.getParameter("daf").toString();
-                String dafType = request.getParameter("engine").toString();
-                logger.log(Level.INFO, dafName + " : " + dafType);
+                    logger.log(Level.INFO, "Start button pressed");
+                    String dafName = request.getParameter("daf").toString();
 
-                String xmlData = IOUtils.readData(dafName);
-                logger.log(Level.INFO, xmlData);
+                    Cookie dafCookie = new Cookie("dafName",dafName);
+                    dafCookie.setMaxAge(60 * 60 * 24);
+                    response.addCookie(dafCookie);
+
+                    String dafType = request.getParameter("engine").toString();
+                    logger.log(Level.INFO, dafName + " : " + dafType);
+
+                    String xmlData = IOUtils.readData(dafName);
+                    logger.log(Level.INFO, xmlData);
                 DataAssetFunctionStreamingData daf = null;
                 try {
                     daf = JAXBUtils.unmarshal(xmlData, DataAssetFunctionStreamingData.class);

@@ -26,10 +26,25 @@
                 <th>EVENT</th>
                 <th>SEVERITY</th>
             </tr>
-            
+
             <%
+
+                String dafName="daf";
+                Cookie[] cookies = null;
+                cookies = request.getCookies();
+                if (cookies != null) {
+                    for (int i = 0; i < cookies.length; i++) {
+                        Cookie cookie = cookies[i];
+                        if (cookie.getName().equals("dafName")){
+                            dafName = cookie.getValue();
+                            break;
+                        }
+                    }
+                } 
+                
+                
             EventLog eLog = new EventLog();
-            ResultSet rs = eLog.getEventLog("daf1");
+            ResultSet rs = eLog.getEventLog(dafName);
             try {
             while (rs.next()) {
                 String id = rs.getString("id");

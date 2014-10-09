@@ -27,3 +27,12 @@
 /Utils/DataEnrichment/target/
 /Utils/DataEnrichment/src/main/java/Test/
 
+/Utils/NativeKMean/NativeKMean/build/
+/Utils/NativeKMean/NativeKMean/dist/
+/Utils/NativeKMean/NativeKMean/nbproject/private/
+/Utils/NativeKMean/build/
+/Utils/NativeKMean/dist/
+/Utils/NativeKMean/nbproject/private/
+/Utils/LeastSquareRegressionHD/nbproject/private/
+/Utils/LeastSquareRegressionHD/dist/
+/Utils/LeastSquareRegressionHD/build/

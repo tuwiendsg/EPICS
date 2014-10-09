@@ -41,7 +41,7 @@ public class Configuration {
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Logger.getLogger(Configuration.class.getName()).log(Level.INFO, path);
+      //  Logger.getLogger(Configuration.class.getName()).log(Level.INFO, path);
         
         Properties prop = new Properties();
         String configString = "";
