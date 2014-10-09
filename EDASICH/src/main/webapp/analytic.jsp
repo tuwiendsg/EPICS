@@ -16,6 +16,18 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>EDASICH</title>
     </head>
+     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
+    <script>
+        var auto_refresh = setInterval(
+                function ()
+                {
+                    $.ajaxSetup({cache: false});
+                    $('#eventLogDiv').fadeOut('slow').load("eventlog.jsp").fadeIn("slow");
+                    
+                   
+                }, 5000);
+    </script>
+    
     <% Logger logger = Logger.getLogger(this.getClass().getName());%>
     <body>
         <h3>File Uploaded!</h3>
@@ -46,7 +58,7 @@
                 logger.log(Level.INFO, "Start button pressed");
                 String dafName = request.getParameter("daf").toString();
                 String dafType = request.getParameter("engine").toString();
-                logger.log(Level.INFO, dafName +" : "+dafType);
+                logger.log(Level.INFO, dafName + " : " + dafType);
 
                 String xmlData = IOUtils.readData(dafName);
                 logger.log(Level.INFO, xmlData);
@@ -71,7 +83,9 @@
         <br>
         <hr>
         <br>
-        
+        <div id="eventLogDiv">
+
+        </div>
 
     </body>
 </html>
