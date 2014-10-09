@@ -140,7 +140,8 @@ public class QueueClient implements Runnable {
     }
     
     public void configureDataAssetFunction(DataAssetFunctionStreamingData daf){
-        sensorEventHandler = new SensorEventHandler(daf.getListOfEventPatterns());
+        sensorEventHandler = new SensorEventHandler(daf);
         sensorEventHandler.afterPropertiesSet();
+        
     }
 }

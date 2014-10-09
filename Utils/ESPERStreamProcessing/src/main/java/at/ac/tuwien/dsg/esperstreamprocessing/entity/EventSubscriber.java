@@ -18,9 +18,11 @@ import at.ac.tuwien.dsg.edasich.streamprocessing.entity.event.SensorEvent;
 import at.ac.tuwien.dsg.edasich.entity.stream.EventPattern;
 import at.ac.tuwien.dsg.edasich.entity.stream.Task;
 import at.ac.tuwien.dsg.esperstreamprocessing.handler.SensorEventHandler;
+import at.ac.tuwien.dsg.esperstreamprocessing.service.TaskDelivery;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.Configuration;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.IOUtils;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.RestHttpClient;
+import at.ac.tuwien.dsg.esperstreamprocessing.utils.RestfulWSClient;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -47,15 +49,18 @@ import org.apache.http.message.BasicNameValuePair;
 public class EventSubscriber implements StatementSubscriber {
 
 
-    private EventPattern eventPattern;   
+    private EventPattern eventPattern;  
+    private String dafName;
     
     public EventSubscriber() {
     }
 
-    public EventSubscriber(EventPattern eventPattern) {
+    public EventSubscriber(EventPattern eventPattern, String dafName) {
         this.eventPattern = eventPattern;
+        this.dafName = dafName;
     }
 
+    
     
     
     
@@ -69,49 +74,60 @@ public class EventSubscriber implements StatementSubscriber {
 
         
         StringBuilder sb = new StringBuilder();
+        StringBuilder valsLog = new StringBuilder();
         sb.append("--------------------------------------------------");
+             
+                
         sb.append("\n- ["+eventPattern.getTask().getSeverity()+"]  ");
         
 
         
         for (Map.Entry<String, SensorEvent> entry : eventMap.entrySet()) {
             SensorEvent sensorEvent = entry.getValue();
-            sb.append("\n- "+sensorEvent.getName()+"  - Value: " + sensorEvent.getValue());
+            sb.append("["+sensorEvent.getName()+"  - Value: " + sensorEvent.getValue() + "]");
+            String valStr ="["+sensorEvent.getName()+"  - Value: " + sensorEvent.getValue() + "]";
+            valStr = valStr.replaceAll("\'", "");   
+            valsLog.append(valStr + " ; ");
         }
 
         sb.append("\n--------------------------------------------------");
 
-
-// enrich data - monitoring object specified enrich info by  developer
-     
         Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, sb.toString());
+        
+        enrichData();
         forwardTask();
+        logEvent(valsLog.toString());
+        
 
     }
 
     public void forwardTask() {
         
         Task task = eventPattern.getTask();
+        TaskDelivery delivery = new TaskDelivery();
+        delivery.deliver(task);
+    }
+    
+    public void enrichData(){
         
-        if (task != null) {
-
-            List<NameValuePair> paramList = new ArrayList<NameValuePair>();
-            paramList.add(new BasicNameValuePair("name", task.getName()));
-            paramList.add(new BasicNameValuePair("content", task.getContent()));
-            paramList.add(new BasicNameValuePair("tag", task.getTag()));
-            paramList.add(new BasicNameValuePair("severity", task.getSeverity().name()));
-
-            String ip = Configuration.getConfiguration("SALAM.IP");
-            String port = Configuration.getConfiguration("SALAM.PORT");
-            String resouce = Configuration.getConfiguration("SALAM.RESOURCE");
-
-            RestHttpClient ws = new RestHttpClient(ip, port, resouce);
-            ws.callPostMethod(paramList);
-            System.out.println("Forward Task !");
-            Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, "Forward Task !" + paramList.toString());
-        }
+        Task task = eventPattern.getTask();
+        String enrichmentURI = eventPattern.getEnrichmentInfo();
+        RestfulWSClient ws = new RestfulWSClient(enrichmentURI);
+        String taskContent = task.getContent() +"\n";
+        taskContent += ws.callGetMethod("");
+   
+        task.setContent(taskContent);
+        
+    }
+    
+    public void logEvent(String eventVals) {
+        Task task = eventPattern.getTask();
+        TaskDelivery sv = new TaskDelivery();
+        sv.logDetectedEvent(dafName, eventVals, task.getSeverity().name());
+        
     }
 
+    /*
     private void logTask(Task task) {
 
        
@@ -139,14 +155,6 @@ public class EventSubscriber implements StatementSubscriber {
         return task;
     }
 
+    */
 
-    
-    
-
-    private <T> String marshal(Object source, Class<T> configurationClass) throws JAXBException {
-        JAXBContext jAXBContext = JAXBContext.newInstance(configurationClass);
-        StringWriter writer = new StringWriter();
-        jAXBContext.createMarshaller().marshal(source, writer);
-        return writer.toString();
-    }
 }

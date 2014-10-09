@@ -114,20 +114,20 @@ public class Configuration {
                     break;    
                     
                     
-                case "DB.CONTROLACTIONS.IP":
-                    configString = prop.getProperty("DB.CONTROLACTIONS.IP");
+                case "DB.EDASICH.IP":
+                    configString = prop.getProperty("DB.EDASICH.IP");
                     break;
-                case "DB.CONTROLACTIONS.PORT":
-                    configString = prop.getProperty("DB.CONTROLACTIONS.PORT");
+                case "DB.EDASICH.PORT":
+                    configString = prop.getProperty("DB.EDASICH.PORT");
                     break;    
-                case "DB.CONTROLACTIONS.DATABASE":
-                    configString = prop.getProperty("DB.CONTROLACTIONS.DATABASE");
+                case "DB.EDASICH.DATABASE":
+                    configString = prop.getProperty("DB.EDASICH.DATABASE");
                     break;    
-                case "DB.CONTROLACTIONS.USERNAME":
-                    configString = prop.getProperty("DB.CONTROLACTIONS.USERNAME");
+                case "DB.EDASICH.USERNAME":
+                    configString = prop.getProperty("DB.EDASICH.USERNAME");
                     break;
-                case "DB.CONTROLACTIONS.PASSWORD":
-                    configString = prop.getProperty("DB.CONTROLACTIONS.PASSWORD");
+                case "DB.EDASICH.PASSWORD":
+                    configString = prop.getProperty("DB.EDASICH.PASSWORD");
                     break;    
 
             }
@@ -149,11 +149,11 @@ public class Configuration {
     
     public static AnalyticEngineConfiguration getAnalyticEngineConfiguration(String analyticEngineID){
         AnalyticEngineConfiguration analyticEngineConfiguration=null;
-        String ip = getConfig("DB.CONTROLACTIONS.IP");
-        String port = getConfig("DB.CONTROLACTIONS.PORT");
-        String database = getConfig("DB.CONTROLACTIONS.DATABASE");
-        String username = getConfig("DB.CONTROLACTIONS.USERNAME");
-        String password = getConfig("DB.CONTROLACTIONS.PASSWORD");
+        String ip = getConfig("DB.EDASICH.IP");
+        String port = getConfig("DB.EDASICH.PORT");
+        String database = getConfig("DB.EDASICH.DATABASE");
+        String username = getConfig("DB.EDASICH.USERNAME");
+        String password = getConfig("DB.EDASICH.PASSWORD");
         
         MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, database, username, password);
         

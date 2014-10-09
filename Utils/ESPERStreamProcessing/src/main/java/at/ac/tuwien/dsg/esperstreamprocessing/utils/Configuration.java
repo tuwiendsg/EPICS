@@ -72,7 +72,7 @@ public class Configuration {
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
         }
-      //  Logger.getLogger(Configuration.class.getName()).log(Level.INFO, path);
+        Logger.getLogger(Configuration.class.getName()).log(Level.INFO,"Configure Path: " + path);
         
         Properties prop = new Properties();
         String configString = "";
@@ -145,20 +145,20 @@ public class Configuration {
                     break;    
                     
                     
-                case "DB.CONTROLACTIONS.IP":
-                    configString = prop.getProperty("DB.CONTROLACTIONS.IP");
+                case "DB.EDASICH.IP":
+                    configString = prop.getProperty("DB.EDASICH.IP");
                     break;
-                case "DB.CONTROLACTIONS.PORT":
-                    configString = prop.getProperty("DB.CONTROLACTIONS.PORT");
+                case "DB.EDASICH.PORT":
+                    configString = prop.getProperty("DB.EDASICH.PORT");
                     break;    
-                case "DB.CONTROLACTIONS.DATABASE":
-                    configString = prop.getProperty("DB.CONTROLACTIONS.DATABASE");
+                case "DB.EDASICH.DATABASE":
+                    configString = prop.getProperty("DB.EDASICH.DATABASE");
                     break;    
-                case "DB.CONTROLACTIONS.USERNAME":
-                    configString = prop.getProperty("DB.CONTROLACTIONS.USERNAME");
+                case "DB.EDASICH.USERNAME":
+                    configString = prop.getProperty("DB.EDASICH.USERNAME");
                     break;
-                case "DB.CONTROLACTIONS.PASSWORD":
-                    configString = prop.getProperty("DB.CONTROLACTIONS.PASSWORD");
+                case "DB.EDASICH.PASSWORD":
+                    configString = prop.getProperty("DB.EDASICH.PASSWORD");
                     break;    
 
             }

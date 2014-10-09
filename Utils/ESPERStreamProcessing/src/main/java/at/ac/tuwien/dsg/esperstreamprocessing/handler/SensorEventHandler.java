@@ -13,6 +13,7 @@ package at.ac.tuwien.dsg.esperstreamprocessing.handler;
 
 
 
+import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
 import at.ac.tuwien.dsg.edasich.entity.stream.EventPattern;
 import at.ac.tuwien.dsg.esperstreamprocessing.entity.EventSubscriber;
 import at.ac.tuwien.dsg.esperstreamprocessing.entity.SensorEvent;
@@ -33,17 +34,27 @@ public class SensorEventHandler {
     private List<StatementSubscriber> listOfEventSubscribers;
     private List<EventPattern> listOfEventPatterns;
     private EPServiceProvider epService;
+    private DataAssetFunctionStreamingData daf;
  
     
     
     public SensorEventHandler() {
     }
 
+    public SensorEventHandler(DataAssetFunctionStreamingData daf) {
+        this.daf = daf;
+        this.listOfEventPatterns = daf.getListOfEventPatterns();
+    }
+
+    /*
+    
     public SensorEventHandler(List<EventPattern> listOfEventPatterns) {
         this.listOfEventPatterns = listOfEventPatterns;
       
     }
 
+    */
+    
     public void initService() {
 
         System.out.println("Initializing Servcie ..");
@@ -52,7 +63,7 @@ public class SensorEventHandler {
         listOfEPSStatements = new ArrayList<>();
         
          for (EventPattern eventPattern : listOfEventPatterns) {
-           EventSubscriber eventSubscriber = new EventSubscriber(eventPattern);
+           EventSubscriber eventSubscriber = new EventSubscriber(eventPattern,daf.getDaFunctionName());
            listOfEventSubscribers.add(eventSubscriber);
         }
         

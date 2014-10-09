@@ -13,6 +13,7 @@ import at.ac.tuwien.dsg.edasich.configuration.TaskDistributionConfiguration;
 import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
 
 import at.ac.tuwien.dsg.esperstreamprocessing.queueclient.QueueClient;
+import at.ac.tuwien.dsg.esperstreamprocessing.utils.Configuration;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.IOUtils;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.JAXBUtils;
 import java.util.Set;
@@ -41,7 +42,8 @@ public class EsperRESTWS {
         
         Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, tempdir);
         String log = "DAF : " + msg;
-        
+         String ip = Configuration.getConfiguration("DB.EDASICH.IP");
+         log = log + "\n" +ip;
         Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
         
         

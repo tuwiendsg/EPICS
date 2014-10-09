@@ -1,4 +1,6 @@
 
+<%@page import="at.ac.tuwien.dsg.edasich.utils.EventLog"%>
+<%@page import="java.sql.ResultSet"%>
 <%@page import="at.ac.tuwien.dsg.edasich.configuration.Configuration"%>
 <%@page import="at.ac.tuwien.dsg.edasich.service.engine.AnalyticController"%>
 <%@page import="javax.xml.bind.JAXBException"%>
@@ -66,6 +68,10 @@
 
         %>
 
+        <br>
+        <hr>
+        <br>
+        
 
     </body>
 </html>
