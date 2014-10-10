@@ -11,6 +11,6 @@
   <modules>
     <module>Sampling</module>
     <module>JBPMWorkflowEngine</module>
-    <module>DataEnrichment</module>
+    <module>ESPERStreamProcessing</module>
   </modules>
 </project>
