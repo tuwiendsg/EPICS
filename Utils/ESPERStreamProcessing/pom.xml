@@ -79,16 +79,16 @@
         </dependency>
         
         <dependency>
-            <groupId>daas</groupId>
+            <groupId>unknown.binary</groupId>
             <artifactId>daas</artifactId>
-            <version>1.0</version>
+            <version>SNAPSHOT</version>
          <!--   <scope>system</scope>
             <systemPath>${project.basedir}/lib/DaaS-1.0.jar</systemPath>   -->
         </dependency>
         <dependency>
-            <groupId>eda</groupId>
+            <groupId>unknown.binary</groupId>
             <artifactId>eda</artifactId>
-            <version>1.0</version>
+            <version>SNAPSHOT</version>
      <!--       <scope>system</scope>
             <systemPath>${project.basedir}/lib/eda-0.0.1-SNAPSHOT.jar</systemPath> -->
         </dependency>
