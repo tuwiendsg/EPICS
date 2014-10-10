@@ -41,9 +41,7 @@ public class EsperRESTWS {
         String tempdir = System.getProperty("java.io.tmpdir");
         
         Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, tempdir);
-        String log = "DAF : " + msg;
-         String ip = Configuration.getConfiguration("DB.EDASICH.IP");
-         log = log + "\n" +ip;
+        String log = "DAF";
         Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
         
         
@@ -59,6 +57,8 @@ public class EsperRESTWS {
     public void startEsper(String xmlString) {
         
         try {
+            
+            IOUtils.writeData(xmlString+"stop", "1"); 
      
             String log = "Recieved:" + xmlString;
             Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
@@ -87,18 +87,9 @@ public class EsperRESTWS {
     @PUT
     @Path("/stop")
     @Consumes(MediaType.APPLICATION_XML)
-    public void stopEsper() {
-        Thread thread = null;
-
-        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-        Thread[] threadArray = threadSet.toArray(new Thread[threadSet.size()]);
-
-        for (int i = 0; i < threadArray.length; i++) {
-            if (threadArray[i].getName().equals("ESPER")) {
-                thread = threadArray[i];
-            }
-        }
-        thread.stop();
+    public void stopEsper(String xmlString) {
+            
+          IOUtils.writeData(xmlString+"stop", "0"); 
 
     }
 

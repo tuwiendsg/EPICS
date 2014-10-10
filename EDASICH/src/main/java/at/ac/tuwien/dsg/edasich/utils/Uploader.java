@@ -108,6 +108,9 @@ public class Uploader extends HttpServlet {
 
                         reader.close();
                         String log = "file name: " + name + " - content: " + out.toString();
+                        EventLog el = new EventLog();
+                        el.insertDAF(name);
+                        
                         
                         IOUtils.writeData(out.toString(), name);
                         Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
@@ -135,7 +138,7 @@ public class Uploader extends HttpServlet {
                     "Sorry this Servlet only handles file upload request");
         }
         
-        response.sendRedirect("analytic.jsp");
+        response.sendRedirect("daf.jsp");
     }
 
     /**

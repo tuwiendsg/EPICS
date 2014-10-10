@@ -99,7 +99,8 @@ public class RestHttpClient {
             
             int responseCode = response.getStatusLine().getStatusCode();
          
-        //    Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, "Response Code : " + responseCode);
+            Logger.getLogger(RestHttpClient.class.getName()).log(Level.INFO, "Connection : " + url);
+            Logger.getLogger(RestHttpClient.class.getName()).log(Level.INFO, "Response Code : " + responseCode);
     
          
             BufferedReader rd = new BufferedReader(

@@ -15,6 +15,7 @@ import at.ac.tuwien.dsg.edasich.connector.MOMService;
 import at.ac.tuwien.dsg.edasich.connector.Sensors;
 import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
 import at.ac.tuwien.dsg.edasich.entity.stream.EventPattern;
+import at.ac.tuwien.dsg.edasich.utils.EventLog;
 import at.ac.tuwien.dsg.edasich.utils.JAXBUtils;
 import at.ac.tuwien.dsg.edasich.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.edasich.utils.TextParser;
@@ -42,12 +43,19 @@ public class AnalyticController {
         AnalyticEngineConfiguration aec = Configuration.getAnalyticEngineConfiguration(analyticEngineID);
         RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/start");
         restClient.callPutMethod(daf);
+        EventLog el = new EventLog();
+        el.updateDAF(daf, "start");
+        
     }
     
-    public void stopAnalyticEngine(String analyticEngineID){
-        AnalyticEngineConfiguration aec = Configuration.getAnalyticEngineConfiguration(analyticEngineID);
-        RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/stop");
-        restClient.callPutMethod("");
+    public void stopAnalyticEngine(String analyticEngineID, String daf){
+        EventLog el = new EventLog();
+        System.out.println("Stop: " + daf);
+        el.updateDAF(daf, "stop");
+        
+       // AnalyticEngineConfiguration aec = Configuration.getAnalyticEngineConfiguration(analyticEngineID);
+       // RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/stop");
+       // restClient.callPutMethod(daf);
     }
     
     public void submitDataAssetFunctionStreamingData(String analyticEngineID, DataAssetFunctionStreamingData daf) {

@@ -16,16 +16,21 @@ import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
 import at.ac.tuwien.dsg.esperstreamprocessing.entity.SensorEvent;
 import at.ac.tuwien.dsg.esperstreamprocessing.handler.SensorEventHandler;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.Configuration;
+import at.ac.tuwien.dsg.esperstreamprocessing.utils.IOUtils;
+import at.ac.tuwien.dsg.esperstreamprocessing.utils.MySqlConnectionManager;
+import at.ac.tuwien.dsg.esperstreamprocessing.utils.RestfulWSClient;
 
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Random;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jms.*;
 import javax.xml.bind.JAXBContext;
@@ -42,7 +47,7 @@ public class QueueClient implements Runnable {
     private String subject;
     private int limit;
     private SensorEventHandler sensorEventHandler;
-
+    private String dafName;
 
     public QueueClient() {
      
@@ -67,8 +72,10 @@ public class QueueClient implements Runnable {
             MessageConsumer consumer = session.createConsumer(destination);
 
             for (int i = 0; i < limit; i++) {
-                Message message = consumer.receive();
-                onMessageStream(message);
+                    
+                    Message message = consumer.receive();
+                    onMessageStream(message);
+                    checkInterrupt();
             }
 
             connection.close();
@@ -106,7 +113,7 @@ public class QueueClient implements Runnable {
 
                             for (RowColumn column : columns) {
                                 if (column.getName().equals("sensorName")) {
-                                    sensorName = column.getValue();
+                                    sensorName = column.getValue().replaceAll("\'", "");
                                 }
 
                                 if (column.getName().equals("sensorValue")) {
@@ -138,10 +145,47 @@ public class QueueClient implements Runnable {
         limit = Integer.parseInt(Configuration.getConfig("MESSAGE.LIMIT"));
         
     }
+   
+    private void checkInterrupt() {
+
+ 
+        String ip = Configuration.getConfiguration("DB.EDASICH.IP");
+        String port = Configuration.getConfiguration("DB.EDASICH.PORT");
+        String database = Configuration.getConfiguration("DB.EDASICH.DATABASE");
+        String username = Configuration.getConfiguration("DB.EDASICH.USERNAME");
+        String password = Configuration.getConfiguration("DB.EDASICH.PASSWORD");
+
+        MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, database, username, password);
+
+        String sql = "SELECT * FROM Daf WHERE name='"+dafName+"'";
+
+        Logger.getLogger(QueueClient.class.getName()).log(Level.INFO, sql);
+        
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+                try {
+                    while (rs.next()) {
+                      
+                        String status = rs.getString("status");
+                        if (status.equals("stop")){
+                            limit=0;
+                            Logger.getLogger(QueueClient.class.getName()).log(Level.INFO, "STOP: " +dafName );
+                        }
+                        
+
+                    }
+
+                } catch (Exception ex) {
+
+                }
     
+
+    }
+
     public void configureDataAssetFunction(DataAssetFunctionStreamingData daf){
         sensorEventHandler = new SensorEventHandler(daf);
         sensorEventHandler.afterPropertiesSet();
-        
+        dafName  = daf.getDaFunctionID();
     }
+    
+    
 }

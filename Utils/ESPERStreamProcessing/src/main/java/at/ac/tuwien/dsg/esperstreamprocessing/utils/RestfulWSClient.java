@@ -95,7 +95,7 @@ public class RestfulWSClient {
         String getResult = "";
         try {
 
-            Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO,  "Connection .. " + url);
+            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO,  "Connection .. " + url);
             HttpGet request = new HttpGet(url);
             request.addHeader("content-type", "text/plain; charset=utf-8");
             request.addHeader("Accept", "text/plain, multipart/related");
@@ -104,7 +104,7 @@ public class RestfulWSClient {
 
             int statusCode = methodResponse.getStatusLine().getStatusCode();
 
-            Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, "Status Code: " + statusCode);
+            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO, "Status Code: " + statusCode);
       
             BufferedReader rd = new BufferedReader(
                     new InputStreamReader(methodResponse.getEntity().getContent()));
@@ -131,7 +131,7 @@ public class RestfulWSClient {
             StringEntity inputKeyspace = new StringEntity(xmlString);
   
       
-         //   Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO,  "Connection .. " + url);
+            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO,  "Connection .. " + url);
             HttpPut request = new HttpPut(url);
             request.addHeader("content-type", "application/xml; charset=utf-8");
             request.addHeader("Accept", "application/xml, multipart/related");
@@ -141,7 +141,7 @@ public class RestfulWSClient {
 
             int statusCode = methodResponse.getStatusLine().getStatusCode();
 
-        //    Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, "Status Code: " + statusCode);
+            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO, "Status Code: " + statusCode);
       
             BufferedReader rd = new BufferedReader(
                     new InputStreamReader(methodResponse.getEntity().getContent()));

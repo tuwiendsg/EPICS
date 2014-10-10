@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package at.ac.tuwien.dsg.edasich.utils;
 
 import java.io.BufferedReader;
@@ -22,6 +21,7 @@ import org.apache.http.impl.client.HttpClients;
  * @author Jun
  */
 public class RestfulWSClient {
+
     private CloseableHttpClient httpClient = HttpClients.createDefault();
     private String ip;
     private String port;
@@ -76,18 +76,16 @@ public class RestfulWSClient {
     public void setUrl(String url) {
         this.url = url;
     }
-    
-    
 
     public void callPutMethod(String xmlString) {
 
         try {
-            
 
             //HttpGet method = new HttpGet(url);
             StringEntity inputKeyspace = new StringEntity(xmlString);
-            logger.log(Level.INFO, "Connection .. " + url);
-     
+
+            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO, "Connection .. " + url);
+
             HttpPut request = new HttpPut(url);
             request.addHeader("content-type", "application/xml; charset=utf-8");
             request.addHeader("Accept", "application/xml, multipart/related");
@@ -97,8 +95,7 @@ public class RestfulWSClient {
 
             int statusCode = methodResponse.getStatusLine().getStatusCode();
 
-            logger.log(Level.INFO, "Status Code: " + statusCode);
-
+            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO, "Status Code: " + statusCode);
             BufferedReader rd = new BufferedReader(
                     new InputStreamReader(methodResponse.getEntity().getContent()));
 
@@ -114,23 +111,21 @@ public class RestfulWSClient {
         }
 
     }
-    
-    
+
     public void callPostMethod(String xmlString) {
 
         try {
-            
 
             //HttpGet method = new HttpGet(url);
             StringEntity inputKeyspace = new StringEntity(xmlString);
             System.out.println("Connection .. " + url);
             //HttpPut request = new HttpPut(url);
-            
-            HttpPost request=new HttpPost(url);
+
+            HttpPost request = new HttpPost(url);
             request.addHeader("content-type", "application/json");
           // request.addHeader("content-type", "application/x-www-form-urlencoded");
-      
-           // request.addHeader("Accept", "application/json, multipart/related");
+
+            // request.addHeader("Accept", "application/json, multipart/related");
             request.setEntity(inputKeyspace);
 
             HttpResponse methodResponse = this.getHttpClient().execute(request);
@@ -147,12 +142,11 @@ public class RestfulWSClient {
                 result.append(line);
             }
 
-             System.out.println("Response String: " + result.toString());
+            System.out.println("Response String: " + result.toString());
         } catch (Exception ex) {
-             System.out.println("Exception: " + ex.toString());
+            System.out.println("Exception: " + ex.toString());
         }
 
     }
-    
-    
+
 }
