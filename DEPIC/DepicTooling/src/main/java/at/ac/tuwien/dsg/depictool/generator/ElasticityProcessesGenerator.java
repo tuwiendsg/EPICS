@@ -207,7 +207,7 @@ public class ElasticityProcessesGenerator {
 
         for (int i=0;i<listOfActions.size();i++) {
             ControlAction controlAction_i = listOfActions.get(i);
-            List<ActionDependency> listOfActionDependencies = epRepo.getControlActionDependencyDB(controlAction_i.getActionID());
+            List<ActionDependency> listOfActionDependencies = epRepo.getControlActionDependencyDB(controlAction_i.getControlActionID());
                     
             for (int j=i+1;j<listOfActions.size();j++) {
                 
@@ -218,7 +218,7 @@ public class ElasticityProcessesGenerator {
                     for (ActionDependency actionDependency : listOfActionDependencies) {
                     
                         String rerequisiteActionID= actionDependency.getPrerequisiteActionID();
-                        if (controlAction_j.getActionID().equals(rerequisiteActionID)){
+                        if (controlAction_j.getControlActionID().equals(rerequisiteActionID)){
                             
                             Collections.swap(listOfActions, i, j);
                            
@@ -240,19 +240,19 @@ public class ElasticityProcessesGenerator {
     private ControlAction findControlAction(String metricName, String rangeVal_i, String rangeVal_j) {
         ControlAction returnControlAction = null;
 
-        List<MetricElasticityProcess> listOfMetricElasticityProcesses = elasticityProcessConfiguration.getListOfMetricElasticityProcesses();
+        List<MetricElasticityProcess> listOfMetricElasticityProcesses = metricProcess.getListOfMetricElasticityProcesses();
 
         for (MetricElasticityProcess elasticityProcess : listOfMetricElasticityProcesses) {
             if (elasticityProcess.getMetricName().equals(metricName)) {
 
-                List<ControlAction> listOfControlActions = elasticityProcess.getListOfControlActions();
+                List<TriggerActions> listOfTriggerActions = elasticityProcess.getListOfTriggerActions();
 
-                for (ControlAction controlAction : listOfControlActions) {
+                for (TriggerActions triggerAction : listOfTriggerActions) {
 
-                    TriggerActions triggerValues = controlAction.getTriggerValues();
+                
 
-                    if (triggerValues.getFromRange().equals(rangeVal_i) && triggerValues.getToRange().equals(rangeVal_j)) {
-                        returnControlAction = controlAction;
+                    if (triggerAction.getFromRange().equals(rangeVal_i) && triggerAction.getToRange().equals(rangeVal_j)) {
+                        returnControlAction = triggerAction.getListOfControlActions().get(0);
                     }
 
                 }

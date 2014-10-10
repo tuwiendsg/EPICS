@@ -68,7 +68,7 @@ public class Generator {
         System.out.println("Start generate Elasticity Processes");
 
         
-        ElasticityProcessesGenerator elasticityProcessGenerator = new ElasticityProcessesGenerator(elasticDataObject, elasticityProcessConfiguration);
+        ElasticityProcessesGenerator elasticityProcessGenerator = new ElasticityProcessesGenerator(null, elasticityProcessConfiguration);
         // generate monitor process
         MonitorProcess monitorProcess = elasticityProcessGenerator.generateMonitorProcess();
 
@@ -104,7 +104,7 @@ public class Generator {
 
         System.out.println("List of Control Processes --- ");
         List<ControlProcess> listOfControlProcesses = dataElasticityProcess.getListOfControlProcesses();
-
+/*
         for (ControlProcess controlProcess : listOfControlProcesses) {
             System.out.println("*** Control Process: --- from " + controlProcess.geteStateID_i() + " to " + controlProcess.geteStateID_j());
 
@@ -121,7 +121,7 @@ public class Generator {
             }
 
         }
-
+*/
     }
 
 }
