@@ -9,7 +9,6 @@
     <artifactId>Utils</artifactId>
     <packaging>pom</packaging>
   <modules>
-    <module>LeastSquareRegression</module>
     <module>Sampling</module>
     <module>JBPMWorkflowEngine</module>
     <module>DataEnrichment</module>
