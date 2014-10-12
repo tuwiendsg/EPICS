@@ -5,7 +5,7 @@
  */
 package com.mkyong.app.graphretrieve;
 
-import com.mkyong.app.*;
+import com.mkyong.app.OperateProperty;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
@@ -26,9 +26,11 @@ public class DataModelManipulation1 {
     {
         
         LinkedList<String> monitoringInformation=new LinkedList<String>();
-        LinkedList<String> monitoringPredicatParameter=new LinkedList<String>();
+        OperateProperty operateProperty=new OperateProperty();
+        //LinkedList<String> monitoringPredicatParameter=new LinkedList<String>();
         //String storageName=new StringTokenizer(subject1,"#").nextToken();
-        String storageName="http://windtunnel.com";
+        //String storageName="http://windtunnel.com";
+        String storageName=operateProperty.getrdfURI();
         String subject1=storageName+"#"+subject2;
         String predicate1="MonitoredObjectInformation";
         
@@ -36,8 +38,11 @@ public class DataModelManipulation1 {
         
         Query sparql = QueryFactory.create("SELECT ?s ?p ?o FROM <"+storageName+"> WHERE { ?s ?p ?o }");
         
-        String url="jdbc:virtuoso://localhost:1111";
-        VirtGraph graph=new VirtGraph(storageName,url,"dba","dba");
+        //String url="jdbc:virtuoso://localhost:1111";
+        String url=operateProperty.getGraphStorageURI();
+        String username=operateProperty.getGraphStorageUserName();
+        String password=operateProperty.getGraphStoragePassword();
+        VirtGraph graph=new VirtGraph(storageName,url,username,password);
         if(graph.isEmpty())
             {
                System.out.println("there have no content under the uri of subject");

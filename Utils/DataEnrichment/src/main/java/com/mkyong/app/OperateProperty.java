@@ -16,9 +16,19 @@ public class OperateProperty {
         return "jdbc:virtuoso://localhost:1111";
     }
     
-    public String rdfURI()
+    public String getrdfURI()
     {
         return "http://windtunnel.com";
+    }
+    
+    public String getGraphStorageUserName()
+    {
+        return "dba";
+    }
+    
+    public String getGraphStoragePassword()
+    {
+        return "dba";
     }
     
 }

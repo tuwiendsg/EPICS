@@ -9,12 +9,13 @@ import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.mem.ModelMem;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
+//import com.hp.hpl.jena.rdf.model.Property;
+//import com.hp.hpl.jena.rdf.model.RDFNode;
+//import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDFS;
+import com.mkyong.app.OperateProperty;
 import java.io.File;
 import java.io.FileReader;
 import virtuoso.jena.driver.VirtGraph;
@@ -37,11 +38,13 @@ public class RDFGraphStorage {
         StmtIterator iter=model.listStatements();
         Statement stmt;
         
-        
-        //store the generated graph in virtuous storage
-        String url="jdbc:virtuoso://localhost:1111";
-        VirtGraph virtgraph=new VirtGraph(fileURI,url,"dba","dba");
-         if(!virtgraph.isEmpty())
+        OperateProperty operateProperty=new OperateProperty();
+        String url=operateProperty.getGraphStorageURI();
+        String username=operateProperty.getGraphStorageUserName();
+        String password=operateProperty.getGraphStoragePassword();
+        VirtGraph virtgraph=new VirtGraph(fileURI,url,username,password);
+         
+        if(!virtgraph.isEmpty())
             {
                 System.out.println("clean the graph");
                 virtgraph.clear();
