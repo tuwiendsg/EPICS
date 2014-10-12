@@ -35,7 +35,7 @@ public class DataModelManipulation1 {
         
         Query sparql = QueryFactory.create("SELECT ?s ?p ?o FROM <"+storageName+"> WHERE { ?s ?p ?o }");
         
-        String url="jdbc:virtuoso://128.130.172.230:1111";
+        String url="jdbc:virtuoso://10.99.0.9:1111";
         VirtGraph graph=new VirtGraph(storageName,url,"dba","dba");
         if(graph.isEmpty())
             {

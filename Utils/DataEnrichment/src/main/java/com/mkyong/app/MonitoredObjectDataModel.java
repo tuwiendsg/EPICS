@@ -35,8 +35,9 @@ public class MonitoredObjectDataModel {
        
        Property buildingPropertyName=model.createProperty(uri+"BuildingName");
        building.addProperty(buildingPropertyName, buildingName);
-       building.addProperty(g_lat, "8.90");
-       building.addProperty(g_long, "6.78");
+       building.addProperty(g_lat, "38.90");
+       building.addProperty(g_long, "36.78");
+       building.addProperty(RDFS.seeAlso, "http://building@@@");
        
        Property sensorProperty=model.createProperty(uri+"SensorInformation");
        
@@ -68,11 +69,11 @@ public class MonitoredObjectDataModel {
         {
         sensorStructure.addProperty(sensorLocationName,sensorLocation.get(0) );
         }
-        if(entry.getKey().equals("Sensor2"))
+        if(entry.getKey().equals("Sensor21"))
         {
         sensorStructure.addProperty(sensorLocationName,sensorLocation.get(1) );
         }
-        if(entry.getKey().equals("Sensor3"))
+        if(entry.getKey().equals("Sensor31"))
         {
         sensorStructure.addProperty(sensorLocationName,sensorLocation.get(2) );
         }

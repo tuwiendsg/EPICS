@@ -5,6 +5,7 @@
  */
 package com.mkyong.app;
 
+//import com.mkyoung.datamodel.ObjectDataModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -60,13 +61,13 @@ public class Main {
         
         
         monitoringInformation.put("Sensor1", monitoringObject1);
-        monitoringInformation.put("Sensor2", monitoringObject2);
-        monitoringInformation.put("Sensor3", monitoringObject3);
+        monitoringInformation.put("Sensor21", monitoringObject2);
+        monitoringInformation.put("Sensor31", monitoringObject3);
         
         new MonitoredObjectDataModel().dataModelGeneration(uri,buildingName,monitoringInformation,sensorLocation); 
         
-        //for graph storage
-        String fileName="./example/WindTunnelTest.rdf";
+        //for graph storage&&&&&&&
+    /*String fileName="./example/WindTunnelTest.rdf";
         String fileuri="http://somewhere/index";
         try
         {
@@ -78,16 +79,16 @@ public class Main {
         }
         
         //for data extraction
-        String subject="Sensor1";
+        String subject="Sensor21";
         //String predicate="MonitoredObjectName";
         //String predicate="MonitoredObjectInformation";
         LinkedList<String> monitoringInformation2=new DataModelManipulation1().queryResult(subject);
         for(int i=0;i<monitoringInformation2.size();i++)
         {
             System.out.println("monitoring object="+monitoringInformation2.get(i));
-        }
+        }*/
 	
-    
+    //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
        //for data about monitored object extraction
         
         /*String subject1="http://somewhere/index#Sensor1";
@@ -104,7 +105,33 @@ public class Main {
            
        }*/
     
-    
+        //for designing object data model
+       /* String uri2="http://somewhere/index#";
+        String sensorName1="Sensor1";
+        
+        Map<String, List<String>> monitoringInformation1=new HashMap<String, List<String>>();
+        
+        List<String> monitoringObject4=new ArrayList<String>();
+        monitoringObject4.add("Methane");
+        monitoringObject4.add("Acetone");
+        monitoringInformation1.put("MonitoredObject", monitoringObject4);
+        
+        List<String> monitoringObject5=new ArrayList<String>();
+        monitoringObject5.add("9.0");
+        monitoringInformation1.put("latitude", monitoringObject5);
+        
+        List<String> monitoringObject6=new ArrayList<String>();
+        monitoringObject6.add("8.0");
+        monitoringInformation1.put("longitude", monitoringObject6);
+        
+        List<String> monitoringObject7=new ArrayList<String>();
+        monitoringObject7.add("Silo 1");
+        monitoringInformation1.put("LocationName", monitoringObject7);
+        
+        new ObjectDataModel().dataModel(uri2,sensorName1,"Sensor",monitoringInformation1);*/
+        
+        
+       
     
     }
     

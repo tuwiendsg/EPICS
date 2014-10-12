@@ -25,7 +25,7 @@ public class SensorRestService {
             {
             result=result.append("\n "+monitoringresult.get(i));
             }
-		return "hello    "+result.toString();
+		return "The information related Sensor "+result.toString();
 
 	}
 

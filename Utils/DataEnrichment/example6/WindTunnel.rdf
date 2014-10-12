@@ -1,0 +1,14 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:Chamber="http://windtunnel.com#" > 
+  <rdf:Description rdf:about="http://windtunnel.com#WindTunnel">
+    <Chamber:proposedby>Department Of Defence</Chamber:proposedby>
+    <Chamber:chambervolume rdf:resource="http://windtunnel.com#ChamberVolume"/>
+    <Chamber:name>WindTunnel</Chamber:name>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://windtunnel.com#ChamberVolume">
+    <Chamber:length>2.5 meter</Chamber:length>
+    <Chamber:width>1.2 meter</Chamber:width>
+    <Chamber:heigth>0.4 meter</Chamber:heigth>
+  </rdf:Description>
+</rdf:RDF>
