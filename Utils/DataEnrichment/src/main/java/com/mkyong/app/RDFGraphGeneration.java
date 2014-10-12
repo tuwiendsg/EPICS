@@ -39,7 +39,7 @@ public class RDFGraphGeneration {
         
         
         //store the generated graph in virtuous storage
-        String url="jdbc:virtuoso://10.99.0.9:1111";
+        String url="jdbc:virtuoso://localhost:1111";
         VirtGraph virtgraph=new VirtGraph(fileURI,url,"dba","dba");
          if(!virtgraph.isEmpty())
             {

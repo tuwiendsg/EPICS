@@ -50,7 +50,7 @@ public class WindTunnelModel {
         facilityResource.addProperty(RDFS.seeAlso,"http://windtunnel.com#AnalyticGas");
         facilityResource.addProperty(facilityName, "ChemicalSource");
         facilityResource.addProperty(RDFS.seeAlso,"http://windtunnel.com#ChemicalSource");
-        tunnel.addProperty(facilityProperty,)
+        tunnel.addProperty(facilityProperty,facilityResource);
         
         
         Property proposedBy=model.createProperty(uri+"proposedby");
