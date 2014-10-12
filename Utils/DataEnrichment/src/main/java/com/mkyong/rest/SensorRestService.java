@@ -1,6 +1,6 @@
 package com.mkyong.rest;
 
-import com.mkyong.app.DataModelManipulation1;
+import com.mkyong.app.graphretrieve.DataModelManipulation1;
 import java.util.LinkedList;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

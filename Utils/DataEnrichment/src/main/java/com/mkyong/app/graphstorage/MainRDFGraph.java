@@ -5,7 +5,7 @@
  */
 package com.mkyong.app.graphstorage;
 
-import com.mkyong.app.RDFGraphGeneration;
+import com.mkyong.app.graphstorage.RDFGraphStorage;
 
 /**
  *
@@ -21,7 +21,7 @@ public class MainRDFGraph {
         
         try
         {
-        new RDFGraphGeneration().GraphStore(fileName,fileuri);
+        new RDFGraphStorage().GraphStore(fileName,fileuri);
         }
         catch(Exception e)
         {
@@ -33,7 +33,7 @@ public class MainRDFGraph {
         String fileName1="./example6/Fan.rdf";
         try
         {
-        new RDFGraphGeneration().GraphStore(fileName1,fileuri);
+        new RDFGraphStorage().GraphStore(fileName1,fileuri);
         }
         catch(Exception e)
         {
