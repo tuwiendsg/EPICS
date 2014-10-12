@@ -9,6 +9,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.RDF;
 import java.io.File;
 import java.io.FileWriter;
 
@@ -23,7 +24,9 @@ public class FanModel {
       String objectName="Fan";
       
       Model model=ModelFactory.createDefaultModel();
+      Resource tunnelResource=model.createResource(uri+"WindTunnel");
       Resource fanResource=model.createResource(uri+objectName);
+      fanResource.addProperty(RDF.type,tunnelResource);
       Property name=model.createProperty(uri+"name");
       fanResource.addProperty(name,"Fan");
       

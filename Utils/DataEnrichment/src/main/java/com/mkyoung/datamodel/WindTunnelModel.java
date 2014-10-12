@@ -43,13 +43,13 @@ public class WindTunnelModel {
         Resource facilityResource=model.createResource(uri+"FacilityElement");
         Property facilityName=model.createProperty(uri+"facilityname");
         facilityResource.addProperty(facilityName, "Fan");
-        facilityResource.addProperty(RDFS.seeAlso,"http://windtunnel.com#Fan");
+        facilityResource.addProperty(RDFS.seeAlso,model.createResource("http://windtunnel.com#Fan"));
         facilityResource.addProperty(facilityName, "SensoryModule");
-        facilityResource.addProperty(RDFS.seeAlso,"http://windtunnel.com#SensoryModule");
+        facilityResource.addProperty(RDFS.seeAlso,model.createResource("http://windtunnel.com#SensoryModule"));
         facilityResource.addProperty(facilityName, "AnalyticGas");
-        facilityResource.addProperty(RDFS.seeAlso,"http://windtunnel.com#AnalyticGas");
+        facilityResource.addProperty(RDFS.seeAlso,model.createResource("http://windtunnel.com#AnalyticGas"));
         facilityResource.addProperty(facilityName, "ChemicalSource");
-        facilityResource.addProperty(RDFS.seeAlso,"http://windtunnel.com#ChemicalSource");
+        facilityResource.addProperty(RDFS.seeAlso,model.createResource("http://windtunnel.com#ChemicalSource"));
         tunnel.addProperty(facilityProperty,facilityResource);
         
         

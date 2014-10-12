@@ -15,5 +15,6 @@
     <chamber:fanlocation rdf:resource="http://windtunnel.com#FanLocation"/>
     <chamber:fanspeed rdf:resource="http://windtunnel.com#FanSpeed"/>
     <chamber:name>Fan</chamber:name>
+    <rdf:type rdf:resource="http://windtunnel.com#WindTunnel"/>
   </rdf:Description>
 </rdf:RDF>
