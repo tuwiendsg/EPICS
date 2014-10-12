@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mkyong.app;
+package com.mkyong.app.graphretrieve;
 
+import com.mkyong.app.*;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
@@ -27,7 +28,7 @@ public class DataModelManipulation1 {
         LinkedList<String> monitoringInformation=new LinkedList<String>();
         LinkedList<String> monitoringPredicatParameter=new LinkedList<String>();
         //String storageName=new StringTokenizer(subject1,"#").nextToken();
-        String storageName="http://somewhere/index";
+        String storageName="http://windtunnel.com";
         String subject1=storageName+"#"+subject2;
         String predicate1="MonitoredObjectInformation";
         

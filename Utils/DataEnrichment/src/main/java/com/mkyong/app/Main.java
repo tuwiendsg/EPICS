@@ -67,7 +67,7 @@ public class Main {
         new MonitoredObjectDataModel().dataModelGeneration(uri,buildingName,monitoringInformation,sensorLocation); 
         
         //for graph storage&&&&&&&
-    /*String fileName="./example/WindTunnelTest.rdf";
+    String fileName="./example/WindTunnelTest.rdf";
         String fileuri="http://somewhere/index";
         try
         {
@@ -86,7 +86,7 @@ public class Main {
         for(int i=0;i<monitoringInformation2.size();i++)
         {
             System.out.println("monitoring object="+monitoringInformation2.get(i));
-        }*/
+        }
 	
     //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
        //for data about monitored object extraction
@@ -103,7 +103,7 @@ public class Main {
             System.out.println("Object Name : "+entry.getKey());
            System.out.println(" Monitored Sensor Name : "+entry.getValue());
            
-       }*/
+       }
     
         //for designing object data model
        /* String uri2="http://somewhere/index#";

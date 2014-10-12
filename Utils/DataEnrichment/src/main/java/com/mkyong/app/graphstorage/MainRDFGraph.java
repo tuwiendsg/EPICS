@@ -1,0 +1,43 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.mkyong.app.graphstorage;
+
+import com.mkyong.app.RDFGraphGeneration;
+
+/**
+ *
+ * @author dsg
+ */
+public class MainRDFGraph {
+   public static void main(String []p)
+   {
+       String fileuri="http://windtunnel.com";
+       
+       //for windtunnel.rdf file
+       String fileName="./example6/WindTunnel.rdf";
+        
+        try
+        {
+        new RDFGraphGeneration().GraphStore(fileName,fileuri);
+        }
+        catch(Exception e)
+        {
+            System.out.println("exception occured="+e);
+        }
+        
+        //for Fan.rdf file
+        
+        String fileName1="./example6/Fan.rdf";
+        try
+        {
+        new RDFGraphGeneration().GraphStore(fileName1,fileuri);
+        }
+        catch(Exception e)
+        {
+            System.out.println("exception occured="+e);
+        }
+   }
+}
