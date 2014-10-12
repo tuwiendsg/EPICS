@@ -5,24 +5,24 @@
  */
 package com.mkyong.app.graphretrieve;
 
-import com.mkyong.app.OperateProperty;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import com.mkyong.app.OperateProperty;
 import java.util.LinkedList;
-import java.util.StringTokenizer;
 import virtuoso.jena.driver.VirtGraph;
 import virtuoso.jena.driver.VirtuosoQueryExecution;
 import virtuoso.jena.driver.VirtuosoQueryExecutionFactory;
 
 /**
  *
- * @author Anindita
+ * @author dsg
  */
-public class DataModelManipulation1 {
-    public LinkedList<String> queryResult(String subject2)
+public class RDFManipulationSubject {
+ 
+    public LinkedList<String> queryResultSubject(String subject2)
     {
         
         LinkedList<String> monitoringInformation=new LinkedList<String>();
@@ -84,3 +84,5 @@ public class DataModelManipulation1 {
         return monitoringInformation;
 }
 }
+  
+

@@ -1,6 +1,6 @@
 package com.mkyong.rest;
 
-import com.mkyong.app.graphretrieve.DataModelManipulation1;
+import com.mkyong.app.graphretrieve.*;
 import java.util.LinkedList;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,16 +17,18 @@ public class SensorRestService {
 	@Path("/{param}")
         @Produces(MediaType.TEXT_PLAIN)
 	public String printMessage(@PathParam("param") String sensorName) {
-            LinkedList<String> monitoringresult=new DataModelManipulation1().queryResult(sensorName);
+            //LinkedList<String> monitoringresult=new DataModelManipulation1().queryResult(sensorName);
 
            StringBuffer result=new StringBuffer();		
 //String result = sensorName + " is monitoring Methane gas at silo No.1. Concentration of Methane gas is 2.2 mol/L";
-            for(int i=0;i<monitoringresult.size();i++)
+            /*for(int i=0;i<monitoringresult.size();i++)
             {
             result=result.append("\n "+monitoringresult.get(i));
             }
 		return "The information related Sensor "+result.toString();
 
-	}
+	}*/
+           return "The information of sensor";
+        }
 
 }
