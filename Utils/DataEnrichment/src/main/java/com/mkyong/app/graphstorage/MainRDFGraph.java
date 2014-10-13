@@ -76,5 +76,27 @@ public class MainRDFGraph {
         {
             System.out.println("exception occured="+e);
         }
+        
+        String fileName5="./example6/Sensor22.rdf";
+        
+        try
+        {
+        new RDFGraphStorage().GraphStore(fileName5,fileuri);
+        }
+        catch(Exception e)
+        {
+            System.out.println("exception occured="+e);
+        }
+        
+        String fileName6="./example6/Sensor23.rdf";
+        
+        try
+        {
+        new RDFGraphStorage().GraphStore(fileName6,fileuri);
+        }
+        catch(Exception e)
+        {
+            System.out.println("exception occured="+e);
+        }
    }
 }

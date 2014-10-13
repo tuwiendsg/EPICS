@@ -13,22 +13,59 @@ import javax.ws.rs.core.Response;
 @Path("/sensor")
 public class SensorRestService {
 
-	@GET
-	@Path("/{param}")
-        @Produces(MediaType.TEXT_PLAIN)
-	public String printMessage(@PathParam("param") String sensorName) {
-            //LinkedList<String> monitoringresult=new DataModelManipulation1().queryResult(sensorName);
+    @GET
+    @Path("/{param}")
+    @Produces(MediaType.TEXT_HTML)
+    public String printMessage(@PathParam("param") String sensorList) {
 
-           StringBuffer result=new StringBuffer();		
-//String result = sensorName + " is monitoring Methane gas at silo No.1. Concentration of Methane gas is 2.2 mol/L";
-            /*for(int i=0;i<monitoringresult.size();i++)
-            {
-            result=result.append("\n "+monitoringresult.get(i));
+        String[] sensors = sensorList.split(",");
+
+        String tabStrs = "";
+
+        for (String sensor : sensors) {
+            LinkedList<String> monitoringresult = new RDFManipulationSubject().queryResultSubject(sensor);
+
+            String rowStrs = "";
+
+            for (int i = 0; i < monitoringresult.size(); i = i + 2) {
+                rowStrs = rowStrs + "                <tr>\n";
+                rowStrs = rowStrs + "                    <td>" + monitoringresult.get(i) + "</td>\n";
+                rowStrs = rowStrs + "                    <td>" + monitoringresult.get(i + 1) + "</td>\n";
+                rowStrs = rowStrs + "                </tr>\n";
+
             }
-		return "The information related Sensor "+result.toString();
 
-	}*/
-           return "The information of sensor";
+            String tabStr = "<table border=\"1\">\n"
+                    + "            <thead>\n"
+                    + "                <tr>\n"
+                    + "                    <th>Predicate</th>\n"
+                    + "                    <th>Object</th>\n"
+                    + "                </tr>\n"
+                    + "            </thead>\n"
+                    + "            <tbody>\n"
+                    + rowStrs
+                    + "            </tbody>\n"
+                    + "        </table>\n"
+                    + "\n"
+                    + " <br> <br> <br>      \n";
+
+            tabStrs += tabStr;
+
         }
+
+        //return "The information related Sensor "+result.toString();
+        return "<html>\n"
+                + "    <head>\n"
+                + "        <title>The information related of </title>\n"
+                + "        <meta charset=\"UTF-8\">\n"
+                + "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+                + "    </head>\n"
+                + "    <body>\n"
+                + tabStrs
+                + "    </body>\n"
+                + "</html>\n"
+                + "";
+
+    }
 
 }
