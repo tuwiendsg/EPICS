@@ -39,5 +39,17 @@ public class MainRDFGraph {
         {
             System.out.println("exception occured="+e);
         }
+        
+        ///Sensor21
+       /* String fileName2="./example6/MOXGasSensor.rdf";
+        
+        try
+        {
+        new RDFGraphStorage().GraphStore(fileName2,fileuri);
+        }
+        catch(Exception e)
+        {
+            System.out.println("exception occured="+e);
+        }*/
    }
 }
