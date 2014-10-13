@@ -34,6 +34,9 @@ public class Configuration {
        
 
         String path = Configuration.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        
+      //  System.out.println("path: " + path);
+        
         int index = path.indexOf("/classes/at/ac");
         path = path.substring(0, index);
         try {
@@ -148,6 +151,9 @@ public class Configuration {
     }
     
     public static AnalyticEngineConfiguration getAnalyticEngineConfiguration(String analyticEngineID){
+        
+        System.out.println("Analytic Engine ID: " + analyticEngineID);
+        
         AnalyticEngineConfiguration analyticEngineConfiguration=null;
         String ip = getConfig("DB.EDASICH.IP");
         String port = getConfig("DB.EDASICH.PORT");

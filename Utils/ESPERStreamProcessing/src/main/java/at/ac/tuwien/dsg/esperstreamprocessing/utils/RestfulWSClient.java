@@ -92,6 +92,7 @@ public class RestfulWSClient {
     
     public String callGetMethod(String xmlString) {
 
+        url += xmlString;
         String getResult = "";
         try {
 
@@ -99,6 +100,8 @@ public class RestfulWSClient {
             HttpGet request = new HttpGet(url);
             request.addHeader("content-type", "text/plain; charset=utf-8");
             request.addHeader("Accept", "text/plain, multipart/related");
+            
+           
          
             HttpResponse methodResponse = this.getHttpClient().execute(request);
 

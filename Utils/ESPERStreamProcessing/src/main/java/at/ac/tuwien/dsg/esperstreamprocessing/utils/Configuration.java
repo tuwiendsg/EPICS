@@ -160,6 +160,9 @@ public class Configuration {
                 case "DB.EDASICH.PASSWORD":
                     configString = prop.getProperty("DB.EDASICH.PASSWORD");
                     break;    
+                case "TASK.INTERVAL":
+                    configString = prop.getProperty("TASK.INTERVAL");
+                    break;        
 
             }
 

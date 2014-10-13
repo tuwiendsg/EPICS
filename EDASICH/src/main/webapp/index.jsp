@@ -27,17 +27,15 @@
 
                 }, 5000);
     </script>
+    <link rel="stylesheet" href="css/kanso.css?v=2.0.1">
 
     <% Logger logger = Logger.getLogger(this.getClass().getName());%>
     <body>
-        
-        
+
+
         <%
             if (request.getParameter("start") != null) {
-                
-                
-                
-                
+
                 logger.log(Level.INFO, "Start button pressed");
                 String dafName = request.getParameter("daf").toString();
 
@@ -48,27 +46,38 @@
                 String dafType = request.getParameter("engine").toString();
                 logger.log(Level.INFO, dafName + " : " + dafType);
 
-                String xmlData = IOUtils.readData(dafName);
-                logger.log(Level.INFO, xmlData);
-                DataAssetFunctionStreamingData daf = null;
-                try {
-                    daf = JAXBUtils.unmarshal(xmlData, DataAssetFunctionStreamingData.class);
-                    logger.log(Level.INFO, "f name: " + daf.getDaFunctionName());
+                if (dafType.equals("es")) {
 
-                    AnalyticController controler = new AnalyticController();
-                    controler.submitDataAssetFunctionStreamingData(dafType, daf);
-                    Configuration.submitMOMConf(dafType);
-                    controler.startAnalyticEngine(dafType, daf.getDaFunctionID());
+                    String xmlData = IOUtils.readData(dafName);
+                    logger.log(Level.INFO, xmlData);
+                    DataAssetFunctionStreamingData daf = null;
+                    try {
+                        daf = JAXBUtils.unmarshal(xmlData, DataAssetFunctionStreamingData.class);
+                        logger.log(Level.INFO, "f name: " + daf.getDaFunctionName());
 
-                } catch (JAXBException ex) {
-                    logger.log(Level.SEVERE, null, ex);
+                        AnalyticController controler = new AnalyticController();
+                        controler.submitDataAssetFunctionStreamingData(dafType, daf);
+                        Configuration.submitMOMConf(dafType);
+                        controler.startAnalyticEngine(dafType, daf.getDaFunctionID());
+
+                    } catch (JAXBException ex) {
+                        logger.log(Level.SEVERE, null, ex);
+                    }
+
                 }
+
+                if (dafType.equals("jbpm")) {
+                    DataAssetFunctionStreamingData daf = null;
+                    String xmlData = IOUtils.readData(dafName);
+                    daf = JAXBUtils.unmarshal(xmlData, DataAssetFunctionStreamingData.class);
+                    AnalyticController controler = new AnalyticController();
+                    controler.startAnalyticEngine(dafType, daf.getDaFunctionID());
+                }
+
             }
-            
-            
-            
+
             if (request.getParameter("stop") != null) {
-            
+
                 logger.log(Level.INFO, "Stop button pressed");
                 String dafName = request.getParameter("daf").toString();
 
@@ -78,13 +87,13 @@
 
                 String dafType = request.getParameter("engine").toString();
                 logger.log(Level.INFO, dafName + " : " + dafType);
-                
+
                 AnalyticController controler = new AnalyticController();
-                    controler.stopAnalyticEngine(dafType, dafName);
-            
+                controler.stopAnalyticEngine(dafType, dafName);
+
             }
 
-              if (request.getParameter("start") == null) {
+            if (request.getParameter("start") == null) {
 
                 Cookie dafCookie = new Cookie("dafName", "daf");
                 dafCookie.setMaxAge(60 * 60 * 24);
@@ -92,84 +101,83 @@
             }
 
         %>
-        
-        
+
+
         <div id="maindiv">
-        <h3>EDASICH</h3>
+            <center><h3>EDASICH</h3></center>
 
-        <form action="index.jsp"> 
+            <form action="index.jsp" class="smart-green"> 
 
-            <table border="0">
-                <tr>
-                    <td>Type</td>
-                    <td><select name="engine">
-                            <option value="es" selected>Streaming Data</option>
-                            <option value="hd">Batch Data</option>
-                        </select></td> 
-                </tr>
-                <tr>
-                    <td>Data Asset Function</td>
-                    <td><select name="daf">
+                <table border="0" width="320">
+                    <tr>
+                        <td>Type</td>
+                        <td><select name="engine">
+                                <option value="es" selected>Streaming Data</option>
+                                <option value="jbpm">Batch Data</option>
+                            </select></td> 
+                    </tr>
+                    <tr>
+                        <td>Data Asset Function</td>
+                        <td><select name="daf">
 
-                            <%                                
-            
-                  String dafName = "daf1";
-                  
-                  if (request.getParameter("daf") != null) {
-                      
-                      dafName = request.getParameter("daf").toString();
-                  }
-              
-              
-                                EventLog eLog = new EventLog();
-                                ResultSet rs = eLog.getDAF();
-                                try {
-                                    while (rs.next()) {
-                                        String d_id = rs.getString("id");
-                                        String d_name = rs.getString("name");
-                                        if (dafName.equals(d_name)) {
-                            %>
+                                <%                                String dafName = "daf1";
 
-                            <option value="<%= d_name%>" selected  ><%= d_name%></option>
+                                    if (request.getParameter("daf") != null) {
 
-                            <%
-
-                                        } else {
-                                            
-                                            %>
-
-                            <option value="<%= d_name%>"  ><%= d_name%></option>
-
-                            <%
-                                            
-                                            
-                                            
-                                        }
-
+                                        dafName = request.getParameter("daf").toString();
                                     }
 
-                                } catch (Exception ex) {
+                                    EventLog eLog = new EventLog();
+                                    ResultSet rs = eLog.getDAF();
+                                    try {
+                                        while (rs.next()) {
+                                            String d_id = rs.getString("id");
+                                            String d_name = rs.getString("name");
+                                            if (dafName.equals(d_name)) {
+                                %>
 
-                                }
-                            %>
+                                <option value="<%= d_name%>" selected  ><%= d_name%></option>
 
-                        </select></td> 
-                </tr>
+                                <%
 
-                <tr>
-                    <td><input type="submit" name="start" value ="Start"/></td>
-                    <td></td> 
-                </tr>
-                <tr>
-                    <td><input type="submit" name="stop" value ="Stop"/></td>
-                    <td></td> 
-                </tr>
+                                } else {
 
-            </table>
-        </form>
+                                %>
+
+                                <option value="<%= d_name%>"  ><%= d_name%></option>
+
+                                <%
+
+                                            }
+
+                                        }
+
+                                    } catch (Exception ex) {
+
+                                    }
+                                %>
+
+                            </select></td> 
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td></td> 
+                    </tr>
+                    <tr>
+                        <td><input type="submit"  name="start" value ="Start"/></td>
+                        <td></td> 
+                    </tr>
+                    <tr>
+                        <td><input type="submit"  name="stop" value ="Stop"/></td>
+                        <td></td> 
+                    </tr>
+
+                </table>
+            </form>
 
 
-        
+
 
         </div>
 

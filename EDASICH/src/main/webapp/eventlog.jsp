@@ -1,7 +1,11 @@
 
 <%@page import="java.sql.ResultSet"%>
 <%@page import="at.ac.tuwien.dsg.edasich.utils.EventLog"%>
-
+<style type="text/css">
+<!--
+@import url("style.css");
+-->
+</style>
 
         <%
 
@@ -22,8 +26,9 @@
 
         %>
 
-        <table border="1">
+        <table id="hor-minimalist-b" >
       
+            <thead>
             <tr>
                 <th>ID</th>
                 <th>DAF</th>
@@ -31,8 +36,9 @@
                 <th>EVENT</th>
                 <th>SEVERITY</th>
             </tr>
+            </thead>
 
-
+            <tbody>
             <%                       EventLog eLog = new EventLog();
                 ResultSet rs = eLog.getEventLog(dafName);
                 try {
@@ -61,7 +67,7 @@
                 }
             %>
 
-
+            </tbody>
 
         </table>
 
