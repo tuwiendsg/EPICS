@@ -14,7 +14,7 @@ public class OperateProperty {
     public String getGraphStorageURI()
     {
         //return "jdbc:virtuoso://localhost:1111";
-        //return "jdbc:virtuoso://128.130.172.230:1111";
+        //return "jdbc:virtuoso://:1111";
         return "jdbc:virtuoso://:1111";
     }
     
