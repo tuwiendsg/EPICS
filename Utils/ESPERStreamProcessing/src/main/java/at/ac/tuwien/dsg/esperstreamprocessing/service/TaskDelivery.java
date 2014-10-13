@@ -26,13 +26,15 @@ import org.apache.http.message.BasicNameValuePair;
  */
 public class TaskDelivery {
     
-    public void deliver(Task task){
+    public void deliver(Task task, String enrichmentInfo, String eventVals){
+        
+        String content = task.getContent() + "\n" +"Detected: " +  eventVals + "\n" + "More information: " + enrichmentInfo;
         
         if (task != null) {
 
             List<NameValuePair> paramList = new ArrayList<NameValuePair>();
             paramList.add(new BasicNameValuePair("name", task.getName()));
-            paramList.add(new BasicNameValuePair("content", task.getContent()));
+            paramList.add(new BasicNameValuePair("content", content));
             paramList.add(new BasicNameValuePair("tag", task.getTag()));
             paramList.add(new BasicNameValuePair("severity", task.getSeverity().name()));
 

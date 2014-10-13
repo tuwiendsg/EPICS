@@ -50,6 +50,7 @@ public class EventSubscriber implements StatementSubscriber {
 
     private EventPattern eventPattern;
     private String dafName;
+    private String enrichmentInfo;
 
     public EventSubscriber() {
     }
@@ -93,25 +94,26 @@ public class EventSubscriber implements StatementSubscriber {
         
         if (sendTaskPermission()) {
             enrichData(listOfSensors);
-            forwardTask();
+            forwardTask(valsLog.toString());
             logEvent(valsLog.toString());
             logTask();
         }
 
     }
 
-    public void forwardTask() {
+    public void forwardTask(String eventVals) {
 
         Task task = eventPattern.getTask();
         TaskDelivery delivery = new TaskDelivery();
-        delivery.deliver(task);
+        delivery.deliver(task,enrichmentInfo,eventVals);
     }
 
     public void enrichData(List<String> listOfSensors) {
         
+      
         String params="";
         for (int i=0;i<listOfSensors.size();i++){
-            if (i!=(listOfSensors.size()-1)){
+            if (i<(listOfSensors.size()-1)){
                 params = params + listOfSensors.get(i) + ",";
             } else {
                 params = params + listOfSensors.get(i);
@@ -119,16 +121,14 @@ public class EventSubscriber implements StatementSubscriber {
             
         }
 
-        Task task = eventPattern.getTask();
         String enrichmentURI = eventPattern.getEnrichmentInfo();
         RestfulWSClient ws = new RestfulWSClient(enrichmentURI);
-        String taskContent = task.getContent() + "\n";
-        String enrichInfo = ws.callGetMethod(params);
+        
+        enrichmentInfo = ws.callGetMethod(params);
 
-        Logger.getLogger(EventSubscriber.class.getName()).log(Level.INFO, "ENRICHMENT DATA: " + enrichInfo);
-        taskContent += enrichInfo;
+        Logger.getLogger(EventSubscriber.class.getName()).log(Level.INFO, "ENRICHMENT DATA: " + enrichmentInfo);
+  
 
-        task.setContent(taskContent);
 
     }
 
@@ -140,51 +140,56 @@ public class EventSubscriber implements StatementSubscriber {
     }
 
     private void logTask() {
-
-       Task task = eventPattern.getTask();
-       task.setContent(String.valueOf(System.nanoTime()));
        
         try {
-            String logData = JAXBUtils.marshal(task, Task.class);
+            String logData = String.valueOf(System.nanoTime());
             IOUtils.writeData(logData, "log");
         } catch (Exception ex) {
             System.out.println("" + ex.toString());
         }
     }
 
-    private Task getLogTask() {
+    private String getLogTask() {
 
-        Task task = null;
+        String logData="";
 
         try {
-            String logData = IOUtils.readData("log");
-            JAXBContext bContext = JAXBContext.newInstance(Task.class);
-            Unmarshaller um = bContext.createUnmarshaller();
-            task = (Task) um.unmarshal(new StringReader(logData));
+            logData = IOUtils.readData("log");
         } catch (Exception e) {
             System.out.println("" + e.toString());
         }
 
-        return task;
+        return logData;
     }
 
     private boolean sendTaskPermission() {
         boolean permission = true;
 
-        Task task = getLogTask();
-        if (task != null) {
+        String logTask = getLogTask();
+        logTask = logTask.replaceAll("\n", "");
+        String lt = "LOG TASK -" + logTask+"-";
+         Logger.getLogger(EventSubscriber.class.getName()).log(Level.INFO, lt);
+        if (!logTask.equals("")) {
 
-            long previousTime = Long.parseLong(task.getContent());
+            long previousTime = Long.parseLong(logTask);
             long currentTime = System.nanoTime();
             double different = ((currentTime - previousTime) / Math.pow(10, 6));
             double waitingTime = Double.parseDouble(Configuration.getConfiguration("TASK.INTERVAL"));
-            System.out.println("Interval time: " + waitingTime);
-            System.out.println("Remaining time: " + different);
+            Logger.getLogger(EventSubscriber.class.getName()).log(Level.INFO, "Interval time: " + waitingTime);
+            Logger.getLogger(EventSubscriber.class.getName()).log(Level.INFO, "Remaining time: " + different);
+      
             if (different < waitingTime) {
                 permission = false;
+                
             }
 
         } 
+            
+        if (permission){
+            Logger.getLogger(EventSubscriber.class.getName()).log(Level.INFO, "PERMISSION: YES");
+        } else {
+            Logger.getLogger(EventSubscriber.class.getName()).log(Level.INFO, "PERMISSION: NO");
+        }
 
         return permission;
     }
