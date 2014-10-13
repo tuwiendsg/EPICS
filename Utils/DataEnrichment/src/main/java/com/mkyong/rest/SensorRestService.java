@@ -1,7 +1,9 @@
 package com.mkyong.rest;
 
+import at.ac.tuwien.dsg.dataenrichment.Utils;
 import com.mkyong.app.graphretrieve.*;
 import java.util.LinkedList;
+import java.util.UUID;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -52,9 +54,8 @@ public class SensorRestService {
             tabStrs += tabStr;
 
         }
-
-        //return "The information related Sensor "+result.toString();
-        return "<html>\n"
+        
+        String htmlData = "<html>\n"
                 + "    <head>\n"
                 + "        <title>The information related of </title>\n"
                 + "        <meta charset=\"UTF-8\">\n"
@@ -65,6 +66,13 @@ public class SensorRestService {
                 + "    </body>\n"
                 + "</html>\n"
                 + "";
+        UUID uuid = UUID.randomUUID();
+
+        String fileName = uuid.toString() + ".html";
+        Utils util  = new Utils();
+        util.writeToHTMLFile(htmlData, fileName);
+        //return "The information related Sensor "+result.toString();
+        return "";
 
     }
 
