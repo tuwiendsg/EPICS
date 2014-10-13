@@ -74,7 +74,7 @@ public class SensorRestService {
         //return "The information related Sensor "+result.toString();
         
         
-        String htmlUrl = "http://128.130.172.230:8080/DataEnrichment/" + fileName;
+        String htmlUrl = "http:///DataEnrichment/" + fileName;
         
         return htmlUrl;
 
