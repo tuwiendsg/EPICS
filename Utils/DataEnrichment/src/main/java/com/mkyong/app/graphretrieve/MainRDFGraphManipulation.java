@@ -15,7 +15,9 @@ import java.util.LinkedList;
 public class MainRDFGraphManipulation {
     public static void main(String []p)
     {
-        String subject="FanSpeed";
+        //String subject="FanSpeed";
+        String subject="Sensor21";
+        //String subject="SensoryModule";
         //String predicate="MonitoredObjectName";
         //String predicate="MonitoredObjectInformation";
         /*LinkedList<String> monitoringInformation2=new DataModelManipulation1().queryResult(subject);

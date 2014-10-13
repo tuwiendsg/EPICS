@@ -18,6 +18,7 @@ public class MainRDFGraph {
        
        //for windtunnel.rdf file
        String fileName="./example6/WindTunnel.rdf";
+       
         
         try
         {
@@ -41,7 +42,7 @@ public class MainRDFGraph {
         }
         
         ///Sensor21
-       /* String fileName2="./example6/MOXGasSensor.rdf";
+        String fileName2="./example6/SensoryModule.rdf";
         
         try
         {
@@ -50,6 +51,30 @@ public class MainRDFGraph {
         catch(Exception e)
         {
             System.out.println("exception occured="+e);
-        }*/
+        }
+        
+        
+        String fileName3="./example6/Sensor21.rdf";
+        
+        try
+        {
+        new RDFGraphStorage().GraphStore(fileName3,fileuri);
+        }
+        catch(Exception e)
+        {
+            System.out.println("exception occured="+e);
+        }
+        
+        //
+        String fileName4="./example6/MOXGasSensor.rdf";
+        
+        try
+        {
+        new RDFGraphStorage().GraphStore(fileName4,fileuri);
+        }
+        catch(Exception e)
+        {
+            System.out.println("exception occured="+e);
+        }
    }
 }

@@ -44,7 +44,7 @@ public class RDFGraphStorage {
         String password=operateProperty.getGraphStoragePassword();
         VirtGraph virtgraph=new VirtGraph(fileURI,url,username,password);
          
-        if(!virtgraph.isEmpty())
+        /*if(!virtgraph.isEmpty())
             {
                 System.out.println("clean the graph");
                 virtgraph.clear();
@@ -52,7 +52,7 @@ public class RDFGraphStorage {
          else
             {
                 System.out.println("do not need to clean the graph");
-            }
+            }*/
         
         
         while (iter.hasNext())
