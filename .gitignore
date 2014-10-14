@@ -42,4 +42,4 @@
 /Utils/DataEnrichment/src/main/java/com/mkyong/app/OperateProperty.java
 /Utils/DataEnrichment/src/main/webapp/WEB-INF/Configuration.properties
 
-/Utils/DataEnrichment/src/main/java/com/mkyong/app/OperateProperty.java
+/Utils/DataEnrichment/src/main/java/com/mkyong/app/graphstorage/OperateProperty.java
