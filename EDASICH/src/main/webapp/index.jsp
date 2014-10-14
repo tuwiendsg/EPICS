@@ -30,22 +30,24 @@
     <link rel="stylesheet" href="css/kanso.css?v=2.0.1">
     <link rel="stylesheet" href="css/dropdown.css">
     <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
-
+    <link href="http://fonts.googleapis.com/css?family=Allerta" rel="stylesheet" type="text/css">
 
     <% Logger logger = Logger.getLogger(this.getClass().getName());%>
     <body>
 
-        <header>
-            
+        <h3>EDASICH</h3>
+         <header>
+
             <div class="nav">
                 <ul>
-                    <li class="analytic"><a class="active" href="#">Analytics</a></li>
-                    <li class="daf"><a href="#">DAF</a></li>
+                    <li class="analytic"><a class="active" href="index.jsp">Analytics</a></li>
+                    <li class="daf"><a href="daf.jsp">DAF</a></li>
                 </ul>
             </div>
+ 
         </header>
 
-        <h3>EDASICH</h3>
+        <br> <br>
         <%
             if (request.getParameter("start") != null) {
 
@@ -117,7 +119,7 @@
 
 
         <div id="maindiv">
-            
+
 
             <form action="index.jsp" class="smart-green"> 
 

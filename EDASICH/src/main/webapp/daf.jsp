@@ -20,13 +20,25 @@
             -->
         </style>
         <link rel="stylesheet" href="css/kanso.css?v=2.0.1">
-
+        <link rel="stylesheet" href="css/dropdown.css">
+        <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+        <link href="http://fonts.googleapis.com/css?family=Allerta" rel="stylesheet" type="text/css">
     </head>
     <body>
+        <h3>EDASICH</h3>
+        <header>
 
-
+            <div class="nav">
+                <ul>
+                    <li class="analytic"><a  href="index.jsp">Analytics</a></li>
+                    <li class="daf"><a class="active" href="daf.jsp">DAF</a></li>
+                </ul>
+            </div>
+ 
+        </header>
+         <br> 
         <% Logger logger = Logger.getLogger(this.getClass().getName());%>
-    <center><h3>EDASICH</h3></center>
+        
         <form action="Uploader" method="post" enctype="multipart/form-data"> <br>
             <table class="smart-green">
 
@@ -46,7 +58,7 @@
 
         <br>
 
-        <center><table id="ver-minimalist">
+    <center><table id="ver-minimalist">
             <tr>
                 <th>Data Asset Function</th>
                 <th>Action</th> 
@@ -83,10 +95,10 @@
             %>
 
 
-            </table></center>
+        </table></center>
 
 
 
 
-    </body>
+</body>
 </html>
