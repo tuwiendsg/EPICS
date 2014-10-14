@@ -8,7 +8,12 @@ package at.ac.tuwien.dsg.esperstreamprocessing.utils;
 
 import at.ac.tuwien.dsg.esperstreamprocessing.handler.SensorEventHandler;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -90,8 +95,58 @@ public class RestfulWSClient {
         this.url = url;
     }
     
+    
+    public String callGetDirectURL(String xmlString){
+        
+        url += xmlString;
+        String rs="";
+        
+        try {
+            URL url_ac = new URL(url);
+            
+            // read text returned by server
+            BufferedReader in=null;
+            try {
+                in = new BufferedReader(new InputStreamReader(url_ac.openStream()));
+            } catch (IOException ex) {
+                Logger.getLogger(RestfulWSClient.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            String line;
+
+            try {
+                while ((line = in.readLine()) != null) {
+                    
+                    rs +=line;
+                    
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(RestfulWSClient.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            try {
+                in.close();
+            } catch (IOException ex) {
+                Logger.getLogger(RestfulWSClient.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return rs;
+    }
+    
+    
     public String callGetMethod(String xmlString) {
 
+      /*  try {
+            xmlString = URLEncoder.encode(xmlString, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+              */
+              
         url += xmlString;
         String getResult = "";
         try {

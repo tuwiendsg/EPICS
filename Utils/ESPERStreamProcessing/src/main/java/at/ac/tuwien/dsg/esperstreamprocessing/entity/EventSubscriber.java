@@ -124,7 +124,7 @@ public class EventSubscriber implements StatementSubscriber {
         String enrichmentURI = eventPattern.getEnrichmentInfo();
         RestfulWSClient ws = new RestfulWSClient(enrichmentURI);
         
-        enrichmentInfo = ws.callGetMethod(params);
+        enrichmentInfo = ws.callGetDirectURL(params);
 
         Logger.getLogger(EventSubscriber.class.getName()).log(Level.INFO, "ENRICHMENT DATA: " + enrichmentInfo);
   
