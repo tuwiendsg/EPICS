@@ -14,14 +14,21 @@
     <head>
         <title>EDASICH</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style type="text/css">
+            <!--
+            @import url("style.css");
+            -->
+        </style>
+        <link rel="stylesheet" href="css/kanso.css?v=2.0.1">
+
     </head>
     <body>
-        
-   
+
+
         <% Logger logger = Logger.getLogger(this.getClass().getName());%>
-        <h3>EDASICH</h3>
+    <center><h3>EDASICH</h3></center>
         <form action="Uploader" method="post" enctype="multipart/form-data"> <br>
-            <table border="0">
+            <table class="smart-green">
 
                 <tr>
                     <td>Data Asset Function</td>
@@ -39,12 +46,12 @@
 
         <br>
 
-        <table border="1">
+        <center><table id="ver-minimalist">
             <tr>
                 <th>Data Asset Function</th>
                 <th>Action</th> 
                 <th>Status</th> 
-                
+
             </tr>
 
             <%
@@ -55,8 +62,7 @@
                         String d_id = rs.getString("id");
                         String d_name = rs.getString("name");
                         String d_status = rs.getString("status");
-                        
-                        
+
 
             %>
 
@@ -64,7 +70,7 @@
 
             <tr>
                 <td><%= d_name%></td>    
-                <td><a href="dafdelete.jsp?dafName=<%= d_name %>">Delete</a></td> 
+                <td><a href="dafdelete.jsp?dafName=<%= d_name%>">Delete</a></td> 
                 <td><%= d_status%></td>
             </tr>
 
@@ -77,7 +83,7 @@
             %>
 
 
-        </table>
+            </table></center>
 
 
 

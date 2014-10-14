@@ -28,11 +28,24 @@
                 }, 5000);
     </script>
     <link rel="stylesheet" href="css/kanso.css?v=2.0.1">
+    <link rel="stylesheet" href="css/dropdown.css">
+    <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+
 
     <% Logger logger = Logger.getLogger(this.getClass().getName());%>
     <body>
 
+        <header>
+            
+            <div class="nav">
+                <ul>
+                    <li class="analytic"><a class="active" href="#">Analytics</a></li>
+                    <li class="daf"><a href="#">DAF</a></li>
+                </ul>
+            </div>
+        </header>
 
+        <h3>EDASICH</h3>
         <%
             if (request.getParameter("start") != null) {
 
@@ -104,7 +117,7 @@
 
 
         <div id="maindiv">
-            <center><h3>EDASICH</h3></center>
+            
 
             <form action="index.jsp" class="smart-green"> 
 
