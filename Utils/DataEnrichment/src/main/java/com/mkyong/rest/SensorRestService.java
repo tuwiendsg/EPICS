@@ -48,9 +48,9 @@ public class SensorRestService {
                     + "            <tbody>\n"
                     + rowStrs
                     + "            </tbody>\n"
-                    + "        </table>\n"
-                    + "\n"
-                    + " <br> <br> <br>      \n";
+                    + "        </table>\n" ;
+                 
+                   
 
             tabStrs += tabStr;
 

@@ -35,6 +35,7 @@ public class OperateProperty {
     public String getgui()
     {
         return "http://localhost:8080/DataEnrichment/" ;
+        //return "http://128.130.172.230:8080/DataEnrichment/" ;
     }
     
 }

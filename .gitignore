@@ -1,3 +1,4 @@
+
 /DEPIC/sSYBL/target/
 /DEPIC/Client/Client/target/
 /DEPIC/DepicTool/target/
@@ -38,3 +39,5 @@
 /Utils/LeastSquareRegressionHD/build/
 /Utils/JBPMWorkflowEngine/target/
 /Utils/JBPMEngine/target/
+/Utils/DataEnrichment/src/main/java/com/mkyong/app/OperateProperty.java
+/Utils/DataEnrichment/src/main/webapp/WEB-INF/Configuration.properties

@@ -19,38 +19,40 @@ import java.io.FileWriter;
  *
  * @author Anindita
  */
-public class Sensor23 {
+public class Sensor29 {
     public static void main(String []p)
     {
         
     
     String uri="http://windtunnel.com#";
-      String objectName="Sensor23";
+      String objectName="Sensor29";
       
       Model model=ModelFactory.createDefaultModel();
-      //Resource moduleResource=model.createResource(uri+"SensoryModule");
+      Resource moduleResource=model.createResource(uri+"SensoryModule");
       Resource sensorResource=model.createResource(uri+objectName);
-      //sensorResource.addProperty(RDFS.member, moduleResource);
+      sensorResource.addProperty(RDFS.member, moduleResource);
       
-      Property manufactured=model.createProperty(uri+"manufacturedby");
-      sensorResource.addProperty(manufactured, "http://www.figarosensor.com/");
-      
-      Resource gasSensor=model.createResource("http://www.eoc-inc.com/Cambridge/metal%20oxide%20gas%20sensors.htm");
-      sensorResource.addProperty(RDFS.seeAlso, gasSensor);
+      Resource gasSensor=model.createResource(uri+"MOXGasSensor");
+      sensorResource.addProperty(RDF.type, gasSensor);
       
       
       Property name=model.createProperty(uri+"name");
-      sensorResource.addProperty(name,"Sensor23");
+      sensorResource.addProperty(name,"Sensor29");
       
-      //Property locationProperty=model.createProperty(uri+"location");
+      Property locationProperty=model.createProperty(uri+"location");
       Property position=model.createProperty(uri+"position");
       Property board=model.createProperty(uri+"board");
       Property sile=model.createProperty(uri+"silo");
-      //Resource location=model.createResource(uri+"location"+objectName);
-      sensorResource.addProperty(position, "3");
-      sensorResource.addProperty(board, "1");
-      sensorResource.addProperty(sile, "7");
-      //sensorResource.addProperty(locationProperty, location);
+      Resource location=model.createResource(uri+"location"+objectName);
+      location.addProperty(position, "4");
+      location.addProperty(board, "1");
+      location.addProperty(sile, "5");
+      sensorResource.addProperty(locationProperty, location);
+      
+      Property monitoredgas=model.createProperty(uri+"monitoredgasname");
+      Property gasconcentration=model.createProperty(uri+"monitoredgasconcentration");
+      sensorResource.addProperty(monitoredgas, "methane");
+      sensorResource.addProperty(gasconcentration, "1500ppm");
       
       model.setNsPrefix("chamber", uri);
         model.write(System.out);

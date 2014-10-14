@@ -28,26 +28,29 @@ public class Sensor25 {
       String objectName="Sensor25";
       
       Model model=ModelFactory.createDefaultModel();
-      Resource moduleResource=model.createResource(uri+"SensoryModule");
+      //Resource moduleResource=model.createResource(uri+"SensoryModule");
       Resource sensorResource=model.createResource(uri+objectName);
-      sensorResource.addProperty(RDFS.member, moduleResource);
+     // sensorResource.addProperty(RDFS.member, moduleResource);
       
-      Resource gasSensor=model.createResource(uri+"MOXGasSensor");
-      sensorResource.addProperty(RDF.type, gasSensor);
+      Property manufactured=model.createProperty(uri+"manufacturedby");
+      sensorResource.addProperty(manufactured, "http://www.figarosensor.com/");
+      
+      Resource gasSensor=model.createResource("http://www.eoc-inc.com/Cambridge/metal%20oxide%20gas%20sensors.htm");
+      sensorResource.addProperty(RDFS.seeAlso, gasSensor);
       
       
       Property name=model.createProperty(uri+"name");
       sensorResource.addProperty(name,"Sensor25");
       
-      Property locationProperty=model.createProperty(uri+"location");
+      //Property locationProperty=model.createProperty(uri+"location");
       Property position=model.createProperty(uri+"position");
       Property board=model.createProperty(uri+"board");
       Property sile=model.createProperty(uri+"silo");
-      Resource location=model.createResource(uri+"location"+objectName);
-      location.addProperty(position, "4");
-      location.addProperty(board, "1");
-      location.addProperty(sile, "1");
-      sensorResource.addProperty(locationProperty, location);
+      //Resource location=model.createResource(uri+"location"+objectName);
+      sensorResource.addProperty(position, "4");
+      sensorResource.addProperty(board, "1");
+      sensorResource.addProperty(sile, "1");
+      //sensorResource.addProperty(locationProperty, location);
       
       model.setNsPrefix("chamber", uri);
         model.write(System.out);
