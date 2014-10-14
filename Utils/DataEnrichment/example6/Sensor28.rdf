@@ -2,11 +2,11 @@
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:chamber="http://windtunnel.com#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" > 
-  <rdf:Description rdf:about="http://windtunnel.com#Sensor27">
+  <rdf:Description rdf:about="http://windtunnel.com#Sensor28">
     <chamber:monitoredgasconcentration>1000ppm</chamber:monitoredgasconcentration>
     <chamber:monitoredgasname>Methane(CH4)</chamber:monitoredgasname>
-    <chamber:locationSensor27>P4*B1*S3</chamber:locationSensor27>
-    <chamber:name>Sensor27</chamber:name>
+    <chamber:locationSensor28>P4*B1*S4</chamber:locationSensor28>
+    <chamber:name>Sensor28</chamber:name>
     <rdfs:seeAlso rdf:resource="http://www.eoc-inc.com/Cambridge/metal%20oxide%20gas%20sensors.htm"/>
     <chamber:manufacturedby>http://www.figarosensor.com/</chamber:manufacturedby>
   </rdf:Description>

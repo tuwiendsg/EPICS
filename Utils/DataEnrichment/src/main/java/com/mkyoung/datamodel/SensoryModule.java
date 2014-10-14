@@ -43,6 +43,25 @@ public class SensoryModule {
         Property controllername=model.createProperty(uri+"controllerunitname");
         r1.addProperty(controllername, "microprocessor MSP430F247");
         
+        Property facilityProperty=model.createProperty(uri+"facilityElement");
+        Resource facilityResource=model.createResource(uri+"FacilityElement");
+        Property facilityName=model.createProperty(uri+"facilityname");
+        facilityResource.addProperty(facilityName, "Sensor21");
+        facilityResource.addProperty(RDFS.seeAlso,model.createResource("http://windtunnel.com#Sensor21"));
+        facilityResource.addProperty(facilityName, "Sensor22");
+        facilityResource.addProperty(RDFS.seeAlso,model.createResource("http://windtunnel.com#Sensor22"));
+        facilityResource.addProperty(facilityName, "Sensor23");
+        facilityResource.addProperty(RDFS.seeAlso,model.createResource("http://windtunnel.com#Sensor23"));
+        facilityResource.addProperty(facilityName, "Sensor24");
+        facilityResource.addProperty(RDFS.seeAlso,model.createResource("http://windtunnel.com#Sensor24"));
+        facilityResource.addProperty(facilityName, "Sensor25");
+        facilityResource.addProperty(RDFS.seeAlso,model.createResource("http://windtunnel.com#Sensor25"));
+        facilityResource.addProperty(facilityName, "Sensor26");
+        facilityResource.addProperty(RDFS.seeAlso,model.createResource("http://windtunnel.com#Sensor26"));
+        facilityResource.addProperty(facilityName, "Sensor27");
+        facilityResource.addProperty(RDFS.seeAlso,model.createResource("http://windtunnel.com#Sensor27"));
+        r1.addProperty(facilityProperty,facilityResource);
+        
          model.setNsPrefix("chamber", uri);
         model.write(System.out);
         File f=new File("./example6");

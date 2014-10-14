@@ -1,7 +1,7 @@
 package com.mkyong.rest;
 
+import at.ac.tuwien.dsg.dataenrichment.Configuration;
 import at.ac.tuwien.dsg.dataenrichment.Utils;
-import com.mkyong.app.OperateProperty;
 import com.mkyong.app.graphretrieve.*;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -29,6 +29,7 @@ public class SensorRestService {
             LinkedList<String> monitoringresult = new RDFManipulationSubject().queryResultSubject(sensor);
 
             String rowStrs = "";
+            String header="The information related of : "+sensor;
 
             for (int i = 0; i < monitoringresult.size(); i = i + 2) {
                 rowStrs = rowStrs + "                <tr>\n";
@@ -38,7 +39,8 @@ public class SensorRestService {
 
             }
 
-            String tabStr = "<table id=\"ver-minimalist\" >\n"
+            String tabStr = "<h3>"+header+"</h3>"
+                    + "<table id=\"ver-minimalist\" >\n"
                     + "            <thead>\n"
                     + "                <tr>\n"
                     + "                    <th>Predicate</th>\n"
@@ -75,7 +77,7 @@ public class SensorRestService {
         util.writeToHTMLFile(htmlData, fileName);
         //return "The information related Sensor "+result.toString();
 
-        String htmlUrl = new OperateProperty().getgui() + fileName;
+        String htmlUrl = "http://"+Configuration.getConfig("ENHANCEMENT.IP")+":"+Configuration.getConfig("ENHANCEMENT.PORT")+"/DataEnrichment/"+ fileName;
 
         return htmlUrl;
 

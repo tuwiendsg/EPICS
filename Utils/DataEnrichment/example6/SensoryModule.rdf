@@ -7,9 +7,26 @@
     <chamber:positionnumber>6</chamber:positionnumber>
   </rdf:Description>
   <rdf:Description rdf:about="http://windtunnel.com#SensoryModule">
+    <chamber:facilityElement rdf:resource="http://windtunnel.com#FacilityElement"/>
     <chamber:controllerunitname>microprocessor MSP430F247</chamber:controllerunitname>
     <chamber:locatedIn rdf:resource="http://windtunnel.com#Place"/>
     <chamber:sensoryModuleNumber>54</chamber:sensoryModuleNumber>
     <rdfs:member rdf:resource="http://windtunnel.com#WindTunnel"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://windtunnel.com#FacilityElement">
+    <chamber:facilityname>Sensor27</chamber:facilityname>
+    <chamber:facilityname>Sensor22</chamber:facilityname>
+    <rdfs:seeAlso rdf:resource="http://windtunnel.com#Sensor21"/>
+    <chamber:facilityname>Sensor25</chamber:facilityname>
+    <rdfs:seeAlso rdf:resource="http://windtunnel.com#Sensor26"/>
+    <chamber:facilityname>Sensor23</chamber:facilityname>
+    <chamber:facilityname>Sensor26</chamber:facilityname>
+    <rdfs:seeAlso rdf:resource="http://windtunnel.com#Sensor24"/>
+    <rdfs:seeAlso rdf:resource="http://windtunnel.com#Sensor25"/>
+    <chamber:facilityname>Sensor24</chamber:facilityname>
+    <rdfs:seeAlso rdf:resource="http://windtunnel.com#Sensor23"/>
+    <chamber:facilityname>Sensor21</chamber:facilityname>
+    <rdfs:seeAlso rdf:resource="http://windtunnel.com#Sensor27"/>
+    <rdfs:seeAlso rdf:resource="http://windtunnel.com#Sensor22"/>
   </rdf:Description>
 </rdf:RDF>

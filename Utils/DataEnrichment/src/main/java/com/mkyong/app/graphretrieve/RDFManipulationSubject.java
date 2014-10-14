@@ -5,12 +5,13 @@
  */
 package com.mkyong.app.graphretrieve;
 
+import at.ac.tuwien.dsg.dataenrichment.Configuration;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-import com.mkyong.app.OperateProperty;
+//import com.mkyong.app.OperateProperty;
 import java.util.LinkedList;
 import virtuoso.jena.driver.VirtGraph;
 import virtuoso.jena.driver.VirtuosoQueryExecution;
@@ -26,11 +27,12 @@ public class RDFManipulationSubject {
     {
         
         LinkedList<String> monitoringInformation=new LinkedList<String>();
-        OperateProperty operateProperty=new OperateProperty();
+        //OperateProperty operateProperty=new OperateProperty();
         //LinkedList<String> monitoringPredicatParameter=new LinkedList<String>();
         //String storageName=new StringTokenizer(subject1,"#").nextToken();
         //String storageName="http://windtunnel.com";
-        String storageName=operateProperty.getrdfURI();
+        //String storageName=operateProperty.getrdfURI();
+        String storageName=Configuration.getConfig("RDFURI");
         String subject1=storageName+"#"+subject2;
         String predicate1="MonitoredObjectInformation";
         
@@ -39,9 +41,11 @@ public class RDFManipulationSubject {
         Query sparql = QueryFactory.create("SELECT ?s ?p ?o FROM <"+storageName+"> WHERE { ?s ?p ?o }");
         
         //String url="jdbc:virtuoso://localhost:1111";
-        String url=operateProperty.getGraphStorageURI();
-        String username=operateProperty.getGraphStorageUserName();
-        String password=operateProperty.getGraphStoragePassword();
+        //String url=operateProperty.getGraphStorageURI();///////
+        
+        String url="jdbc:virtuoso://"+Configuration.getConfig("VIRTUOSO.IP")+":"+Configuration.getConfig("VIRTUOSO.PORT");
+        String username=Configuration.getConfig("VIRTUOSO.USERNAME");
+        String password=Configuration.getConfig("VIRTUOSO.PASSWORD");
         VirtGraph graph=new VirtGraph(storageName,url,username,password);
         if(graph.isEmpty())
             {

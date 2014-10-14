@@ -42,14 +42,22 @@ public class Sensor24 {
       Property name=model.createProperty(uri+"name");
       sensorResource.addProperty(name,"Sensor24");
       
+      Property locationProperty=model.createProperty(uri+"locationSensor24");
+      sensorResource.addProperty(locationProperty, "P3*B1*S8");
+      
+      Property monitoredgasName=model.createProperty(uri+"monitoredgasname");
+      Property monitoredgasconc=model.createProperty(uri+"monitoredgasconcentration");
+      sensorResource.addProperty(monitoredgasName, "Methane(CH4)");
+      sensorResource.addProperty(monitoredgasconc, "1000ppm");
+      
       //Property locationProperty=model.createProperty(uri+"location");
-      Property position=model.createProperty(uri+"position");
+      /*Property position=model.createProperty(uri+"position");
       Property board=model.createProperty(uri+"board");
       Property sile=model.createProperty(uri+"silo");
       //Resource location=model.createResource(uri+"location"+objectName);
       sensorResource.addProperty(position, "3");
       sensorResource.addProperty(board, "1");
-      sensorResource.addProperty(sile, "8");
+      sensorResource.addProperty(sile, "8");*/
       //sensorResource.addProperty(locationProperty, location);
       
       model.setNsPrefix("chamber", uri);

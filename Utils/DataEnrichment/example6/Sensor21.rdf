@@ -3,9 +3,9 @@
     xmlns:chamber="http://windtunnel.com#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" > 
   <rdf:Description rdf:about="http://windtunnel.com#Sensor21">
-    <chamber:silo>5</chamber:silo>
-    <chamber:board>1</chamber:board>
-    <chamber:position>3</chamber:position>
+    <chamber:monitoredgasconcentration>1000ppm</chamber:monitoredgasconcentration>
+    <chamber:monitoredgasname>Methane(CH4)</chamber:monitoredgasname>
+    <chamber:locationSensor21>P3*B1*S5</chamber:locationSensor21>
     <chamber:name>Sensor21</chamber:name>
     <rdfs:seeAlso rdf:resource="http://www.eoc-inc.com/Cambridge/metal%20oxide%20gas%20sensors.htm"/>
     <chamber:manufacturedby>http://www.figarosensor.com/</chamber:manufacturedby>

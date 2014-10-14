@@ -67,7 +67,7 @@ public class MainRDFGraph {
         }
         
         //MOX gas sensor
-        for(int i=21;i<28;i++)
+        for(int i=21;i<30;i++)
         {
         String fileName3="./example6/Sensor"+i+".rdf";
         
