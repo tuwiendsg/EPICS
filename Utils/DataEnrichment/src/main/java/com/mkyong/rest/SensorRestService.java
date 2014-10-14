@@ -38,7 +38,7 @@ public class SensorRestService {
 
             }
 
-            String tabStr = "<table border=\"1\">\n"
+            String tabStr = "<table id=\"ver-minimalist\" >\n"
                     + "            <thead>\n"
                     + "                <tr>\n"
                     + "                    <th>Predicate</th>\n"
@@ -55,12 +55,13 @@ public class SensorRestService {
             tabStrs += tabStr;
 
         }
-        
+
         String htmlData = "<html>\n"
                 + "    <head>\n"
                 + "        <title>The information related of </title>\n"
                 + "        <meta charset=\"UTF-8\">\n"
                 + "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+                + "        <link rel=\"stylesheet\" href=\"style.css\">"
                 + "    </head>\n"
                 + "    <body>\n"
                 + tabStrs
@@ -70,13 +71,12 @@ public class SensorRestService {
         UUID uuid = UUID.randomUUID();
 
         String fileName = uuid.toString() + ".html";
-        Utils util  = new Utils();
+        Utils util = new Utils();
         util.writeToHTMLFile(htmlData, fileName);
         //return "The information related Sensor "+result.toString();
-        
-        
-        String htmlUrl = new OperateProperty().getgui()+ fileName;
-        
+
+        String htmlUrl = new OperateProperty().getgui() + fileName;
+
         return htmlUrl;
 
     }
