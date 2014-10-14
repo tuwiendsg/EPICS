@@ -3,12 +3,12 @@
     xmlns:chamber="http://windtunnel.com#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" > 
   <rdf:Description rdf:about="http://windtunnel.com#Sensor22">
-    <chamber:location rdf:resource="http://windtunnel.com#location"/>
+    <chamber:location rdf:resource="http://windtunnel.com#locationSensor22"/>
     <chamber:name>Sensor22</chamber:name>
     <rdf:type rdf:resource="http://windtunnel.com#MOXGasSensor"/>
     <rdfs:member rdf:resource="http://windtunnel.com#SensoryModule"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://windtunnel.com#location">
+  <rdf:Description rdf:about="http://windtunnel.com#locationSensor22">
     <chamber:silo>6</chamber:silo>
     <chamber:board>1</chamber:board>
     <chamber:position>3</chamber:position>

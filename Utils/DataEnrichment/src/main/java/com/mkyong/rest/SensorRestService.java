@@ -1,6 +1,7 @@
 package com.mkyong.rest;
 
 import at.ac.tuwien.dsg.dataenrichment.Utils;
+import com.mkyong.app.OperateProperty;
 import com.mkyong.app.graphretrieve.*;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -74,7 +75,7 @@ public class SensorRestService {
         //return "The information related Sensor "+result.toString();
         
         
-        String htmlUrl = "http:///DataEnrichment/" + fileName;
+        String htmlUrl = new OperateProperty().getgui()+ fileName;
         
         return htmlUrl;
 

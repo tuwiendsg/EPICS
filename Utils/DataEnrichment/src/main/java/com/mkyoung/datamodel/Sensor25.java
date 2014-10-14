@@ -11,21 +11,21 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
-import com.hp.hpl.jena.vocabulary.RDFS;
 import java.io.File;
 import java.io.FileWriter;
 
 /**
  *
- * @author Anindita
+ * @author dsg
  */
-public class Sensor23 {
+public class Sensor25 {
+
     public static void main(String []p)
     {
         
     
     String uri="http://windtunnel.com#";
-      String objectName="Sensor23";
+      String objectName="Sensor25";
       
       Model model=ModelFactory.createDefaultModel();
       Resource moduleResource=model.createResource(uri+"SensoryModule");
@@ -37,16 +37,16 @@ public class Sensor23 {
       
       
       Property name=model.createProperty(uri+"name");
-      sensorResource.addProperty(name,"Sensor23");
+      sensorResource.addProperty(name,"Sensor25");
       
       Property locationProperty=model.createProperty(uri+"location");
       Property position=model.createProperty(uri+"position");
       Property board=model.createProperty(uri+"board");
       Property sile=model.createProperty(uri+"silo");
       Resource location=model.createResource(uri+"location"+objectName);
-      location.addProperty(position, "3");
+      location.addProperty(position, "4");
       location.addProperty(board, "1");
-      location.addProperty(sile, "7");
+      location.addProperty(sile, "1");
       sensorResource.addProperty(locationProperty, location);
       
       model.setNsPrefix("chamber", uri);
@@ -71,3 +71,6 @@ public class Sensor23 {
     }
     
 }
+
+    
+

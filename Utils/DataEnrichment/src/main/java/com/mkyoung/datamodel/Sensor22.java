@@ -43,7 +43,7 @@ public class Sensor22 {
       Property position=model.createProperty(uri+"position");
       Property board=model.createProperty(uri+"board");
       Property sile=model.createProperty(uri+"silo");
-      Resource location=model.createResource(uri+"location");
+      Resource location=model.createResource(uri+"location"+objectName);
       location.addProperty(position, "3");
       location.addProperty(board, "1");
       location.addProperty(sile, "6");

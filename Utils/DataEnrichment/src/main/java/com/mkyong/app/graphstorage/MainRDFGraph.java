@@ -15,6 +15,8 @@ public class MainRDFGraph {
    public static void main(String []p)
    {
        String fileuri="http://windtunnel.com";
+       //for clean the graph
+       new GraphClean().graphRemove(fileuri);
        
        //for windtunnel.rdf file
        String fileName="./example6/WindTunnel.rdf";
@@ -41,7 +43,7 @@ public class MainRDFGraph {
             System.out.println("exception occured="+e);
         }
         
-        ///Sensor21
+        ///SensoryModule
         String fileName2="./example6/SensoryModule.rdf";
         
         try
@@ -53,19 +55,6 @@ public class MainRDFGraph {
             System.out.println("exception occured="+e);
         }
         
-        
-        String fileName3="./example6/Sensor21.rdf";
-        
-        try
-        {
-        new RDFGraphStorage().GraphStore(fileName3,fileuri);
-        }
-        catch(Exception e)
-        {
-            System.out.println("exception occured="+e);
-        }
-        
-        //
         String fileName4="./example6/MOXGasSensor.rdf";
         
         try
@@ -77,7 +66,25 @@ public class MainRDFGraph {
             System.out.println("exception occured="+e);
         }
         
-        String fileName5="./example6/Sensor22.rdf";
+        //MOX gas sensor
+        for(int i=21;i<28;i++)
+        {
+        String fileName3="./example6/Sensor"+i+".rdf";
+        
+        try
+        {
+        new RDFGraphStorage().GraphStore(fileName3,fileuri);
+        }
+        catch(Exception e)
+        {
+            System.out.println("exception occured="+e);
+        }
+        }
+        
+        //
+        
+        
+        /*String fileName5="./example6/Sensor22.rdf";
         
         try
         {
@@ -97,6 +104,6 @@ public class MainRDFGraph {
         catch(Exception e)
         {
             System.out.println("exception occured="+e);
-        }
+        }*/
    }
 }
