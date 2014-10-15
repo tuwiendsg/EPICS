@@ -1,7 +1,7 @@
 DEPIC
 =====
 
-A Framework to Develop Elastic Data-as-a-Service
+Data Elasticity Programming in the Cloud
 
 
 
