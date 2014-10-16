@@ -39,7 +39,7 @@ public class Configuration {
         try {
             path = URLDecoder.decode(path, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            System.out.println("Exception occured  :"+ex);
+            //System.out.println("Exception occured  :"+ex);
             Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
         }
       //  Logger.getLogger(Configuration.class.getName()).log(Level.INFO, path);
@@ -54,7 +54,7 @@ public class Configuration {
 
             // load a properties file
             prop.load(input);
-            configString = configString=prop.getProperty(configureName);
+           configString=prop.getProperty(configureName);
             
 
         } catch (IOException ex) {

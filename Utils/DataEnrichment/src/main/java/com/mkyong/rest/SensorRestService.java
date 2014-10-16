@@ -75,7 +75,7 @@ public class SensorRestService {
         String fileName = uuid.toString() + ".html";
         Utils util = new Utils();
         util.writeToHTMLFile(htmlData, fileName);
-        //return "The information related Sensor "+result.toString();
+        
 
         String htmlUrl = "http://"+Configuration.getConfig("ENHANCEMENT.IP")+":"+Configuration.getConfig("ENHANCEMENT.PORT")+"/DataEnrichment/"+ fileName;
 

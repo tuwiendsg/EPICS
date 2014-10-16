@@ -6,6 +6,8 @@
 package com.mkyong.app.graphstorage;
 
 import at.ac.tuwien.dsg.dataenrichment.Configuration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 //import com.mkyong.app.OperateProperty;
 import virtuoso.jena.driver.VirtGraph;
 
@@ -28,6 +30,7 @@ public class GraphClean {
          
         if(!virtgraph.isEmpty())
             {
+                Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null);
                 System.out.println("clean the graph");
                 virtgraph.clear();
             }

@@ -10,7 +10,7 @@ import java.util.LinkedList;
 
 /**
  *
- * @author dsg
+ * @author Anindita
  */
 public class MainRDFGraphManipulation {
     public static void main(String []p)

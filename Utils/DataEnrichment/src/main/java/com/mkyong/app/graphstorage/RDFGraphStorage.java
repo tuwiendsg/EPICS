@@ -39,7 +39,7 @@ public class RDFGraphStorage {
         StmtIterator iter=model.listStatements();
         Statement stmt;
         
-        //OperateProperty operateProperty=new OperateProperty();
+        
         OperateProperty operateProperty=new OperateProperty();
         String url=operateProperty.getGraphStorageURI();
         String username=operateProperty.getGraphStorageUserName();

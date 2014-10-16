@@ -14,13 +14,15 @@ import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 //import com.mkyong.app.OperateProperty;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import virtuoso.jena.driver.VirtGraph;
 import virtuoso.jena.driver.VirtuosoQueryExecution;
 import virtuoso.jena.driver.VirtuosoQueryExecutionFactory;
 
 /**
  *
- * @author dsg
+ * @author Anindita
  */
 public class RDFManipulationPredicate {
  
@@ -35,13 +37,11 @@ public class RDFManipulationPredicate {
         //String storageName=operateProperty.getrdfURI();
         String storageName=Configuration.getConfig("RDFURI");
         String subject1=storageName+"#"+predicate;
-        //String predicate1="MonitoredObjectInformation";
         
-        //String predicate3="SensorLocation";
         
         Query sparql = QueryFactory.create("SELECT ?s ?p ?o FROM <"+storageName+"> WHERE { ?s ?p ?o }");
         
-        //String url="jdbc:virtuoso://localhost:1111";
+        
         //String url=operateProperty.getGraphStorageURI();/////
         String url="jdbc:virtuoso://"+Configuration.getConfig("VIRTUOSO.IP")+":"+Configuration.getConfig("VIRTUOSO.PORT");
         String username=Configuration.getConfig("VIRTUOSO.USERNAME");
@@ -49,17 +49,17 @@ public class RDFManipulationPredicate {
         VirtGraph graph=new VirtGraph(storageName,url,username,password);
         if(graph.isEmpty())
             {
-               System.out.println("there have no content under the uri of subject");
+                Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null);
+               //System.out.println("there have no content under the uri of subject");
             }
         else
            {
-                System.out.println("graph.getCount() = " + graph.getCount());  
+               // System.out.println("graph.getCount() = " + graph.getCount());  
                 //VirtuosoQueryExecution vqe = 
                         VirtuosoQueryExecutionFactory.create (sparql, graph);
 
                 Node predicateNode=Node.createURI(subject1);
-                //Node predicateNode=Node.createURI(predicate1);
-                //ExtendedIterator iter=graph.find(subjectNode, predicateNode, Node.ANY);
+                
                 ExtendedIterator iter=graph.find(Node.ANY, predicateNode, Node.ANY);
                 for(;iter.hasNext();)
                     {
@@ -67,23 +67,14 @@ public class RDFManipulationPredicate {
                         Triple tr=(Triple)iter.next();
                         String subject=tr.getSubject().toString();
                         monitoringInformation.add(subject);
-                        System.out.println("subject="+subject);
+                        //System.out.println("subject="+subject);
                         String object=tr.getObject().toString();
                         monitoringInformation.add(object);
-                        System.out.println("object="+object);
+                        //System.out.println("object="+object);
                     }
           
         
-                /*Node predicateNode3=Node.createURI(predicate3);
-                ExtendedIterator iter3=graph.find(subjectNode, predicateNode3, Node.ANY);
-                for(;iter3.hasNext();)
-                    {
-
-                        Triple tr=(Triple)iter.next();
-                        String Location=tr.getObject().toString();
-                        monitoringInformation.add(Location);
-                        System.out.println("Location="+Location);
-                    }*/
+                
         }
         	
         return monitoringInformation;

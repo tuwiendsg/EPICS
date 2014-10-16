@@ -1,6 +1,7 @@
 <rdf:RDF
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:chamber="http://windtunnel.com#" > 
+    xmlns:chamber="http://windtunnel.com#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" > 
   <rdf:Description rdf:about="http://windtunnel.com#FanSpeed">
     <chamber:maxspeed>5500 rpm (91.66 Hz)</chamber:maxspeed>
     <chamber:mediumspeed>3900 rpm (65 Hz)</chamber:mediumspeed>
@@ -15,6 +16,6 @@
     <chamber:fanlocation rdf:resource="http://windtunnel.com#FanLocation"/>
     <chamber:fanspeed rdf:resource="http://windtunnel.com#FanSpeed"/>
     <chamber:name>Fan</chamber:name>
-    <rdf:type rdf:resource="http://windtunnel.com#WindTunnel"/>
+    <rdfs:member rdf:resource="http://windtunnel.com#WindTunnel"/>
   </rdf:Description>
 </rdf:RDF>
