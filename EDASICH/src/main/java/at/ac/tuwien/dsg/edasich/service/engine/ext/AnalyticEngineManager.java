@@ -6,6 +6,7 @@
 package at.ac.tuwien.dsg.edasich.service.engine.ext;
 
 import static at.ac.tuwien.dsg.edasich.configuration.Configuration.getConfig;
+import at.ac.tuwien.dsg.edasich.service.core.registry.UtilServiceRegistry;
 import at.ac.tuwien.dsg.edasich.utils.MySqlConnectionManager;
 import java.sql.ResultSet;
 
@@ -25,11 +26,10 @@ public class AnalyticEngineManager {
         String username = getConfig("DB.EDASICH.USERNAME");
         String password = getConfig("DB.EDASICH.PASSWORD");
         
-        MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, database, username, password);
-        
+        UtilServiceRegistry utilServiceRegistry = new UtilServiceRegistry();    
         String sql = "Select * from AnalyticEngine where analyticEngineID='"+analyticEngineID+"'";
         
-        ResultSet rs = connectionManager.ExecuteQuery(sql);
+        ResultSet rs = utilServiceRegistry.executeQueryMySQL(ip, port, database, username, password, sql);
 
         try {
             while (rs.next()) {

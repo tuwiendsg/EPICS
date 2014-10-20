@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.edasich.service.core;
+package at.ac.tuwien.dsg.edasich.service.core.daf;
 
 
 import at.ac.tuwien.dsg.edasich.entity.DataAssetFunction;
