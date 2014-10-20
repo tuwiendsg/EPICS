@@ -10,6 +10,7 @@ package at.ac.tuwien.dsg.edasich.configuration;
  * @author Jun
  */
 import at.ac.tuwien.dsg.edasich.service.engine.ext.AnalyticEngineConfiguration;
+import at.ac.tuwien.dsg.edasich.service.engine.ext.AnalyticEngineManager;
 import at.ac.tuwien.dsg.edasich.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.edasich.utils.JAXBUtils;
 import at.ac.tuwien.dsg.edasich.utils.MySqlConnectionManager;
@@ -66,40 +67,7 @@ public class Configuration {
         return configString;
     }
     
-    public static AnalyticEngineConfiguration getAnalyticEngineConfiguration(String analyticEngineID){
-        
-        System.out.println("Analytic Engine ID: " + analyticEngineID);
-        
-        AnalyticEngineConfiguration analyticEngineConfiguration=null;
-        String ip = getConfig("DB.EDASICH.IP");
-        String port = getConfig("DB.EDASICH.PORT");
-        String database = getConfig("DB.EDASICH.DATABASE");
-        String username = getConfig("DB.EDASICH.USERNAME");
-        String password = getConfig("DB.EDASICH.PASSWORD");
-        
-        MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, database, username, password);
-        
-        String sql = "Select * from AnalyticEngine where analyticEngineID='"+analyticEngineID+"'";
-        
-        ResultSet rs = connectionManager.ExecuteQuery(sql);
-
-        try {
-            while (rs.next()) {
-                String analyticEngineName = rs.getString("analyticEngineName");
-                String analyticEngineIp = rs.getString("ip");
-                String analyticEnginePort = rs.getString("port");
-                String analyticEngineApi = rs.getString("api");
-                analyticEngineConfiguration = new AnalyticEngineConfiguration(analyticEngineID, analyticEngineName, analyticEngineIp, analyticEnginePort, analyticEngineApi);
-            
-            }
-
-        } catch (Exception ex) {
-
-        }
-        
-        
-        return  analyticEngineConfiguration;
-    }
+    
     
     public static void submitMOMConf(String analyticEngineID) {
         
@@ -112,7 +80,8 @@ public class Configuration {
         MOMConfiguration momConf = new MOMConfiguration(ip, port, queue, limit);
         
         try {
-            AnalyticEngineConfiguration aec = getAnalyticEngineConfiguration(analyticEngineID);
+            
+            AnalyticEngineConfiguration aec = AnalyticEngineManager.getAnalyticEngineConfiguration(analyticEngineID);
             RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/momconf");
             String xmlStr = JAXBUtils.marshal(momConf, MOMConfiguration.class);
             restClient.callPutMethod(xmlStr);
@@ -131,7 +100,7 @@ public class Configuration {
         
         
         try {
-            AnalyticEngineConfiguration aec = getAnalyticEngineConfiguration(analyticEngineID);
+            AnalyticEngineConfiguration aec = AnalyticEngineManager.getAnalyticEngineConfiguration(analyticEngineID);
             RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/taskdistributionconf");
             String xmlStr = JAXBUtils.marshal(taskDConf, TaskDistributionConfiguration.class);
             restClient.callPutMethod(xmlStr);
