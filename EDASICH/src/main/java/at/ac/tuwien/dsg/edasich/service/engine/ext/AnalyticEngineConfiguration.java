@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package at.ac.tuwien.dsg.edasich.configuration;
+package at.ac.tuwien.dsg.edasich.service.engine.ext;
 
 /**
  *

@@ -9,6 +9,7 @@ package at.ac.tuwien.dsg.edasich.configuration;
  *
  * @author Jun
  */
+import at.ac.tuwien.dsg.edasich.service.engine.ext.AnalyticEngineConfiguration;
 import at.ac.tuwien.dsg.edasich.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.edasich.utils.JAXBUtils;
 import at.ac.tuwien.dsg.edasich.utils.MySqlConnectionManager;

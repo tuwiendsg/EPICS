@@ -7,7 +7,7 @@
 package at.ac.tuwien.dsg.edasich.service.engine;
 
 
-import at.ac.tuwien.dsg.edasich.configuration.AnalyticEngineConfiguration;
+import at.ac.tuwien.dsg.edasich.service.engine.ext.AnalyticEngineConfiguration;
 import at.ac.tuwien.dsg.edasich.configuration.Configuration;
 import at.ac.tuwien.dsg.edasich.configuration.MOMConfiguration;
 import at.ac.tuwien.dsg.edasich.configuration.TaskDistributionConfiguration;
@@ -15,6 +15,8 @@ import at.ac.tuwien.dsg.edasich.connector.MOMService;
 import at.ac.tuwien.dsg.edasich.connector.Sensors;
 import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
 import at.ac.tuwien.dsg.edasich.entity.stream.EventPattern;
+import at.ac.tuwien.dsg.edasich.service.core.dafstore.DafStore;
+import at.ac.tuwien.dsg.edasich.service.engine.ext.AnalyticEngineManager;
 import at.ac.tuwien.dsg.edasich.utils.EventLog;
 import at.ac.tuwien.dsg.edasich.utils.JAXBUtils;
 import at.ac.tuwien.dsg.edasich.utils.RestfulWSClient;
@@ -40,18 +42,18 @@ public class AnalyticController {
     }
 
     public void startAnalyticEngine(String analyticEngineID, String daf) {
-        AnalyticEngineConfiguration aec = Configuration.getAnalyticEngineConfiguration(analyticEngineID);
+        AnalyticEngineConfiguration aec = AnalyticEngineManager.getAnalyticEngineConfiguration(analyticEngineID);
         RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/start");
         restClient.callPutMethod(daf);
-        EventLog el = new EventLog();
-        el.updateDAF(daf, "start");
+        DafStore dafStore = new DafStore();
+        dafStore.updateDAF(daf, "start");
         
     }
     
     public void stopAnalyticEngine(String analyticEngineID, String daf){
-        EventLog el = new EventLog();
+        DafStore dafStore = new DafStore();
         System.out.println("Stop: " + daf);
-        el.updateDAF(daf, "stop");
+        dafStore.updateDAF(daf, "stop");
         
        // AnalyticEngineConfiguration aec = Configuration.getAnalyticEngineConfiguration(analyticEngineID);
        // RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/stop");
@@ -61,7 +63,7 @@ public class AnalyticController {
     public void submitDataAssetFunctionStreamingData(String analyticEngineID, DataAssetFunctionStreamingData daf) {
         
         try {
-            AnalyticEngineConfiguration aec = Configuration.getAnalyticEngineConfiguration(analyticEngineID);
+            AnalyticEngineConfiguration aec = AnalyticEngineManager.getAnalyticEngineConfiguration(analyticEngineID);
             RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/dataassetfunction");
             String dafXML = JAXBUtils.marshal(daf, DataAssetFunctionStreamingData.class);
             restClient.callPutMethod(dafXML);

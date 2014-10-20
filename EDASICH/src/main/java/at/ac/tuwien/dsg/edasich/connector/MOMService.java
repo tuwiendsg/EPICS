@@ -6,7 +6,7 @@
 package at.ac.tuwien.dsg.edasich.connector;
 
 import at.ac.tuwien.dsg.edasich.utils.RestfulWSClient;
-import at.ac.tuwien.dsg.edasich.configuration.AnalyticEngineConfiguration;
+import at.ac.tuwien.dsg.edasich.service.engine.ext.AnalyticEngineConfiguration;
 import at.ac.tuwien.dsg.edasich.configuration.Configuration;
 import at.ac.tuwien.dsg.edasich.utils.JAXBUtils;
 import java.util.List;

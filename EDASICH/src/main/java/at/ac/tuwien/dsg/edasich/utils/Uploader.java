@@ -6,6 +6,7 @@
 package at.ac.tuwien.dsg.edasich.utils;
 
 import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
+import at.ac.tuwien.dsg.edasich.service.core.dafstore.DafStore;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -108,8 +109,8 @@ public class Uploader extends HttpServlet {
 
                         reader.close();
                         String log = "file name: " + name + " - content: " + out.toString();
-                        EventLog el = new EventLog();
-                        el.insertDAF(name);
+                        DafStore dafStore = new DafStore();
+                        dafStore.insertDAF(name);
                         
                         
                         IOUtils.writeData(out.toString(), name);
