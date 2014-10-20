@@ -1,0 +1,61 @@
+**************************
+***                    ***
+*** EDASICH User Guide ***
+***                    ***
+**************************
+
+
+
+1. 	Purpose: 
+	
+	This document describes how to set up and configure EDASICH installation.
+	
+2. 	Configuration:
+	
+	i. Setup database for connection to external engines (esper, jbpm, hadoop etc.), data analytic functions, and utility services by importing EDASICH.sql in folder db
+	ii. Configure connection to the database in WEB-INF/config.properties. The most important configurations are DB.EDASICH.IP, DB.EDASICH.PORT, DB.EDASICH.DATABASE, DB.EDASICH.USERNAME and DB.EDASICH.PASSWORD
+	iii. External Services Configuration: external analytic engines (esper, jbpm etc.) can be found in EPICS/Utils. It is necessary to deploy these services and modify their connection information in EDASICH database.
+	
+3. 	Installation:
+	
+	It is recommended to deploy EDASICH and external services on Apache Tomcat 7.x
+	
+4. 	Getting Started:
+	
+	i. Browse the web interface for data analytics of EDASICH at http://[ip]:8080/EDASICH/
+	ii. Go to menu “DAF” to import/delete a data analytic function
+	iii. Go to menu “Analytics”. Choose a type of analytic (streaming data or batch job analytic)
+
+5. 	Development of external analytic services for edasich:
+	
+	To build external analytic services for edasich, it is necessary to follow rest api format to start, stop and submit data analytic functions.
+
+	
+    @PUT
+    @Path("/start")
+    @Consumes(MediaType.APPLICATION_XML)
+    public void startEngineName(String daf) {      
+
+    }
+
+    @PUT
+    @Path("/stop")
+    @Consumes(MediaType.APPLICATION_XML)
+    public void stopEngineName(String daf) {
+
+    }
+
+    @PUT
+    @Path("/dataassetfunction")
+    @Consumes(MediaType.APPLICATION_XML)
+    public void submitDataAssetFunction(String dafXML) {
+ 
+    }
+
+	
+
+
+	
+
+
+
