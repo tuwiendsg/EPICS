@@ -24,7 +24,7 @@
 	
 	i. Browse the web interface for data analytics of EDASICH at http://[ip]:8080/EDASICH/
 	ii. Go to menu “DAF” to import/delete a data analytic function
-	iii. Go to menu “Analytics”. Choose a type of analytic (streaming data or batch job analytic)
+	iii. Go to menu “Analytics”. Choose a type of analytic (streaming data or batch job analytic). Examples of data analytic function can be found in EDASICH/examples.
 
 5. 	Development of external analytic services for edasich:
 	
