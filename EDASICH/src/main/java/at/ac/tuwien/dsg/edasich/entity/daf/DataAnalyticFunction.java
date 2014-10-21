@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.edasich.entity;
+package at.ac.tuwien.dsg.edasich.entity.daf;
 
 /**
  *
@@ -11,9 +11,5 @@ package at.ac.tuwien.dsg.edasich.entity;
  */
 public interface DataAnalyticFunction {
 
-    public void setDafInput();
-    public void setDafOutput();
-    public void setDafAnalytic();
-    public void setAnalyticResultHandler();
        
 }

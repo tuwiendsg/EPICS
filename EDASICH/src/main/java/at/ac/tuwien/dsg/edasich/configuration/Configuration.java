@@ -9,6 +9,7 @@ package at.ac.tuwien.dsg.edasich.configuration;
  *
  * @author Jun
  */
+import at.ac.tuwien.dsg.edasich.entity.daf.datasource.DataSourceMOM;
 import at.ac.tuwien.dsg.edasich.service.engine.ext.AnalyticEngineConfiguration;
 import at.ac.tuwien.dsg.edasich.service.engine.ext.AnalyticEngineManager;
 import at.ac.tuwien.dsg.edasich.utils.RestfulWSClient;
@@ -34,7 +35,7 @@ public class Configuration {
     public static String getConfig(String configureName) {
 
         String path = Configuration.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        
+
         int index = path.indexOf("/classes/at/ac");
         path = path.substring(0, index);
         try {
@@ -42,7 +43,7 @@ public class Configuration {
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         Properties prop = new Properties();
         String configString = "";
         InputStream input = null;
@@ -51,7 +52,7 @@ public class Configuration {
             input = new FileInputStream(path + "/config.properties");
             prop.load(input);
             configString = prop.getProperty(configureName);
- 
+
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
@@ -66,48 +67,42 @@ public class Configuration {
 
         return configString;
     }
-    
-    
-    
+
     public static void submitMOMConf(String analyticEngineID) {
-        
-        
-        String ip= getConfig("MOM.IP");
-    String port= getConfig("MOM.PORT");
-    String queue= getConfig("MOM.QUEUE_NAME");
-    int limit= Integer.parseInt(getConfig("MESSAGE.LIMIT"));
-    
-        MOMConfiguration momConf = new MOMConfiguration(ip, port, queue, limit);
-        
+
+        String ip = getConfig("MOM.IP");
+        String port = getConfig("MOM.PORT");
+        String queue = getConfig("MOM.QUEUE_NAME");
+
+        DataSourceMOM momConf = new DataSourceMOM(ip, port, queue);
+
         try {
-            
+
             AnalyticEngineConfiguration aec = AnalyticEngineManager.getAnalyticEngineConfiguration(analyticEngineID);
-            RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/momconf");
-            String xmlStr = JAXBUtils.marshal(momConf, MOMConfiguration.class);
+            RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi() + "/momconf");
+            String xmlStr = JAXBUtils.marshal(momConf, DataSourceMOM.class);
             restClient.callPutMethod(xmlStr);
         } catch (JAXBException ex) {
-       
-        }    
+
+        }
     }
-    
+
     public static void submitTaskDistributionConf(String analyticEngineID) {
-        
+
         String ip = getConfig("TASK.DISTRIBUTION.IP");
         String port = getConfig("TASK.DISTRIBUTION.PORT");
-        String api = getConfig("TASK.DISTRIBUTION.API"); 
-        
+        String api = getConfig("TASK.DISTRIBUTION.API");
+
         TaskDistributionConfiguration taskDConf = new TaskDistributionConfiguration(ip, port, api);
-        
-        
+
         try {
             AnalyticEngineConfiguration aec = AnalyticEngineManager.getAnalyticEngineConfiguration(analyticEngineID);
-            RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/taskdistributionconf");
+            RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi() + "/taskdistributionconf");
             String xmlStr = JAXBUtils.marshal(taskDConf, TaskDistributionConfiguration.class);
             restClient.callPutMethod(xmlStr);
         } catch (JAXBException ex) {
-       
-        }    
+
+        }
     }
-    
 
 }

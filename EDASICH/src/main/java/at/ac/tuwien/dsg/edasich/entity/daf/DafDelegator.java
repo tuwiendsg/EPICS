@@ -3,8 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package at.ac.tuwien.dsg.edasich.configuration;
+package at.ac.tuwien.dsg.edasich.entity.daf;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -15,9 +14,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jun
  */
-@XmlRootElement(name = "MOMConfiguration")
+
+@XmlRootElement(name = "dafDelegator")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class MOMConfiguration {
+public class DafDelegator {
     
     @XmlElement(name = "ip", required = true)
     String ip;
@@ -25,20 +25,16 @@ public class MOMConfiguration {
     @XmlElement(name = "port", required = true)
     String port;
     
-    @XmlElement(name = "queue", required = true)
-    String queue;
-    
-    @XmlElement(name = "limit", required = true)
-    int limit;
+    @XmlElement(name = "restapi", required = true)
+    String restapi;
 
-    public MOMConfiguration() {
+    public DafDelegator() {
     }
 
-    public MOMConfiguration(String ip, String port, String queue, int limit) {
+    public DafDelegator(String ip, String port, String restapi) {
         this.ip = ip;
         this.port = port;
-        this.queue = queue;
-        this.limit = limit;
+        this.restapi = restapi;
     }
 
     public String getIp() {
@@ -57,23 +53,12 @@ public class MOMConfiguration {
         this.port = port;
     }
 
-    public String getQueue() {
-        return queue;
+    public String getRestapi() {
+        return restapi;
     }
 
-    public void setQueue(String queue) {
-        this.queue = queue;
+    public void setRestapi(String restapi) {
+        this.restapi = restapi;
     }
-
-    public int getLimit() {
-        return limit;
-    }
-
-    public void setLimit(int limit) {
-        this.limit = limit;
-    }
-    
-    
-    
     
 }

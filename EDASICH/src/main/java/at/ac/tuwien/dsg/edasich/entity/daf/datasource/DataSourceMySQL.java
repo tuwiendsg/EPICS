@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.edasich.entity;
+package at.ac.tuwien.dsg.edasich.entity.daf.datasource;
 
 /**
  *
  * @author Jun
  */
-public interface DafOutput {
-    public void setDafOutputLocation();
-    public void setDafOutputDataType();
+public class DataSourceMySQL {
+    
 }

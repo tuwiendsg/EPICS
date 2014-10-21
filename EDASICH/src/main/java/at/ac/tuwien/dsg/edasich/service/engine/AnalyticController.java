@@ -9,7 +9,7 @@ package at.ac.tuwien.dsg.edasich.service.engine;
 
 import at.ac.tuwien.dsg.edasich.service.engine.ext.AnalyticEngineConfiguration;
 import at.ac.tuwien.dsg.edasich.configuration.Configuration;
-import at.ac.tuwien.dsg.edasich.configuration.MOMConfiguration;
+import at.ac.tuwien.dsg.edasich.entity.daf.datasource.DataSourceMOM;
 import at.ac.tuwien.dsg.edasich.configuration.TaskDistributionConfiguration;
 import at.ac.tuwien.dsg.edasich.connector.MOMService;
 import at.ac.tuwien.dsg.edasich.connector.Sensors;
