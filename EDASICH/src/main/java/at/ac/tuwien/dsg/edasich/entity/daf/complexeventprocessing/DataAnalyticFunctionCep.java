@@ -20,6 +20,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class DataAnalyticFunctionCep implements DataAnalyticFunction {
     
+    @XmlElement(name = "dafName", required = true)
+    String dafName;
+    
     @XmlElement(name = "dafInputCep", required = true)
     DafInputCep dafInputCep;
     
@@ -35,11 +38,20 @@ public class DataAnalyticFunctionCep implements DataAnalyticFunction {
     public DataAnalyticFunctionCep() {
     }
 
-    public DataAnalyticFunctionCep(DafInputCep dafInputCep, DafOutputCep dafOutputCep, DafAnalyticCep dafAnalyticCep, AnalyticResultDelegate analyticResultDelegate) {
+    public DataAnalyticFunctionCep(String dafName, DafInputCep dafInputCep, DafOutputCep dafOutputCep, DafAnalyticCep dafAnalyticCep, AnalyticResultDelegate analyticResultDelegate) {
+        this.dafName = dafName;
         this.dafInputCep = dafInputCep;
         this.dafOutputCep = dafOutputCep;
         this.dafAnalyticCep = dafAnalyticCep;
         this.analyticResultDelegate = analyticResultDelegate;
+    }
+
+    public String getDafName() {
+        return dafName;
+    }
+
+    public void setDafName(String dafName) {
+        this.dafName = dafName;
     }
 
     public DafInputCep getDafInputCep() {
@@ -73,5 +85,6 @@ public class DataAnalyticFunctionCep implements DataAnalyticFunction {
     public void setAnalyticResultDelegate(AnalyticResultDelegate analyticResultDelegate) {
         this.analyticResultDelegate = analyticResultDelegate;
     }
-      
+
+    
 }

@@ -19,23 +19,35 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Table {
     
-    @XmlElement(name = "listOfTableRows", required = true)
-    List<TableRow> listOfTableRows;
+    @XmlElement(name = "tableName", required = true)
+    String tableName;
+    
+    @XmlElement(name = "listOfTableAttributes", required = true)
+    List<TableAttribute> listOfTableAttributes;
 
     public Table() {
     }
 
-    public Table(List<TableRow> listOfTableRows) {
-        this.listOfTableRows = listOfTableRows;
+    public Table(String tableName, List<TableAttribute> listOfTableAttributes) {
+        this.tableName = tableName;
+        this.listOfTableAttributes = listOfTableAttributes;
     }
 
-    public List<TableRow> getListOfTableRows() {
-        return listOfTableRows;
+    public String getTableName() {
+        return tableName;
     }
 
-    public void setListOfTableRows(List<TableRow> listOfTableRows) {
-        this.listOfTableRows = listOfTableRows;
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
-    
+
+    public List<TableAttribute> getListOfTableAttributes() {
+        return listOfTableAttributes;
+    }
+
+    public void setListOfTableAttributes(List<TableAttribute> listOfTableAttributes) {
+        this.listOfTableAttributes = listOfTableAttributes;
+    }
+
     
 }

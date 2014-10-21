@@ -14,23 +14,22 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jun
  */
-
-@XmlRootElement(name = "tableCell")
+@XmlRootElement(name = "tableAttribute")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class TableCell {
+public class TableAttribute {
     
     @XmlElement(name = "attributeName", required = true)
     String attributeName;
     
-    @XmlElement(name = "attributeValue", required = true)
-    String attributeValue;
+    @XmlElement(name = "attributeType", required = true)
+    String attributeType;
 
-    public TableCell() {
+    public TableAttribute() {
     }
 
-    public TableCell(String attributeName, String attributeValue) {
+    public TableAttribute(String attributeName, String attributeType) {
         this.attributeName = attributeName;
-        this.attributeValue = attributeValue;
+        this.attributeType = attributeType;
     }
 
     public String getAttributeName() {
@@ -41,14 +40,11 @@ public class TableCell {
         this.attributeName = attributeName;
     }
 
-    public String getAttributeValue() {
-        return attributeValue;
+    public String getAttributeType() {
+        return attributeType;
     }
 
-    public void setAttributeValue(String attributeValue) {
-        this.attributeValue = attributeValue;
+    public void setAttributeType(String attributeType) {
+        this.attributeType = attributeType;
     }
-    
-    
-    
 }
