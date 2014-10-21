@@ -9,6 +9,10 @@
 1. 	Purpose: 
 	
 	This document describes how to set up and configure EDASICH installation.
+
+2. 	Concepts:
+	
+	Data analytic function (daf) includes input, output, analytic and analytic result delegate. Input and output indicate format of input/output for the analytic and data sources, which are used to get/store data. The analytic can be a statement of event processing language or a workflow of data analytics. The analytic result delegate presents what can be done with analytic results (represented by output). The analytic result delegate includes a delegate message and a delegator. The analytic result is put into the delegate message, which is sent to the delegator.
 	
 2. 	Configuration:
 	
