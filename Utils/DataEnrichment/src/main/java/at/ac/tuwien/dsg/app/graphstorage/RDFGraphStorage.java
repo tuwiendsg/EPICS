@@ -3,16 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mkyong.app.graphstorage;
+package at.ac.tuwien.dsg.app.graphstorage;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.mem.ModelMem;
 import com.hp.hpl.jena.rdf.model.Model;
-import at.ac.tuwien.dsg.dataenrichment.Configuration;
-//import com.hp.hpl.jena.rdf.model.Property;
-//import com.hp.hpl.jena.rdf.model.RDFNode;
-//import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDFS;

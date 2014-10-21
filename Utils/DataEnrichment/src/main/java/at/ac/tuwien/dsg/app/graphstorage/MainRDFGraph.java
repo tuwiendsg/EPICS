@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mkyong.app.graphstorage;
+package at.ac.tuwien.dsg.app.graphstorage;
 
-import com.mkyong.app.graphstorage.RDFGraphStorage;
 
 /**
  *
- * @author dsg
+ * @author Anindita
  */
 public class MainRDFGraph {
    public static void main(String []p)

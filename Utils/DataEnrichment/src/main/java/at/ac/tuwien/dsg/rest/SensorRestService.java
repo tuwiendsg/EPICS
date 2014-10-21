@@ -1,8 +1,8 @@
-package com.mkyong.rest;
+package at.ac.tuwien.dsg.rest;
 
 import at.ac.tuwien.dsg.dataenrichment.Configuration;
 import at.ac.tuwien.dsg.dataenrichment.Utils;
-import com.mkyong.app.graphretrieve.*;
+import at.ac.tuwien.dsg.app.graphretrieve.*;
 import java.util.LinkedList;
 import java.util.UUID;
 import javax.ws.rs.GET;
@@ -10,7 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+
 
 //http://localhost:8080/RESTfulExample/rest/message/hello%20world
 @Path("/sensor")
@@ -77,7 +77,7 @@ public class SensorRestService {
         util.writeToHTMLFile(htmlData, fileName);
         
 
-        String htmlUrl = "http://"+Configuration.getConfig("ENHANCEMENT.IP")+":"+Configuration.getConfig("ENHANCEMENT.PORT")+"/DataEnrichment/"+ fileName;
+        String htmlUrl = "http://"+Configuration.getConfig("ENRICHMENT.IP")+":"+Configuration.getConfig("ENRICHMENT.PORT")+"/DataEnrichment/"+ fileName;
 
         return htmlUrl;
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mkyong.app.graphretrieve;
+package at.ac.tuwien.dsg.app.graphretrieve;
 
 import at.ac.tuwien.dsg.dataenrichment.Configuration;
 import com.hp.hpl.jena.graph.Node;
@@ -16,16 +16,15 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import virtuoso.jena.driver.VirtGraph;
-import virtuoso.jena.driver.VirtuosoQueryExecution;
 import virtuoso.jena.driver.VirtuosoQueryExecutionFactory;
 
 /**
  *
  * @author Anindita
  */
-public class RDFManipulationSubject {
+public class RDFManipulationPredicate {
  
-    public LinkedList<String> queryResultSubject(String subject2)
+    public LinkedList<String> queryResultPredicate(String predicate)
     {
         
         LinkedList<String> monitoringInformation=new LinkedList<String>();
@@ -35,14 +34,13 @@ public class RDFManipulationSubject {
         //String storageName="http://windtunnel.com";
         //String storageName=operateProperty.getrdfURI();
         String storageName=Configuration.getConfig("RDFURI");
-        String subject1=storageName+"#"+subject2;
+        String subject1=storageName+"#"+predicate;
         
         
         Query sparql = QueryFactory.create("SELECT ?s ?p ?o FROM <"+storageName+"> WHERE { ?s ?p ?o }");
         
-       
-        //String url=operateProperty.getGraphStorageURI();///////
         
+        //String url=operateProperty.getGraphStorageURI();/////
         String url="jdbc:virtuoso://"+Configuration.getConfig("VIRTUOSO.IP")+":"+Configuration.getConfig("VIRTUOSO.PORT");
         String username=Configuration.getConfig("VIRTUOSO.USERNAME");
         String password=Configuration.getConfig("VIRTUOSO.PASSWORD");
@@ -54,19 +52,20 @@ public class RDFManipulationSubject {
             }
         else
            {
-                System.out.println("graph.getCount() = " + graph.getCount());  
-                VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (sparql, graph);
-
-                Node subjectNode=Node.createURI(subject1);
+               // System.out.println("graph.getCount() = " + graph.getCount());  
                 
-                ExtendedIterator iter=graph.find(subjectNode, Node.ANY, Node.ANY);
+                VirtuosoQueryExecutionFactory.create (sparql, graph);
+
+                Node predicateNode=Node.createURI(subject1);
+                
+                ExtendedIterator iter=graph.find(Node.ANY, predicateNode, Node.ANY);
                 for(;iter.hasNext();)
                     {
 
                         Triple tr=(Triple)iter.next();
-                        String predicate=tr.getPredicate().toString();
-                        monitoringInformation.add(predicate);
-                        //System.out.println("predicate="+predicate);
+                        String subject=tr.getSubject().toString();
+                        monitoringInformation.add(subject);
+                        //System.out.println("subject="+subject);
                         String object=tr.getObject().toString();
                         monitoringInformation.add(object);
                         //System.out.println("object="+object);
@@ -79,5 +78,5 @@ public class RDFManipulationSubject {
         return monitoringInformation;
 }
 }
-  
+
 
