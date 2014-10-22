@@ -45,3 +45,13 @@
 /Utils/DataEnrichment/src/main/java/at/ac/tuwien/dsg/app/graphstorage/OperateProperty.java
 /Utils/DataEnrichment/src/main/java/com
 /Utils/DataEnrichment/src/main/java/at/ac/tuwien/dsg/app/graphretrieve/MainRDFGraphManipulation.java
+
+
+/EDASICH/nb-configuration.xml
+/DEPIC/DataAssetLoader/nb-configuration.xml
+/DEPIC/DepicTooling/nb-configuration.xml
+/DEPIC/Orchestrator/nb-configuration.xml
+/Utils/DataEnrichment/nb-configuration.xml
+/Utils/ESPERStreamProcessing/nb-configuration.xml
+/Utils/JBPMEngine/nb-configuration.xml
+/Utils/Sampling/nb-configuration.xml
