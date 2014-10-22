@@ -5,7 +5,7 @@
  */
 package at.ac.tuwien.dsg.edasich.utils;
 
-import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
+
 import at.ac.tuwien.dsg.edasich.service.core.dafstore.DafStore;
 import java.io.BufferedReader;
 import java.io.File;
@@ -88,6 +88,9 @@ public class Uploader extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        InputStream dafFileContent = null;
+        String dafName = "";
+        String dafType = "";
         
         if (ServletFileUpload.isMultipartContent(request)) {
             try {
@@ -96,31 +99,18 @@ public class Uploader extends HttpServlet {
 
                 for (FileItem item : multiparts) {
                     if (!item.isFormField()) {
-                        String name = new File(item.getName()).getName();
-                       // item.write( new File(UPLOAD_DIRECTORY + File.separator + name));
-
-                        InputStream filecontent = item.getInputStream();
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(filecontent));
-                        StringBuilder out = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            out.append(line);
-                        }
-
-                        reader.close();
-                        String log = "file name: " + name + " - content: " + out.toString();
-                        DafStore dafStore = new DafStore();
-                        dafStore.insertDAF(name);
-                        
-                        
-                        IOUtils.writeData(out.toString(), name);
-                        Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
+                        dafName = new File(item.getName()).getName();
+                        dafFileContent = item.getInputStream();
+                     
 
                     } else {
                         
-                        String fieldname = item.getFieldName();
-                        String fieldvalue = item.getString();
-             
+                        String fieldName = item.getFieldName();
+                        String fieldValue = item.getString();
+                        
+                        if (fieldName.equals("type")) {
+                            dafType=fieldValue;
+                        }
                         
                         // String log = "att name: " + fieldname + " - value: " + fieldvalue;
                         // Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
@@ -138,6 +128,12 @@ public class Uploader extends HttpServlet {
             request.setAttribute("message",
                     "Sorry this Servlet only handles file upload request");
         }
+        
+       
+        DafStore dafStore = new DafStore();
+        dafStore.insertDAF(dafName, dafType, dafFileContent);
+        Logger.getLogger(Uploader.class.getName()).log(Level.INFO, dafName);
+        
         
         response.sendRedirect("daf.jsp");
     }

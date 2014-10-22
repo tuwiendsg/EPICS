@@ -4,8 +4,8 @@
     Author     : Jun
 --%>
 
+<%@page import="at.ac.tuwien.dsg.edasich.service.core.dafstore.DafStore"%>
 <%@page import="java.sql.ResultSet"%>
-<%@page import="at.ac.tuwien.dsg.edasich.utils.EventLog"%>
 <%@page import="java.util.logging.Level"%>
 <%@page import="java.util.logging.Logger"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -34,17 +34,29 @@
                     <li class="daf"><a class="active" href="daf.jsp">DAF</a></li>
                 </ul>
             </div>
- 
+
         </header>
-         <br> 
+        <br> 
         <% Logger logger = Logger.getLogger(this.getClass().getName());%>
-        
+
+
+
+
+
         <form action="Uploader" method="post" enctype="multipart/form-data"> <br>
             <table class="smart-green">
 
                 <tr>
                     <td>Data Asset Function</td>
                     <td><input type="file" name="file" /></td> 
+                </tr>
+
+                <tr>
+                    <td>Type</td>
+                    <td><select name="type">
+                            <option value="cep" selected>Complex Event Processing</option>
+                            <option value="wf">Data Analytics Workflow</option>
+                        </select></td> 
                 </tr>
 
                 <tr>
@@ -61,18 +73,20 @@
     <center><table id="ver-minimalist">
             <tr>
                 <th>Data Asset Function</th>
+                <th>Type</th>
                 <th>Action</th> 
                 <th>Status</th> 
 
             </tr>
 
             <%
-                EventLog eLog = new EventLog();
-                ResultSet rs = eLog.getDAF();
+                DafStore dafStore = new DafStore();
+                ResultSet rs = dafStore.getDAF();
                 try {
                     while (rs.next()) {
                         String d_id = rs.getString("id");
                         String d_name = rs.getString("name");
+                        String d_type = rs.getString("type");
                         String d_status = rs.getString("status");
 
 
@@ -82,6 +96,7 @@
 
             <tr>
                 <td><%= d_name%></td>    
+                <td><%= d_type%></td> 
                 <td><a href="dafdelete.jsp?dafName=<%= d_name%>">Delete</a></td> 
                 <td><%= d_status%></td>
             </tr>

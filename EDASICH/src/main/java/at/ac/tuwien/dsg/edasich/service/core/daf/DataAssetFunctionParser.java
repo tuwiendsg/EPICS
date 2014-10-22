@@ -7,8 +7,7 @@
 package at.ac.tuwien.dsg.edasich.service.core.daf;
 
 
-import at.ac.tuwien.dsg.edasich.entity.DataAssetFunction;
-import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
+import at.ac.tuwien.dsg.edasich.entity.daf.complexeventprocessing.DataAnalyticFunctionCep;
 import at.ac.tuwien.dsg.edasich.utils.JAXBUtils;
 
 
@@ -19,20 +18,17 @@ import at.ac.tuwien.dsg.edasich.utils.JAXBUtils;
 
 public class DataAssetFunctionParser {
     
-    public static DataAssetFunctionStreamingData loadDataAssetFunctionStreamingData(String daFunction) {
+    public static DataAnalyticFunctionCep loadDataAnalyticFunctionCep(String daf) {
         
-        DataAssetFunctionStreamingData dataAssetFunction =null;
+        DataAnalyticFunctionCep dataAnalyticFunction =null;
                    
         try {
-            dataAssetFunction = JAXBUtils.unmarshal(daFunction, DataAssetFunctionStreamingData.class);
+            dataAnalyticFunction = JAXBUtils.unmarshal(daf, DataAnalyticFunctionCep.class);
         } catch (Exception e) {
 
         }
  
-        return dataAssetFunction;
+        return dataAnalyticFunction;
     }
-    
-  
-    
     
 }
