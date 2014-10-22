@@ -14,11 +14,6 @@
             <url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
         </repository>
         <repository>
-            <id>unknown-jars-temp-repo</id>
-            <name>A temporary repository created by NetBeans for libraries and jars it could not identify. Please replace the dependencies in this repository with correct ones and delete this repository.</name>
-            <url>file:${project.basedir}/lib</url>
-        </repository>
-        <repository>
             <id>codehaus</id>
             <url>http://repository.codehaus.org/org/codehaus</url>
         </repository>
@@ -37,11 +32,7 @@
             <artifactId>resteasy-jaxrs</artifactId>
             <version>2.2.1.GA</version>
         </dependency>
-        <dependency>
-            <groupId>unknown.binary</groupId>
-            <artifactId>javax.ws.rs-api-2.0</artifactId>
-            <version>SNAPSHOT</version>
-        </dependency>
+        
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
@@ -78,15 +69,13 @@
             <version>2.2</version>
         </dependency>
         
+        
+        
         <dependency>
-            <groupId>daas</groupId>
-            <artifactId>daas</artifactId>
-            <version>1.0</version>
-             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/daas-1.0.jar</systemPath>  
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.0</version>
         </dependency>
-        
-        
         
         <dependency>
             <groupId>eda</groupId>
@@ -96,7 +85,13 @@
             <systemPath>${project.basedir}/lib/eda-1.0.jar</systemPath> 
         </dependency>
 
-       
+        <dependency>
+            <groupId>daas</groupId>
+            <artifactId>daas</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/daas-1.0.jar</systemPath>  
+        </dependency>
 
         <dependency>
             <groupId>org.apache.activemq</groupId>
