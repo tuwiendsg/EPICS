@@ -5,6 +5,7 @@
  */
 package at.ac.tuwien.dsg.app.graphstorage;
 
+import at.ac.tuwien.dsg.dataenrichment.Configuration;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.mem.ModelMem;
@@ -36,14 +37,16 @@ public class RDFGraphStorage {
         Statement stmt;
         
         
-        OperateProperty operateProperty=new OperateProperty();
+        /*OperateProperty operateProperty=new OperateProperty();
         String url=operateProperty.getGraphStorageURI();
         String username=operateProperty.getGraphStorageUserName();
-        String password=operateProperty.getGraphStoragePassword();
+        String password=operateProperty.getGraphStoragePassword();*/
         
-       /*String url="jdbc:virtuoso://"+Configuration.getConfig("VIRTUOSO.IP")+":"+Configuration.getConfig("VIRTUOSO.PORT");
+        String url="jdbc:virtuoso://"+Configuration.getConfig("VIRTUOSO.IP")+":"+Configuration.getConfig("VIRTUOSO.PORT");
         String username=Configuration.getConfig("VIRTUOSO.USERNAME");
-        String password=Configuration.getConfig("VIRTUOSO.PASSWORD");*/
+        String password=Configuration.getConfig("VIRTUOSO.PASSWORD");
+        
+       
         VirtGraph virtgraph=new VirtGraph(fileURI,url,username,password);
          
        

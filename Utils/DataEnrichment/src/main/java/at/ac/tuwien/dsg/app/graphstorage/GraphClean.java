@@ -18,14 +18,14 @@ import virtuoso.jena.driver.VirtGraph;
 public class GraphClean {
     public void graphRemove(String fileURI)
     {
-         OperateProperty operateProperty=new OperateProperty();
+         /*OperateProperty operateProperty=new OperateProperty();
         String url=operateProperty.getGraphStorageURI();
         String username=operateProperty.getGraphStorageUserName();
-        String password=operateProperty.getGraphStoragePassword();
+        String password=operateProperty.getGraphStoragePassword();*/
         
-        /*String url="jdbc:virtuoso://"+Configuration.getConfig("VIRTUOSO.IP")+":"+Configuration.getConfig("VIRTUOSO.PORT");
+        String url="jdbc:virtuoso://"+Configuration.getConfig("VIRTUOSO.IP")+":"+Configuration.getConfig("VIRTUOSO.PORT");
         String username=Configuration.getConfig("VIRTUOSO.USERNAME");
-        String password=Configuration.getConfig("VIRTUOSO.PASSWORD");*/
+        String password=Configuration.getConfig("VIRTUOSO.PASSWORD");
         VirtGraph virtgraph=new VirtGraph(fileURI,url,username,password);
          
         if(!virtgraph.isEmpty())
