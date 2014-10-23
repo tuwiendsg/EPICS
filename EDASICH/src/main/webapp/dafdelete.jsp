@@ -4,7 +4,8 @@
     Author     : Jun
 --%>
 
-<%@page import="at.ac.tuwien.dsg.edasich.utils.EventLog"%>
+<%@page import="at.ac.tuwien.dsg.edasich.service.core.dafstore.DafStore"%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -16,8 +17,8 @@
         <%
             
             String dafName = request.getParameter("dafName").toString();
-            EventLog el = new EventLog();
-            el.deleteDAF(dafName);
+            DafStore dafStore = new DafStore();
+            dafStore.deleteDAF(dafName);
              response.sendRedirect("daf.jsp");
             
             %>

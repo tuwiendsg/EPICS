@@ -1,6 +1,7 @@
 
+<%@page import="at.ac.tuwien.dsg.edasich.service.core.dafstore.DafStore"%>
 <%@page import="java.sql.ResultSet"%>
-<%@page import="at.ac.tuwien.dsg.edasich.utils.EventLog"%>
+
 <style type="text/css">
 <!--
 @import url("style.css");
@@ -39,8 +40,11 @@
             </thead>
 
             <tbody>
-            <%                       EventLog eLog = new EventLog();
-                ResultSet rs = eLog.getEventLog(dafName);
+            <%                       
+                
+                DafStore dafStore = new DafStore();
+                ResultSet rs = dafStore.getDAF();
+                
                 try {
                     while (rs.next()) {
                         String id = rs.getString("id");

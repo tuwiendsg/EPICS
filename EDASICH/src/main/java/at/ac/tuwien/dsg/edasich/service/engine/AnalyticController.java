@@ -54,11 +54,11 @@ public class AnalyticController {
        // restClient.callPutMethod(daf);
     }
     
-    public void submitDataAnalytic(String analyticEngineID, String dafAnalytic) {
+    public void submitDataAnalytic(String analyticEngineID, String dafXML) {
 
         AnalyticEngineConfiguration aec = AnalyticEngineManager.getAnalyticEngineConfiguration(analyticEngineID);
             RestfulWSClient restClient = new RestfulWSClient(aec.getIp(), aec.getPort(), aec.getApi()+"/daf");
-            restClient.callPutMethod(dafAnalytic);
+            restClient.callPutMethod(dafXML);
 
     }
     

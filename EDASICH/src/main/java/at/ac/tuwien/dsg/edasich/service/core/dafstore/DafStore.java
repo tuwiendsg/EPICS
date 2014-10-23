@@ -44,12 +44,11 @@ public class DafStore {
         return rs;
     }
 
-    public String getAnalyticOfDaf(String dafName) {
+    public String getDafXML(String dafName) {
 
-        String analyticXML = "";
+        String dafStr = "";
         try {
             InputStream inputStream = null;
-            String dafType ="";
 
             String ip = getConfig("DB.EDASICH.IP");
             String port = getConfig("DB.EDASICH.PORT");
@@ -65,7 +64,6 @@ public class DafStore {
 
             try {
                 while (rs.next()) {
-                    dafType = rs.getString("type");
                     inputStream = rs.getBinaryStream("file");
                 }
             } catch (SQLException ex) {
@@ -76,27 +74,15 @@ public class DafStore {
             String encoding = StandardCharsets.UTF_8.name();
 
             IOUtils.copy(inputStream, writer, encoding);
-            String dafStr = writer.toString();
-            
-            if (dafType.equals("cep")) {
+            dafStr = writer.toString();
+            Logger.getLogger(DafStore.class.getName()).log(Level.INFO, null, "DAF XML: " + dafStr);
                 
-                try {
-                    DataAnalyticFunctionCep daf = JAXBUtils.unmarshal(dafStr, DataAnalyticFunctionCep.class);
-                    DafAnalyticCep dafAnalyticCep = daf.getDafAnalyticCep();
-                    analyticXML = JAXBUtils.marshal(dafAnalyticCep, DafAnalyticCep.class);
-                } catch (JAXBException ex) {
-                    Logger.getLogger(DafStore.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-            }
-            
-            
 
         } catch (IOException ex) {
             Logger.getLogger(DafStore.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return analyticXML;
+        return dafStr;
     }
 
     public void insertDAF(String dafName, String type, InputStream daf) {

@@ -1,12 +1,8 @@
 
-<%@page import="at.ac.tuwien.dsg.edasich.utils.EventLog"%>
+<%@page import="at.ac.tuwien.dsg.edasich.service.core.dafstore.DafStore"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="at.ac.tuwien.dsg.edasich.configuration.Configuration"%>
 <%@page import="at.ac.tuwien.dsg.edasich.service.engine.AnalyticController"%>
-<%@page import="javax.xml.bind.JAXBException"%>
-<%@page import="at.ac.tuwien.dsg.edasich.utils.JAXBUtils"%>
-<%@page import="at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData"%>
-<%@page import="at.ac.tuwien.dsg.edasich.utils.IOUtils"%>
 <%@page import="java.util.logging.Level"%>
 <%@page import="java.util.logging.Logger"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -36,7 +32,7 @@
     <body>
 
         <h3>EDASICH</h3>
-         <header>
+        <header>
 
             <div class="nav">
                 <ul>
@@ -44,7 +40,7 @@
                     <li class="daf"><a href="daf.jsp">DAF</a></li>
                 </ul>
             </div>
- 
+
         </header>
 
         <br> <br>
@@ -61,32 +57,15 @@
                 String dafType = request.getParameter("engine").toString();
                 logger.log(Level.INFO, dafName + " : " + dafType);
 
-                if (dafType.equals("es")) {
+                if (dafType.equals("cep")) {
 
-                    String xmlData = IOUtils.readData(dafName);
-                    logger.log(Level.INFO, xmlData);
-                    DataAssetFunctionStreamingData daf = null;
-                    try {
-                        daf = JAXBUtils.unmarshal(xmlData, DataAssetFunctionStreamingData.class);
-                        logger.log(Level.INFO, "f name: " + daf.getDaFunctionName());
+                    DafStore dafStore = new DafStore();
+                    String dafXML = dafStore.getDafXML(dafName);
 
-                        AnalyticController controler = new AnalyticController();
-                        controler.submitDataAssetFunctionStreamingData(dafType, daf);
-                        Configuration.submitMOMConf(dafType);
-                        controler.startAnalyticEngine(dafType, daf.getDaFunctionID());
-
-                    } catch (JAXBException ex) {
-                        logger.log(Level.SEVERE, null, ex);
-                    }
-
-                }
-
-                if (dafType.equals("jbpm")) {
-                    DataAssetFunctionStreamingData daf = null;
-                    String xmlData = IOUtils.readData(dafName);
-                    daf = JAXBUtils.unmarshal(xmlData, DataAssetFunctionStreamingData.class);
                     AnalyticController controler = new AnalyticController();
-                    controler.startAnalyticEngine(dafType, daf.getDaFunctionID());
+                    controler.submitDataAnalytic(dafType, dafXML);
+                    controler.startAnalyticEngine(dafType, dafName);
+
                 }
 
             }
@@ -142,8 +121,8 @@
                                         dafName = request.getParameter("daf").toString();
                                     }
 
-                                    EventLog eLog = new EventLog();
-                                    ResultSet rs = eLog.getDAF();
+                                    DafStore dafStore = new DafStore();
+                                    ResultSet rs = dafStore.getDAF();
                                     try {
                                         while (rs.next()) {
                                             String d_id = rs.getString("id");
