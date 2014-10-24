@@ -6,7 +6,7 @@
 package at.ac.tuwien.dsg.esperstreamprocessing.service;
 
 import at.ac.tuwien.dsg.edasich.entity.stream.Task;
-import at.ac.tuwien.dsg.esperstreamprocessing.handler.SensorEventHandler;
+import at.ac.tuwien.dsg.esperstreamprocessing.handler.EventHandler;
 
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.Configuration;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.MySqlConnectionManager;
@@ -46,7 +46,7 @@ public class TaskDelivery {
             ws.callPostMethod(paramList);
             //System.out.println("Forward Task !");
             String log = "Forward Task !" + paramList.toString();
-            Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, log);
+            Logger.getLogger(EventHandler.class.getName()).log(Level.INFO, log);
         }
     }
     
@@ -68,7 +68,7 @@ public class TaskDelivery {
         String sql = "INSERT INTO Event (daf,detected_time,event_values,severity) "
                 + "VALUES ('" + dafName + "','" + detectedTime + "','" + eventValues + "','" + severity + "')";
 
-        Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, sql);
+        Logger.getLogger(EventHandler.class.getName()).log(Level.INFO, sql);
         connectionManager.ExecuteUpdate(sql);
 
     }

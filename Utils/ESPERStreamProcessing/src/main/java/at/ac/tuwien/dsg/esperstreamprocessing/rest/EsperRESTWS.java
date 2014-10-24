@@ -9,14 +9,15 @@ package at.ac.tuwien.dsg.esperstreamprocessing.rest;
  *
  * @author Jun
  */
-import at.ac.tuwien.dsg.edasich.configuration.TaskDistributionConfiguration;
-import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
+
+import at.ac.tuwien.dsg.edasich.entity.daf.complexeventprocessing.DataAnalyticFunctionCep;
+
 
 import at.ac.tuwien.dsg.esperstreamprocessing.queueclient.QueueClient;
-import at.ac.tuwien.dsg.esperstreamprocessing.utils.Configuration;
+
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.IOUtils;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.JAXBUtils;
-import java.util.Set;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
@@ -33,6 +34,7 @@ import javax.xml.bind.JAXBException;
 @Path("/esper")
 public class EsperRESTWS {
 
+    
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/{param}")
@@ -54,28 +56,26 @@ public class EsperRESTWS {
     @PUT
     @Path("/start")
     @Consumes(MediaType.APPLICATION_XML)
-    public void startEsper(String xmlString) {
+    public void startEsper(String dafName) {
         
         try {
             
-            IOUtils.writeData(xmlString+"stop", "1"); 
+            IOUtils.writeData(dafName+"stop", "1"); 
      
-            String log = "Recieved:" + xmlString;
+            String log = "Recieved:" + dafName;
             Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
-            String xmlData = IOUtils.readData(xmlString);
+            String xmlData = IOUtils.readData(dafName);
             
             Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, xmlData);
             
-            DataAssetFunctionStreamingData daf=null;
-            daf = JAXBUtils.unmarshal(xmlData, DataAssetFunctionStreamingData.class);
+            DataAnalyticFunctionCep daf = JAXBUtils.unmarshal(xmlData, DataAnalyticFunctionCep.class);
       
-            log = daf.getDaFunctionName();
             Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, xmlData);
             
             QueueClient qc = new QueueClient();
             qc.configureDataAssetFunction(daf);
             
-            Thread thread = new Thread(qc, "ESPER");
+            Thread thread = new Thread(qc, dafName);
             thread.start();
         } catch (JAXBException ex) {
            // Logger.getLogger(EsperRESTWS.class.getName()).log(Level.SEVERE, null, ex);
@@ -87,50 +87,22 @@ public class EsperRESTWS {
     @PUT
     @Path("/stop")
     @Consumes(MediaType.APPLICATION_XML)
-    public void stopEsper(String xmlString) {
-            
-          IOUtils.writeData(xmlString+"stop", "0"); 
-
+    public void stopEsper(String dafName) {       
+          IOUtils.writeData(dafName+"stop", "0"); 
     }
 
     @PUT
-    @Path("/dataassetfunction")
+    @Path("/daf")
     @Consumes(MediaType.APPLICATION_XML)
     public void submitDataAssetFunction(String dafXML) {
         try {
         String log= "Recieved:" + dafXML;
-       Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
-        DataAssetFunctionStreamingData daf = JAXBUtils.unmarshal(dafXML, DataAssetFunctionStreamingData.class);
-        IOUtils.writeData(dafXML, daf.getDaFunctionID());
+        Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
+        DataAnalyticFunctionCep daf = JAXBUtils.unmarshal(dafXML, DataAnalyticFunctionCep.class);
+        IOUtils.writeData(dafXML, daf.getDafName());
         } catch (JAXBException ex) {
-           // Logger.getLogger(EsperRESTWS.class.getName()).log(Level.SEVERE, null, ex);
+           Logger.getLogger(EsperRESTWS.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    
-    @PUT
-    @Path("/momconf")
-    @Consumes(MediaType.APPLICATION_XML)
-    public void submitMOMConf(String xmltring) {
-    
-            System.out.println("Recieved: " + xmltring);       
-            IOUtils.writeData(xmltring, "momconf");
-          
-        
-    }
-    
-    
-    @PUT
-    @Path("/taskdistributionconf")
-    @Consumes(MediaType.APPLICATION_XML)
-    public void submitTaskDistributionConf(String xmltring) {
-        try {
-            TaskDistributionConfiguration obj = JAXBUtils.unmarshal(xmltring, TaskDistributionConfiguration.class);
-            IOUtils.writeData(xmltring, "taskdistributionconf");
-        } catch (JAXBException ex) {
-            Logger.getLogger(EsperRESTWS.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
     }
 
 }

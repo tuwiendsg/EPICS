@@ -12,9 +12,10 @@ package at.ac.tuwien.dsg.esperstreamprocessing.queueclient;
 import at.ac.tuwien.dsg.daas.entities.CreateRowsStatement;
 import at.ac.tuwien.dsg.daas.entities.RowColumn;
 import at.ac.tuwien.dsg.daas.entities.TableRow;
-import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
+import at.ac.tuwien.dsg.edasich.entity.daf.complexeventprocessing.DataAnalyticFunctionCep;
+
 import at.ac.tuwien.dsg.esperstreamprocessing.entity.SensorEvent;
-import at.ac.tuwien.dsg.esperstreamprocessing.handler.SensorEventHandler;
+import at.ac.tuwien.dsg.esperstreamprocessing.handler.EventHandler;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.Configuration;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.IOUtils;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.MySqlConnectionManager;
@@ -46,7 +47,7 @@ public class QueueClient implements Runnable {
     private String url;
     private String subject;
     private int limit;
-    private SensorEventHandler sensorEventHandler;
+    private EventHandler eventHandler;
     private String dafName;
 
     public QueueClient() {
@@ -123,7 +124,7 @@ public class QueueClient implements Runnable {
                             }
 
                             SensorEvent sensorEvent = new SensorEvent(sensorName, sensorValue, new Date());
-                            sensorEventHandler.handle(sensorEvent);
+                            eventHandler.handle(sensorEvent);
                         }
 
                     }
@@ -181,10 +182,10 @@ public class QueueClient implements Runnable {
 
     }
 
-    public void configureDataAssetFunction(DataAssetFunctionStreamingData daf){
-        sensorEventHandler = new SensorEventHandler(daf);
-        sensorEventHandler.afterPropertiesSet();
-        dafName  = daf.getDaFunctionID();
+    public void configureDataAssetFunction(DataAnalyticFunctionCep daf){
+        eventHandler = new EventHandler(daf);
+        eventHandler.afterPropertiesSet();
+        dafName  = daf.getDafName();
     }
     
     

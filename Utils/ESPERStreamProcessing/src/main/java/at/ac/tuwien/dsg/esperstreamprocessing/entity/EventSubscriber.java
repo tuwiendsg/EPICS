@@ -14,9 +14,9 @@ package at.ac.tuwien.dsg.esperstreamprocessing.entity;
  import at.ac.tuwien.dsg.edasich.streamprocessing.entity.event.EventPattern;
  import at.ac.tuwien.dsg.edasich.streamprocessing.entity.event.SensorEvent;
  */
-import at.ac.tuwien.dsg.edasich.entity.stream.EventPattern;
-import at.ac.tuwien.dsg.edasich.entity.stream.Task;
-import at.ac.tuwien.dsg.esperstreamprocessing.handler.SensorEventHandler;
+
+import at.ac.tuwien.dsg.edasich.entity.daf.complexeventprocessing.DataAnalyticFunctionCep;
+import at.ac.tuwien.dsg.esperstreamprocessing.handler.EventHandler;
 import at.ac.tuwien.dsg.esperstreamprocessing.service.TaskDelivery;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.Configuration;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.IOUtils;
@@ -48,22 +48,19 @@ import org.apache.http.message.BasicNameValuePair;
  */
 public class EventSubscriber implements StatementSubscriber {
 
-    private EventPattern eventPattern;
-    private String dafName;
-    private String enrichmentInfo;
+    private DataAnalyticFunctionCep daf;
 
     public EventSubscriber() {
     }
 
-    public EventSubscriber(EventPattern eventPattern, String dafName) {
-        this.eventPattern = eventPattern;
-        this.dafName = dafName;
+    public EventSubscriber(DataAnalyticFunctionCep daf) {
+        this.daf = daf;
     }
 
     @Override
     public String getStatement() {
-
-        return eventPattern.getStatement();
+        
+        return daf.getDafAnalyticCep().getEplStatement();
     }
 
     public void update(Map<String, SensorEvent> eventMap) {
@@ -74,7 +71,7 @@ public class EventSubscriber implements StatementSubscriber {
         StringBuilder valsLog = new StringBuilder();
         sb.append("--------------------------------------------------");
 
-        sb.append("\n- [" + eventPattern.getTask().getSeverity() + "]  ");
+     //   sb.append("\n- [" + eventPattern.getTask().getSeverity() + "]  ");
 
         for (Map.Entry<String, SensorEvent> entry : eventMap.entrySet()) {
             SensorEvent sensorEvent = entry.getValue();
@@ -91,7 +88,7 @@ public class EventSubscriber implements StatementSubscriber {
 
         Logger.getLogger(EventSubscriber.class.getName()).log(Level.INFO, sb.toString());
 
-        
+        /*
         if (sendTaskPermission()) {
             enrichData(listOfSensors);
             forwardTask(valsLog.toString());
@@ -99,8 +96,11 @@ public class EventSubscriber implements StatementSubscriber {
             logTask();
         }
 
+        */
     }
 
+    /*
+    
     public void forwardTask(String eventVals) {
 
         Task task = eventPattern.getTask();
@@ -193,4 +193,5 @@ public class EventSubscriber implements StatementSubscriber {
 
         return permission;
     }
+    */
 }

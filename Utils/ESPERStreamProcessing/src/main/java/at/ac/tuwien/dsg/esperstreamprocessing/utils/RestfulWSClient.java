@@ -6,7 +6,7 @@
 
 package at.ac.tuwien.dsg.esperstreamprocessing.utils;
 
-import at.ac.tuwien.dsg.esperstreamprocessing.handler.SensorEventHandler;
+import at.ac.tuwien.dsg.esperstreamprocessing.handler.EventHandler;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

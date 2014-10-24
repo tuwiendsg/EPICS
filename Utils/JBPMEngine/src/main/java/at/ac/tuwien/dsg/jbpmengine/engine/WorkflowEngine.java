@@ -52,6 +52,10 @@ public class WorkflowEngine {
           //  params.put("count", 5);
             params.put("ac.at.tuwien.dsg.daw1_P_1", 9.8);
             ksession.startProcess("ac.at.tuwien.dsg.daw1", params);
+            
+            
+            
+            
             logger.close();
         } catch (Throwable t) {
             t.printStackTrace();

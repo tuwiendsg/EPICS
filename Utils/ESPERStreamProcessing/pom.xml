@@ -78,17 +78,17 @@
         </dependency>
         
         <dependency>
-            <groupId>eda</groupId>
-            <artifactId>eda</artifactId>
-            <version>1.0</version>
+            <groupId>at.ac.tuwien.dsg</groupId>
+            <artifactId>dafmodel</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/eda-1.0.jar</systemPath> 
         </dependency>
 
         <dependency>
-            <groupId>daas</groupId>
+            <groupId>at.ac.tuwien.dsg</groupId>
             <artifactId>daas</artifactId>
-            <version>1.0</version>
+            <version>0.0.1-SNAPSHOT</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/daas-1.0.jar</systemPath>  
         </dependency>

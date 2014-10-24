@@ -5,7 +5,7 @@
  */
 package at.ac.tuwien.dsg.esperstreamprocessing.utils;
 
-import at.ac.tuwien.dsg.esperstreamprocessing.handler.SensorEventHandler;
+import at.ac.tuwien.dsg.esperstreamprocessing.handler.EventHandler;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -88,10 +88,10 @@ public class RestHttpClient {
          
             // set content
             post.setEntity(new UrlEncodedFormEntity(paramList));            
-        //    Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, "\nSending 'POST' request to URL : " + url);
-         //   Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, "Configuring..");
+        //    Logger.getLogger(EventHandler.class.getName()).log(Level.INFO, "\nSending 'POST' request to URL : " + url);
+         //   Logger.getLogger(EventHandler.class.getName()).log(Level.INFO, "Configuring..");
             
-         //   Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, "Post parameters : " + paramList);
+         //   Logger.getLogger(EventHandler.class.getName()).log(Level.INFO, "Post parameters : " + paramList);
   
 
             HttpClient client = HttpClientBuilder.create().build();
@@ -112,7 +112,7 @@ public class RestHttpClient {
                 result.append(line);
             }
          
-          //  Logger.getLogger(SensorEventHandler.class.getName()).log(Level.INFO, result.toString());
+          //  Logger.getLogger(EventHandler.class.getName()).log(Level.INFO, result.toString());
   
 
         } catch (Exception ex) {
