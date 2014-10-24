@@ -12,54 +12,34 @@
 
 2. 	Concepts:
 	
-	Data analytic function (daf) includes input, output, analytic and analytic result delegate. Input and output indicate format of input/output for the analytic and data sources, which are used to get/store data. The analytic can be a statement of event processing language or a workflow of data analytics. The analytic result delegate presents what can be done with analytic results (represented by output). The analytic result delegate includes a delegate message and a delegator. The analytic result is put into the delegate message, which is sent to the delegator.
 	
-2. 	Configuration:
+
+3. 	Installation MySQL:
+	i. download and instal MySQL version 5.x
+	ii. create new database name EDASICH
+	iii. import database using file EPICS/EDASICH/db/EDASICH.sql 
+	iv. change ip and port of external engines in table AnalyticEngine
+
+
+4. 	Installation ESPERStreamProcessing:
 	
-	i. Setup database for connection to external engines (esper, jbpm, hadoop etc.), data analytic functions, and utility services by importing EDASICH.sql in folder db
-	ii. Configure connection to the database in WEB-INF/config.properties. The most important configurations are DB.EDASICH.IP, DB.EDASICH.PORT, DB.EDASICH.DATABASE, DB.EDASICH.USERNAME and DB.EDASICH.PASSWORD
-	iii. External Services Configuration: external analytic engines (esper, jbpm etc.) can be found in EPICS/Utils. It is necessary to deploy these services and modify their connection information in EDASICH database.
+	i. configure for esper at EPICS/Utils/ESPERStreamProcessing/src/main/webapp/WEB-INF/config.properties. Important configurations include MOM.IP, DB.EDASICH.IP, DB.EDASICH.USERNAME, DB.EDASICH.PASSWORD, SALAM.IP
+	ii. compile Esper with maven2
+	iii. deploy esper on Tomcat 7.x server
+
+
+5. 	Installation EDASICH:
 	
-3. 	Installation:
+	i. configure for edasich at EPICS/EDASICH/src/main/webapp/WEB-INF/config.properties. The most important configurations are DB.EDASICH.IP, DB.EDASICH.USERNAME and DB.EDASICH.PASSWORD
+	iii. Compiel edasich with maven2
+	iv. deploy edasich on Tomcat 7.x server
+
 	
-	It is recommended to deploy EDASICH and external services on Apache Tomcat 7.x
-	
-4. 	Getting Started:
+6. 	Getting Started:
 	
 	i. Browse the web interface for data analytics of EDASICH at http://[ip]:8080/EDASICH/
-	ii. Go to menu “DAF” to import/delete a data analytic function
-	iii. Go to menu “Analytics”. Choose a type of analytic (streaming data or batch job analytic). Examples of data analytic function can be found in EDASICH/examples.
-
-5. 	Development of external analytic services for edasich:
-	
-	To build external analytic services for edasich, it is necessary to follow rest api format to start, stop and submit data analytic functions.
-
-	
-    @PUT
-    @Path("/start")
-    @Consumes(MediaType.APPLICATION_XML)
-    public void startEngineName(String daf) {      
-
-    }
-
-    @PUT
-    @Path("/stop")
-    @Consumes(MediaType.APPLICATION_XML)
-    public void stopEngineName(String daf) {
-
-    }
-
-    @PUT
-    @Path("/dataassetfunction")
-    @Consumes(MediaType.APPLICATION_XML)
-    public void submitDataAssetFunction(String dafXML) {
- 
-    }
-
-	
-
-
-	
-
+	ii. Go to menu “DAF” to import/delete a data analytic function. Examples of data analytic function can be found in EPICS/EDASICH/examples/example1/daf3 
+	iii. Go to salsa and turn on gas sensors http://128.130.172.215:8080/salsa-engine/?id=sensorsWorkload
+	iii. After import a data analytic function. Go to menu “Analytics”. Choose streaming data. And click start to start analytic.
 
 
