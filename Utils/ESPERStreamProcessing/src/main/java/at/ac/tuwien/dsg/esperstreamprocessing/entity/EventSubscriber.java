@@ -88,6 +88,8 @@ public class EventSubscriber implements StatementSubscriber {
 
         Logger.getLogger(EventSubscriber.class.getName()).log(Level.INFO, sb.toString());
 
+        logEvent(valsLog.toString());
+        
         /*
         if (sendTaskPermission()) {
             enrichData(listOfSensors);
@@ -97,12 +99,25 @@ public class EventSubscriber implements StatementSubscriber {
         }
 
         */
+        
+        
     }
 
-    /*
+    
+    
+    public void logEvent(String eventVals) {
+      
+        TaskDelivery sv = new TaskDelivery();
+        sv.logDetectedEvent(daf.getDafName(), eventVals, "");
+
+    }
+ /*   
     
     public void forwardTask(String eventVals) {
 
+        
+ 
+        
         Task task = eventPattern.getTask();
         TaskDelivery delivery = new TaskDelivery();
         delivery.deliver(task,enrichmentInfo,eventVals);
@@ -193,5 +208,5 @@ public class EventSubscriber implements StatementSubscriber {
 
         return permission;
     }
-    */
+   */ 
 }
