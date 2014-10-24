@@ -7,7 +7,7 @@
 package at.ac.tuwien.dsg.depictool.generator;
 
 
-import at.ac.tuwien.dsg.common.entity.others.MySqlConnectionManager;
+
 import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
 import at.ac.tuwien.dsg.common.entity.process.DataSource;

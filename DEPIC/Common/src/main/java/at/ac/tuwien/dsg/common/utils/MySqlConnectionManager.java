@@ -2,11 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.common.entity.others;
+package at.ac.tuwien.dsg.common.utils;
 
 import java.sql.*;
 import java.util.*;
 import com.mysql.jdbc.Driver;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,7 +16,7 @@ import java.util.logging.Logger;
  * @author Mitdacit
  */
 public class MySqlConnectionManager {
- //private static String connectionString = "jdbc:mysql://localhost:3306/it?user=root;password=";
+    //private static String connectionString = "jdbc:mysql://localhost:3306/it?user=root;password=";
     //private static String connectionString = "jdbc:mysql://10.8.52.21/it?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false";
 
     private String ip;
@@ -24,7 +25,6 @@ public class MySqlConnectionManager {
     private String userName;
     private String password;
     private String connectionString;
-    
 
     public MySqlConnectionManager() {
     }
@@ -35,15 +35,11 @@ public class MySqlConnectionManager {
         this.database = database;
         this.userName = userName;
         this.password = password;
-        
-        connectionString ="jdbc:mysql://"+ip+":"+port+"/"+database+"?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false";
-    
+
+        connectionString = "jdbc:mysql://" + ip + ":" + port + "/" + database + "?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false";
+
     }
 
-    
-    
-    
-    
     public MySqlConnectionManager(String userName, String password, String connectionString) {
         this.userName = userName;
         this.password = password;
@@ -98,11 +94,6 @@ public class MySqlConnectionManager {
         this.connectionString = connectionString;
     }
 
-    
-    
-
-    
-
     public ResultSet ExecuteQuery(String sql) {
         ResultSet result = null;
         try {
@@ -113,9 +104,7 @@ public class MySqlConnectionManager {
             String mysql = sql;
 
             result = stmt.executeQuery(mysql);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(MySqlConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(MySqlConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -129,15 +118,32 @@ public class MySqlConnectionManager {
             String connectionURL = connectionString;
             Connection connection = DriverManager.getConnection(connectionURL, userName, password);
             Statement stmt = connection.createStatement();
+
             String mysql = sql;
 
             result = stmt.executeUpdate(mysql);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(MySqlConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(MySqlConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        return result;
+    }
+
+    public int ExecuteUpdateBlob(String sql, InputStream inputStream) {
+
+        int result = 0;
+        try {
+
+            Class.forName("com.mysql.jdbc.Driver");
+            String connectionURL = connectionString;
+            try (Connection connection = DriverManager.getConnection(connectionURL, userName, password)) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setBlob(1, inputStream);
+                result = statement.executeUpdate();
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(MySqlConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return result;
     }
 
