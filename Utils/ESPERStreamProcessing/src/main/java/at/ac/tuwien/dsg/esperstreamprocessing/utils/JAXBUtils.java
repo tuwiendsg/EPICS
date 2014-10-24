@@ -5,7 +5,7 @@
  */
 package at.ac.tuwien.dsg.esperstreamprocessing.utils;
 
-import at.ac.tuwien.dsg.edasich.entity.stream.DataAssetFunctionStreamingData;
+
 import java.io.StringReader;
 import java.io.StringWriter;
 import javax.xml.bind.JAXBContext;

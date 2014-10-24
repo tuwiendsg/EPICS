@@ -141,9 +141,9 @@ public class QueueClient implements Runnable {
     }
     
     private void configure() {
-        url = "tcp://" + Configuration.getConfig("MOM.IP") + ":" + Configuration.getConfig("MOM.PORT");
-        subject = Configuration.getConfig("MOM.QUEUE_NAME");
-        limit = Integer.parseInt(Configuration.getConfig("MESSAGE.LIMIT"));
+        url = "tcp://" + Configuration.getConfiguration("MOM.IP") + ":" + Configuration.getConfiguration("MOM.PORT");
+        subject = Configuration.getConfiguration("MOM.QUEUE_NAME");
+        limit = Integer.parseInt(Configuration.getConfiguration("MESSAGE.LIMIT"));
         
     }
    

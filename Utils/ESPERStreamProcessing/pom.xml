@@ -82,7 +82,7 @@
             <artifactId>dafmodel</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/eda-1.0.jar</systemPath> 
+            <systemPath>${project.basedir}/lib/dafmodel-0.0.1-SNAPSHOT.jar</systemPath> 
         </dependency>
 
         <dependency>
@@ -90,7 +90,15 @@
             <artifactId>daas</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/daas-1.0.jar</systemPath>  
+            <systemPath>${project.basedir}/lib/daas-0.0.1-SNAPSHOT.jar</systemPath>  
+        </dependency>
+        
+        <dependency>
+            <groupId>at.ac.tuwien.dsg</groupId>
+            <artifactId>salam</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/salam-0.0.1-SNAPSHOT.jar</systemPath>  
         </dependency>
 
         <dependency>

@@ -9,8 +9,6 @@
     <artifactId>Utils</artifactId>
     <packaging>pom</packaging>
   <modules>
-    <module>Sampling</module>
-    <module>JBPMWorkflowEngine</module>
     <module>ESPERStreamProcessing</module>
   </modules>
 </project>

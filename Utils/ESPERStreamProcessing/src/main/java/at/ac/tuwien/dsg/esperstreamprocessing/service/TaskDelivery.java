@@ -5,12 +5,13 @@
  */
 package at.ac.tuwien.dsg.esperstreamprocessing.service;
 
-import at.ac.tuwien.dsg.edasich.entity.stream.Task;
+
 import at.ac.tuwien.dsg.esperstreamprocessing.handler.EventHandler;
 
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.Configuration;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.MySqlConnectionManager;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.RestHttpClient;
+import at.ac.tuwien.dsg.salam.Task;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,12 +29,12 @@ public class TaskDelivery {
     
     public void deliver(Task task, String enrichmentInfo, String eventVals){
         
-        String content = task.getTaskContent() + "\n" +"Detected: " +  eventVals + "\n" + "More information: " + enrichmentInfo;
+        String content = task.getContent() + "\n" +"Detected: " +  eventVals + "\n" + "More information: " + enrichmentInfo;
         
         if (task != null) {
 
             List<NameValuePair> paramList = new ArrayList<NameValuePair>();
-            paramList.add(new BasicNameValuePair("name", task.getTaskName()));
+            paramList.add(new BasicNameValuePair("name", task.getName()));
             paramList.add(new BasicNameValuePair("content", content));
             paramList.add(new BasicNameValuePair("tag", task.getTag()));
             paramList.add(new BasicNameValuePair("severity", task.getSeverity().name()));

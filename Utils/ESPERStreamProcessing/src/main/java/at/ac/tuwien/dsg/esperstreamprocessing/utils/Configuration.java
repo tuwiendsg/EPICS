@@ -10,7 +10,7 @@ package at.ac.tuwien.dsg.esperstreamprocessing.utils;
  * @author Jun
  */
 
-import at.ac.tuwien.dsg.edasich.configuration.MOMConfiguration;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,40 +26,6 @@ public class Configuration {
     public Configuration() {
     }
 
-    public static String getConfig(String configureName) {
-
-        
-        String configString = "";
-        
-        try {
-            String momXML = IOUtils.readData("momconf");
-            MOMConfiguration conf = JAXBUtils.unmarshal(momXML, MOMConfiguration.class);
-
-
-            switch (configureName) {
-                case "MOM.IP":
-                    configString = conf.getIp();
-                    break;
-                case "MOM.PORT":
-                    configString = conf.getPort();
-                    break;
-                case "MOM.QUEUE_NAME":
-                    configString = conf.getQueue();
-                    break;
-                case "MESSAGE.LIMIT":
-                    configString = String.valueOf(conf.getLimit());
-                    break;
-
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } 
-
-        return configString;
-    }
-    
-    
     public static String getConfiguration(String configureName) {
 
         String path = Configuration.class.getProtectionDomain().getCodeSource().getLocation().getPath();
