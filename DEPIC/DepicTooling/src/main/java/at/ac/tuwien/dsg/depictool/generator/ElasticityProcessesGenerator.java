@@ -8,7 +8,6 @@ package at.ac.tuwien.dsg.depictool.generator;
 
 import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import at.ac.tuwien.dsg.common.deployment.DeploymentDescription;
-import at.ac.tuwien.dsg.common.deployment.DeploymentDescriptionJAXB;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
 import at.ac.tuwien.dsg.common.entity.eda.MetricCondition;

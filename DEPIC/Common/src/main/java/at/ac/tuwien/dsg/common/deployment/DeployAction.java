@@ -17,19 +17,26 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class DeployAction {
     String actionID;
     String actionName;
-    String ip;
-    String port;
+    
     String artifact;
+    String artifactType;
+    
+    // call this API, the action is execute. This must be filled after deployment 
+    // to have the real IP of the VM which contain the artifact of the action
+    String apiEndpoint;	
+    
+    // call this API, a new instance of the artifact is created.
+    // This will be fill after SALSA description is generated.
+    String deploymentEndpoint;
 
     public DeployAction() {
     }
-
-    public DeployAction(String actionID, String actionName, String ip, String port, String artifact) {
+    
+    public DeployAction(String actionID, String actionName, String artifactType, String artifactRef) {
         this.actionID = actionID;
         this.actionName = actionName;
-        this.ip = ip;
-        this.port = port;
-        this.artifact = artifact;
+        this.artifactType = artifactType;
+        this.artifact = artifactRef;
     }
 
     public String getActionID() {
@@ -50,25 +57,23 @@ public class DeployAction {
         this.actionName = actionName;
     }
 
-    public String getIp() {
-        return ip;
-    }
+    public String getArtifactType() {
+		return artifactType;
+	}
 
-    @XmlElement (name ="ip")
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
+	public void setArtifactType(String artifactType) {
+		this.artifactType = artifactType;
+	}
 
-    public String getPort() {
-        return port;
-    }
+	public String getApiEndpoint() {
+		return apiEndpoint;
+	}
 
-    @XmlElement (name ="port")
-    public void setPort(String port) {
-        this.port = port;
-    }
+	public void setApiEndpoint(String apiEndpoint) {
+		this.apiEndpoint = apiEndpoint;
+	}
 
-    public String getArtifact() {
+	public String getArtifact() {
         return artifact;
     }
 
@@ -76,6 +81,14 @@ public class DeployAction {
     public void setArtifact(String artifact) {
         this.artifact = artifact;
     }
+
+	public String getDeploymentEndpoint() {
+		return deploymentEndpoint;
+	}
+
+	public void setDeploymentEndpoint(String deploymentEndpoint) {
+		this.deploymentEndpoint = deploymentEndpoint;
+	}
     
     
     

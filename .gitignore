@@ -6,6 +6,7 @@
 /DEPIC/Common/src/main/java/at/ac/tuwien/dsg/common/test/
 
 /DEPIC/Orchestrator/target/
+/DEPIC/Orchestrator/src/main/java/at/ac/tuwien/dsg/orchestrator/test/
 /DEPIC/DataAssetLoader/target/
 /DEPIC/DepicTooling/target/
 /DEPIC/DepicTooling/template/eDaaS/target/

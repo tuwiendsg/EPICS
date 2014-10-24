@@ -44,9 +44,7 @@ public class ElasticityProcessStore {
     
     
     
-    public  void storeElasticityProcesses(ElasticityProcess elasticityProcesses){
-        
-
+    public  void storeElasticityProcesses(ElasticityProcess elasticityProcesses, String deploymentDesciption){
        
         String epXml="";
         try {
@@ -55,9 +53,11 @@ public class ElasticityProcessStore {
             Logger.getLogger(ElasticityProcessStore.class.getName()).log(Level.SEVERE, null, ex);
         }
         InputStream epStream = new ByteArrayInputStream(epXml.getBytes(StandardCharsets.UTF_8));
-        String sql = "INSERT INTO ElasticityProcessStore (file) VALUES (?)";
+        String sql = "INSERT INTO ElasticityProcessStore (elasticityProcesses, deployementDescription) VALUES (?,?)";
         connectionManager.ExecuteUpdateBlob(sql, epStream);
     }
+    
+   
     
     
     public List<ActionDependency> getControlActionDependencyDB(String actionID){
@@ -92,17 +92,13 @@ public class ElasticityProcessStore {
         List<ActionDependency> listOfActionDependencies = new ArrayList<>();
         
         ResultSet rs = connectionManager.ExecuteQuery(sql);
-
         try {
-
             while (rs.next()) {
             
                 String actionName = rs.getString("actionName");    
-                String artifact = rs.getString("artifact");
-                
-                deployAction = new DeployAction(actionID, actionName, "", "", artifact);
-                
-              
+                String artifact = rs.getString("artifact"); 
+                String type = rs.getString("type"); 
+                deployAction = new DeployAction(actionID, actionName, type, artifact);          
             }
 
         } catch (Exception ex) {
