@@ -57,7 +57,7 @@
                 String dafType = request.getParameter("engine").toString();
                 logger.log(Level.INFO, dafName + " : " + dafType);
 
-                if (dafType.equals("cep")) {
+                if (dafType.equals("es")) {
 
                     DafStore dafStore = new DafStore();
                     String dafXML = dafStore.getDafXML(dafName);

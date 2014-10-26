@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 public class EventHandler {
 
-    private EPStatement listOfEPSStatements;
     private StatementSubscriber eventSubscriber;
     private EPServiceProvider epService;
     private DataAnalyticFunctionCep daf;

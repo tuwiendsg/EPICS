@@ -98,7 +98,18 @@ public class EsperRESTWS {
         try {
         String log= "Recieved:" + dafXML;
         Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
+        
         DataAnalyticFunctionCep daf = JAXBUtils.unmarshal(dafXML, DataAnalyticFunctionCep.class);
+        
+        log= "Daf Name:" + daf.getDafName();
+        Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
+        
+        
+        log= "Daf CPL:" + daf.getDafAnalyticCep().getEplStatement();
+        Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
+        
+        
+        
         IOUtils.writeData(dafXML, daf.getDafName());
         } catch (JAXBException ex) {
            Logger.getLogger(EsperRESTWS.class.getName()).log(Level.SEVERE, null, ex);

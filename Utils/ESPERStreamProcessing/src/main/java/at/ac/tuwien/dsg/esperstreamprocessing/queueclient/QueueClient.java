@@ -124,6 +124,7 @@ public class QueueClient implements Runnable {
                             }
 
                             SensorEvent sensorEvent = new SensorEvent(sensorName, sensorValue, new Date());
+                            Logger.getLogger(QueueClient.class.getName()).log(Level.INFO, "INPUT DATA: " +sensorName+" : " + sensorValue );
                             eventHandler.handle(sensorEvent);
                         }
 
@@ -186,6 +187,7 @@ public class QueueClient implements Runnable {
         eventHandler = new EventHandler(daf);
         eventHandler.afterPropertiesSet();
         dafName  = daf.getDafName();
+        Logger.getLogger(QueueClient.class.getName()).log(Level.INFO, "EPL: " +daf.getDafAnalyticCep().getEplStatement() );
     }
     
     

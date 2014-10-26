@@ -28,13 +28,14 @@ import org.apache.commons.io.IOUtils;
 public class DafStore {
 
     public ResultSet getDAF() {
-
+        
         String ip = getConfig("DB.EDASICH.IP");
         String port = getConfig("DB.EDASICH.PORT");
         String database = getConfig("DB.EDASICH.DATABASE");
         String username = getConfig("DB.EDASICH.USERNAME");
         String password = getConfig("DB.EDASICH.PASSWORD");
 
+        
         MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, database, username, password);
 
         String sql = "Select * from Daf";
@@ -56,6 +57,7 @@ public class DafStore {
             String username = getConfig("DB.EDASICH.USERNAME");
             String password = getConfig("DB.EDASICH.PASSWORD");
 
+            
             MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, database, username, password);
 
             String sql = "Select * from Daf where name='" + dafName + "'";
