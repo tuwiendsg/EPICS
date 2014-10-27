@@ -13,6 +13,7 @@ import java.util.List;
  * @author Jun
  */
 public class DataAsset {
+    
     List<DataItem> listOfDataItems;
 
     public DataAsset() {

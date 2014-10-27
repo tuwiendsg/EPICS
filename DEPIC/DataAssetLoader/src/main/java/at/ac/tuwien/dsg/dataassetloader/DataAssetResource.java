@@ -6,6 +6,12 @@
 
 package at.ac.tuwien.dsg.dataassetloader;
 
+import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
+import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.dataassetloader.dastore.DataAssetStore;
+import at.ac.tuwien.dsg.dataassetloader.datasource.DataLoader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.PathParam;
@@ -14,6 +20,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
+import javax.xml.bind.JAXBException;
 
 /**
  * REST Web Service
@@ -32,24 +39,35 @@ public class DataAssetResource {
     public DataAssetResource() {
     }
 
-    /**
-     * Retrieves representation of an instance of at.ac.tuwien.dsg.dataassetloader.DataAssetResource
-     * @return an instance of java.lang.String
-     */
-    @GET
-    @Produces("application/xml")
-    public String getXml() {
-        //TODO return proper representation object
-        throw new UnsupportedOperationException();
-    }
 
-    /**
-     * PUT method for updating or creating an instance of DataAssetResource
-     * @param content representation for the resource
-     * @return an HTTP response with content of the updated or created resource.
-     */
     @PUT
+    @Path("daloader")
     @Consumes("application/xml")
-    public void putXml(String content) {
+    public void requestDataAsset(String dataAssetFunctionXML) {
+        
+        DataLoader dataLoader = new DataLoader();
+        dataLoader.loadDataAsset(dataAssetFunctionXML);
+   
     }
+    
+    
+    @PUT
+    @Path("darepo")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String getDataAsset(String daName) {
+        
+        DataAssetStore dataAssetStore = new DataAssetStore();
+        DataAsset da= dataAssetStore.getDataAsset(daName);
+        String daXml="";
+        try {
+            daXml = JAXBUtils.marshal(daName, DataAsset.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataAssetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return daXml;
+    }
+    
+    
 }

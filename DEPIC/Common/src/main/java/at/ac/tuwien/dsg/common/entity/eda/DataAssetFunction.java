@@ -12,22 +12,26 @@ package at.ac.tuwien.dsg.common.entity.eda;
  */
 public class DataAssetFunction {
     String name;
+    String type;
     String daw;
-    
+
     public DataAssetFunction() {
     }
 
-    public DataAssetFunction(String name, String daw) {
-        this.name = name;
-        this.daw = daw;
-    }
-    
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getDaw() {
@@ -37,5 +41,8 @@ public class DataAssetFunction {
     public void setDaw(String daw) {
         this.daw = daw;
     }
- 
+    
+    
+    
+  
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.edasich.utils;
+package at.ac.tuwien.dsg.common.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -77,8 +77,9 @@ public class RestfulWSClient {
         this.url = url;
     }
 
-    public void callPutMethod(String xmlString) {
-
+    public String callPutMethod(String xmlString) {
+        String rs="";
+        
         try {
 
             //HttpGet method = new HttpGet(url);
@@ -105,11 +106,12 @@ public class RestfulWSClient {
                 result.append(line);
             }
 
+            rs = result.toString();
             // System.out.println("Response String: " + result.toString());
         } catch (Exception ex) {
 
         }
-
+        return rs;
     }
 
     public void callPostMethod(String xmlString) {
