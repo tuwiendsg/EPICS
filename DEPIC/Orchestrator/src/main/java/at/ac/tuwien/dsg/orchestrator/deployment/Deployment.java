@@ -5,7 +5,8 @@
  */
 package at.ac.tuwien.dsg.orchestrator.deployment;
 
-import at.ac.tuwien.dsg.edasich.utils.RestfulWSClient;
+
+import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 
 /**

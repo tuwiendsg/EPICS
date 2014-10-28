@@ -37,6 +37,14 @@ public class RestfulWSClient {
         logger = Logger.getLogger(this.getClass().getName());
     }
 
+    public RestfulWSClient(String url) {
+        this.url = url;
+    }
+    
+    
+    
+    
+
     public CloseableHttpClient getHttpClient() {
         return httpClient;
     }
