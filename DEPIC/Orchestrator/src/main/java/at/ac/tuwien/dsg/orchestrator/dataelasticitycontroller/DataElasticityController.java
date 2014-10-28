@@ -9,8 +9,15 @@ package at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
+import at.ac.tuwien.dsg.common.entity.process.Parameter;
+import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
+import at.ac.tuwien.dsg.orchestrator.registry.ControlServiceRegistry;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.bind.JAXBException;
 
 /**
  *
@@ -68,8 +75,24 @@ public class DataElasticityController {
     }
     
     private void executeControlProcess(ControlProcess cp) {
+        List<ControlAction> listOfControlActions = cp.getListOfControlActions();
         
-        
+        for (ControlAction ca : listOfControlActions){
+            String controlActionID = ca.getControlActionID();
+            List<Parameter> listOfParameters = ca.getListOfParameters();
+            ControlServiceRegistry controlServiceRegistry = new ControlServiceRegistry();
+            String uri = controlServiceRegistry.getControlServiceURI(controlActionID);
+            String paramStr ="";
+            try {
+                paramStr  = JAXBUtils.marshal(listOfParameters, List.class);
+            } catch (JAXBException ex) {
+                Logger.getLogger(DataElasticityController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            RestfulWSClient ws = new RestfulWSClient(uri);
+            ws.callPutMethod(paramStr);
+     
+        }
     }
     
     
