@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "dataAnalyticFunctionCep")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DataAnalyticFunctionCep implements DataAnalyticFunction {
+public class DataAnalyticFunctionCep  {
     
     @XmlElement(name = "dafName", required = true)
     String dafName;

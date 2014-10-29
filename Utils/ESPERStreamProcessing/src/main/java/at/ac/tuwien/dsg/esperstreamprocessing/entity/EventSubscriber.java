@@ -16,31 +16,22 @@ package at.ac.tuwien.dsg.esperstreamprocessing.entity;
  */
 
 import at.ac.tuwien.dsg.edasich.entity.daf.complexeventprocessing.DataAnalyticFunctionCep;
-import at.ac.tuwien.dsg.esperstreamprocessing.handler.EventHandler;
+
 import at.ac.tuwien.dsg.esperstreamprocessing.service.TaskDelivery;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.Configuration;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.IOUtils;
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.JAXBUtils;
-import at.ac.tuwien.dsg.esperstreamprocessing.utils.RestHttpClient;
+
 import at.ac.tuwien.dsg.esperstreamprocessing.utils.RestfulWSClient;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+import at.ac.tuwien.dsg.salam.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+
 
 /**
  *
@@ -90,7 +81,7 @@ public class EventSubscriber implements StatementSubscriber {
 
         logEvent(valsLog.toString());
         
-        /*
+        
         if (sendTaskPermission()) {
             enrichData(listOfSensors);
             forwardTask(valsLog.toString());
@@ -98,29 +89,33 @@ public class EventSubscriber implements StatementSubscriber {
             logTask();
         }
 
-        */
+        
         
         
     }
 
     
     
-    public void logEvent(String eventVals) {
-      
-        TaskDelivery sv = new TaskDelivery();
-        sv.logDetectedEvent(daf.getDafName(), eventVals, "");
 
-    }
- /*   
+ 
     
     public void forwardTask(String eventVals) {
 
+        String taskXML = daf.getAnalyticResultDelegate().getDelegateMessage();
         
+        
+        
+        Task task=null;
+        try {
+            task = JAXBUtils.unmarshal(taskXML, Task.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(EventSubscriber.class.getName()).log(Level.SEVERE, null, ex);
+        }
  
         
-        Task task = eventPattern.getTask();
+      
         TaskDelivery delivery = new TaskDelivery();
-        delivery.deliver(task,enrichmentInfo,eventVals);
+        delivery.deliver(task,"",eventVals);
     }
 
     public void enrichData(List<String> listOfSensors) {
@@ -136,21 +131,24 @@ public class EventSubscriber implements StatementSubscriber {
             
         }
 
-        String enrichmentURI = eventPattern.getEnrichmentInfo();
-        RestfulWSClient ws = new RestfulWSClient(enrichmentURI);
+       // String enrichmentURI = daf.getAnalyticResultDelegate().getDafDelegator().getRestapi();
+        //RestfulWSClient ws = new RestfulWSClient(enrichmentURI);
         
-        enrichmentInfo = ws.callGetDirectURL(params);
+        //enrichmentInfo = ws.callGetDirectURL(params);
 
-        Logger.getLogger(EventSubscriber.class.getName()).log(Level.INFO, "ENRICHMENT DATA: " + enrichmentInfo);
+        //Logger.getLogger(EventSubscriber.class.getName()).log(Level.INFO, "ENRICHMENT DATA: " + enrichmentInfo);
   
 
 
     }
 
+       
+    
+    
     public void logEvent(String eventVals) {
-        Task task = eventPattern.getTask();
+        
         TaskDelivery sv = new TaskDelivery();
-        sv.logDetectedEvent(dafName, eventVals, task.getSeverity().name());
+        sv.logDetectedEvent(daf.getDafName(), eventVals, "");
 
     }
 
@@ -158,7 +156,7 @@ public class EventSubscriber implements StatementSubscriber {
        
         try {
             String logData = String.valueOf(System.nanoTime());
-            IOUtils.writeData(logData, "log");
+            IOUtils.writeData(logData,daf.getDafName()+ "log");
         } catch (Exception ex) {
             System.out.println("" + ex.toString());
         }
@@ -169,7 +167,7 @@ public class EventSubscriber implements StatementSubscriber {
         String logData="";
 
         try {
-            logData = IOUtils.readData("log");
+            logData = IOUtils.readData(daf.getDafName()+"log");
         } catch (Exception e) {
             System.out.println("" + e.toString());
         }
@@ -208,5 +206,5 @@ public class EventSubscriber implements StatementSubscriber {
 
         return permission;
     }
-   */ 
+   
 }

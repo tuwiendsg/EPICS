@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "dafOutput")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DafOutputCep implements DafOutput{
+public class DafOutputCep {
     
     @XmlElement(name = "outputDataFormat", required = true)
     TableSchema outputDataFormat;

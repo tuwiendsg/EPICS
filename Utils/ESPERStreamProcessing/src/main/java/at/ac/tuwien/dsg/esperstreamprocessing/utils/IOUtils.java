@@ -35,7 +35,7 @@ public class IOUtils {
     }
     
     public static String readData(String fileName) {
-
+        //String tomcatTempFolder="/Volumes/DATA/BigData";
         String tomcatTempFolder = System.getProperty("java.io.tmpdir");
         fileName =  tomcatTempFolder +"/" + fileName;
         String data = "";

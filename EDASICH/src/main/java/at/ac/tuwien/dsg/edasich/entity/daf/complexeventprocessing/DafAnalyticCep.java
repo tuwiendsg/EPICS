@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "dafAnalyticCep")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DafAnalyticCep implements DafAnalytic  {
+public class DafAnalyticCep  {
     
     @XmlElement(name = "eplStatement", required = true)
     String eplStatement;

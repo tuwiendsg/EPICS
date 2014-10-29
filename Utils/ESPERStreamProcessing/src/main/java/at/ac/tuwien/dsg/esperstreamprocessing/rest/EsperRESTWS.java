@@ -62,15 +62,18 @@ public class EsperRESTWS {
             
             IOUtils.writeData(dafName+"stop", "1"); 
      
-            String log = "Recieved:" + dafName;
-            Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
-            String xmlData = IOUtils.readData(dafName);
             
-            Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, xmlData);
+            
+            String xmlData = IOUtils.readData(dafName);
             
             DataAnalyticFunctionCep daf = JAXBUtils.unmarshal(xmlData, DataAnalyticFunctionCep.class);
       
-            Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, xmlData);
+            
+            String log = "STARTING ... " + dafName;
+            
+            log = log + "\n CQL: " + daf.getDafAnalyticCep().getEplStatement();
+            
+            Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
             
             QueueClient qc = new QueueClient();
             qc.configureDataAssetFunction(daf);
@@ -97,15 +100,12 @@ public class EsperRESTWS {
     public void submitDataAssetFunction(String dafXML) {
         try {
         String log= "Recieved:" + dafXML;
-        Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
-        
         DataAnalyticFunctionCep daf = JAXBUtils.unmarshal(dafXML, DataAnalyticFunctionCep.class);
         
-        log= "Daf Name:" + daf.getDafName();
-        Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
+        log = log +  "\n Daf Name:" + daf.getDafName();
+        log= log + "\n Daf CPL:" + daf.getDafAnalyticCep().getEplStatement();
         
         
-        log= "Daf CPL:" + daf.getDafAnalyticCep().getEplStatement();
         Logger.getLogger(EsperRESTWS.class.getName()).log(Level.INFO, log);
         
         

@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "dafInput")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DafInputCep implements DafInput{
+public class DafInputCep {
     
     @XmlElement(name = "inputDataFormat", required = true)
     TableSchema inputDataFormat;
