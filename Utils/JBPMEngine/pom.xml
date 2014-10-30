@@ -164,7 +164,20 @@
            <scope>compile</scope>
          </dependency>
         <!--end-->
-         
+	 <!--
+         <dependency>
+	  <groupId>jfree</groupId>
+	  <artifactId>jfreechart</artifactId>
+	  <version>1.0.9-brew</version>
+	  <type>jar</type>
+	 </dependency>
+         -->
+         <dependency>
+	<groupId>jfree</groupId>
+	<artifactId>jfreechart</artifactId>
+	<version>1.0.13</version>
+</dependency>
+
 	</dependencies>
 
 	<build>

@@ -52,7 +52,7 @@ public class CassandraConnection {
             ResultSet results=session.execute(query);
             for(Row row : results.all())
                 {
-                    System.out.println(row.toString());
+                    System.out.println("value: "+row.toString());
                 }
           }
           catch(Exception e)

@@ -13,7 +13,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDFS;
-//import com.mkyong.app.OperateProperty;
+//import com.mkyoung.datamodel.OperateProperty;
 import java.io.File;
 import java.io.FileReader;
 import virtuoso.jena.driver.VirtGraph;

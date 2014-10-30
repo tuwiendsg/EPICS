@@ -71,6 +71,12 @@
       <nodeName>Sampling</nodeName>
       <nodeInstanceId>2</nodeInstanceId>
     </org.drools.core.audit.event.RuleFlowNodeLogEvent>
+  </events>
+  <engine>PHREAK</engine>
+</org.drools.core.audit.WorkingMemoryLog>
+<org.drools.core.audit.WorkingMemoryLog>
+  <version>6.1</version>
+  <events>
     <org.drools.core.audit.event.RuleFlowNodeLogEvent>
       <type>26</type>
       <processId>ac.at.tuwien.dsg.daw1</processId>

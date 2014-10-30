@@ -8,7 +8,7 @@ package at.ac.tuwien.dsg.app.graphstorage;
 import at.ac.tuwien.dsg.dataenrichment.Configuration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-//import com.mkyong.app.OperateProperty;
+//import com.mkyoung.datamodel.OperateProperty;
 import virtuoso.jena.driver.VirtGraph;
 
 /**

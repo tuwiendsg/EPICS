@@ -64,7 +64,7 @@ public class SensoryModule {
         
          model.setNsPrefix("chamber", uri);
         model.write(System.out);
-        File f=new File("./example6");
+        File f=new File("./example");
             if(!f.exists())
             {
                f.mkdir();
@@ -72,7 +72,7 @@ public class SensoryModule {
             }
           try
             {
-                FileWriter fw=new FileWriter("./example6/"+objectName+".rdf");
+                FileWriter fw=new FileWriter("./example/"+objectName+".rdf");
                 model.write(fw);
             }
           catch(Exception e)

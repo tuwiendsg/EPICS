@@ -5,6 +5,8 @@
  */
 package at.ac.tuwien.dsg.jbpmengine.hadoop;
 
+import at.ac.tuwien.dsg.utility.DesignChart;
+
 /**
  *
  * @author Jun
@@ -20,8 +22,15 @@ public class Sampling {
         System.out.println("Sampling Starting ...");
         //algorithm
 
-    
-
+        DesignChart chart12=new DesignChart();
+        try {
+            chart12.chart();
+            
+        } catch (Exception e) {
+            System.out.println("Exception occured in sampling: "+e);
+        }
+        
+        System.out.println("ClassValue=" + samplingPercentage);
         System.out.println("Sampling Completed ...");
     }
 }

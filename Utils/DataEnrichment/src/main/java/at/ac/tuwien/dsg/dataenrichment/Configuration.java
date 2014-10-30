@@ -58,13 +58,13 @@ public class Configuration {
             
 
         } catch (IOException ex) {
-            ex.printStackTrace();
+             Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (input != null) {
                 try {
                     input.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                     Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
         }
