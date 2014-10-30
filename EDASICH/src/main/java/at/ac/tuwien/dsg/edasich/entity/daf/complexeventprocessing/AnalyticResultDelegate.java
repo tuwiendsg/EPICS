@@ -6,6 +6,7 @@
 package at.ac.tuwien.dsg.edasich.entity.daf.complexeventprocessing;
 
 import at.ac.tuwien.dsg.edasich.entity.daf.DafDelegator;
+import at.ac.tuwien.dsg.salam.Task;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -21,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class AnalyticResultDelegate {
     
     @XmlElement(name = "delegateMessage", required = true)
-    String delegateMessage;
+    Task delegateMessage;
     
     @XmlElement(name = "dafDelegator", required = true)
     DafDelegator dafDelegator;
@@ -29,16 +30,16 @@ public class AnalyticResultDelegate {
     public AnalyticResultDelegate() {
     }
 
-    public AnalyticResultDelegate(String delegateMessage, DafDelegator dafDelegator) {
+    public AnalyticResultDelegate(Task delegateMessage, DafDelegator dafDelegator) {
         this.delegateMessage = delegateMessage;
         this.dafDelegator = dafDelegator;
     }
 
-    public String getDelegateMessage() {
+    public Task getDelegateMessage() {
         return delegateMessage;
     }
 
-    public void setDelegateMessage(String delegateMessage) {
+    public void setDelegateMessage(Task delegateMessage) {
         this.delegateMessage = delegateMessage;
     }
 
@@ -49,4 +50,6 @@ public class AnalyticResultDelegate {
     public void setDafDelegator(DafDelegator dafDelegator) {
         this.dafDelegator = dafDelegator;
     }
+
+    
 }

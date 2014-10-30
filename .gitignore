@@ -20,8 +20,8 @@
 /EDASICH/src/main/java/at/ac/tuwien/dsg/edasich/test/
 /EDASICH/log/
 
-/EDASICH/src/main/webapp/WEB-INF/config.properties
-/Utils/ESPERStreamProcessing/src/main/webapp/WEB-INF/config.properties
+
+
 
 /Utils/LeastSquareRegression/target/
 /Utils/Sampling/target/

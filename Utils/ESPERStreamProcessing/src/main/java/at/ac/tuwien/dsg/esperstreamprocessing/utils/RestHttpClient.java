@@ -41,6 +41,12 @@ public class RestHttpClient {
        
     }
 
+    public RestHttpClient(String url) {
+        this.url = url;
+    }
+    
+    
+
 
     public String getIp() {
         return ip;

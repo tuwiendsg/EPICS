@@ -10,6 +10,7 @@
 
         <%
 
+
             String dafName = "daf";
             Cookie[] cookies = null;
             cookies = request.getCookies();
@@ -43,7 +44,7 @@
             <%                       
                 
                 DafStore dafStore = new DafStore();
-                ResultSet rs = dafStore.getDAF();
+                ResultSet rs = dafStore.getEvent();
                 
                 try {
                     while (rs.next()) {
@@ -75,7 +76,6 @@
 
         </table>
 
+<% } %>
 
-
-        <% }%>
   

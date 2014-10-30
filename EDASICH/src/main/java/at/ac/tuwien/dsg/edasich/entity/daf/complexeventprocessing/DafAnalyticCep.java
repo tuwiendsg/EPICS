@@ -22,12 +22,16 @@ public class DafAnalyticCep  {
     
     @XmlElement(name = "eplStatement", required = true)
     String eplStatement;
+    
+    @XmlElement(name = "enrichmentURI", required = true)
+    String enrichmentURI;
 
     public DafAnalyticCep() {
     }
 
-    public DafAnalyticCep(String eplStatement) {
+    public DafAnalyticCep(String eplStatement, String enrichmentURI) {
         this.eplStatement = eplStatement;
+        this.enrichmentURI = enrichmentURI;
     }
 
     public String getEplStatement() {
@@ -37,5 +41,15 @@ public class DafAnalyticCep  {
     public void setEplStatement(String eplStatement) {
         this.eplStatement = eplStatement;
     }
+
+    public String getEnrichmentURI() {
+        return enrichmentURI;
+    }
+
+    public void setEnrichmentURI(String enrichmentURI) {
+        this.enrichmentURI = enrichmentURI;
+    }
+
+    
     
 }

@@ -40,6 +40,7 @@ import javax.xml.bind.JAXBException;
 public class EventSubscriber implements StatementSubscriber {
 
     private DataAnalyticFunctionCep daf;
+    String enrichmentInfo;
 
     public EventSubscriber() {
     }
@@ -83,10 +84,11 @@ public class EventSubscriber implements StatementSubscriber {
         
         
         if (sendTaskPermission()) {
+            logTask();
             enrichData(listOfSensors);
             forwardTask(valsLog.toString());
             logEvent(valsLog.toString());
-            logTask();
+            
         }
 
         
@@ -101,21 +103,16 @@ public class EventSubscriber implements StatementSubscriber {
     
     public void forwardTask(String eventVals) {
 
-        String taskXML = daf.getAnalyticResultDelegate().getDelegateMessage();
+     //   String taskXML = daf.getAnalyticResultDelegate().getDelegateMessage();
         
         
         
-        Task task=null;
-        try {
-            task = JAXBUtils.unmarshal(taskXML, Task.class);
-        } catch (JAXBException ex) {
-            Logger.getLogger(EventSubscriber.class.getName()).log(Level.SEVERE, null, ex);
-        }
- 
+        Task task= daf.getAnalyticResultDelegate().getDelegateMessage();
+        
         
       
         TaskDelivery delivery = new TaskDelivery();
-        delivery.deliver(task,"",eventVals);
+        delivery.deliver(task,enrichmentInfo,eventVals, daf.getAnalyticResultDelegate().getDafDelegator().getRestapi());
     }
 
     public void enrichData(List<String> listOfSensors) {
@@ -131,12 +128,12 @@ public class EventSubscriber implements StatementSubscriber {
             
         }
 
-       // String enrichmentURI = daf.getAnalyticResultDelegate().getDafDelegator().getRestapi();
-        //RestfulWSClient ws = new RestfulWSClient(enrichmentURI);
+        String enrichmentURI = daf.getDafAnalyticCep().getEnrichmentURI();
+        RestfulWSClient ws = new RestfulWSClient(enrichmentURI);
         
-        //enrichmentInfo = ws.callGetDirectURL(params);
+        enrichmentInfo = ws.callGetDirectURL(params);
 
-        //Logger.getLogger(EventSubscriber.class.getName()).log(Level.INFO, "ENRICHMENT DATA: " + enrichmentInfo);
+        Logger.getLogger(EventSubscriber.class.getName()).log(Level.INFO, "ENRICHMENT DATA: " + enrichmentInfo);
   
 
 
@@ -146,9 +143,9 @@ public class EventSubscriber implements StatementSubscriber {
     
     
     public void logEvent(String eventVals) {
-        
+        Task task= daf.getAnalyticResultDelegate().getDelegateMessage();
         TaskDelivery sv = new TaskDelivery();
-        sv.logDetectedEvent(daf.getDafName(), eventVals, "");
+        sv.logDetectedEvent(daf.getDafName(), eventVals, task.getSeverity().name());
 
     }
 

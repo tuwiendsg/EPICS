@@ -44,6 +44,24 @@ public class DafStore {
 
         return rs;
     }
+    
+    public ResultSet getEvent() {
+        
+        String ip = getConfig("DB.EDASICH.IP");
+        String port = getConfig("DB.EDASICH.PORT");
+        String database = getConfig("DB.EDASICH.DATABASE");
+        String username = getConfig("DB.EDASICH.USERNAME");
+        String password = getConfig("DB.EDASICH.PASSWORD");
+
+        
+        MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, database, username, password);
+
+        String sql = "Select * from Event WHERE 1 ORDER BY id DESC LIMIT 30";
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        return rs;
+    }
 
     public String getDafXML(String dafName) {
 

@@ -49,6 +49,9 @@ public class QueueClient implements Runnable {
     private int limit;
     private EventHandler eventHandler;
     private String dafName;
+    private String mom_ip;
+    private String mom_port;
+    private String mon_queue;
 
     public QueueClient() {
      
@@ -142,8 +145,8 @@ public class QueueClient implements Runnable {
     }
     
     private void configure() {
-        url = "tcp://" + Configuration.getConfiguration("MOM.IP") + ":" + Configuration.getConfiguration("MOM.PORT");
-        subject = Configuration.getConfiguration("MOM.QUEUE_NAME");
+        url = "tcp://" + mom_ip + ":" + mom_port;
+        subject = mon_queue;
         limit = Integer.parseInt(Configuration.getConfiguration("MESSAGE.LIMIT"));
         
     }
@@ -187,6 +190,12 @@ public class QueueClient implements Runnable {
         eventHandler = new EventHandler(daf);
         eventHandler.afterPropertiesSet();
         dafName  = daf.getDafName();
+        mom_ip = daf.getDafInputCep().getInputDataSource().getIp();
+        mom_port = daf.getDafInputCep().getInputDataSource().getPort();
+        mon_queue = daf.getDafInputCep().getInputDataSource().getQueue();
+        
+        
+        
         Logger.getLogger(QueueClient.class.getName()).log(Level.INFO, "EPL: " +daf.getDafAnalyticCep().getEplStatement() );
     }
     

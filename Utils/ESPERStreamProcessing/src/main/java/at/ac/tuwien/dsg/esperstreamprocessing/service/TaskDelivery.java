@@ -27,7 +27,7 @@ import org.apache.http.message.BasicNameValuePair;
  */
 public class TaskDelivery {
     
-    public void deliver(Task task, String enrichmentInfo, String eventVals){
+    public void deliver(Task task, String enrichmentInfo, String eventVals, String uri){
         
         String content = task.getContent() + "\n" +"Detected: " +  eventVals + "\n" + "More information: " + enrichmentInfo;
         
@@ -39,11 +39,9 @@ public class TaskDelivery {
             paramList.add(new BasicNameValuePair("tag", task.getTag()));
             paramList.add(new BasicNameValuePair("severity", task.getSeverity().name()));
 
-            String ip = Configuration.getConfiguration("SALAM.IP");
-            String port = Configuration.getConfiguration("SALAM.PORT");
-            String resouce = Configuration.getConfiguration("SALAM.RESOURCE");
+   
 
-            RestHttpClient ws = new RestHttpClient(ip, port, resouce);
+            RestHttpClient ws = new RestHttpClient(uri);
             ws.callPostMethod(paramList);
             //System.out.println("Forward Task !");
             String log = "Forward Task !" + paramList.toString();
