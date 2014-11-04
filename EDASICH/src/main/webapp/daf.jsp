@@ -47,7 +47,7 @@
             <table class="smart-green">
 
                 <tr>
-                    <td>Data Asset Function</td>
+                    <td>Data Analytics Function</td>
                     <td><input type="file" name="file" /></td> 
                 </tr>
 
@@ -72,7 +72,7 @@
 
     <center><table id="ver-minimalist">
             <tr>
-                <th>Data Asset Function</th>
+                <th>Data Analytics Function</th>
                 <th>Type</th>
                 <th>Action</th> 
                 <th>Status</th> 

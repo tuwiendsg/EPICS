@@ -111,7 +111,7 @@
                             </select></td> 
                     </tr>
                     <tr>
-                        <td>Data Asset Function</td>
+                        <td>Data Analytics Function</td>
                         <td><select name="daf">
 
                                 <%                                String dafName = "daf1";

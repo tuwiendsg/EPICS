@@ -10,5 +10,6 @@
     <packaging>pom</packaging>
   <modules>
     <module>ESPERStreamProcessing</module>
+    <module>DataAssetFunctionManagement</module>
   </modules>
 </project>

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.edasich.utils;
+package at.ac.tuwien.dsg.dataassetfunctionmanagement.util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,11 +16,19 @@ import java.io.IOException;
  * @author Jun
  */
 public class IOUtils {
+  
+    private static String tomcatTempFolder;
 
-    public static void writeData(String data, String fileName) {
+    public IOUtils() {
+        tomcatTempFolder="/Volumes/DATA/BigData";
+       // tomcatTempFolder = System.getProperty("java.io.tmpdir");
+        
+    }
+  
+    
 
-        String tomcatTempFolder = System.getProperty("java.io.tmpdir");
-        //String tomcatTempFolder="/Volumes/DATA/BigData";
+    public void writeData(String data, String fileName) {
+
         fileName =  tomcatTempFolder +"/" + fileName;
         FileWriter fstream;
         try {
@@ -33,10 +41,8 @@ public class IOUtils {
         }
     }
 
-    public static String readData(String fileName) {
+    public  String readData(String fileName) {
 
-        String tomcatTempFolder = System.getProperty("java.io.tmpdir");
-        //String tomcatTempFolder="/Volumes/DATA/BigData";
         fileName =  tomcatTempFolder +"/" + fileName;
         String data = "";
         try {

@@ -147,7 +147,7 @@ public class QueueClient implements Runnable {
     private void configure() {
         url = "tcp://" + mom_ip + ":" + mom_port;
         subject = mon_queue;
-        limit = Integer.parseInt(Configuration.getConfiguration("MESSAGE.LIMIT"));
+        limit = Integer.MAX_VALUE;
         
     }
    

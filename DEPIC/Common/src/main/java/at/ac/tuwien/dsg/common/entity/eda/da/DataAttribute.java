@@ -6,12 +6,24 @@
 
 package at.ac.tuwien.dsg.common.entity.eda.da;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  * @author Jun
  */
+
+@XmlRootElement(name = "DataAttribute")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DataAttribute {
+    
+    @XmlElement(name = "attributeName", required = true)
     String attributeName;
+    
+    @XmlElement(name = "attributeValue", required = true)
     String attributeValue;
 
     public DataAttribute() {

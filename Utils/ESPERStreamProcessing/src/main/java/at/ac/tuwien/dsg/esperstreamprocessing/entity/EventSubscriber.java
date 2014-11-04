@@ -153,7 +153,7 @@ public class EventSubscriber implements StatementSubscriber {
        
         try {
             String logData = String.valueOf(System.nanoTime());
-            IOUtils.writeData(logData,daf.getDafName()+ "log");
+            IOUtils.writeData(logData,daf.getDafName()+ "logz");
         } catch (Exception ex) {
             System.out.println("" + ex.toString());
         }
@@ -164,7 +164,7 @@ public class EventSubscriber implements StatementSubscriber {
         String logData="";
 
         try {
-            logData = IOUtils.readData(daf.getDafName()+"log");
+            logData = IOUtils.readData(daf.getDafName()+"logz");
         } catch (Exception e) {
             System.out.println("" + e.toString());
         }
