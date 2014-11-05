@@ -39,12 +39,19 @@ public class DataLoader {
             RestfulWSClient rs = new RestfulWSClient(ip, port, resource);
             String dataAssetXml = rs.callPutMethod(daw);
            
+            DataAsset da = JAXBUtils.unmarshal(dataAssetXml, DataAsset.class);
+            da.setName(daf.getName());
+            
+            dataAssetXml = JAXBUtils.marshal(da, DataAsset.class);
+            
+            
             System.out.println(dataAssetXml);
             
             //DataAsset da = JAXBUtils.unmarshal(dataAssetXml, DataAsset.class);
             
             
             DataAssetStore das = new DataAssetStore();
+            
             das.saveDataAsset(dataAssetXml, daf.getName());
             
             

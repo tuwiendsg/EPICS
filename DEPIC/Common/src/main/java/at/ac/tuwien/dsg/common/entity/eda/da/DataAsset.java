@@ -20,14 +20,26 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class DataAsset {
     
+    @XmlElement(name = "name", required = true)
+    String name;
+    
     @XmlElement(name = "listOfDataItems", required = true)
     List<DataItem> listOfDataItems;
 
     public DataAsset() {
     }
 
-    public DataAsset(List<DataItem> listOfDataItems) {
+    public DataAsset(String name, List<DataItem> listOfDataItems) {
+        this.name = name;
         this.listOfDataItems = listOfDataItems;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<DataItem> getListOfDataItems() {
@@ -37,6 +49,7 @@ public class DataAsset {
     public void setListOfDataItems(List<DataItem> listOfDataItems) {
         this.listOfDataItems = listOfDataItems;
     }
+
     
     
     

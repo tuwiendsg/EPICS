@@ -126,7 +126,7 @@ public class Query {
         }
         
         
-        DataAsset da = new DataAsset(dataItemList);
+        DataAsset da = new DataAsset("",dataItemList);
         
         
         return da;

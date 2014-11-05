@@ -53,32 +53,16 @@ public class DataAssetStore {
 
         String sql = "INSERT INTO DataAsset(daw_name,da) VALUES ('" + dafName + "',?)";
         connectionManager.ExecuteUpdateBlob(sql, daStream);
-        /*
-        
-        List<DataItem> dataItems = da.getListOfDataItems();
-
-        for (DataItem dataItem : dataItems) {
-            String atts = "";
-            String vals = "";
-            List<DataAttribute> dataAttributes = dataItem.getListOfAttributes();
-
-            for (DataAttribute dataAttribute : dataAttributes) {
-                atts += dataAttribute.getAttributeName() + ",";
-                vals += dataAttribute.getAttributeValue() + ",";
-            }
-
-            atts = atts.substring(0, atts.length() - 1);
-            vals = vals.substring(0, vals.length() - 1);
-
-            String sql = "INSERT INTO '" + dafName + "' (" + atts + ") VALUES (" + vals + ") ";
-            connectionManager.ExecuteUpdate(sql);
-
-        }
-                
-                */
-        
+  
         
                 
+    }
+    
+    public void removeDataAsset(String dafName) {
+        MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
+        String sql = "DElETE FROM DataAsset WHERE daw_name='"+dafName+"'";
+
+        connectionManager.ExecuteQuery(sql);
     }
     
       public String getDataAssetXML(String dafName) {
@@ -158,7 +142,7 @@ public class DataAssetStore {
         }
         
         
-        DataAsset da = new DataAsset(dataItemList);
+        DataAsset da = new DataAsset(dafName,dataItemList);
         
         
         return da;

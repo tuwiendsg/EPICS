@@ -5,9 +5,13 @@
  */
 package at.ac.tuwien.dsg.dataassetloader.restws;
 
+import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
+import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetloader.dastore.DataAssetStore;
 import at.ac.tuwien.dsg.dataassetloader.datasource.DataLoader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.PathParam;
@@ -17,6 +21,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.JAXBException;
 
 /**
  * REST Web Service
@@ -60,7 +65,7 @@ public class DataassetResource {
     
     
     @PUT
-    @Path("darepo")
+    @Path("daget")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String getDataAsset(String daName) {
@@ -69,6 +74,24 @@ public class DataassetResource {
         String daXml= dataAssetStore.getDataAssetXML(daName);
       
         return daXml;
+    }
+    
+    @PUT
+    @Path("dastore")
+    @Consumes("application/xml")
+    public void storeDataAsset(String daXML) {
+        
+        
+        DataAsset da=null;
+        try {
+            da = JAXBUtils.unmarshal(daXML, DataAsset.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        DataAssetStore dataAssetStore = new DataAssetStore();  
+        dataAssetStore.removeDataAsset(da.getName());
+        dataAssetStore.saveDataAsset(daXML, da.getName());
+
     }
 
 }
