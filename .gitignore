@@ -61,3 +61,7 @@
 /Utils/Sampling/nb-configuration.xml
 /Utils/DataEnrichment/src/main/java/com/mkyoung/datamodel 
 /Utils/DataAssetFunctionManagement/target/
+
+/Utils/DataAssetFunctionManagement/src/main/webapp/WEB-INF/config.properties
+/Utils/ESPERStreamProcessing/src/main/webapp/WEB-INF/config.properties
+/EDASICH/src/main/webapp/WEB-INF/config.properties

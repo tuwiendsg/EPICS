@@ -4,7 +4,9 @@
  */
 package at.ac.tuwien.dsg.dataassetfunctionmanagement;
 
+import at.ac.tuwien.dsg.dataassetfunctionmanagement.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.engine.WorkflowEngine;
+import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.IOUtils;
 import java.util.UUID;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -41,7 +43,7 @@ public class DawResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String getXml() {
         //TODO return proper representation object
-        return "Hello";
+        return Configuration.getConfig("DATA.SOURCE.IP");
     }
 
     /**
@@ -55,12 +57,12 @@ public class DawResource {
     public String putXml(String dataAssetFunctionXML) {
     
         UUID dafID = UUID.randomUUID();
-        
-        
+
         WorkflowEngine wf = new WorkflowEngine(dataAssetFunctionXML,dafID.toString());
         wf.startWFEngine();
                 
-        
-        return "zzz";
+        IOUtils ioUtils = new IOUtils();
+        String daXML = ioUtils.readData(dafID.toString());
+        return daXML;
     }
 }

@@ -42,7 +42,9 @@ public class Configuration {
         InputStream input = null;
 
         try {
-            input = new FileInputStream(path + "/DataAssetFunctionManagement/WEB-INF/config.properties");
+            //input = new FileInputStream(path + "/DataAssetFunctionManagement/WEB-INF/config.properties");
+            input = new FileInputStream(path + "/config.properties");
+            
             prop.load(input);
             configString = prop.getProperty(configureName);
 

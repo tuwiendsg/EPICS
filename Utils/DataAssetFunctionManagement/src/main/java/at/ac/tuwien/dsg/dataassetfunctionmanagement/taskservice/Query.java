@@ -8,9 +8,10 @@ package at.ac.tuwien.dsg.dataassetfunctionmanagement.taskservice;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAttribute;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataItem;
-import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.IOUtils;
+import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.JAXBUtils;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.MySqlConnectionManager;
 
 import java.sql.ResultSet;
@@ -72,64 +73,8 @@ public class Query {
         
         MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
         
-        
-        ResultSet rs = connectionManager.ExecuteQuery(sql);
-        
-        /*
-        List<DataItem> listOfDataItems = new ArrayList<DataItem>();
-        String vals = "";
-        
-        try {
-            while (rs.next()) {
-                
-                int id = rs.getInt("id");
-                String date = rs.getString("date");
-                String time = rs.getString("time");
-                String global_active_power = rs.getString("global_active_power");
-                double global_reactive_power = rs.getDouble("global_reactive_power");
-                double voltage = rs.getDouble("voltage");
-                double global_intensity = rs.getDouble("global_intensity");
-                double sub_metering_1 = rs.getDouble("sub_metering_1");
-                double sub_metering_2 = rs.getDouble("sub_metering_2");
-                double sub_metering_3 = rs.getDouble("sub_metering_3");
-                
-                vals = vals + String.valueOf(id) +"\t" 
-                        + date +"\t" 
-                        + time +"\t" 
-                        + String.valueOf(global_active_power) +"\t" 
-                        + String.valueOf(global_reactive_power)  +"\t" 
-                        + String.valueOf(voltage) +"\t" 
-                        + String.valueOf(global_intensity)+"\t" 
-                        + String.valueOf(sub_metering_1)+"\t" 
-                        + String.valueOf(sub_metering_2)+"\t" 
-                        + String.valueOf(sub_metering_3);
-                
-                UUID keyGen = UUID.randomUUID();
-                
-                DataAttribute attributeKey = new DataAttribute("key", keyGen.toString());
-                DataAttribute attributeValue = new DataAttribute("value", vals);
-                
-                List<DataAttribute> listOfAttributes = new ArrayList<DataAttribute>();
-                listOfAttributes.add(attributeKey);
-                listOfAttributes.add(attributeValue);
-                
-                DataItem dataItem = new DataItem(listOfAttributes);
-                
-                listOfDataItems.add(dataItem);
-                
-                System.out.println(vals);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
-        DataAsset da = new DataAsset(listOfDataItems);
-       */
-        
+        ResultSet rs = connectionManager.ExecuteQuery(sql);  
         DataAsset da = getDataAsset(rs);
-        
         
         return da;
     }

@@ -7,8 +7,9 @@ package at.ac.tuwien.dsg.dataassetfunctionmanagement.taskservice;
 
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataItem;
-import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.IOUtils;
+import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.JAXBUtils;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
