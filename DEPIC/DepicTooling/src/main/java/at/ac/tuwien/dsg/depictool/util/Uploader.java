@@ -107,6 +107,14 @@ public class Uploader extends HttpServlet {
                         String log = "file name: " + name + " - content: " + out.toString();
                         Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
 
+                    } else {
+                        
+                        String fieldname = item.getFieldName();
+                        String fieldvalue = item.getString();
+                        
+                        String log = "field: " + fieldname + " - value: " + fieldvalue;
+                        Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
+                        
                     }
                 }
 
@@ -121,7 +129,7 @@ public class Uploader extends HttpServlet {
                     "Sorry this Servlet only handles file upload request");
         }
 
-    //    request.getRequestDispatcher("/result.jsp").forward(request, response);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
     /**
