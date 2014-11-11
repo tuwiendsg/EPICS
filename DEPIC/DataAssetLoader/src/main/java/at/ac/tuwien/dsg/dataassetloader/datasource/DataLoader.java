@@ -29,6 +29,10 @@ public class DataLoader {
         
         try {
             DataAssetFunction daf = JAXBUtils.unmarshal(dataAssetFunctionStr, DataAssetFunction.class);
+            String log = "DAF Name: " + daf.getName();
+            Logger.getLogger(DataLoader.class.getName()).log(Level.INFO,log);
+            
+ 
             String daw = daf.getDaw();
            
             Configuration config = new Configuration();
@@ -38,6 +42,7 @@ public class DataLoader {
             
             RestfulWSClient rs = new RestfulWSClient(ip, port, resource);
             String dataAssetXml = rs.callPutMethod(daw);
+          
            
             DataAsset da = JAXBUtils.unmarshal(dataAssetXml, DataAsset.class);
             da.setName(daf.getName());

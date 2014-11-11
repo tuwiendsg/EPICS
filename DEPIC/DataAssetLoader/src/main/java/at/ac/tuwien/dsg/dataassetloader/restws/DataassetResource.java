@@ -60,7 +60,9 @@ public class DataassetResource {
         
         DataLoader dataLoader = new DataLoader();
         dataLoader.loadDataAsset(dataAssetFunctionXML);
-   
+        
+        String log ="RECEIVED: " + dataAssetFunctionXML;
+        Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, log);
     }
     
     

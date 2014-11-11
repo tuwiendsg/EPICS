@@ -7,14 +7,27 @@
 package at.ac.tuwien.dsg.common.entity.eda;
 
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Jun
  */
+
+@XmlRootElement(name = "ElasticState")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class MetricCondition {
+    
+    @XmlElement(name = "metricName", required = true)
     String metricName;
+    
+    @XmlElement(name = "upperBound", required = true)
     double upperBound;
+    
+    @XmlElement(name = "lowerBound", required = true)
     double lowerBound;
 
     public MetricCondition() {

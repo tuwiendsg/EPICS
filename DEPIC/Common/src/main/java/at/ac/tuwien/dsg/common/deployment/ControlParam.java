@@ -3,8 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package at.ac.tuwien.dsg.common.entity.eda.ep;
+package at.ac.tuwien.dsg.common.deployment;
 
 import at.ac.tuwien.dsg.common.entity.process.Parameter;
 import java.util.List;
@@ -17,31 +16,30 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jun
  */
-
-@XmlRootElement(name = "ControlAction")
+@XmlRootElement(name = "ControlParam")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ControlAction {
+public class ControlParam {
     
-    @XmlElement(name = "controlActionID", required = true)
-    String controlActionID;
+    @XmlElement(name = "dataAssetID", required = true)
+    String dataAssetID;
     
     @XmlElement(name = "listOfParameters", required = true)
     List<Parameter> listOfParameters;
 
-    public ControlAction() {
+    public ControlParam() {
     }
 
-    public ControlAction(String controlActionID, List<Parameter> listOfParameters) {
-        this.controlActionID = controlActionID;
+    public ControlParam(String dataAssetID, List<Parameter> listOfParameters) {
+        this.dataAssetID = dataAssetID;
         this.listOfParameters = listOfParameters;
     }
 
-    public String getControlActionID() {
-        return controlActionID;
+    public String getDataAssetID() {
+        return dataAssetID;
     }
 
-    public void setControlActionID(String controlActionID) {
-        this.controlActionID = controlActionID;
+    public void setDataAssetID(String dataAssetID) {
+        this.dataAssetID = dataAssetID;
     }
 
     public List<Parameter> getListOfParameters() {
@@ -51,10 +49,6 @@ public class ControlAction {
     public void setListOfParameters(List<Parameter> listOfParameters) {
         this.listOfParameters = listOfParameters;
     }
-
-    
-    
-    
     
     
     

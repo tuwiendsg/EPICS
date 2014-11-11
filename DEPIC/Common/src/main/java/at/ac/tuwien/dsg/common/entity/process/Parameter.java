@@ -6,13 +6,27 @@
 
 package at.ac.tuwien.dsg.common.entity.process;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  * @author Jun
  */
+
+@XmlRootElement(name = "Parameter")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Parameter {
+    
+    @XmlElement(name = "paraName", required = true)
     String paraName;
+    
+    @XmlElement(name = "type", required = true)
     String type;
+    
+    @XmlElement(name = "value", required = true)
     String value;
 
     public Parameter() {

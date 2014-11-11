@@ -62,7 +62,7 @@ public class DataAssetStore {
         MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
         String sql = "DElETE FROM DataAsset WHERE daw_name='"+dafName+"'";
 
-        connectionManager.ExecuteQuery(sql);
+        connectionManager.ExecuteUpdate(sql);
     }
     
       public String getDataAssetXML(String dafName) {

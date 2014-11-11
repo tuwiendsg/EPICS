@@ -6,16 +6,25 @@
 
 package at.ac.tuwien.dsg.common.entity.eda;
 
-import at.ac.tuwien.dsg.common.entity.qor.MetricRange;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Jun
  */
+
+@XmlRootElement(name = "ElasticState")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ElasticState {
     
+    @XmlElement(name = "eStateID", required = true)
     String eStateID;
+    
+    @XmlElement(name = "listOfConditions", required = true)
     List<MetricCondition> listOfConditions;
 
     public ElasticState() {

@@ -9,15 +9,27 @@ package at.ac.tuwien.dsg.common.entity.eda.ep;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Jun
  */
+
+@XmlRootElement(name = "ControlProcess")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ControlProcess {
+    
+    @XmlElement(name = "eStateID_i", required = true)
     ElasticState eStateID_i;
+    
+    @XmlElement(name = "eStateID_j", required = true)
     ElasticState eStateID_j;
     
+    @XmlElement(name = "listOfControlActions", required = true)
     List<ControlAction> listOfControlActions;
 
     public ControlProcess() {

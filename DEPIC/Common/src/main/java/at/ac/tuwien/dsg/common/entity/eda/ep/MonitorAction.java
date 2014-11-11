@@ -6,11 +6,21 @@
 
 package at.ac.tuwien.dsg.common.entity.eda.ep;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  * @author Jun
  */
+
+@XmlRootElement(name = "MonitorAction")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class MonitorAction {
+    
+    @XmlElement(name = "monitorActionID", required = true)
     String monitorActionID;
 
     public MonitorAction() {
