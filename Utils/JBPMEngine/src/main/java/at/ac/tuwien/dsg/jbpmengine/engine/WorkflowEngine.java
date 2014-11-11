@@ -12,6 +12,9 @@ package at.ac.tuwien.dsg.jbpmengine.engine;
 
 import java.util.HashMap;
 import java.util.Map;
+//import org.eclipse.jdt.internal.compiler.lookup.ProblemReasons;
+import at.ac.tuwien.dsg.jbpmengine.hadoop.Query;
+
 
 import org.kie.internal.KnowledgeBase;
 import org.kie.internal.builder.KnowledgeBuilder;
@@ -47,11 +50,18 @@ public class WorkflowEngine {
             KnowledgeBase kbase = readKnowledgeBase();
             StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
             KnowledgeRuntimeLogger logger = KnowledgeRuntimeLoggerFactory.newThreadedFileLogger(ksession, "test", 1000);
+            
+           Boolean existValue=false;
+           //Query.getInstance().getExist();
             // start a new process instance
             Map<String, Object> params = new HashMap<String, Object>();
           //  params.put("count", 5);
-            params.put("ac.at.tuwien.dsg.daw1_P_1", 9.8);
+            //params.put("ac.at.tuwien.dsg.daw1_P_1", 9.8);
+            params.put("exist", existValue);
+            params.put("tableName", new String());
+            params.put("keySpaceName", new String());
             ksession.startProcess("ac.at.tuwien.dsg.daw1", params);
+            
             
             
             

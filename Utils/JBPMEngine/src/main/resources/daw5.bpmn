@@ -15,29 +15,58 @@
     <bpmn2:startEvent id="__1" name="Start">
       <bpmn2:outgoing>_1-_7</bpmn2:outgoing>
     </bpmn2:startEvent>
-    <bpmn2:scriptTask id="_5" name="Sampling" scriptFormat="text/x-groovy">
-      <bpmn2:incoming>_9</bpmn2:incoming>
-      <bpmn2:outgoing>_10</bpmn2:outgoing>
-      <bpmn2:script>Sampling.getInstance().start(10);</bpmn2:script>
-    </bpmn2:scriptTask>
-    <bpmn2:endEvent id="_6" name="End">
-      <bpmn2:incoming>_4</bpmn2:incoming>
-      <bpmn2:terminateEventDefinition id="_6_ED_1"/>
-    </bpmn2:endEvent>
-    <bpmn2:scriptTask id="_7" name="QUERY" scriptFormat="text/x-groovy">
-      <bpmn2:incoming>_1-_7</bpmn2:incoming>
-      <bpmn2:outgoing>_9</bpmn2:outgoing>
-      <bpmn2:script>Query.getInstance().start(&quot;SELECT * FROM sensor.Sensor21 WHERE collection_date = '2010/12/10' &quot;);</bpmn2:script>
-    </bpmn2:scriptTask>
     <bpmn2:sequenceFlow id="_1-_7" tns:priority="1" name="" sourceRef="__1" targetRef="_7"/>
+    <bpmn2:scriptTask id="_7" name="Receiver" scriptFormat="http://www.java.com/java">
+      <bpmn2:incoming>_1-_7</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
+      <bpmn2:script>String tableName =&quot;Sensor21&quot;;
+String keySpaceName =&quot;sensor&quot;;
+Boolean value=Query.getInstance().start(tableName, keySpaceName);
+kcontext.setVariable(&quot;exist&quot;, value);
+kcontext.setVariable(&quot;tableName&quot;, tableName);
+kcontext.setVariable(&quot;keySpaceName&quot;, keySpaceName);</bpmn2:script>
+    </bpmn2:scriptTask>
+    <bpmn2:sequenceFlow id="SequenceFlow_1" tns:priority="1" name="" sourceRef="_7" targetRef="ExclusiveGateway_1"/>
+    <bpmn2:exclusiveGateway id="ExclusiveGateway_1" name="Check" gatewayDirection="Diverging">
+      <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_3</bpmn2:outgoing>
+      <bpmn2:outgoing>SequenceFlow_4</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:scriptTask id="_5" name="Sampling" scriptFormat="text/x-groovy">
+      <bpmn2:incoming>SequenceFlow_3</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_5</bpmn2:outgoing>
+      <bpmn2:script>String condition=&quot;collection_date = '2010/12/10'&quot;;
+String x=&quot;collection_time&quot;;
+String y=&quot;collection_data&quot;;
+String tableName=kcontext.getVariable(&quot;tableName&quot;);
+String keySpaceName=kcontext.getVariable(&quot;keySpaceName&quot;);
+Sampling.getInstance().start(keySpaceName, tableName, x, y, condition);</bpmn2:script>
+    </bpmn2:scriptTask>
     <bpmn2:scriptTask id="_2" name="Clustering" scriptFormat="text/x-groovy">
-      <bpmn2:incoming>_10</bpmn2:incoming>
-      <bpmn2:outgoing>_4</bpmn2:outgoing>
+      <bpmn2:incoming>SequenceFlow_4</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_6</bpmn2:outgoing>
       <bpmn2:script>Clustering.getInstance().start(5.2);</bpmn2:script>
     </bpmn2:scriptTask>
-    <bpmn2:sequenceFlow id="_9" tns:priority="1" name="" sourceRef="_7" targetRef="_5"/>
-    <bpmn2:sequenceFlow id="_10" tns:priority="1" name="" sourceRef="_5" targetRef="_2"/>
-    <bpmn2:sequenceFlow id="_4" tns:priority="1" name="" sourceRef="_2" targetRef="_6"/>
+    <bpmn2:sequenceFlow id="SequenceFlow_3" tns:priority="1" name="true" sourceRef="ExclusiveGateway_1" targetRef="_5">
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" id="FormalExpression_1" language="http://www.java.com/java">return Boolean.TRUE.equals(kcontext.getVariable(&quot;exist&quot;));
+</bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="SequenceFlow_4" tns:priority="1" name="false" sourceRef="ExclusiveGateway_1" targetRef="_2">
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" id="FormalExpression_2" language="http://www.java.com/java">return Boolean.FALSE.equals(kcontext.getVariable(&quot;exist&quot;));
+</bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:exclusiveGateway id="ExclusiveGateway_2" name="Direction" gatewayDirection="Converging">
+      <bpmn2:incoming>SequenceFlow_5</bpmn2:incoming>
+      <bpmn2:incoming>SequenceFlow_6</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_7</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:endEvent id="_6" name="End">
+      <bpmn2:incoming>SequenceFlow_7</bpmn2:incoming>
+      <bpmn2:terminateEventDefinition id="_6_ED_1"/>
+    </bpmn2:endEvent>
+    <bpmn2:sequenceFlow id="SequenceFlow_5" tns:priority="1" name="" sourceRef="_5" targetRef="ExclusiveGateway_2"/>
+    <bpmn2:sequenceFlow id="SequenceFlow_6" tns:priority="1" name="" sourceRef="_2" targetRef="ExclusiveGateway_2"/>
+    <bpmn2:sequenceFlow id="SequenceFlow_7" tns:priority="1" name="" sourceRef="ExclusiveGateway_2" targetRef="_6"/>
   </bpmn2:process>
   <bpmndi:BPMNDiagram documentation="background=#FFFFFF;count=1;horizontalcount=1;orientation=0;width=597.6;height=842.4;imageableWidth=587.6;imageableHeight=832.4;imageableX=5.0;imageableY=5.0" id="Yaoqiang_Diagram-_1" name="New Diagram" resolution="96.0">
     <bpmndi:BPMNPlane id="BPMNPlane_Process_1" bpmnElement="ac.at.tuwien.dsg.daw1">
@@ -47,57 +76,76 @@
           <dc:Bounds height="18.955078" width="31.0" x="12.5" y="124.52246"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Yaoqiang-_5" bpmnElement="_5">
-        <dc:Bounds height="55.0" width="85.0" x="420.0" y="129.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_2">
-          <dc:Bounds height="18.955078" width="55.0" x="435.0" y="149.02246"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Yaoqiang-_6" bpmnElement="_6">
-        <dc:Bounds height="32.0" width="32.0" x="943.0" y="128.0"/>
+        <dc:Bounds height="32.0" width="32.0" x="640.0" y="64.0"/>
         <bpmndi:BPMNLabel id="BPMNLabel_3">
           <dc:Bounds height="18.955078" width="26.0" x="946.0" y="168.52246"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Yaoqiang-_7" bpmnElement="_7">
-        <dc:Bounds height="55.0" width="85.0" x="189.0" y="135.0"/>
+        <dc:Bounds height="55.0" width="85.0" x="150.0" y="73.0"/>
         <bpmndi:BPMNLabel id="BPMNLabel_4">
           <dc:Bounds height="18.955078" width="43.0" x="210.0" y="155.02246"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_ExclusiveGateway_1" bpmnElement="ExclusiveGateway_1" isMarkerVisible="true">
+        <dc:Bounds height="41.0" width="41.0" x="292.0" y="79.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Yaoqiang-_5" bpmnElement="_5">
+        <dc:Bounds height="55.0" width="85.0" x="380.0" y="0.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_2">
+          <dc:Bounds height="18.955078" width="55.0" x="435.0" y="149.02246"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Yaoqiang-_2" bpmnElement="_2">
-        <dc:Bounds height="55.0" width="85.0" x="640.0" y="124.0"/>
+        <dc:Bounds height="55.0" width="85.0" x="390.0" y="133.0"/>
         <bpmndi:BPMNLabel id="BPMNLabel_5">
           <dc:Bounds height="18.955078" width="62.0" x="652.2308" y="144.984"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_ExclusiveGateway_2" bpmnElement="ExclusiveGateway_2" isMarkerVisible="true">
+        <dc:Bounds height="50.0" width="50.0" x="525.0" y="55.0"/>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Yaoqiang-_1-_7" bpmnElement="_1-_7" sourceElement="Yaoqiang-__1" targetElement="Yaoqiang-_7">
-        <di:waypoint xsi:type="dc:Point" x="44.28083" y="100.0"/>
-        <di:waypoint xsi:type="dc:Point" x="188.63043" y="162.5"/>
+        <di:waypoint xsi:type="dc:Point" x="44.0" y="100.0"/>
+        <di:waypoint xsi:type="dc:Point" x="130.0" y="100.0"/>
+        <di:waypoint xsi:type="dc:Point" x="130.0" y="100.0"/>
+        <di:waypoint xsi:type="dc:Point" x="150.0" y="100.0"/>
         <bpmndi:BPMNLabel id="BPMNLabel_6">
           <dc:Bounds height="18.955078" width="6.0" x="113.5" y="121.533325"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Yaoqiang-_9" bpmnElement="_9" sourceElement="Yaoqiang-_7" targetElement="Yaoqiang-_5">
-        <di:waypoint xsi:type="dc:Point" x="273.84784" y="162.5"/>
-        <di:waypoint xsi:type="dc:Point" x="419.93478" y="156.5"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_7">
-          <dc:Bounds height="18.955078" width="6.0" x="344.0" y="150.2616"/>
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_1" bpmnElement="SequenceFlow_1" sourceElement="Yaoqiang-_7" targetElement="BPMNShape_ExclusiveGateway_1">
+        <di:waypoint xsi:type="dc:Point" x="235.0" y="100.0"/>
+        <di:waypoint xsi:type="dc:Point" x="279.0" y="100.0"/>
+        <di:waypoint xsi:type="dc:Point" x="279.0" y="99.0"/>
+        <di:waypoint xsi:type="dc:Point" x="292.0" y="99.0"/>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Yaoqiang-_10" bpmnElement="_10" sourceElement="Yaoqiang-_5" targetElement="Yaoqiang-_2">
-        <di:waypoint xsi:type="dc:Point" x="505.15216" y="156.5"/>
-        <di:waypoint xsi:type="dc:Point" x="640.8043" y="152.46153"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_8">
-          <dc:Bounds height="18.955078" width="6.0" x="569.86536" y="145.10774"/>
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_3" bpmnElement="SequenceFlow_3" sourceElement="BPMNShape_ExclusiveGateway_1" targetElement="Yaoqiang-_5">
+        <di:waypoint xsi:type="dc:Point" x="312.0" y="79.0"/>
+        <di:waypoint xsi:type="dc:Point" x="312.0" y="27.0"/>
+        <di:waypoint xsi:type="dc:Point" x="380.0" y="27.0"/>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Yaoqiang-_4" bpmnElement="_4" sourceElement="Yaoqiang-_2" targetElement="Yaoqiang-_6">
-        <di:waypoint xsi:type="dc:Point" x="726.0217" y="152.46153"/>
-        <di:waypoint xsi:type="dc:Point" x="943.41547" y="144.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_9">
-          <dc:Bounds height="18.955078" width="6.0" x="831.36536" y="138.85774"/>
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_4" bpmnElement="SequenceFlow_4" sourceElement="BPMNShape_ExclusiveGateway_1" targetElement="Yaoqiang-_2">
+        <di:waypoint xsi:type="dc:Point" x="312.0" y="120.0"/>
+        <di:waypoint xsi:type="dc:Point" x="312.0" y="160.0"/>
+        <di:waypoint xsi:type="dc:Point" x="390.0" y="160.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_5" bpmnElement="SequenceFlow_5" sourceElement="Yaoqiang-_5" targetElement="BPMNShape_ExclusiveGateway_2">
+        <di:waypoint xsi:type="dc:Point" x="465.0" y="27.0"/>
+        <di:waypoint xsi:type="dc:Point" x="550.0" y="27.0"/>
+        <di:waypoint xsi:type="dc:Point" x="550.0" y="55.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_6" bpmnElement="SequenceFlow_6" sourceElement="Yaoqiang-_2" targetElement="BPMNShape_ExclusiveGateway_2">
+        <di:waypoint xsi:type="dc:Point" x="475.0" y="160.0"/>
+        <di:waypoint xsi:type="dc:Point" x="550.0" y="160.0"/>
+        <di:waypoint xsi:type="dc:Point" x="550.0" y="106.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_7" bpmnElement="SequenceFlow_7" sourceElement="BPMNShape_ExclusiveGateway_2" targetElement="Yaoqiang-_6">
+        <di:waypoint xsi:type="dc:Point" x="576.0" y="80.0"/>
+        <di:waypoint xsi:type="dc:Point" x="620.0" y="80.0"/>
+        <di:waypoint xsi:type="dc:Point" x="620.0" y="80.0"/>
+        <di:waypoint xsi:type="dc:Point" x="640.0" y="80.0"/>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
