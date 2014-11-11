@@ -32,7 +32,7 @@ kcontext.setVariable(&quot;keySpaceName&quot;, keySpaceName);</bpmn2:script>
       <bpmn2:outgoing>SequenceFlow_3</bpmn2:outgoing>
       <bpmn2:outgoing>SequenceFlow_4</bpmn2:outgoing>
     </bpmn2:exclusiveGateway>
-    <bpmn2:scriptTask id="_5" name="Sampling" scriptFormat="text/x-groovy">
+    <bpmn2:scriptTask id="_5" name="Visualization" scriptFormat="text/x-groovy">
       <bpmn2:incoming>SequenceFlow_3</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_5</bpmn2:outgoing>
       <bpmn2:script>String condition=&quot;collection_date = '2010/12/10'&quot;;
@@ -42,7 +42,7 @@ String tableName=kcontext.getVariable(&quot;tableName&quot;);
 String keySpaceName=kcontext.getVariable(&quot;keySpaceName&quot;);
 Sampling.getInstance().start(keySpaceName, tableName, x, y, condition);</bpmn2:script>
     </bpmn2:scriptTask>
-    <bpmn2:scriptTask id="_2" name="Clustering" scriptFormat="text/x-groovy">
+    <bpmn2:scriptTask id="_2" name="Wearning" scriptFormat="text/x-groovy">
       <bpmn2:incoming>SequenceFlow_4</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_6</bpmn2:outgoing>
       <bpmn2:script>Clustering.getInstance().start(5.2);</bpmn2:script>
