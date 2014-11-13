@@ -1,0 +1,102 @@
+
+**************************************
+* Examples of Data Analytic Function *
+**************************************
+
+
+Example 1: EPICS/EDASICH/examples/example1/daf3
+
+This example describes a data analytic function (daf) for streaming data analytics with gas sensor data. The scenario is that EDASICH continuously receives gas sensor data from a message queue, and analysis the data. If three continuously values of sensor data are greater than 300, there will be a  task is sent to human. 
+
+The daf includes 4 parts:
+
+1. DafInputCep: 
+	
+   i. format of input data:
+
+      <inputDataFormat>
+	<listOfTables>
+	   <tableName>SensorEvent</tableName>
+	   <listOfTableAttributes>
+	      <attributeName>name</attributeName>
+	      <attributeType>String</attributeType>
+	   </listOfTableAttributes>
+	   <listOfTableAttributes>
+	      <attributeName>value</attributeName>
+	      <attributeType>Double</attributeType>
+	   </listOfTableAttributes>
+	   <listOfTableAttributes>
+	      <attributeName>timeOfReading</attributeName>
+	      <attributeType>Date</attributeType>
+	   </listOfTableAttributes>
+	</listOfTables>
+      </inputDataFormat>
+
+   ii. input data source:
+
+       <inputDataSource>
+          <ip>10.99.0.44</ip>
+          <port>9124</port>
+          <queue>DB_LOG</queue>
+       </inputDataSource	
+	
+2. DafOutputCep
+    
+   i. format of output data
+
+      <outputDataFormat>
+         <listOfTables>
+            <tableName>SensorEvent</tableName>
+            <listOfTableAttributes>
+               <attributeName>name</attributeName>
+               <attributeType>String</attributeType>
+            </listOfTableAttributes>
+            <listOfTableAttributes>
+               <attributeName>value</attributeName>
+               <attributeType>Double</attributeType>
+            </listOfTableAttributes>
+            <listOfTableAttributes>
+               <attributeName>timeOfReading</attributeName>
+               <attributeType>Date</attributeType>
+            </listOfTableAttributes>
+         </listOfTables>
+       </outputDataFormat>
+
+	
+   ii. output data source
+
+       <outputDataSource>
+          <ip>localhost</ip>
+          <port>3306</port>
+          <database>EDASICH</database>
+          <username>root</username>
+          <password>123</password>
+       </outputDataSource>
+
+
+3. DafAnalyticCep: for complex event processing, the analytic is written based on Event Processing Language
+
+	<dafAnalyticCep>
+	   <eplStatement>
+	   select * from SensorEvent match_recognize ( measures A as val1, B as val2, C as val3 pattern (A B C) define A as A.value > 300, B as B.value > 300, C as C.value > 300 )
+	   </eplStatement>
+	</dafAnalyticCep>
+
+
+4. AnalyticResultDelegate: after doing data analytic, data analytic results are put into a human task, and it is sent to human service
+
+
+	<analyticResultDelegate>
+	   <delegateMessage>
+	   <task><taskID>id01</taskID><taskName>Leaking gas</taskName><taskContent>Please check the joints</taskContent><tag>JOINT</tag><severity>WARNING</severity></task><enrichmentInfo>http://10.99.0.66:8080/DataEnrichment/rest/sensor/</enrichmentInfo>
+	   </delegateMessage>
+	   <dafDelegator>
+		<ip>10.99.0.45</ip>
+		<port>8080</port>
+		<restapi>http://10.99.0.66:8080/humantask</restapi>
+	   </dafDelegator>
+	</analyticResultDelegate>
+
+ 
+
+

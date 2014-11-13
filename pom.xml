@@ -16,8 +16,8 @@
 	
 	<modules>
 		<module>DEPIC</module>
-		<module>EDASICH</module>
 	 <module>Utils</module>
+	 <module>CloudLyra</module>
 	</modules>
     
 </project>
