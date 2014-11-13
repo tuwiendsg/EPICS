@@ -43,6 +43,21 @@ public class ElasticityProcessStore {
     
     
     
+    public void storeQoRAndElasticityProcesses(String edaas, String qor, String elasticityProcesses){
+        InputStream qorStream = new ByteArrayInputStream(qor.getBytes(StandardCharsets.UTF_8));
+        InputStream elasticityProcessesStream = new ByteArrayInputStream(qor.getBytes(StandardCharsets.UTF_8));
+        List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
+        listOfInputStreams.add(qorStream);
+        listOfInputStreams.add(elasticityProcessesStream);
+        
+        String sql = "INSERT INTO eDaaS (name, qor, elasticity_process_config) VALUES ('"+edaas+"',?,?)";
+        connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
+        
+        
+    }
+    
+    
+    
     
     public  void storeElasticityProcesses(ElasticityProcess elasticityProcesses, String deploymentDesciption){
        
@@ -54,7 +69,7 @@ public class ElasticityProcessStore {
         }
         InputStream epStream = new ByteArrayInputStream(epXml.getBytes(StandardCharsets.UTF_8));
         String sql = "INSERT INTO ElasticityProcessStore (elasticityProcesses, deployementDescription) VALUES (?,?)";
-        connectionManager.ExecuteUpdateBlob(sql, epStream);
+      //  connectionManager.ExecuteUpdateBlob(sql, epStream);
     }
     
    

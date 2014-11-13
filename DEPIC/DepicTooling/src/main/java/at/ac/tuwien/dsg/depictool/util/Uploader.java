@@ -5,6 +5,7 @@
  */
 package at.ac.tuwien.dsg.depictool.util;
 
+import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -85,6 +86,12 @@ public class Uploader extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //process only if its multipart content
+        
+        String eDaaSName = "";
+        String qor = "";
+        String elasticityProcesses = "";
+        
+        
         if (ServletFileUpload.isMultipartContent(request)) {
             try {
                 List<FileItem> multiparts = new ServletFileUpload(
@@ -104,13 +111,27 @@ public class Uploader extends HttpServlet {
                         }
 
                         reader.close();
-                        String log = "file name: " + name + " - content: " + out.toString();
+                        String log ="item: " +item.getFieldName()+ " - file name: " + name + " - content: " + out.toString();
+                        
+                        if (item.getFieldName().equals("qor")) {
+                            qor = out.toString();
+                        }
+                        
+                        if (item.getFieldName().equals("ep")) {
+                            elasticityProcesses = out.toString();
+                        }
+                        
+                        
                         Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
 
                     } else {
                         
                         String fieldname = item.getFieldName();
                         String fieldvalue = item.getString();
+                        if (fieldname.equals("edaas")){
+                            eDaaSName = fieldvalue;
+                        }
+                        
                         
                         String log = "field: " + fieldname + " - value: " + fieldvalue;
                         Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
@@ -128,6 +149,14 @@ public class Uploader extends HttpServlet {
             request.setAttribute("message",
                     "Sorry this Servlet only handles file upload request");
         }
+        
+        
+        String log = "edaas: " + eDaaSName + "\n qor: " + qor + "\n ep: " + elasticityProcesses;
+        Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
+        
+        ElasticityProcessStore elasticityProcessStore = new ElasticityProcessStore();
+        elasticityProcessStore.storeQoRAndElasticityProcesses(eDaaSName, qor, elasticityProcesses);
+     
 
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }

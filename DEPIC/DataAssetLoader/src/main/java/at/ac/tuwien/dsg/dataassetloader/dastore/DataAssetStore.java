@@ -52,7 +52,11 @@ public class DataAssetStore {
         MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
 
         String sql = "INSERT INTO DataAsset(daw_name,da) VALUES ('" + dafName + "',?)";
-        connectionManager.ExecuteUpdateBlob(sql, daStream);
+        
+        List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
+        listOfInputStreams.add(daStream);
+        
+        connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
   
         
                 

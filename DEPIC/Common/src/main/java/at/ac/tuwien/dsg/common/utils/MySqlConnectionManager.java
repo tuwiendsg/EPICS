@@ -129,7 +129,7 @@ public class MySqlConnectionManager {
         return result;
     }
 
-    public int ExecuteUpdateBlob(String sql, InputStream inputStream) {
+    public int ExecuteUpdateBlob(String sql, List<InputStream> listOfInputStreams) {
 
         int result = 0;
         try {
@@ -138,7 +138,11 @@ public class MySqlConnectionManager {
             String connectionURL = connectionString;
             Connection connection = DriverManager.getConnection(connectionURL, userName, password);
                 PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setBlob(1, inputStream);
+                
+                for (int i=0;i<listOfInputStreams.size();i++) {
+                    statement.setBlob(i+1, listOfInputStreams.get(i));
+                }
+                
                 result = statement.executeUpdate();
             
         } catch (Exception ex) {
