@@ -65,3 +65,7 @@
 /Utils/DataAssetFunctionManagement/src/main/webapp/WEB-INF/config.properties
 /Utils/ESPERStreamProcessing/src/main/webapp/WEB-INF/config.properties
 /EDASICH/src/main/webapp/WEB-INF/config.properties
+
+/DEPIC/DepicTooling/src/main/webapp/WEB-INF/config.properties
+/DEPIC/DataAssetLoader/src/main/webapp/WEB-INF/config.properties
+/DEPIC/Common/src/test/java/at/ac/tuwien/dsg/common/AppTest.java
