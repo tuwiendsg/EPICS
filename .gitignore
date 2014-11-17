@@ -14,6 +14,8 @@
 /DEPIC/TestMOMConnector/nbproject/private/
 
 
+
+
 /EDASICH/target/
 /EDASICH/config/
 /EDASICH/log/
@@ -71,4 +73,4 @@
 /DEPIC/Common/src/test/java/at/ac/tuwien/dsg/common/AppTest.java
 /Utils/ControlServices/LSR/target/
 /Utils/MonitoringServices/DataCompletenessMonitor/target
-
+/Utils/MonitoringServices/ThroughputMonitor/target
