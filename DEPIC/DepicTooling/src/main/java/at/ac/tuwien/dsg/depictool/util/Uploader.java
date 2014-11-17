@@ -5,7 +5,12 @@
  */
 package at.ac.tuwien.dsg.depictool.util;
 
+import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
+import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
+import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
+import at.ac.tuwien.dsg.depictool.generator.Generator;
+import at.ac.tuwien.dsg.depictool.parser.ElasticityProcessesParser;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +25,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -156,7 +162,16 @@ public class Uploader extends HttpServlet {
         
         ElasticityProcessStore elasticityProcessStore = new ElasticityProcessStore();
         elasticityProcessStore.storeQoRAndElasticityProcesses(eDaaSName, qor, elasticityProcesses);
-     
+  
+        
+        ElasticityProcessesParser elasticityProcessesParser = new ElasticityProcessesParser();
+        
+        QoRModel qorModel = elasticityProcessesParser.parseQoRModel(qor);
+        MetricProcess metricProcess = elasticityProcessesParser.parseElasticityProcesses(elasticityProcesses);
+        
+        Generator generator = new Generator(eDaaSName, qorModel, metricProcess);
+        generator.generateElasticityProcesses();
+       
 
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }

@@ -40,10 +40,10 @@ public class YamlUtils {
         }
     }
     
-    public static <T> T fromYaml(Class<T> className, String filePath){
+    public static <T> T fromYaml(Class<T> className, String yml){
         T obj = null;
         try {
-            YamlReader reader = new YamlReader(new FileReader(filePath));
+            YamlReader reader = new YamlReader(yml);
             obj = reader.read(className);
  
         } catch (Exception ex) {

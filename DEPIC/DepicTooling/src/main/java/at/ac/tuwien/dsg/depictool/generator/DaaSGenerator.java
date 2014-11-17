@@ -12,6 +12,8 @@ import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
 import at.ac.tuwien.dsg.common.entity.process.DataSource;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
+import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
+import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -39,6 +41,7 @@ public class DaaSGenerator {
     
     ElasticDataAsset elasticDataObject;
     String templateFolder;
+    
 
     public DaaSGenerator() {
     }
@@ -57,31 +60,11 @@ public class DaaSGenerator {
         // get ResultSetMetaData -> generate DataItems
         genrateDataItemClass();
         
-        
-        // setup description
-        deployDaaS();
-        
-        
-        // 
-        
-        
-       
-       
+  
         
         
     } 
-    
-    private void deployDaaS(){
-    
-        // compile maven project
-        
-        // maven test -> document REST API with MireDot
-        
-        
-        
-        
-        
-    }
+
     
     private void genrateDataItemClass() {
     /*
@@ -133,40 +116,7 @@ public class DaaSGenerator {
             */
     }
     
-    public void getDataTypeFromCode(int typeCode) {
-        
-        String monthString;
-        switch (typeCode) {
-            case 1:  monthString = "January";
-                     break;
-            case 2:  monthString = "February";
-                     break;
-            case 3:  monthString = "March";
-                     break;
-            case 4:  monthString = "April";
-                     break;
-            case 5:  monthString = "May";
-                     break;
-            case 6:  monthString = "June";
-                     break;
-            case 7:  monthString = "July";
-                     break;
-            case 8:  monthString = "August";
-                     break;
-            case 9:  monthString = "September";
-                     break;
-            case 10: monthString = "October";
-                     break;
-            case 11: monthString = "November";
-                     break;
-            case 12: monthString = "December";
-                     break;
-            default: monthString = "Invalid month";
-                     break;
-        }
-        System.out.println(monthString);
-        
-    }
+   
     
 
     
