@@ -51,17 +51,20 @@ public class Generator {
     
     public void startGenerator(){
         ElasticityProcess elasticityProcesses = generateElasticityProcesses();
+        generateElasticDaaS();
+        prepareDeployment(elasticityProcesses);
+    }
+    
+    public void prepareDeployment(ElasticityProcess elasticityProcesses){
         String deploymenDescription  = generateDeploymentDesciptionForElasticityProcesses(elasticityProcesses);
         
-        System.out.println("\nDEPLOYMENT DESCRIPTION: " + deploymenDescription);
-    
-        generateElasticDaaS();
-    
+        ElasticityProcessStore elStore = new ElasticityProcessStore();
+        elStore.storeDeploymentDescription(eDaaSName, deploymenDescription);
     }
     
     
 
-    public void generateElasticDaaS() {
+    private void generateElasticDaaS() {
 
         System.out.println("Start generate APIs ...");
 
@@ -72,7 +75,7 @@ public class Generator {
     
     
 
-    public ElasticityProcess generateElasticityProcesses() {
+    private ElasticityProcess generateElasticityProcesses() {
         System.out.println("Start generate Elasticity Processes");
         System.out.println("eDaaS: " + eDaaSName);
         System.out.println("qor metrics: " + qorModel.getListOfMetrics().get(0).getName());
@@ -100,7 +103,7 @@ public class Generator {
     
     
 
-    public String generateDeploymentDesciptionForElasticityProcesses(ElasticityProcess elasticityProcesses) {
+    private String generateDeploymentDesciptionForElasticityProcesses(ElasticityProcess elasticityProcesses) {
 
         String deployementDescriptionXml = "";
 
@@ -132,7 +135,7 @@ public class Generator {
         return deployementDescriptionXml;
     }
     
-    public void storeSpecifications(ElasticityProcess elasticityProcesses, String deploymentDescription){
+    private void storeSpecifications(ElasticityProcess elasticityProcesses, String deploymentDescription){
         ElasticityProcessStore epStore = new ElasticityProcessStore();
         epStore.storeElasticityProcesses(elasticityProcesses, deploymentDescription);
     }

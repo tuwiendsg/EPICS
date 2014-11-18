@@ -54,8 +54,23 @@ public class ElasticityProcessStore {
         connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
         
         
+        
+        
     }
     
+    public void storeDeploymentDescription(String edaas, String deploymentDescription){
+        InputStream deploymentDescriptionStream = new ByteArrayInputStream(deploymentDescription.getBytes(StandardCharsets.UTF_8));
+      
+        List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
+        listOfInputStreams.add(deploymentDescriptionStream);
+       
+        String sql = "INSERT INTO DeploymentDescription (edaas, specs) VALUES ('"+edaas+"',?)";
+        connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
+        
+        
+        
+        
+    }
     
     
     
