@@ -8,14 +8,25 @@ package at.ac.tuwien.dsg.orchestrator.deployment;
 
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
+import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 
 /**
  *
  * @author Jun
  */
 public class Deployment {
+
     
-    public void deployElasticityProcesses(String deploymentDesctiption){
+    public void requestDeploymentService(String edaas){
+        
+        ElasticityProcessesStore elasticityProcessesStore = new ElasticityProcessesStore();
+        String deploymentDescription = elasticityProcessesStore.getDeployementDescription(edaas);
+        deployElasticityProcesses(deploymentDescription);
+    
+    }
+    
+    
+    private void deployElasticityProcesses(String deploymentDesctiption){
         Configuration config = new Configuration();
         String ip = config.getConfig("SALSA.IP");
         String port = config.getConfig("SALSA.PORT");

@@ -5,6 +5,7 @@
  */
 package at.ac.tuwien.dsg.orchestrator.restws;
 
+import at.ac.tuwien.dsg.orchestrator.deployment.Deployment;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.PathParam;
@@ -49,7 +50,11 @@ public class ElasticityprocessesResource {
      * @return an HTTP response with content of the updated or created resource.
      */
     @PUT
-    @Consumes("application/xml")
-    public void putXml(String content) {
+    @Consumes(MediaType.APPLICATION_XML)
+    public void startDeployment(String edaas) {
+        
+        Deployment deployment = new Deployment();
+        deployment.requestDeploymentService(edaas);
+        
     }
 }
