@@ -23,10 +23,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ElasticDataAsset {
 
-    @XmlElement(name = "dataAssetID", required = true)
-    String dataAssetID;
+    @XmlElement(name = "listOfDataAssets", required = true)
+    List<String> listOfDataAssets;
     
-    @XmlElement(name = "elasticityProcess", required = true)
+    @XmlElement(name = "elasticityProcesses", required = true)
     ElasticityProcess elasticityProcess;
     
     @XmlElement(name = "listOfElasticStates", required = true)
@@ -35,18 +35,18 @@ public class ElasticDataAsset {
     public ElasticDataAsset() {
     }
 
-    public ElasticDataAsset(String dataAssetID, ElasticityProcess elasticityProcess, List<ElasticState> listOfElasticStates) {
-        this.dataAssetID = dataAssetID;
+    public ElasticDataAsset(List<String> listOfDataAssets, ElasticityProcess elasticityProcess, List<ElasticState> listOfElasticStates) {
+        this.listOfDataAssets = listOfDataAssets;
         this.elasticityProcess = elasticityProcess;
         this.listOfElasticStates = listOfElasticStates;
     }
 
-    public String getDataAssetID() {
-        return dataAssetID;
+    public List<String> getListOfDataAssets() {
+        return listOfDataAssets;
     }
 
-    public void setDataAssetID(String dataAssetID) {
-        this.dataAssetID = dataAssetID;
+    public void setListOfDataAssets(List<String> listOfDataAssets) {
+        this.listOfDataAssets = listOfDataAssets;
     }
 
     public ElasticityProcess getElasticityProcess() {
