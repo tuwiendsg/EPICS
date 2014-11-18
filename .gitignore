@@ -74,3 +74,4 @@
 /Utils/ControlServices/LSR/target/
 /Utils/MonitoringServices/DataCompletenessMonitor/target
 /Utils/MonitoringServices/ThroughputMonitor/target
+/Utils/ControlServices/AddVM/target/

@@ -13,6 +13,7 @@ import generated.oasis.tosca.TArtifactReference;
 import generated.oasis.tosca.TArtifactTemplate;
 import generated.oasis.tosca.TDeploymentArtifact;
 import generated.oasis.tosca.TNodeTemplate;
+import generated.oasis.tosca.TRelationshipTemplate;
 import generated.oasis.tosca.TServiceTemplate;
 
 import java.io.BufferedReader;
@@ -48,26 +49,35 @@ public class SALSAConnector {
     public SALSAConnector(DeploymentDescription deploymentDescription) {
         deployActions = deploymentDescription.getListOfDeployActions();
       
+      
     }
 
     public SALSAConnector(DeploymentDescription deploymentDescription, String salsaRESTfulEndpoint) {
         deployActions = deploymentDescription.getListOfDeployActions();
         this.salsaRESTfulEndpoint = salsaRESTfulEndpoint;
+      
     }
     
-    public void config() {
+    public void config(String edaasName) {
         Configuration config = new Configuration();
-        DEPIC_SERVICE_NAME = config.getConfig(DEPIC_SERVICE_NAME);
-        DEPIC_TOPOLOGY_NAME = config.getConfig(DEPIC_TOPOLOGY_NAME);
-        salsaDEPICEndpoint = config.getConfig(salsaDEPICEndpoint);
-        salsaRESTfulEndpoint = config.getConfig(salsaRESTfulEndpoint);
         
+        
+        DEPIC_SERVICE_NAME = edaasName;
+        DEPIC_TOPOLOGY_NAME = edaasName+"Topology";
+        salsaDEPICEndpoint = config.getConfig("SALSA.DEPIC.ENDPOINT")+ DEPIC_SERVICE_NAME + "/topologies/" + DEPIC_TOPOLOGY_NAME + "/nodes/";
+        salsaRESTfulEndpoint = config.getConfig("SALSA.SERVICE.ENDPOINT");
+       
     }
 
-    public String newServicesInstance() {
+    public String newServicesInstance(String toscaString ) {
         String url = salsaRESTfulEndpoint + "/services/xml";
-        String toscaString = this.toToscaString();
+      //  String toscaString = this.toToscaString();
+        
+        System.out.println("TOSCA: \n" + toscaString);
         String serviceId = sendRESTfulRequest(url, HTTPVerb.PUT, toscaString);
+        
+        System.out.println("Service ID: \n" + serviceId);
+        
         updateListWithDeploymentEndpoint();
         return serviceId;
     }
@@ -85,6 +95,7 @@ public class SALSAConnector {
         TServiceTemplate toscaServiceTemplate = new TServiceTemplate();
         toscaServiceTemplate.setId(DEPIC_TOPOLOGY_NAME);
         toscaDef.getServiceTemplateOrNodeTypeOrNodeTypeImplementation().add(toscaServiceTemplate);
+        TNodeTemplate previousNode = null;
         for (DeployAction action : this.deployActions) {
 			//System.out.println("Generating node for action: " + action.getActionID() + "/" + action.getActionName());
             // create an artifact reference
@@ -106,8 +117,20 @@ public class SALSAConnector {
             toscaNode.setId(action.getActionID());
             toscaNode.setName(action.getActionName());
             toscaNode.setMinInstances(0);
-            toscaNode.setMaxInstances("1");
+            toscaNode.setMaxInstances("5000");
             toscaServiceTemplate.getTopologyTemplate().getNodeTemplateOrRelationshipTemplate().add(toscaNode);
+            if (previousNode!=null){
+                TRelationshipTemplate localRela = new TRelationshipTemplate();
+                TRelationshipTemplate.SourceElement source = new TRelationshipTemplate.SourceElement();
+                TRelationshipTemplate.TargetElement target = new TRelationshipTemplate.TargetElement();
+                source.setRef(previousNode);
+                target.setRef(toscaNode);
+                localRela.setSourceElement(source);
+                localRela.setTargetElement(target);                
+                localRela.setType(new QName("LOCAL"));
+                toscaServiceTemplate.getTopologyTemplate().getNodeTemplateOrRelationshipTemplate().add(localRela);
+            }
+            previousNode = toscaNode;
         }
 
         try {

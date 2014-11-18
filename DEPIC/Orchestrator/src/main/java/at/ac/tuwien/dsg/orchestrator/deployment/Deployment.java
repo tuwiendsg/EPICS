@@ -19,14 +19,15 @@ public class Deployment {
     
     public void requestDeploymentService(String edaas){
         
+        System.out.println("DEPLOY EDAAS: " + edaas);
         ElasticityProcessesStore elasticityProcessesStore = new ElasticityProcessesStore();
         String deploymentDescription = elasticityProcessesStore.getDeployementDescription(edaas);
-        deployElasticityProcesses(deploymentDescription);
+        deployElasticityProcesses(edaas,deploymentDescription);
     
     }
     
     
-    private void deployElasticityProcesses(String deploymentDesctiption){
+    private void deployElasticityProcesses(String edaas, String deploymentDesctiption){
         Configuration config = new Configuration();
         String ip = config.getConfig("SALSA.IP");
         String port = config.getConfig("SALSA.PORT");

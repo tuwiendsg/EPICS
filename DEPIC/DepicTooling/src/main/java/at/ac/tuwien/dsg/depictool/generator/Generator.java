@@ -15,6 +15,7 @@ import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
+import at.ac.tuwien.dsg.common.utils.IOUtils;
 
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
 import at.ac.tuwien.dsg.depictool.util.Logger;
@@ -58,9 +59,16 @@ public class Generator {
     public void prepareDeployment(ElasticityProcess elasticityProcesses){
         String deploymenDescription  = generateDeploymentDesciptionForElasticityProcesses(elasticityProcesses);
         
+        
+        /*
+        IOUtils iou = new IOUtils();
+        iou.writeData(deploymenDescription, "tosca.xml");
+        
+        
         ElasticityProcessStore elStore = new ElasticityProcessStore();
         elStore.storeDeploymentDescription(eDaaSName, deploymenDescription);
-    }
+    */
+                }
     
     
 
@@ -117,23 +125,46 @@ public class Generator {
 
         for (MonitorAction ma : monitorActions) {
             DeployAction deployAction = epStore.getPrimitiveAction(ma.getMonitorActionID());
-            listOfDeployActions.add(deployAction);
+            
+             if (!isDeployActionExisting(listOfDeployActions, deployAction)) {
+                listOfDeployActions.add(deployAction);
+            }
+            
+            
         }
 
         for (ControlProcess cp : listOfControlProcesses) {
             List<ControlAction> controlActions = cp.getListOfControlActions();
             for (ControlAction ca : controlActions) {
                 DeployAction deployAction = epStore.getPrimitiveAction(ca.getControlActionID());
+            
+                if (!isDeployActionExisting(listOfDeployActions, deployAction)) {
                 listOfDeployActions.add(deployAction);
+            }
             }
         }
         
         DeploymentDescription deploymentDescription = new DeploymentDescription(listOfDeployActions);
         SALSAConnector salsaCon = new SALSAConnector(deploymentDescription);
+        salsaCon.config(eDaaSName);
         deployementDescriptionXml = salsaCon.toToscaString();
+        salsaCon.newServicesInstance(deployementDescriptionXml);
          
         return deployementDescriptionXml;
     }
+    
+    
+    private boolean isDeployActionExisting(List<DeployAction> listOfDeployActions, DeployAction deployAction){
+        
+        for (DeployAction da : listOfDeployActions){
+            if (da.getActionID().equals(deployAction.getActionID())){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
     
     private void storeSpecifications(ElasticityProcess elasticityProcesses, String deploymentDescription){
         ElasticityProcessStore epStore = new ElasticityProcessStore();
