@@ -17,6 +17,8 @@ import java.io.FileReader;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,10 +42,28 @@ public class YamlUtils {
         }
     }
     
-    public static <T> T fromYaml(Class<T> className, String yml){
+    public static <T> T fromYaml(Class<T> className, String filePath){
         T obj = null;
         try {
+            YamlReader reader = new YamlReader(new FileReader(filePath));
+            obj = reader.read(className);
+ 
+        } catch (Exception ex) {
+            Logger.getLogger(YamlUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return  obj;
+    }
+    
+    
+    public static <T> T unmarshallYaml(Class<T> className, String yml){
+        T obj = null;
+        
+        
+        try {
+          
+           
             YamlReader reader = new YamlReader(yml);
+           // YamlReader reader = new YamlReader(new FileReader(filePath));
             obj = reader.read(className);
  
         } catch (Exception ex) {

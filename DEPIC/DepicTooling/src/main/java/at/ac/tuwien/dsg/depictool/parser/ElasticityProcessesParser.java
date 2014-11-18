@@ -22,7 +22,7 @@ public class ElasticityProcessesParser {
     
     public QoRModel parseQoRModel(String xmlString) {
    
-        QoRModel qoRModel  = YamlUtils.fromYaml(QoRModel.class, xmlString);
+        QoRModel qoRModel  = YamlUtils.unmarshallYaml(QoRModel.class, xmlString);
 
         return  qoRModel;
         
@@ -30,7 +30,7 @@ public class ElasticityProcessesParser {
     
     
     public MetricProcess parseElasticityProcesses(String xmlString) {
-        MetricProcess elprs = YamlUtils.fromYaml(MetricProcess.class, xmlString);
+        MetricProcess elprs = YamlUtils.unmarshallYaml(MetricProcess.class, xmlString);
         return  elprs;
         
     }

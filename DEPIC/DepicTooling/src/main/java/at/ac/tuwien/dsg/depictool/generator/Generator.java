@@ -17,6 +17,7 @@ import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
+import at.ac.tuwien.dsg.depictool.util.Logger;
 import at.ac.tuwien.dsg.depictool.util.SALSAConnector;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,17 +48,31 @@ public class Generator {
         this.elasticDataObject = elasticDataObject;
         this.elasticityProcessConfiguration = elasticityProcessConfiguration;
     }
+    
+    public void startGenerator(){
+        ElasticityProcess elasticityProcesses = generateElasticityProcesses();
+        String deploymenDescription  = generateDeploymentDesciptionForElasticityProcesses(elasticityProcesses);
+        
+        System.out.println("\nDEPLOYMENT DESCRIPTION: " + deploymenDescription);
+    
+        generateElasticDaaS();
+    
+    }
+    
+    
 
-    public void generateAPIs() {
+    public void generateElasticDaaS() {
 
         System.out.println("Start generate APIs ...");
 
-        DaaSGenerator daaSGenerator = new DaaSGenerator(elasticDataObject);
+        DaaSGenerator daaSGenerator = new DaaSGenerator(qorModel);
         daaSGenerator.generateDaaS();
 
     }
+    
+    
 
-    public void generateElasticityProcesses() {
+    public ElasticityProcess generateElasticityProcesses() {
         System.out.println("Start generate Elasticity Processes");
         System.out.println("eDaaS: " + eDaaSName);
         System.out.println("qor metrics: " + qorModel.getListOfMetrics().get(0).getName());
@@ -65,11 +80,22 @@ public class Generator {
         
         
 
-        ElasticityProcessesGenerator elasticityProcessGenerator = new ElasticityProcessesGenerator(null, elasticityProcessConfiguration);
+        ElasticityProcessesGenerator elasticityProcessGenerator = new ElasticityProcessesGenerator(qorModel, elasticityProcessConfiguration);
         MonitorProcess monitorProcess = elasticityProcessGenerator.generateMonitorProcess();
         List<ControlProcess> listOfControlProcesses = elasticityProcessGenerator.generateControlProcesses();
         ElasticityProcess elasticityProcesses = new ElasticityProcess(monitorProcess, listOfControlProcesses);
 
+        
+        
+        //log
+        
+        Logger logger = new Logger();
+        logger.logMonitorProcesses(monitorProcess);
+        logger.logControlProcesses(listOfControlProcesses);
+        
+        
+        return elasticityProcesses;
+                
     }
     
     

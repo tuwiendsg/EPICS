@@ -6,6 +6,7 @@
 package at.ac.tuwien.dsg.depictool.util;
 
 import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
+import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +33,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 /**
  *
@@ -108,23 +111,22 @@ public class Uploader extends HttpServlet {
                         String name = new File(item.getName()).getName();
                        // item.write( new File(UPLOAD_DIRECTORY + File.separator + name));
 
-                        InputStream filecontent = item.getInputStream();
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(filecontent));
-                        StringBuilder out = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            out.append(line);
-                        }
+                                                InputStream filecontent = item.getInputStream();
 
-                        reader.close();
-                        String log ="item: " +item.getFieldName()+ " - file name: " + name + " - content: " + out.toString();
-                        
+                        StringWriter writer = new StringWriter();
+                        IOUtils.copy(filecontent, writer, "UTF-8");
+                        String str = writer.toString();
+
+                       
+                        String log = "item: " + item.getFieldName() + " - file name: " + name + " - content: " + str;
+
                         if (item.getFieldName().equals("qor")) {
-                            qor = out.toString();
+ 
+                            qor = str;
                         }
                         
                         if (item.getFieldName().equals("ep")) {
-                            elasticityProcesses = out.toString();
+                            elasticityProcesses = str;
                         }
                         
                         
@@ -160,8 +162,8 @@ public class Uploader extends HttpServlet {
         String log = "edaas: " + eDaaSName + "\n qor: " + qor + "\n ep: " + elasticityProcesses;
         Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
         
-        ElasticityProcessStore elasticityProcessStore = new ElasticityProcessStore();
-        elasticityProcessStore.storeQoRAndElasticityProcesses(eDaaSName, qor, elasticityProcesses);
+      //  ElasticityProcessStore elasticityProcessStore = new ElasticityProcessStore();
+      //  elasticityProcessStore.storeQoRAndElasticityProcesses(eDaaSName, qor, elasticityProcesses);
   
         
         ElasticityProcessesParser elasticityProcessesParser = new ElasticityProcessesParser();
@@ -170,7 +172,7 @@ public class Uploader extends HttpServlet {
         MetricProcess metricProcess = elasticityProcessesParser.parseElasticityProcesses(elasticityProcesses);
         
         Generator generator = new Generator(eDaaSName, qorModel, metricProcess);
-        generator.generateElasticityProcesses();
+        generator.startGenerator();
        
 
         request.getRequestDispatcher("/index.jsp").forward(request, response);
