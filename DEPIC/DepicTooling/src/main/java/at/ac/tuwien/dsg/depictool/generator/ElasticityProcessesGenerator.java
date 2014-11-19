@@ -128,7 +128,7 @@ public class ElasticityProcessesGenerator {
 
         for (int i=0;i<listOfActions.size();i++) {
             ControlAction controlAction_i = listOfActions.get(i);
-            List<ActionDependency> listOfActionDependencies = epRepo.getControlActionDependencyDB(controlAction_i.getControlActionID());
+            List<ActionDependency> listOfActionDependencies = epRepo.getActionDependencyDB(controlAction_i.getControlActionID());
                     
             for (int j=i+1;j<listOfActions.size();j++) {
             

@@ -11,7 +11,7 @@
  Target Server Version : 50521
  File Encoding         : utf-8
 
- Date: 11/18/2014 18:54:08 PM
+ Date: 11/19/2014 12:07:29 PM
 */
 
 SET NAMES utf8;
@@ -38,6 +38,7 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `DataAssetFunction`;
 CREATE TABLE `DataAssetFunction` (
+  `edaas` varchar(255) DEFAULT NULL,
   `dataAssetID` varchar(255) DEFAULT NULL,
   `dataAssetFunction` mediumblob
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -62,7 +63,7 @@ CREATE TABLE `InputSpecification` (
   `qor` longblob,
   `elasticity_process_config` longblob,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 --  Table structure for `PrimitiveAction`

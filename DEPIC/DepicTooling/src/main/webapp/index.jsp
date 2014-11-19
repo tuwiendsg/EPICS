@@ -22,12 +22,12 @@
             <div class="nav">
                 <ul>
                     <li class="tool"><a class="active" href="index.jsp">Depic Tooling</a></li>
-                    <li class="edaas"><a href="index.jsp">eDaaS Manager</a></li>
+                    <li class="edaas"><a href="daf_manager.jsp">eDaaS Manager</a></li>
                 </ul>
             </div>
 
         </header>
-        <form action="Uploader" method="post" enctype="multipart/form-data"> <br>
+        <form action="InputSpecificationUploader" method="post" enctype="multipart/form-data"> <br>
             <table class="smart-green">
 
                 <tr>

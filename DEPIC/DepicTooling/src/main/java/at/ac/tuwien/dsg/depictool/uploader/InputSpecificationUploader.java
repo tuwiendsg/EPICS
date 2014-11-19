@@ -3,20 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.depictool.util;
+package at.ac.tuwien.dsg.depictool.uploader;
 
 import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
-import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
-import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
 import at.ac.tuwien.dsg.depictool.generator.Generator;
 import at.ac.tuwien.dsg.depictool.parser.ElasticityProcessesParser;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
@@ -27,20 +23,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBException;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 /**
  *
  * @author Jun
  */
-@WebServlet(name = "Uploader", urlPatterns = {"/Uploader"})
-public class Uploader extends HttpServlet {
+@WebServlet(name = "InputSpecificationUploader", urlPatterns = {"/InputSpecificationUploader"})
+public class InputSpecificationUploader extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -55,17 +48,20 @@ public class Uploader extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        try {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Done/title>");
+            out.println("<title>Servlet InputSpecificationUploader</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h3>Done</h3>");
+            out.println("<h1>Servlet InputSpecificationUploader at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
-        
+        } finally {
+            out.close();
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -162,8 +158,8 @@ public class Uploader extends HttpServlet {
         String log = "edaas: " + eDaaSName + "\n qor: " + qor + "\n ep: " + elasticityProcesses;
         Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
         
-      //  ElasticityProcessStore elasticityProcessStore = new ElasticityProcessStore();
-      //  elasticityProcessStore.storeQoRAndElasticityProcesses(eDaaSName, qor, elasticityProcesses);
+        ElasticityProcessStore elasticityProcessStore = new ElasticityProcessStore();
+        elasticityProcessStore.storeQoRAndElasticityProcesses(eDaaSName, qor, elasticityProcesses);
   
         
         ElasticityProcessesParser elasticityProcessesParser = new ElasticityProcessesParser();

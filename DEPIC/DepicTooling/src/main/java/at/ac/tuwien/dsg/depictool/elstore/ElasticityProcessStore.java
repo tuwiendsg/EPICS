@@ -46,11 +46,13 @@ public class ElasticityProcessStore {
     public void storeQoRAndElasticityProcesses(String edaas, String qor, String elasticityProcesses){
         InputStream qorStream = new ByteArrayInputStream(qor.getBytes(StandardCharsets.UTF_8));
         InputStream elasticityProcessesStream = new ByteArrayInputStream(qor.getBytes(StandardCharsets.UTF_8));
+        
+        
         List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
         listOfInputStreams.add(qorStream);
         listOfInputStreams.add(elasticityProcessesStream);
         
-        String sql = "INSERT INTO eDaaS (name, qor, elasticity_process_config) VALUES ('"+edaas+"',?,?)";
+        String sql = "INSERT INTO InputSpecification (name, qor, elasticity_process_config) VALUES ('"+edaas+"',?,?)";
         connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
         
         
@@ -58,40 +60,30 @@ public class ElasticityProcessStore {
         
     }
     
-    public void storeDeploymentDescription(String edaas, String deploymentDescription){
-        InputStream deploymentDescriptionStream = new ByteArrayInputStream(deploymentDescription.getBytes(StandardCharsets.UTF_8));
-      
+
+    
+    
+    
+    public  void storeElasticityProcesses(String name, String elasticityProcesses, String deploymentDesciption){
+       
+       
+        InputStream elasticityProcessesStream = new ByteArrayInputStream(elasticityProcesses.getBytes(StandardCharsets.UTF_8));
+        InputStream deploymentDesciptionStream = new ByteArrayInputStream(deploymentDesciption.getBytes(StandardCharsets.UTF_8));
+        
         List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
-        listOfInputStreams.add(deploymentDescriptionStream);
-       
-        String sql = "INSERT INTO DeploymentDescription (edaas, specs) VALUES ('"+edaas+"',?)";
+        listOfInputStreams.add(elasticityProcessesStream);
+        listOfInputStreams.add(deploymentDesciptionStream);
+        
+        String sql = "INSERT INTO ElasticDaaS (name, elasticity_processes, deployment_descriptions) VALUES ('"+name+"',?,?)";
+    
         connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
-        
-        
-        
-        
-    }
-    
-    
-    
-    public  void storeElasticityProcesses(ElasticityProcess elasticityProcesses, String deploymentDesciption){
-       
-        String epXml="";
-        try {
-            epXml = JAXBUtils.marshal(elasticityProcesses, ElasticityProcess.class);
-        } catch (JAXBException ex) {
-            Logger.getLogger(ElasticityProcessStore.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        InputStream epStream = new ByteArrayInputStream(epXml.getBytes(StandardCharsets.UTF_8));
-        String sql = "INSERT INTO ElasticityProcessStore (elasticityProcesses, deployementDescription) VALUES (?,?)";
-      //  connectionManager.ExecuteUpdateBlob(sql, epStream);
     }
     
    
     
     
-    public List<ActionDependency> getControlActionDependencyDB(String actionID){
-        String sql = "select * from ControlActionDependency where actionID='" + actionID+"'";
+    public List<ActionDependency> getActionDependencyDB(String actionID){
+        String sql = "select * from ActionDependency where actionID='" + actionID+"'";
         
         List<ActionDependency> listOfActionDependencies = new ArrayList<ActionDependency>();
         
@@ -136,5 +128,25 @@ public class ElasticityProcessStore {
         }
         
         return deployAction;
+    }
+    
+    public List<String> getElasticDaasNames(){
+        String sql = "select name from InputSpecification";
+        
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+        List<String> listOfEDaases = new ArrayList<String>();
+        try {
+            while (rs.next()) {
+            
+                String name = rs.getString("name");    
+                listOfEDaases.add(name);
+       
+            }
+
+        } catch (Exception ex) {
+
+        }
+        
+        return listOfEDaases;
     }
 }
