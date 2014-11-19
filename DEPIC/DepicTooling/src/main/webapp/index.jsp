@@ -16,13 +16,15 @@
     </head>
     <body>
         
+        
+        
         <h3>DEPIC</h3>
         <header>
 
             <div class="nav">
                 <ul>
                     <li class="tool"><a class="active" href="index.jsp">Depic Tooling</a></li>
-                    <li class="edaas"><a href="daf_manager.jsp">eDaaS Manager</a></li>
+                    <li class="daf"><a href="daf_manager.jsp">Data Asset</a></li>
                 </ul>
             </div>
 

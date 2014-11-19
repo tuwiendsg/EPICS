@@ -4,14 +4,69 @@
     Author     : Jun
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.util.List"%>
+<%@page import="at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore"%>
+<style type="text/css">
+<!--
+@import url("style.css");
+-->
+</style>
+
+        <%
+            
+            String edaasName = "";
+            
+            if (request.getParameter("edaasName")!=null){
+                edaasName = request.getParameter("edaasName");
+            }
+            
+            ElasticityProcessStore elasticityProcessStore = new ElasticityProcessStore();
+            
+            if (!edaasName.equals("")) {
+
+        %>
+
+        <table id="hor-minimalist-b" >
+      
+            <thead>
+            <tr>
+                <th>eDaaS</th>
+                <th>Data Asset ID</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <%                       
+                
+              
+               ResultSet rs = elasticityProcessStore.getDataAssetFunction(edaasName);
+                
+                try {
+                    while (rs.next()) {
+                        String edaas = rs.getString("edaas");
+                        String dataAssetID = rs.getString("dataAssetID");
+
+            %>
+
+            <tr>
+                <td><%= edaas%></td>
+                <td><%= dataAssetID%></td>
+            </tr>
+
+            <%
+                    }
+
+                } catch (Exception ex) {
+
+                }
+            %>
+
+            </tbody>
+
+        </table>
+
+<% } %>
+
+  

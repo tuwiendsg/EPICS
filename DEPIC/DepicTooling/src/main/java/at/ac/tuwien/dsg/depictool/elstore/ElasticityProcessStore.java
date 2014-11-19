@@ -79,6 +79,20 @@ public class ElasticityProcessStore {
         connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
     }
     
+    
+    public  void storeDataAssetFunction(String edaasName, String dataAssetID, String dataAssetFunction){
+       
+       
+        InputStream dataAssetFunctionStream = new ByteArrayInputStream(dataAssetFunction.getBytes(StandardCharsets.UTF_8));
+        
+        List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
+        listOfInputStreams.add(dataAssetFunctionStream);
+
+        String sql = "INSERT INTO DataAssetFunction (edaas, dataAssetID, dataAssetFunction) VALUES ('"+edaasName+"','"+dataAssetID+"',?)";
+    
+        connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
+    }
+    
    
     
     
@@ -148,5 +162,14 @@ public class ElasticityProcessStore {
         }
         
         return listOfEDaases;
+    }
+    
+    
+    public ResultSet getDataAssetFunction(String edaasName){
+        
+        String sql = "select edaas, dataAssetID  from DataAssetFunction WHERE edaas='"+edaasName+"'";
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+        return rs;
+        
     }
 }

@@ -121,20 +121,23 @@ public class Generator {
         List<MonitorAction> monitorActions = monitorProcess.getListOfMonitorActions();
 
         for (MonitorAction ma : monitorActions) {
-            DeployAction deployAction = epStore.getPrimitiveAction(ma.getMonitorActionID());
+            
 
-            if (!isDeployActionExisting(listOfDeployActions, deployAction)) {
+            if (!isDeployActionExisting(listOfDeployActions, ma.getMonitorActionID())) {
+                DeployAction deployAction = epStore.getPrimitiveAction(ma.getMonitorActionID());
                 listOfDeployActions.add(deployAction);
             }
 
         }
+        
 
         for (ControlProcess cp : listOfControlProcesses) {
             List<ControlAction> controlActions = cp.getListOfControlActions();
             for (ControlAction ca : controlActions) {
-                DeployAction deployAction = epStore.getPrimitiveAction(ca.getControlActionID());
+                
 
-                if (!isDeployActionExisting(listOfDeployActions, deployAction)) {
+                if (!isDeployActionExisting(listOfDeployActions, ca.getControlActionID())) {
+                    DeployAction deployAction = epStore.getPrimitiveAction(ca.getControlActionID());
                     listOfDeployActions.add(deployAction);
                 }
             }
@@ -150,10 +153,10 @@ public class Generator {
         return deployementDescriptionXml;
     }
 
-    private boolean isDeployActionExisting(List<DeployAction> listOfDeployActions, DeployAction deployAction) {
+    private boolean isDeployActionExisting(List<DeployAction> listOfDeployActions, String deployActionID) {
 
         for (DeployAction da : listOfDeployActions) {
-            if (da.getActionID().equals(deployAction.getActionID())) {
+            if (da.getActionID().equals(deployActionID)) {
                 return true;
             }
         }

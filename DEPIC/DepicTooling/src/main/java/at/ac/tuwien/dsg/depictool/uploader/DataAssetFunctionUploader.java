@@ -5,13 +5,28 @@
  */
 package at.ac.tuwien.dsg.depictool.uploader;
 
+import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
+import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
+import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
+import at.ac.tuwien.dsg.depictool.generator.Generator;
+import at.ac.tuwien.dsg.depictool.parser.ElasticityProcessesParser;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 
 /**
  *
@@ -75,7 +90,76 @@ public class DataAssetFunctionUploader extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //process only if its multipart content
+        
+        String eDaaSName = "";
+        String dataAssetID = "";
+        String dataAssetFunction = "";
+        
+        
+        if (ServletFileUpload.isMultipartContent(request)) {
+            try {
+                List<FileItem> multiparts = new ServletFileUpload(
+                        new DiskFileItemFactory()).parseRequest(request);
+
+                for (FileItem item : multiparts) {
+                    if (!item.isFormField()) {
+                        String name = new File(item.getName()).getName();
+                       // item.write( new File(UPLOAD_DIRECTORY + File.separator + name));
+
+                                                InputStream filecontent = item.getInputStream();
+
+                        StringWriter writer = new StringWriter();
+                        IOUtils.copy(filecontent, writer, "UTF-8");
+                        String str = writer.toString();
+
+                       
+                        String log = "item: " + item.getFieldName() + " - file name: " + name + " - content: " + str;
+
+                        if (item.getFieldName().equals("dataAssetFunction")) {
+ 
+                            dataAssetFunction = str;
+                        }
+                        
+                      
+                        
+                        Logger.getLogger(DataAssetFunctionUploader.class.getName()).log(Level.INFO, log);
+
+                    } else {
+                        
+                        String fieldname = item.getFieldName();
+                        String fieldvalue = item.getString();
+                        if (fieldname.equals("edaasName")){
+                            eDaaSName = fieldvalue;
+                        }
+                        
+                        if (fieldname.equals("dataAssetID")){
+                            dataAssetID = fieldvalue;
+                        }
+                        
+                        
+                        String log = "field: " + fieldname + " - value: " + fieldvalue;
+                        Logger.getLogger(DataAssetFunctionUploader.class.getName()).log(Level.INFO, log);
+                        
+                    }
+                }
+
+                //File uploaded successfully
+                request.setAttribute("message", "File Uploaded Successfully");
+            } catch (Exception ex) {
+                request.setAttribute("message", "File Upload Failed due to " + ex);
+            }
+
+        } else {
+            request.setAttribute("message",
+                    "Sorry this Servlet only handles file upload request");
+        }
+        
+        ElasticityProcessStore elasticityProcessStore = new ElasticityProcessStore();
+        elasticityProcessStore.storeDataAssetFunction(eDaaSName, dataAssetID, dataAssetFunction);
+       
+
+        request.getRequestDispatcher("/daf_manager.jsp?edaasname="+eDaaSName).forward(request, response);
     }
 
     /**

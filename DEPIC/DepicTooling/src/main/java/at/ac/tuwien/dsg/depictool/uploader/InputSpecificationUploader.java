@@ -126,7 +126,7 @@ public class InputSpecificationUploader extends HttpServlet {
                         }
                         
                         
-                        Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
+                        Logger.getLogger(InputSpecificationUploader.class.getName()).log(Level.INFO, log);
 
                     } else {
                         
@@ -138,7 +138,7 @@ public class InputSpecificationUploader extends HttpServlet {
                         
                         
                         String log = "field: " + fieldname + " - value: " + fieldvalue;
-                        Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
+                        Logger.getLogger(InputSpecificationUploader.class.getName()).log(Level.INFO, log);
                         
                     }
                 }
@@ -156,7 +156,7 @@ public class InputSpecificationUploader extends HttpServlet {
         
         
         String log = "edaas: " + eDaaSName + "\n qor: " + qor + "\n ep: " + elasticityProcesses;
-        Logger.getLogger(Uploader.class.getName()).log(Level.INFO, log);
+        Logger.getLogger(InputSpecificationUploader.class.getName()).log(Level.INFO, log);
         
         ElasticityProcessStore elasticityProcessStore = new ElasticityProcessStore();
         elasticityProcessStore.storeQoRAndElasticityProcesses(eDaaSName, qor, elasticityProcesses);
