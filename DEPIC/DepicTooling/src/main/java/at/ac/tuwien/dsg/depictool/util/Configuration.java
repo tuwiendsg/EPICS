@@ -57,4 +57,18 @@ public class Configuration {
 
         return configString;
     }
+    
+    public String getCurrentPath(){
+        String path = Configuration.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+
+        int index = path.indexOf("/WEB-INF/classes/at/ac");
+        path = path.substring(0, index);
+        try {
+            path = URLDecoder.decode(path, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return path;
+    }
 }

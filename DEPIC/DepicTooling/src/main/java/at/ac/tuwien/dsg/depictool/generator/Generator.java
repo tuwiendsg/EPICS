@@ -19,10 +19,13 @@ import at.ac.tuwien.dsg.common.utils.IOUtils;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
+import at.ac.tuwien.dsg.depictool.util.Configuration;
 import at.ac.tuwien.dsg.depictool.util.Logger;
 import at.ac.tuwien.dsg.depictool.util.SALSAConnector;
+import at.ac.tuwien.dsg.depictool.util.ZipUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import javax.xml.bind.JAXBException;
 
@@ -70,12 +73,20 @@ public class Generator {
 
         ElasticityProcessStore elStore = new ElasticityProcessStore();
         elStore.storeElasticityProcesses(eDaaSName, elasticityProcessesXML, deploymenDescription);
-        /*
-         IOUtils iou = new IOUtils();
-         iou.writeData(deploymenDescription, "tosca.xml");
         
-       
-         */
+        
+        Configuration config = new Configuration();
+        String parentPath = config.getCurrentPath();
+        
+        String edaasPath = parentPath + "/WEB-INF/classes/project/eDaaS";
+        String edaasZipFile  = parentPath + "/edaasproject/" + eDaaSName + ".zip";
+        
+        System.out.println("PARENT PATH: " + parentPath);
+         
+        
+        ZipUtils zipUtils = new ZipUtils();
+        zipUtils.zipDir(edaasZipFile, edaasPath);
+        
 
     }
 
