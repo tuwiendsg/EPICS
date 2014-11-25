@@ -6,6 +6,7 @@
 package at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore;
 
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
+import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.MySqlConnectionManager;
 import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
@@ -115,6 +116,54 @@ public class ElasticityProcessesStore {
         }
         
         return  elasticityProcess;
+        
+    }
+    
+    
+    
+    public QoRModel getQoRModel(String dataAssetID) {
+        
+            
+                    
+            String qorXML="";
+        
+        try {
+
+            InputStream inputStream = null;
+            
+            String sql = "SELECT * FROM InputSpecification, DataAssetFunction "
+                    + "WHERE InputSpecification.name = DataAssetFunction.edaas "
+                    + "AND DataAssetFunction.dataAssetID='"+dataAssetID+"'";
+            
+            ResultSet rs = connectionManager.ExecuteQuery(sql);
+            
+            try {
+                while (rs.next()) {
+                    inputStream = rs.getBinaryStream("elasticity_processes");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+            StringWriter writer = new StringWriter();
+            String encoding = StandardCharsets.UTF_8.name();
+
+            IOUtils.copy(inputStream, writer, encoding);
+            qorXML = writer.toString();
+            
+        } catch (IOException ex) {
+                Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+        QoRModel qoRModel=null;
+        try {
+            qoRModel = JAXBUtils.unmarshal(qorXML, QoRModel.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return qoRModel;
         
     }
     

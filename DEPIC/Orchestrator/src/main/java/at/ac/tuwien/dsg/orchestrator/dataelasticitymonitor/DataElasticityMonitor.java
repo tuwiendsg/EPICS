@@ -13,11 +13,17 @@ import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitoringSession;
 import at.ac.tuwien.dsg.common.entity.process.MonitoringMetric;
+import at.ac.tuwien.dsg.common.entity.qor.MetricRange;
+import at.ac.tuwien.dsg.common.entity.qor.QElement;
+import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
+import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
+import at.ac.tuwien.dsg.common.entity.qor.Range;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 import at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller.DataElasticityController;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 import at.ac.tuwien.dsg.orchestrator.registry.MonitoringServiceRegistry;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -132,8 +138,82 @@ public class DataElasticityMonitor implements Runnable{
         ElasticityProcess elasticityProcess= elasticityProcessesStore.getElasticityProcesses(monitoringSession.getDataAssetID());
        
         monitorProcess = elasticityProcess.getMonitorProcess(); 
-        List<String> expectElasticStates = monitoringSession.getListOfExpectedElasticStates();
+        mappingEState(monitoringSession.getDataAssetID());
+        List<String> expectElasticStateIDs = monitoringSession.getListOfExpectedElasticStates();
+        mappingExpectedEStateIDs(expectElasticStateIDs);
        
+    }
+    
+    private void mappingExpectedEStateIDs(List<String> expectElasticStateIDs){
+        
+        listOfExpectedElasticStates = new ArrayList<ElasticState>();
+        
+        for (String eStateID : expectElasticStateIDs){
+            ElasticState elasticState = findElasticStateWithID(eStateID);
+            listOfExpectedElasticStates.add(elasticState);
+            
+        }
+        
+        
+    }
+    
+    
+    private ElasticState findElasticStateWithID(String elasticStateID){
+        
+        for (ElasticState elasticState: listOfElasticStates){
+            
+            if (elasticState.geteStateID().equals(elasticStateID)){
+                return elasticState;
+            }
+        }
+        return null;
+    }
+    
+    private void mappingEState(String dataAssetID){
+        listOfElasticStates = new ArrayList<ElasticState>();
+        ElasticityProcessesStore elasticityProcessesStore = new ElasticityProcessesStore();
+        
+        QoRModel qoRModel = elasticityProcessesStore.getQoRModel(dataAssetID);
+        List<QElement> listOfQElements =  qoRModel.getListOfQElements();
+        
+        for (QElement qElement : listOfQElements){
+            ElasticState elasticState = eStateMap(qElement, qoRModel);
+            listOfElasticStates.add(elasticState);
+        }
+  
+    }
+    
+    
+    private ElasticState eStateMap(QElement qElement, QoRModel qorModel) {
+        
+        List<QoRMetric> listOfMetrics = qorModel.getListOfMetrics();
+        List<MetricRange> listOfMetricRanges =  qElement.getListOfMetricRanges();
+        
+        List<MetricCondition> listOfMetricConditions = new ArrayList<MetricCondition>();
+        
+        for (MetricRange metricRange : listOfMetricRanges) {
+            String metricName = metricRange.getMetricName();
+            String rangeID = metricRange.getRange();
+            
+            for (QoRMetric metric : listOfMetrics) {
+                if (metric.equals(metricName)){
+                   List<Range> listOfRanges =  metric.getListOfRanges();              
+                   for (Range r : listOfRanges) {
+                       if (r.getRangeID().equals(rangeID)){
+                           double lowerBound = r.getFromValue();
+                           double upperBound = r.getToValue();
+                           MetricCondition metricCondition = new MetricCondition(metricName, upperBound, lowerBound);
+                           listOfMetricConditions.add(metricCondition);
+                           break;
+                       }              
+                   }        
+                }           
+            }           
+        }
+        
+        String eStateID = qElement.getqElementID();
+        ElasticState elasticState = new ElasticState(eStateID, listOfMetricConditions);
+        return  elasticState;
     }
     
 }
