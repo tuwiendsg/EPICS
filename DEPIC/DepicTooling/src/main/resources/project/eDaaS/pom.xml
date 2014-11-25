@@ -57,9 +57,9 @@
         <dependency>
             <groupId>at.ac.tuwien.dsg</groupId>
             <artifactId>Common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <!--       <scope>system</scope>
-            <systemPath>${project.basedir}/lib/Common-0.0.1-SNAPSHOT</systemPath>  -->
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/Common-1.0-SNAPSHOT.jar</systemPath> 
         </dependency>
     </dependencies>
 

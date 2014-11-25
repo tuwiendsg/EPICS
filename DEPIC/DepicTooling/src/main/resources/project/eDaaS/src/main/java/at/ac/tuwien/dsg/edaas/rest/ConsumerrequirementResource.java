@@ -27,7 +27,7 @@ import javax.xml.bind.JAXBException;
  *
  * @author bolobala
  */
-@Path("consumerrequirement")
+@Path("dataasset")
 public class ConsumerrequirementResource {
 
     @Context

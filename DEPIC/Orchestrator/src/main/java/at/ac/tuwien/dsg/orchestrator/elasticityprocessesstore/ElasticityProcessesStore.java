@@ -5,6 +5,8 @@
  */
 package at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore;
 
+import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
+import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.MySqlConnectionManager;
 import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBException;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -68,6 +71,51 @@ public class ElasticityProcessesStore {
         }
 
         return deploymentDescription;
+    }
+    
+    
+    public ElasticityProcess getElasticityProcesses(String dataAssetID){
+        
+                    
+            String elasticityProcessesXML="";
+        
+        try {
+
+            InputStream inputStream = null;
+            
+            String sql = "SELECT * FROM ElasticDaaS, DataAssetFunction "
+                    + "WHERE ElasticDaaS.name = DataAssetFunction.edaas "
+                    + "AND DataAssetFunction.dataAssetID='"+dataAssetID+"'";
+            
+            ResultSet rs = connectionManager.ExecuteQuery(sql);
+            
+            try {
+                while (rs.next()) {
+                    inputStream = rs.getBinaryStream("elasticity_processes");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+            StringWriter writer = new StringWriter();
+            String encoding = StandardCharsets.UTF_8.name();
+
+            IOUtils.copy(inputStream, writer, encoding);
+            elasticityProcessesXML = writer.toString();
+            
+        } catch (IOException ex) {
+                Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+        ElasticityProcess elasticityProcess = null;
+        try {
+            elasticityProcess = JAXBUtils.unmarshal(elasticityProcessesXML, ElasticityProcess.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return  elasticityProcess;
+        
     }
     
 }

@@ -8,12 +8,15 @@ package at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor;
 
 import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
 import at.ac.tuwien.dsg.common.entity.eda.MetricCondition;
+import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
+import at.ac.tuwien.dsg.common.entity.eda.ep.MonitoringSession;
 import at.ac.tuwien.dsg.common.entity.process.MonitoringMetric;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 import at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller.DataElasticityController;
+import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 import at.ac.tuwien.dsg.orchestrator.registry.MonitoringServiceRegistry;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,12 +31,13 @@ public class DataElasticityMonitor implements Runnable{
     List<MonitoringMetric> listOfMonitoringMetrics;
     List<ElasticState> listOfElasticStates;
     List<ElasticState> listOfExpectedElasticStates;
+    MonitoringSession monitoringSession;
     MonitorProcess monitorProcess;
     
-    
-    
-    public DataElasticityMonitor() {
-        
+
+    public DataElasticityMonitor(MonitoringSession monitoringSession) {
+        this.monitoringSession = monitoringSession;
+        config();
     }
         
     
@@ -120,6 +124,16 @@ public class DataElasticityMonitor implements Runnable{
         
         return listOfExpectedElasticStates.contains(elasticState);
         
+    }
+    
+    private void config(){
+        
+        ElasticityProcessesStore elasticityProcessesStore = new ElasticityProcessesStore();
+        ElasticityProcess elasticityProcess= elasticityProcessesStore.getElasticityProcesses(monitoringSession.getDataAssetID());
+       
+        monitorProcess = elasticityProcess.getMonitorProcess(); 
+        List<String> expectElasticStates = monitoringSession.getListOfExpectedElasticStates();
+       
     }
     
 }
