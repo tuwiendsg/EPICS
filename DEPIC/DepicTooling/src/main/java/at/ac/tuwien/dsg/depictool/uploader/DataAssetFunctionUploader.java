@@ -5,8 +5,10 @@
  */
 package at.ac.tuwien.dsg.depictool.uploader;
 
+import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
 import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
+import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
 import at.ac.tuwien.dsg.depictool.generator.Generator;
 import at.ac.tuwien.dsg.depictool.parser.ElasticityProcessesParser;
@@ -23,6 +25,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -94,7 +97,7 @@ public class DataAssetFunctionUploader extends HttpServlet {
         
         String eDaaSName = "";
         String dataAssetID = "";
-        String dataAssetFunction = "";
+        String dawXML = "";
         
         
         if (ServletFileUpload.isMultipartContent(request)) {
@@ -118,7 +121,7 @@ public class DataAssetFunctionUploader extends HttpServlet {
 
                         if (item.getFieldName().equals("dataAssetFunction")) {
  
-                            dataAssetFunction = str;
+                            dawXML = str;
                         }
                         
                       
@@ -155,10 +158,18 @@ public class DataAssetFunctionUploader extends HttpServlet {
                     "Sorry this Servlet only handles file upload request");
         }
         
+        DataAssetFunction daf = new DataAssetFunction(dataAssetID, "", dawXML);
+        
+        String dafXML="";
+        try {
+            dafXML = JAXBUtils.marshal(daf, DataAssetFunction.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataAssetFunctionUploader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         ElasticityProcessStore elasticityProcessStore = new ElasticityProcessStore();
-        elasticityProcessStore.storeDataAssetFunction(eDaaSName, dataAssetID, dataAssetFunction);
+        elasticityProcessStore.storeDataAssetFunction(eDaaSName, dataAssetID, dafXML);
        
-
         request.getRequestDispatcher("/daf_manager.jsp?edaasname="+eDaaSName).forward(request, response);
     }
 

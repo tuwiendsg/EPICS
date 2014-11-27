@@ -70,6 +70,7 @@ public class Query {
         String db = Configuration.getConfig("DATA.SOURCE.DATABASE");
         String user = Configuration.getConfig("DATA.SOURCE.USERNAME");
         String pass = Configuration.getConfig("DATA.SOURCE.PASSWORD");
+
         
         MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
         

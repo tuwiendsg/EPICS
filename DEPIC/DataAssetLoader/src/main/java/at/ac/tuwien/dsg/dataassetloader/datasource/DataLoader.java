@@ -11,7 +11,7 @@ import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
-import at.ac.tuwien.dsg.dataassetloader.dastore.DataAssetStore;
+import at.ac.tuwien.dsg.dataassetloader.store.DataAssetStore;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

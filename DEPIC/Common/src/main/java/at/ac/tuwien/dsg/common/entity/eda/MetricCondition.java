@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jun
  */
 
-@XmlRootElement(name = "ElasticState")
+@XmlRootElement(name = "MetricCondition")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MetricCondition {
     

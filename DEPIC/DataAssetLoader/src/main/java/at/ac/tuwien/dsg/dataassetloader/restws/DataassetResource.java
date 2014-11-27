@@ -8,8 +8,9 @@ package at.ac.tuwien.dsg.dataassetloader.restws;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
-import at.ac.tuwien.dsg.dataassetloader.dastore.DataAssetStore;
+import at.ac.tuwien.dsg.dataassetloader.store.DataAssetStore;
 import at.ac.tuwien.dsg.dataassetloader.datasource.DataLoader;
+import at.ac.tuwien.dsg.dataassetloader.store.DataAssetFunctionStore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
@@ -56,7 +57,10 @@ public class DataassetResource {
     @PUT
     @Path("dafmanagement")
     @Consumes("application/xml")
-    public void requestDataAsset(String dataAssetFunctionXML) {
+    public void requestDataAsset(String dataAssetID) {
+
+        DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
+        String dataAssetFunctionXML = dafStore.getDataAssetFunction(dataAssetID);
         
         DataLoader dataLoader = new DataLoader();
         dataLoader.loadDataAsset(dataAssetFunctionXML);
@@ -75,6 +79,7 @@ public class DataassetResource {
         DataAssetStore dataAssetStore = new DataAssetStore();  
         String daXml= dataAssetStore.getDataAssetXML(daName);
       
+        Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO, "SEND: " + daXml);
         return daXml;
     }
     

@@ -63,9 +63,7 @@ public class WorkflowEngine {
             KnowledgeRuntimeLogger logger = KnowledgeRuntimeLoggerFactory.newThreadedFileLogger(ksession, "test", 1000);
             // start a new process instance
             Map<String, Object> params = new HashMap<String, Object>();
-          //  params.put("count", 5);
-            params.put("ac.at.tuwien.dsg.daw1_P_1", 9.8);
-            
+   
             params.put("ac.at.tuwien.dsg.dawid", dafID);
             ksession.startProcess("ac.at.tuwien.dsg.daw1", params);
           

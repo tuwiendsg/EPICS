@@ -95,6 +95,8 @@ public class MySqlConnectionManager {
     }
 
     public ResultSet ExecuteQuery(String sql) {
+        
+        System.out.println("Query: " + sql);
         ResultSet result = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");

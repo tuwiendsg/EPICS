@@ -153,13 +153,16 @@ public class Generator {
                 }
             }
         }
-
+        
+        //localhost:8080/DepicTooling/edaasproject/daas1.zip
+        
+        
         DeploymentDescription deploymentDescription = new DeploymentDescription(listOfDeployActions);
         SALSAConnector salsaCon = new SALSAConnector(deploymentDescription);
         salsaCon.config(eDaaSName);
         deployementDescriptionXml = salsaCon.toToscaString();
         
-        //salsaCon.newServicesInstance(deployementDescriptionXml);
+        salsaCon.newServicesInstance(deployementDescriptionXml);
 
         return deployementDescriptionXml;
     }

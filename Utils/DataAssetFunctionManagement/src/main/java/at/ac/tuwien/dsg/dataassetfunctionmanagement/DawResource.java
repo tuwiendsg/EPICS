@@ -8,6 +8,8 @@ import at.ac.tuwien.dsg.dataassetfunctionmanagement.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.engine.WorkflowEngine;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.IOUtils;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.PathParam;
@@ -56,6 +58,7 @@ public class DawResource {
     @Produces("application/xml")
     public String putXml(String dataAssetFunctionXML) {
     
+        Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + dataAssetFunctionXML);
         UUID dafID = UUID.randomUUID();
 
         WorkflowEngine wf = new WorkflowEngine(dataAssetFunctionXML,dafID.toString());

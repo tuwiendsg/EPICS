@@ -11,6 +11,7 @@ import at.ac.tuwien.dsg.common.entity.process.DataSource;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
+import at.ac.tuwien.dsg.depictool.util.ZipUtils;
 import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -49,16 +50,22 @@ public class DaaSGenerator {
     public DaaSGenerator(QoRModel qoRModel) {
         this.qoRModel = qoRModel;
         configureProjectPath();
+        generateProjectTemplate();
     }
 
     public void generateDaaS() {
 
         generateMetricConstraintClass();
-
         generateConstraintConverterClass();
-
         generateConsumerRequirementClass();
 
+    }
+    
+    
+    private void generateProjectTemplate(){
+        ZipUtils zipUtils = new ZipUtils();
+        zipUtils.unZipIt(rootPath + "/classes/project.zip");
+        
     }
 
     private void generateMetricConstraintClass() {
