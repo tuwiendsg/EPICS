@@ -132,7 +132,10 @@ public class Query {
                 if (partitionCounter==noOfPartitions-1){
                     partitionCounter=0;
                     DataAsset da = new DataAsset(dawID, partitionIndex, dataItemList);
+                    storeDataAsset(da);
                     partitionIndex++;
+                    dataItemList = new ArrayList<DataItem>();
+                
                 }
                 
                

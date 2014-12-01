@@ -62,6 +62,19 @@ public class Generator {
 
     public void prepareDeployment(ElasticityProcess elasticityProcesses) {
 
+        
+        Configuration config = new Configuration();
+        String parentPath = config.getCurrentPath();
+        
+        String edaasPath = parentPath + "/WEB-INF/classes/project/eDaaS";
+        String edaasZipFile  = parentPath + "/edaasproject/" + eDaaSName + ".zip";
+        
+        System.out.println("PARENT PATH: " + parentPath);
+         
+        
+        ZipUtils zipUtils = new ZipUtils();
+        zipUtils.zipDir(edaasZipFile, edaasPath);
+        
         String elasticityProcessesXML = "";
         try {
             elasticityProcessesXML = JAXBUtils.marshal(elasticityProcesses, ElasticityProcess.class);
@@ -75,17 +88,7 @@ public class Generator {
         elStore.storeElasticityProcesses(eDaaSName, elasticityProcessesXML, deploymenDescription);
         
         
-        Configuration config = new Configuration();
-        String parentPath = config.getCurrentPath();
         
-        String edaasPath = parentPath + "/WEB-INF/classes/project/eDaaS";
-        String edaasZipFile  = parentPath + "/edaasproject/" + eDaaSName + ".zip";
-        
-        System.out.println("PARENT PATH: " + parentPath);
-         
-        
-        ZipUtils zipUtils = new ZipUtils();
-        zipUtils.zipDir(edaasZipFile, edaasPath);
         
 
     }
@@ -154,8 +157,12 @@ public class Generator {
             }
         }
         
-        //localhost:8080/DepicTooling/edaasproject/daas1.zip
         
+
+        Configuration config = new Configuration();
+        String edaasArtifact  = config.getConfig("EDAAS.URL") + "/edaasproject/" + eDaaSName + ".zip"; 
+        DeployAction eDaaSDA = new DeployAction(eDaaSName, eDaaSName, edaasArtifact, "sh");
+        listOfDeployActions.add(eDaaSDA);
         
         DeploymentDescription deploymentDescription = new DeploymentDescription(listOfDeployActions);
         SALSAConnector salsaCon = new SALSAConnector(deploymentDescription);
