@@ -23,14 +23,18 @@ public class DataAsset {
     @XmlElement(name = "name", required = true)
     String name;
     
+    @XmlElement(name = "partition", required = true)
+    int partition;
+
     @XmlElement(name = "listOfDataItems", required = true)
     List<DataItem> listOfDataItems;
 
     public DataAsset() {
     }
 
-    public DataAsset(String name, List<DataItem> listOfDataItems) {
+    public DataAsset(String name, int partition, List<DataItem> listOfDataItems) {
         this.name = name;
+        this.partition = partition;
         this.listOfDataItems = listOfDataItems;
     }
 
@@ -42,6 +46,14 @@ public class DataAsset {
         this.name = name;
     }
 
+    public int getPartition() {
+        return partition;
+    }
+
+    public void setPartition(int partition) {
+        this.partition = partition;
+    }
+
     public List<DataItem> getListOfDataItems() {
         return listOfDataItems;
     }
@@ -50,8 +62,5 @@ public class DataAsset {
         this.listOfDataItems = listOfDataItems;
     }
 
-    
-    
-    
     
 }
