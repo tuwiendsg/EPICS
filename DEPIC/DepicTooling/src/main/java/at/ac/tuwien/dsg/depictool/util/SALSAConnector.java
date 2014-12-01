@@ -98,7 +98,7 @@ public class SALSAConnector {
         // add a Tomcat Node because we use war file
         TNodeTemplate tomcatNode = new TNodeTemplate();
     	tomcatNode.setType(new QName("tomcat"));
-    	tomcatNode.setMinInstances(1);
+    	tomcatNode.setMinInstances(0);
     	tomcatNode.setMaxInstances("1");
         toscaServiceTemplate.getTopologyTemplate().getNodeTemplateOrRelationshipTemplate().add(tomcatNode);
         
