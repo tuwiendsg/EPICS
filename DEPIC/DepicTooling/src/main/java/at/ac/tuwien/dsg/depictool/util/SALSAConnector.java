@@ -124,10 +124,10 @@ public class SALSAConnector {
             toscaNode.setMinInstances(0);
             toscaNode.setMaxInstances("unbounded");
             toscaServiceTemplate.getTopologyTemplate().getNodeTemplateOrRelationshipTemplate().add(toscaNode);
-            if (previousNode!=null && !action.getArtifactType().equals("software")){
+            if (previousNode!=null && !toscaNode.getType().getLocalPart().equals("software")){	// except first node and eDaaS node
             	attachRelationship(previousNode, toscaNode, "LOCAL", toscaServiceTemplate);
-            }
-            previousNode = toscaNode;
+            	previousNode = toscaNode;
+            }            
         }
 
         try {
