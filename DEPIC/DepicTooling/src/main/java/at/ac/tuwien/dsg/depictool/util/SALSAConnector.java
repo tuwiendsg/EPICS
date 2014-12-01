@@ -47,9 +47,7 @@ public class SALSAConnector {
     
 
     public SALSAConnector(DeploymentDescription deploymentDescription) {
-        deployActions = deploymentDescription.getListOfDeployActions();
-      
-      
+        deployActions = deploymentDescription.getListOfDeployActions();      
     }
 
     public SALSAConnector(DeploymentDescription deploymentDescription, String salsaRESTfulEndpoint) {
@@ -96,6 +94,14 @@ public class SALSAConnector {
         toscaServiceTemplate.setId(DEPIC_TOPOLOGY_NAME);
         toscaDef.getServiceTemplateOrNodeTypeOrNodeTypeImplementation().add(toscaServiceTemplate);
         TNodeTemplate previousNode = null;
+        
+        // add a Tomcat Node because we use war file
+        TNodeTemplate tomcatNode = new TNodeTemplate();
+    	tomcatNode.setType(new QName("tomcat"));
+    	tomcatNode.setMinInstances(1);
+    	tomcatNode.setMaxInstances("1");
+        toscaServiceTemplate.getTopologyTemplate().getNodeTemplateOrRelationshipTemplate().add(tomcatNode);
+        
         for (DeployAction action : this.deployActions) {
 			//System.out.println("Generating node for action: " + action.getActionID() + "/" + action.getActionName());
             // create an artifact reference
@@ -113,22 +119,20 @@ public class SALSAConnector {
             nodeDeploymentArtifact.setArtifactType(new QName(action.getArtifactType()));
             nodeDeploymentArtifact.setArtifactRef(new QName(artTemplate.getId()));
             toscaNode.getDeploymentArtifacts().getDeploymentArtifact().add(nodeDeploymentArtifact);
-            toscaNode.setType(new QName("war"));
+            if (action.getArtifactType().equals("sh")) {
+            	toscaNode.setType(new QName("sh"));
+            	// the sh should be LOCAL with the Tomcat
+            	attachRelationship(toscaNode, tomcatNode, "LOCAL", toscaServiceTemplate);
+            } else {
+            	toscaNode.setType(new QName("war"));
+            }
             toscaNode.setId(action.getActionID());
             toscaNode.setName(action.getActionName());
             toscaNode.setMinInstances(0);
-            toscaNode.setMaxInstances("5000");
+            toscaNode.setMaxInstances("unbounded");
             toscaServiceTemplate.getTopologyTemplate().getNodeTemplateOrRelationshipTemplate().add(toscaNode);
-            if (previousNode!=null){
-                TRelationshipTemplate localRela = new TRelationshipTemplate();
-                TRelationshipTemplate.SourceElement source = new TRelationshipTemplate.SourceElement();
-                TRelationshipTemplate.TargetElement target = new TRelationshipTemplate.TargetElement();
-                source.setRef(previousNode);
-                target.setRef(toscaNode);
-                localRela.setSourceElement(source);
-                localRela.setTargetElement(target);                
-                localRela.setType(new QName("LOCAL"));
-                toscaServiceTemplate.getTopologyTemplate().getNodeTemplateOrRelationshipTemplate().add(localRela);
+            if (previousNode!=null && !action.getArtifactType().equals("sh")){
+            	attachRelationship(previousNode, toscaNode, "LOCAL", toscaServiceTemplate);
             }
             previousNode = toscaNode;
         }
@@ -150,6 +154,18 @@ public class SALSAConnector {
             e.printStackTrace();
             return "Error when generating TOSCA description";
         }
+    }
+    
+    private void attachRelationship(TNodeTemplate sourceNode, TNodeTemplate tategrNode, String type, TServiceTemplate service){
+    	TRelationshipTemplate localRela = new TRelationshipTemplate();
+        TRelationshipTemplate.SourceElement source = new TRelationshipTemplate.SourceElement();
+        TRelationshipTemplate.TargetElement target = new TRelationshipTemplate.TargetElement();
+        source.setRef(sourceNode);
+        target.setRef(tategrNode);
+        localRela.setSourceElement(source);
+        localRela.setTargetElement(target);                
+        localRela.setType(new QName(type));
+        service.getTopologyTemplate().getNodeTemplateOrRelationshipTemplate().add(localRela);
     }
 
     public enum HTTPVerb {
