@@ -8,11 +8,15 @@ package at.ac.tuwien.dsg.dataassetfunctionmanagement.taskservice;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAttribute;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataItem;
+import at.ac.tuwien.dsg.common.utils.MySqlConnectionManager;
 
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.IOUtils;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.JAXBUtils;
-import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.MySqlConnectionManager;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -44,7 +48,7 @@ public class Query {
         System.out.println("DAW ID : " + dawID);
       
          
-        DataAsset da = executeQueryStatement(param);
+        DataAsset da = executeQueryStatement(param, dawID);
         try {
             String daXML = JAXBUtils.marshal(da, DataAsset.class);
             
@@ -63,7 +67,7 @@ public class Query {
     }
     
     
-    public DataAsset executeQueryStatement(String sql) {
+    public DataAsset executeQueryStatement(String sql, String dawID) {
 
         String ip = Configuration.getConfig("DATA.SOURCE.IP");
         String port = Configuration.getConfig("DATA.SOURCE.PORT");
@@ -75,18 +79,15 @@ public class Query {
         MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
         
         ResultSet rs = connectionManager.ExecuteQuery(sql);  
-        DataAsset da = getDataAsset(rs);
+        DataAsset da = getDataAsset(rs, dawID);
         
         return da;
     }
     
     
-     public DataAsset getDataAsset(ResultSet rs) {
-  
-        List<DataItem>  dataItemList = new ArrayList<DataItem>();
+     public DataAsset getDataAsset(ResultSet rs, String dawID) {
          
         List<String> colsList = new ArrayList<String>();
-        
         
         try {
             ResultSetMetaData metaData = rs.getMetaData();
@@ -105,13 +106,18 @@ public class Query {
         
         
         try {
+            
+            List<DataItem>  dataItemList = new ArrayList<DataItem>();
+            int noOfPartitions = Integer.parseInt(Configuration.getConfig("DATA.PARTITION"));
+            int partitionIndex =0;     
+            int partitionCounter=0;
+            
             while (rs.next()){
+                
+                
                 
                 List<DataAttribute> attsList = new ArrayList<DataAttribute>();
                 for (String colName : colsList) {
-                    
-                    
-                    
                     
                     String colVal = rs.getString(colName);
                     DataAttribute dataAttribute = new DataAttribute(colName, colVal);
@@ -121,19 +127,64 @@ public class Query {
                 DataItem dataItem = new DataItem(attsList);
                 dataItemList.add(dataItem);
                 
+                partitionCounter++;
+                
+                if (partitionCounter==noOfPartitions-1){
+                    partitionCounter=0;
+                    DataAsset da = new DataAsset(dawID, partitionIndex, dataItemList);
+                    partitionIndex++;
+                }
+                
+               
+                
             }
+            
+            
+            
+           
+            
+            
         } catch (SQLException ex) {
             Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         
-        DataAsset da = new DataAsset("",dataItemList);
         
         
-        return da;
+        
+        return null;
     }
+     
+     public void storeDataAsset(DataAsset da){
+         
+        String ip = Configuration.getConfig("DATA.SOURCE.IP");
+        String port = Configuration.getConfig("DATA.SOURCE.PORT");
+        String db = Configuration.getConfig("DATA.SOURCE.DATABASE");
+        String user = Configuration.getConfig("DATA.SOURCE.USERNAME");
+        String pass = Configuration.getConfig("DATA.SOURCE.PASSWORD");
+
+        
+        MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
+         
+         
+         try {
+            String daXML = JAXBUtils.marshal(da, DataAsset.class);
+            InputStream daStream = new ByteArrayInputStream(daXML.getBytes(StandardCharsets.UTF_8));
+            List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
+            listOfInputStreams.add(daStream);
+           
+            String sql = "INSERT INTO DataAsset (dataAssetID, dataPartitionID, data) VALUES ('"+da.getName()+"',"+da.getPartition()+",?)";
+            
+             connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
+            
+        
+        } catch (Exception ex) {
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, ex.toString());
+        }
+         
+     }
     
     
-    
+  
     
 }

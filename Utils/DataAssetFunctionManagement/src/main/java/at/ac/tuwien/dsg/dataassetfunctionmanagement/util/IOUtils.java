@@ -20,8 +20,8 @@ public class IOUtils {
     private static String tomcatTempFolder;
 
     public IOUtils() {
-        tomcatTempFolder="/Volumes/DATA/BigData";
-       //tomcatTempFolder = System.getProperty("java.io.tmpdir");
+        tomcatTempFolder="/Volumes/DATA/Temp";
+     //  tomcatTempFolder = System.getProperty("java.io.tmpdir");
         
     }
   

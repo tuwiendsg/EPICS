@@ -56,20 +56,40 @@ public class DawResource {
     @PUT
     @Consumes("application/xml")
     @Produces("application/xml")
-    public String putXml(String dataAssetFunctionXML) {
+    public String executeDataAssetFunction(String dataAssetFunctionXML) {
     
         Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + dataAssetFunctionXML);
         UUID dafID = UUID.randomUUID();
 
         WorkflowEngine wf = new WorkflowEngine(dataAssetFunctionXML,dafID.toString());
         wf.startWFEngine();
-                
+       
+        
         IOUtils ioUtils = new IOUtils();
         String daXML = ioUtils.readData(dafID.toString());
         
-       
-        
         
         return daXML;
+    }
+    
+    
+    @PUT
+    @Path("dataasset")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String getData(String dataAssetFunctionXML) {
+    
+        Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + dataAssetFunctionXML);
+        UUID dafID = UUID.randomUUID();
+
+        WorkflowEngine wf = new WorkflowEngine(dataAssetFunctionXML,dafID.toString());
+        wf.startWFEngine();
+       /*
+        
+        IOUtils ioUtils = new IOUtils();
+        String daXML = ioUtils.readData(dafID.toString());
+        */
+        
+        return dafID.toString();
     }
 }
