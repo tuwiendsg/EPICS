@@ -113,8 +113,9 @@ public class SALSAConnector {
             nodeDeploymentArtifact.setArtifactType(new QName(action.getArtifactType()));
             nodeDeploymentArtifact.setArtifactRef(new QName(artTemplate.getId()));
             toscaNode.getDeploymentArtifacts().getDeploymentArtifact().add(nodeDeploymentArtifact);
+            
             if (action.getArtifactType().equals("sh")) {
-            	toscaNode.setType(new QName("sh"));
+            	toscaNode.setType(new QName("software"));
             } else {
             	toscaNode.setType(new QName("war"));
             }
