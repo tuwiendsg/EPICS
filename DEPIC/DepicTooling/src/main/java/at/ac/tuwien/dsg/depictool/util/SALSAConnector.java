@@ -1,13 +1,5 @@
 package at.ac.tuwien.dsg.depictool.util;
 
-
-
-
-
-import at.ac.tuwien.dsg.common.deployment.DeployAction;
-import at.ac.tuwien.dsg.common.deployment.DeploymentDescription;
-import at.ac.tuwien.dsg.depictool.util.Configuration;
-
 import generated.oasis.tosca.Definitions;
 import generated.oasis.tosca.TArtifactReference;
 import generated.oasis.tosca.TArtifactTemplate;
@@ -19,6 +11,7 @@ import generated.oasis.tosca.TServiceTemplate;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -28,13 +21,15 @@ import javax.xml.namespace.QName;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+
+import at.ac.tuwien.dsg.common.deployment.DeployAction;
+import at.ac.tuwien.dsg.common.deployment.DeploymentDescription;
 
 public class SALSAConnector {
 
@@ -95,7 +90,7 @@ public class SALSAConnector {
         toscaDef.getServiceTemplateOrNodeTypeOrNodeTypeImplementation().add(toscaServiceTemplate);
         TNodeTemplate previousNode = null;
         
-        
+        // first, add the sh node
         for (DeployAction action : this.deployActions) {
 			//System.out.println("Generating node for action: " + action.getActionID() + "/" + action.getActionName());
             // create an artifact reference
@@ -113,21 +108,21 @@ public class SALSAConnector {
             nodeDeploymentArtifact.setArtifactType(new QName(action.getArtifactType()));
             nodeDeploymentArtifact.setArtifactRef(new QName(artTemplate.getId()));
             toscaNode.getDeploymentArtifacts().getDeploymentArtifact().add(nodeDeploymentArtifact);
+            toscaNode.setId(action.getActionID());
+            toscaNode.setName(action.getActionName());
+            toscaNode.setMinInstances(0);
+            toscaNode.setMaxInstances("unbounded");
             
             if (action.getArtifactType().equals("sh")) {
             	toscaNode.setType(new QName("software"));
             } else {
             	toscaNode.setType(new QName("war"));
-            }
-            toscaNode.setId(action.getActionID());
-            toscaNode.setName(action.getActionName());
-            toscaNode.setMinInstances(0);
-            toscaNode.setMaxInstances("unbounded");
-            toscaServiceTemplate.getTopologyTemplate().getNodeTemplateOrRelationshipTemplate().add(toscaNode);
-            if (previousNode!=null && !toscaNode.getType().getLocalPart().equals("software")){	// except first node and eDaaS node
-            	attachRelationship(previousNode, toscaNode, "LOCAL", toscaServiceTemplate);
+            	if (previousNode!=null){
+            		attachRelationship(previousNode, toscaNode, "LOCAL", toscaServiceTemplate);            		
+            	}
             	previousNode = toscaNode;
-            }            
+            }           
+            toscaServiceTemplate.getTopologyTemplate().getNodeTemplateOrRelationshipTemplate().add(toscaNode);
         }
 
         try {
@@ -149,12 +144,13 @@ public class SALSAConnector {
         }
     }
     
-    private void attachRelationship(TNodeTemplate sourceNode, TNodeTemplate tategrNode, String type, TServiceTemplate service){
+    private void attachRelationship(TNodeTemplate sourceNode, TNodeTemplate targetNode, String type, TServiceTemplate service){
     	TRelationshipTemplate localRela = new TRelationshipTemplate();
         TRelationshipTemplate.SourceElement source = new TRelationshipTemplate.SourceElement();
         TRelationshipTemplate.TargetElement target = new TRelationshipTemplate.TargetElement();
         source.setRef(sourceNode);
-        target.setRef(tategrNode);
+        target.setRef(targetNode);
+        localRela.setId(sourceNode.getId()+"_LOCAL_"+targetNode.getId());        
         localRela.setSourceElement(source);
         localRela.setTargetElement(target);                
         localRela.setType(new QName(type));
@@ -226,4 +222,45 @@ public class SALSAConnector {
         return "Unknown error";
 
     }
+    
+    
+    public static void main(String[] args) {
+    	List<DeployAction> list = new ArrayList<DeployAction>();
+    	DeployAction da = new DeployAction();
+    	da.setActionID("war1");
+    	da.setActionName("name1");
+    	da.setArtifact("linkToWar1");
+    	da.setArtifactType("war");
+    	list.add(da);
+    	
+    	da = new DeployAction();
+    	da.setActionID("war2");
+    	da.setActionName("name1");
+    	da.setArtifact("linkToWar2");
+    	da.setArtifactType("war");
+    	list.add(da);
+    	
+    	
+    	da = new DeployAction();
+    	da.setActionID("softwareNode");
+    	da.setActionName("name2");
+    	da.setArtifact("linkToSH");
+    	da.setArtifactType("sh");
+    	list.add(da);
+    	
+//    	da = new DeployAction();
+//    	da.setActionID("test3");
+//    	da.setActionName("name3");
+//    	da.setArtifact("linkToSH3");
+//    	da.setArtifactType("sh");
+//    	list.add(da);
+    	
+    	DeploymentDescription des = new DeploymentDescription();
+    	des.setListOfDeployActions(list);
+    	
+    	SALSAConnector salsa = new SALSAConnector(des);
+    	System.out.println(salsa.toToscaString());
+    	
+    }
+    
 }
