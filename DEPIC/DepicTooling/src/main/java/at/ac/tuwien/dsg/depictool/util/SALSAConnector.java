@@ -95,14 +95,6 @@ public class SALSAConnector {
         toscaDef.getServiceTemplateOrNodeTypeOrNodeTypeImplementation().add(toscaServiceTemplate);
         TNodeTemplate previousNode = null;
         
-        // add a Tomcat Node because we use war file
-        TNodeTemplate tomcatNode = new TNodeTemplate();
-    	tomcatNode.setType(new QName("tomcat"));
-    	tomcatNode.setId("tomcatNode");
-    	tomcatNode.setName("Tomcat node");;
-    	tomcatNode.setMinInstances(0);
-    	tomcatNode.setMaxInstances("1");
-        toscaServiceTemplate.getTopologyTemplate().getNodeTemplateOrRelationshipTemplate().add(tomcatNode);
         
         for (DeployAction action : this.deployActions) {
 			//System.out.println("Generating node for action: " + action.getActionID() + "/" + action.getActionName());
@@ -123,8 +115,6 @@ public class SALSAConnector {
             toscaNode.getDeploymentArtifacts().getDeploymentArtifact().add(nodeDeploymentArtifact);
             if (action.getArtifactType().equals("sh")) {
             	toscaNode.setType(new QName("sh"));
-            	// the sh should be LOCAL with the Tomcat
-            	attachRelationship(toscaNode, tomcatNode, "LOCAL", toscaServiceTemplate);
             } else {
             	toscaNode.setType(new QName("war"));
             }
