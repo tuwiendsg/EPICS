@@ -28,7 +28,7 @@ public class Configuration {
 
         String path = Configuration.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 
-        System.out.println("Path: " + path);
+        //System.out.println("Path: " + path);
         int index = path.indexOf("/classes/");
         path = path.substring(0, index);
         try {

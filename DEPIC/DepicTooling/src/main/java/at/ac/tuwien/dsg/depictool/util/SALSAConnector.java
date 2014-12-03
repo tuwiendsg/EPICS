@@ -110,8 +110,9 @@ public class SALSAConnector {
             toscaNode.getDeploymentArtifacts().getDeploymentArtifact().add(nodeDeploymentArtifact);
             toscaNode.setId(action.getActionID());
             toscaNode.setName(action.getActionName());
-            toscaNode.setMinInstances(0);
-            toscaNode.setMaxInstances("unbounded");
+            toscaNode.setMinInstances(1);
+            //toscaNode.setMaxInstances("unbounded");
+            toscaNode.setMaxInstances("1");
             
             if (action.getArtifactType().equals("sh")) {
             	toscaNode.setType(new QName("software"));

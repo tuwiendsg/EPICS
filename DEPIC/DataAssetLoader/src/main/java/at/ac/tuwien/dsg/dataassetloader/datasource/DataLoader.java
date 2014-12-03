@@ -25,48 +25,65 @@ import javax.xml.bind.JAXBException;
 public class DataLoader {
     
     
-    public void loadDataAsset(String dataAssetFunctionStr){
+    public String loadDataAsset(String dataAssetFunctionStr){
         
+        String partitionNo="";
         try {
             DataAssetFunction daf = JAXBUtils.unmarshal(dataAssetFunctionStr, DataAssetFunction.class);
             String log = "DAF Name: " + daf.getName();
             Logger.getLogger(DataLoader.class.getName()).log(Level.INFO,log);
             
- 
             String daw = daf.getDaw();
-           
-            Configuration config = new Configuration();
-            String ip = config.getConfig("DAF.MANAGEMENT.IP");
-            String port = config.getConfig("DAF.MANAGEMENT.PORT");
-            String resource = config.getConfig("DAF.MANAGEMENT.RESOURCE");
+            String returnStr = requestToGetDataAsset(daw);
             
-            RestfulWSClient rs = new RestfulWSClient(ip, port, resource);
-            String dataAssetXml = rs.callPutMethod(daw);
-          
-           
-            DataAsset da = JAXBUtils.unmarshal(dataAssetXml, DataAsset.class);
-            da.setName(daf.getName());
+            String[] strs = returnStr.split(";");
+            String dataAssetID = strs[0];
+            int numberOfPartitions = Integer.parseInt(strs[1]);
+            partitionNo = String.valueOf(numberOfPartitions);
             
-            dataAssetXml = JAXBUtils.marshal(da, DataAsset.class);
-            
-            
-            System.out.println(dataAssetXml);
-            
-            //DataAsset da = JAXBUtils.unmarshal(dataAssetXml, DataAsset.class);
-            
-            
-            DataAssetStore das = new DataAssetStore();
-            
-            das.saveDataAsset(dataAssetXml, daf.getName());
+            for (int i = 0; i < numberOfPartitions; i++) {
+                String dataAssetXml = getDataPartition(dataAssetID, String.valueOf(i));
+                DataAsset da = JAXBUtils.unmarshal(dataAssetXml, DataAsset.class);
+                da.setName(daf.getName());
+                dataAssetXml = JAXBUtils.marshal(da, DataAsset.class);   
+                
+                DataAssetStore das = new DataAssetStore();
+                das.saveDataAsset(dataAssetXml, daf.getName(), String.valueOf(i));
+                
+            }
             
             
         } catch (JAXBException ex) {
             Logger.getLogger(DataLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
-        
-        
+        return partitionNo;
     } 
+    
+    private String requestToGetDataAsset(String daw){
+        
+            Configuration config = new Configuration();
+            String ip = config.getConfig("DAF.MANAGEMENT.IP");
+            String port = config.getConfig("DAF.MANAGEMENT.PORT");
+            String resource = config.getConfig("DAF.MANAGEMENT.RESOURCE.DAW");
+            
+            RestfulWSClient rs = new RestfulWSClient(ip, port, resource);
+            String returnStr = rs.callPutMethod(daw);
+            
+        return returnStr;
+    }
+
+    private String getDataPartition(String dataAssetID, String dataPartitionID) {
+
+        Configuration config = new Configuration();
+        String ip = config.getConfig("DAF.MANAGEMENT.IP");
+        String port = config.getConfig("DAF.MANAGEMENT.PORT");
+        String resource = config.getConfig("DAF.MANAGEMENT.RESOURCE.DATAASSET");
+
+        RestfulWSClient rs = new RestfulWSClient(ip, port, resource);
+        String dataPartition = rs.callPutMethod(dataAssetID + ";" + dataPartitionID);
+        
+        return dataPartition;
+    }
  
 }

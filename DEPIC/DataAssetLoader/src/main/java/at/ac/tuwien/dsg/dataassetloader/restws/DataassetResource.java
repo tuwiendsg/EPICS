@@ -57,16 +57,19 @@ public class DataassetResource {
     @PUT
     @Path("dafmanagement")
     @Consumes("application/xml")
-    public void requestDataAsset(String dataAssetID) {
+    @Produces("application/xml")
+    public String requestDataAsset(String dataAssetID) {
 
+        String log ="RECEIVED: " + dataAssetID;
+        Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, log);
+        
         DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
         String dataAssetFunctionXML = dafStore.getDataAssetFunction(dataAssetID);
         
         DataLoader dataLoader = new DataLoader();
-        dataLoader.loadDataAsset(dataAssetFunctionXML);
+        String noOfPartitions = dataLoader.loadDataAsset(dataAssetFunctionXML);
         
-        String log ="RECEIVED: " + dataAssetFunctionXML;
-        Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, log);
+        return noOfPartitions;
     }
     
     
@@ -74,10 +77,14 @@ public class DataassetResource {
     @Path("daget")
     @Consumes("application/xml")
     @Produces("application/xml")
-    public String getDataAsset(String daName) {
+    public String getDataAsset(String requesString) {
+        
+        String[] strs = requesString.split(";");
+        String dataAssetID = strs[0];
+        String dataPartitionID = strs[1];
         
         DataAssetStore dataAssetStore = new DataAssetStore();  
-        String daXml= dataAssetStore.getDataAssetXML(daName);
+        String daXml= dataAssetStore.getDataAssetXML(dataAssetID, dataPartitionID);
       
         Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO, "SEND: " + daXml);
         return daXml;
@@ -97,7 +104,7 @@ public class DataassetResource {
         }
         DataAssetStore dataAssetStore = new DataAssetStore();  
         dataAssetStore.removeDataAsset(da.getName());
-        dataAssetStore.saveDataAsset(daXML, da.getName());
+       // dataAssetStore.saveDataAsset(daXML, da.getName());
 
     }
 

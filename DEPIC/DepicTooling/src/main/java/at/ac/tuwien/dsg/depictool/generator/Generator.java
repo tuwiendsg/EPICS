@@ -160,8 +160,11 @@ public class Generator {
         
 
         Configuration config = new Configuration();
-        String edaasArtifact  = config.getConfig("EDAAS.URL") + "/edaasproject/" + eDaaSName + ".zip"; 
-        DeployAction eDaaSDA = new DeployAction(eDaaSName, eDaaSName, edaasArtifact, "sh");
+        //String edaasArtifact  = config.getConfig("EDAAS.URL") + "/edaasproject/" + eDaaSName + ".zip"; 
+        String edaasArtifact  =  "http://128.130.172.215/salsa/upload/files/jun/edaas/install-edaas.sh" ;
+        DeployAction eDaaSDA = new DeployAction(eDaaSName, eDaaSName, "sh", edaasArtifact);
+      
+        
         listOfDeployActions.add(eDaaSDA);
         
         DeploymentDescription deploymentDescription = new DeploymentDescription(listOfDeployActions);

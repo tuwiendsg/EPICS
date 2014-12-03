@@ -6,6 +6,7 @@ package at.ac.tuwien.dsg.dataassetfunctionmanagement;
 
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.engine.WorkflowEngine;
+import at.ac.tuwien.dsg.dataassetfunctionmanagement.store.DataAssetStore;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.IOUtils;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -63,13 +64,12 @@ public class DawResource {
 
         WorkflowEngine wf = new WorkflowEngine(dataAssetFunctionXML,dafID.toString());
         wf.startWFEngine();
-       
         
-        IOUtils ioUtils = new IOUtils();
-        String daXML = ioUtils.readData(dafID.toString());
+        DataAssetStore das = new DataAssetStore();
+        int noOfPartitions = das.getNumberOfPartitionsByDataAssetID(dafID.toString());
         
-        
-        return daXML;
+        String returnString = dafID.toString()+";"+String.valueOf(noOfPartitions);
+        return returnString;
     }
     
     
@@ -77,19 +77,19 @@ public class DawResource {
     @Path("dataasset")
     @Consumes("application/xml")
     @Produces("application/xml")
-    public String getData(String dataAssetFunctionXML) {
+    public String getData(String requestData) {
     
-        Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + dataAssetFunctionXML);
-        UUID dafID = UUID.randomUUID();
-
-        WorkflowEngine wf = new WorkflowEngine(dataAssetFunctionXML,dafID.toString());
-        wf.startWFEngine();
-       /*
+        String[] strs = requestData.split(";");
+        String dataAssetID = strs[0];
+        String partitionID = strs[1];
         
-        IOUtils ioUtils = new IOUtils();
-        String daXML = ioUtils.readData(dafID.toString());
-        */
+        Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + requestData);
         
-        return dafID.toString();
+        DataAssetStore das = new DataAssetStore();
+        String daXML = das.getDataPartition(dataAssetID, partitionID);
+        
+        return daXML;
     }
+    
+    
 }

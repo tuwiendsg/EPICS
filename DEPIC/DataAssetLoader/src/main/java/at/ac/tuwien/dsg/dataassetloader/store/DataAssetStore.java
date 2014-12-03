@@ -46,12 +46,12 @@ public class DataAssetStore {
 
     }
 
-    public void saveDataAsset(String daXML, String dafName) {
+    public void saveDataAsset(String daXML, String dafName, String partitionID) {
 
         InputStream daStream = new ByteArrayInputStream(daXML.getBytes(StandardCharsets.UTF_8));
         MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
-
-        String sql = "INSERT INTO DataAsset(daw_name,da) VALUES ('" + dafName + "',?)";
+        
+        String sql = "INSERT INTO DataAsset(daw_name,partitionID,da) VALUES ('" + dafName + "','"+partitionID+"',?)";
         
         List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
         listOfInputStreams.add(daStream);
@@ -69,7 +69,7 @@ public class DataAssetStore {
         connectionManager.ExecuteUpdate(sql);
     }
     
-      public String getDataAssetXML(String dafName) {
+      public String getDataAssetXML(String dafName, String partitionID) {
 
         String dafStr = "";
         try {
@@ -78,7 +78,7 @@ public class DataAssetStore {
       
          MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
 
-            String sql = "Select * from DataAsset where daw_name='" + dafName + "'";
+            String sql = "Select * from DataAsset where daw_name='" + dafName + "' and partitionID='"+partitionID+"'";
 
             ResultSet rs = connectionManager.ExecuteQuery(sql);
 
@@ -104,7 +104,7 @@ public class DataAssetStore {
         return dafStr;
     }
     
-   
+   /*
 
     public DataAsset getDataAsset(String dafName) {
   
@@ -151,5 +151,5 @@ public class DataAssetStore {
         
         return da;
     }
-
+*/
 }
