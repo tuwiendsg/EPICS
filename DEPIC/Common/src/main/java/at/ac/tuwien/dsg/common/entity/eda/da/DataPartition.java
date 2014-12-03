@@ -27,6 +27,13 @@ public class DataPartition {
     public DataPartition() {
     }
 
+    public DataPartition(String dataAssetID, String partitionID) {
+        this.dataAssetID = dataAssetID;
+        this.partitionID = partitionID;
+    }
+
+    
+    
     public String getDataAssetID() {
         return dataAssetID;
     }

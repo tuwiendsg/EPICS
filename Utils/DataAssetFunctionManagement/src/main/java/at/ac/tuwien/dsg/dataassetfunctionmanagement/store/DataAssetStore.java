@@ -73,7 +73,7 @@ public class DataAssetStore {
 
         String sql = "SELECT * FROM DataAsset WHERE dataAssetID='" + dawID + "'";
         ResultSet rs = connectionManager.ExecuteQuery(sql);
-
+      
         return rs;
     }
     

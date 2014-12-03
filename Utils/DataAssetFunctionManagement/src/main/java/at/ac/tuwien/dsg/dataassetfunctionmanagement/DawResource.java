@@ -4,10 +4,12 @@
  */
 package at.ac.tuwien.dsg.dataassetfunctionmanagement;
 
+import at.ac.tuwien.dsg.common.entity.eda.da.DataPartition;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.engine.WorkflowEngine;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.store.DataAssetStore;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.IOUtils;
+import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.JAXBUtils;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,6 +22,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.JAXBException;
 
 /**
  * REST Web Service
@@ -77,13 +80,21 @@ public class DawResource {
     @Path("dataasset")
     @Consumes("application/xml")
     @Produces("application/xml")
-    public String getData(String requestData) {
-    
-        String[] strs = requestData.split(";");
-        String dataAssetID = strs[0];
-        String partitionID = strs[1];
+    public String getData(String requestDataPartition) {
         
-        Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + requestData);
+        Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + requestDataPartition);
+        
+        DataPartition dataPartition=null;
+        try {
+            dataPartition = JAXBUtils.unmarshal(requestDataPartition, DataPartition.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DawResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        String dataAssetID = dataPartition.getDataAssetID();
+        String partitionID = dataPartition.getPartitionID();
+        
+        
         
         DataAssetStore das = new DataAssetStore();
         String daXML = das.getDataPartition(dataAssetID, partitionID);

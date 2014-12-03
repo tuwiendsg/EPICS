@@ -6,6 +6,7 @@
 package at.ac.tuwien.dsg.dataassetloader.restws;
 
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
+import at.ac.tuwien.dsg.common.entity.eda.da.DataPartition;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetloader.store.DataAssetStore;
@@ -77,11 +78,17 @@ public class DataassetResource {
     @Path("daget")
     @Consumes("application/xml")
     @Produces("application/xml")
-    public String getDataAsset(String requesString) {
+    public String getDataAsset(String requestDataPartition) {
         
-        String[] strs = requesString.split(";");
-        String dataAssetID = strs[0];
-        String dataPartitionID = strs[1];
+        DataPartition dataPartition=null;
+        try {
+            dataPartition = JAXBUtils.unmarshal(requestDataPartition, DataPartition.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        String dataAssetID = dataPartition.getDataAssetID();
+        String dataPartitionID = dataPartition.getPartitionID();
         
         DataAssetStore dataAssetStore = new DataAssetStore();  
         String daXml= dataAssetStore.getDataAssetXML(dataAssetID, dataPartitionID);

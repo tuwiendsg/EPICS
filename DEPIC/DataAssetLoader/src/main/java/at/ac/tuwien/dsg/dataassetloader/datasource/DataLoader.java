@@ -8,6 +8,7 @@ package at.ac.tuwien.dsg.dataassetloader.datasource;
 
 import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
+import at.ac.tuwien.dsg.common.entity.eda.da.DataPartition;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
@@ -80,10 +81,21 @@ public class DataLoader {
         String port = config.getConfig("DAF.MANAGEMENT.PORT");
         String resource = config.getConfig("DAF.MANAGEMENT.RESOURCE.DATAASSET");
 
-        RestfulWSClient rs = new RestfulWSClient(ip, port, resource);
-        String dataPartition = rs.callPutMethod(dataAssetID + ";" + dataPartitionID);
+        DataPartition dataPartitionRequest = new DataPartition(dataAssetID, dataPartitionID);
         
-        return dataPartition;
+        
+        String dataPartitionXML = "";
+        try {
+            dataPartitionXML = JAXBUtils.marshal(dataPartitionRequest, DataPartition.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataLoader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        RestfulWSClient rs = new RestfulWSClient(ip, port, resource);
+        String dataParstitionXML = rs.callPutMethod(dataPartitionXML);
+        
+        return dataParstitionXML;
     }
  
 }

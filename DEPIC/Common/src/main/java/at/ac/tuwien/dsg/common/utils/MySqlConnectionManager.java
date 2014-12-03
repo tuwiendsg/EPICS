@@ -104,6 +104,8 @@ public class MySqlConnectionManager {
             String mysql = sql;
 
             result = stmt.executeQuery(mysql);
+            
+         
         } catch (Exception ex) {
             Logger.getLogger(MySqlConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -122,6 +124,7 @@ public class MySqlConnectionManager {
             String mysql = sql;
 
             result = stmt.executeUpdate(mysql);
+         
         } catch (Exception ex) {
             Logger.getLogger(MySqlConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -144,7 +147,7 @@ public class MySqlConnectionManager {
                 }
                 
                 result = statement.executeUpdate();
-            
+        
         } catch (Exception ex) {
             Logger.getLogger(MySqlConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
         }
