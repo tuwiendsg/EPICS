@@ -87,6 +87,7 @@ public class DataAssetStore {
             while (rs.next()){
                 counter = rs.getInt("counter");
             }
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(DataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -110,11 +111,14 @@ public class DataAssetStore {
                 org.apache.commons.io.IOUtils.copy(inputStream, writer, encoding);
                 daXML = writer.toString();
             }
+            
+            rs.close();
         } catch (Exception ex) {
             Logger.getLogger(DataAssetStore.class.getName()).log(Level.SEVERE, ex.toString());
         }
         
         return daXML;
     }
-
+    
+    
 }

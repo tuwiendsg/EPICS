@@ -81,6 +81,8 @@ public class Sampling {
                 das.updateDataAsset(dawID, dataPartitionID, daXML);
                 
             }
+            
+            rs.close();
         } catch (Exception ex) {
             Logger.getLogger(Sampling.class.getName()).log(Level.SEVERE, ex.toString());
         }

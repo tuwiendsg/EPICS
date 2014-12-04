@@ -61,7 +61,6 @@ public class Query {
         String user = Configuration.getConfig("DATA.SOURCE.USERNAME");
         String pass = Configuration.getConfig("DATA.SOURCE.PASSWORD");
 
-        
         MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
         
         ResultSet rs = connectionManager.ExecuteQuery(sql);  
@@ -118,17 +117,14 @@ public class Query {
                     DataAsset da = new DataAsset(dawID, partitionIndex, dataItemList);
                     DataAssetStore das = new DataAssetStore();
                     das.storeDataAsset(da);
+                    
                     partitionIndex++;
                     dataItemList = new ArrayList<DataItem>();
-                    Logger.getLogger(Query.class.getName()).log(Level.INFO, "Partition Index: " + partitionIndex);
-                
-                }
-                
-                               
+                    Logger.getLogger(Query.class.getName()).log(Level.INFO, "Partition Index: " + partitionIndex);  
+                }                              
             }
-            
-            
-     
+             
+            rs.close();
             
         } catch (SQLException ex) {
             Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);

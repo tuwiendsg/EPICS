@@ -51,6 +51,8 @@ public class DataAssetFunctionStore {
                 while (rs.next()) {
                     inputStream = rs.getBinaryStream("dataAssetFunction");
                 }
+                
+                rs.close();
             } catch (SQLException ex) {
                 Logger.getLogger(DataAssetFunctionStore.class.getName()).log(Level.SEVERE, null, ex);
             }

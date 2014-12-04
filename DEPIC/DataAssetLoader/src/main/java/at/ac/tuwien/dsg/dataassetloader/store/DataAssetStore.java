@@ -69,16 +69,15 @@ public class DataAssetStore {
         connectionManager.ExecuteUpdate(sql);
     }
     
-      public String getDataAssetXML(String dafName, String partitionID) {
+     public String getDataAssetXML(String dafName, String partitionID) {
 
         String dafStr = "";
         try {
             InputStream inputStream = null;
 
-      
-         MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
+            MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
 
-            String sql = "Select * from DataAsset where daw_name='" + dafName + "' and partitionID='"+partitionID+"'";
+            String sql = "Select * from DataAsset where daw_name='" + dafName + "' and partitionID='" + partitionID + "'";
 
             ResultSet rs = connectionManager.ExecuteQuery(sql);
 
@@ -86,8 +85,10 @@ public class DataAssetStore {
                 while (rs.next()) {
                     inputStream = rs.getBinaryStream("da");
                 }
+
+                rs.close();
             } catch (SQLException ex) {
-                
+
             }
 
             StringWriter writer = new StringWriter();
@@ -95,10 +96,9 @@ public class DataAssetStore {
 
             IOUtils.copy(inputStream, writer, encoding);
             dafStr = writer.toString();
-                
 
         } catch (IOException ex) {
-          
+
         }
 
         return dafStr;
