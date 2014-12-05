@@ -55,7 +55,7 @@
             <groupId>at.ac.tuwien.dsg</groupId>
             <artifactId>tosca-description</artifactId>
             <version>1.0</version>
-            <type>pom</type>
+            <type>jar</type>
         </dependency>
 
         <dependency>
