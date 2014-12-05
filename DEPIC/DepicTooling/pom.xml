@@ -18,6 +18,14 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <repositories>
+        <repository>
+        <id>gemini</id>
+        <name>gemini-releases</name>
+        <url>http://gemini.infosys.tuwien.ac.at:8081/artifactory/ext</url>
+    </repository>
+
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -44,13 +52,13 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>tosca</groupId>
+            <groupId>at.ac.tuwien.dsg</groupId>
             <artifactId>tosca-description</artifactId>
             <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/tosca-description-1.0.jar</systemPath>
+            <type>pom</type>
         </dependency>
-         <dependency>
+
+        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.3.1</version>
