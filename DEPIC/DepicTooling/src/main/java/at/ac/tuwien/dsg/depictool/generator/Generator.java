@@ -12,6 +12,7 @@ import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
+import at.ac.tuwien.dsg.common.entity.eda.ElasticStateSet;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
@@ -56,12 +57,12 @@ public class Generator {
     }
 
     public void startGenerator() {
-        ElasticityProcess elasticityProcesses = generateElasticityProcesses();
+        ElasticDataAsset elasticDataAsset = generateElasticityProcesses();
         generateElasticDaaS();
-        prepareDeployment(elasticityProcesses);
+        prepareDeployment(elasticDataAsset);
     }
 
-    public void prepareDeployment(ElasticityProcess elasticityProcesses) {
+    public void prepareDeployment(ElasticDataAsset elasticDataAsset) {
 
         
         Configuration config = new Configuration();
@@ -76,17 +77,29 @@ public class Generator {
         ZipUtils zipUtils = new ZipUtils();
         zipUtils.zipDir(edaasZipFile, edaasPath);
         
+        
+        
         String elasticityProcessesXML = "";
         try {
-            elasticityProcessesXML = JAXBUtils.marshal(elasticityProcesses, ElasticityProcess.class);
+            elasticityProcessesXML = JAXBUtils.marshal(elasticDataAsset.getElasticityProcess(), ElasticityProcess.class);
         } catch (JAXBException ex) {
             java.util.logging.Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        String deploymenDescription = generateDeploymentDesciptionForElasticityProcesses(elasticityProcesses);
+        String deploymenDescription = generateDeploymentDesciptionForElasticityProcesses(elasticDataAsset.getElasticityProcess());
 
+        
+        String elasticStateSetXML ="";
+        
+        try {
+            elasticStateSetXML = JAXBUtils.marshal(elasticDataAsset.getElasticStateSet(), ElasticStateSet.class);
+        } catch (JAXBException ex) {
+            java.util.logging.Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
         ElasticityProcessStore elStore = new ElasticityProcessStore();
-        elStore.storeElasticityProcesses(eDaaSName, elasticityProcessesXML, deploymenDescription);
+        elStore.storeElasticityProcesses(eDaaSName,elasticStateSetXML, elasticityProcessesXML, deploymenDescription);
         
         
         
@@ -103,7 +116,7 @@ public class Generator {
 
     }
 
-    private ElasticityProcess generateElasticityProcesses() {
+    private ElasticDataAsset generateElasticityProcesses() {
         System.out.println("Start generate Elasticity Processes");
         System.out.println("eDaaS: " + eDaaSName);
         System.out.println("qor metrics: " + qorModel.getListOfMetrics().get(0).getName());
@@ -113,16 +126,18 @@ public class Generator {
         MonitorProcess monitorProcess = elasticityProcessGenerator.generateMonitorProcess();
         List<ElasticState> initialElasticStateSet = elasticityProcessGenerator.generateSetOfInitialElasticState();
         List<ElasticState> finalElasticStateSet = elasticityProcessGenerator.generateSetOfFinalElasticState(initialElasticStateSet);
+        ElasticStateSet elasticStateSet = new ElasticStateSet(initialElasticStateSet, finalElasticStateSet);
         
         List<ControlProcess> listOfControlProcesses = elasticityProcessGenerator.generateControlProcesses(initialElasticStateSet, finalElasticStateSet);
         ElasticityProcess elasticityProcesses = new ElasticityProcess(monitorProcess, listOfControlProcesses);
 
+        ElasticDataAsset elasticDataAsset = new ElasticDataAsset(eDaaSName, elasticityProcesses, elasticStateSet);
         //log
         Logger logger = new Logger();
         logger.logMonitorProcesses(monitorProcess);
         logger.logControlProcesses(listOfControlProcesses);
 
-        return elasticityProcesses;
+        return elasticDataAsset;
 
     }
 

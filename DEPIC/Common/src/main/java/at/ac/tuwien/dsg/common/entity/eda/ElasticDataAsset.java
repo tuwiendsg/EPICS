@@ -29,16 +29,16 @@ public class ElasticDataAsset {
     @XmlElement(name = "elasticityProcesses", required = true)
     ElasticityProcess elasticityProcess;
     
-    @XmlElement(name = "listOfElasticStates", required = true)
-    List<ElasticState> listOfElasticStates;
+    @XmlElement(name = "elasticStateSet", required = true)
+    ElasticStateSet elasticStateSet;
     
     public ElasticDataAsset() {
     }
 
-    public ElasticDataAsset(String dataAssetID, ElasticityProcess elasticityProcess, List<ElasticState> listOfElasticStates) {
+    public ElasticDataAsset(String dataAssetID, ElasticityProcess elasticityProcess, ElasticStateSet elasticStateSet) {
         this.dataAssetID = dataAssetID;
         this.elasticityProcess = elasticityProcess;
-        this.listOfElasticStates = listOfElasticStates;
+        this.elasticStateSet = elasticStateSet;
     }
 
     public String getDataAssetID() {
@@ -57,15 +57,14 @@ public class ElasticDataAsset {
         this.elasticityProcess = elasticityProcess;
     }
 
-    public List<ElasticState> getListOfElasticStates() {
-        return listOfElasticStates;
+    public ElasticStateSet getElasticStateSet() {
+        return elasticStateSet;
     }
 
-    public void setListOfElasticStates(List<ElasticState> listOfElasticStates) {
-        this.listOfElasticStates = listOfElasticStates;
+    public void setElasticStateSet(ElasticStateSet elasticStateSet) {
+        this.elasticStateSet = elasticStateSet;
     }
 
-    
     
     
 }

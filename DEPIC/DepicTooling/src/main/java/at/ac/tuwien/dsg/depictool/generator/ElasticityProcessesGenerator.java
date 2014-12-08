@@ -16,6 +16,7 @@ import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
+import at.ac.tuwien.dsg.common.entity.eda.ep.ParallelGateway;
 import at.ac.tuwien.dsg.common.entity.process.MetricElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.common.entity.qor.MetricRange;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  *
@@ -226,8 +228,86 @@ public class ElasticityProcessesGenerator {
         if (listOfControlActions.size() != 0) {
        
             controlProcess = new ControlProcess(elasticState_in, elasticState_fi, listOfControlActions);
+            buildWorkflowForControlProcess(controlProcess);
+          
         }
+        
         return controlProcess;
+    }
+    
+    private void buildWorkflowForControlProcess(ControlProcess controlProcess){
+        
+        List<ControlAction> listOfControlActions =  controlProcess.getListOfControlActions();
+        
+        List<ParallelGateway> listOfParallelGateways = new ArrayList<ParallelGateway>();
+        
+        ElasticityProcessStore epRepo = new ElasticityProcessStore();
+        
+        
+        for (ControlAction controlAction : listOfControlActions) {
+            List<ActionDependency> listOfActionDependencies = epRepo.getActionDependencyDB(controlAction.getControlActionID());
+            
+            if (listOfActionDependencies.size()>1) {
+                
+                ParallelGateway parallelGateway = new ParallelGateway();
+                List<String> incomingList = new ArrayList<String>();
+                List<String> outgoingList = new ArrayList<String>();
+                
+                outgoingList.add(controlAction.getControlActionID());
+                
+                UUID parallelGatewayID = UUID.randomUUID();
+                parallelGateway.setId(parallelGatewayID.toString());
+                
+                for (ActionDependency actionDependency : listOfActionDependencies){
+                    int prerequisiteControlActionIndex = findControlActionIndex(listOfControlActions, actionDependency.getPrerequisiteActionID());
+                    ControlAction prerequisiteControlAction = listOfControlActions.get(prerequisiteControlActionIndex);
+                    prerequisiteControlAction.setOutgoing(parallelGateway.getId());
+                    incomingList.add(prerequisiteControlAction.getControlActionID());
+                    
+                }
+                
+                parallelGateway.setIncomming(incomingList);
+                parallelGateway.setOutgoing(outgoingList);
+                listOfParallelGateways.add(parallelGateway);
+                
+                
+               
+                
+            } else if (listOfActionDependencies.size()==1) {
+                ActionDependency actionDependency = listOfActionDependencies.get(0);
+                int prerequisiteControlActionIndex = findControlActionIndex(listOfControlActions, actionDependency.getPrerequisiteActionID());
+                ControlAction prerequisiteControlAction = listOfControlActions.get(prerequisiteControlActionIndex);
+                
+                controlAction.setIncomming(prerequisiteControlAction.getControlActionID());
+                prerequisiteControlAction.setOutgoing(controlAction.getControlActionID());
+                
+            } 
+            
+            
+            
+            
+            
+        }
+        
+        
+        
+        
+        
+    }
+    
+    private int findControlActionIndex(List<ControlAction> listOfControlActions,String prerequisiteActionID){
+        
+        int index=0;
+        
+        for (ControlAction ca : listOfControlActions){
+            if (ca.getControlActionID().equals(prerequisiteActionID)){
+                index = listOfControlActions.indexOf(ca);
+                break;
+            }
+            
+        }
+        
+        return index;
     }
     
     private MetricCondition findMetricConditionByMetricName(String metricName, List<MetricCondition> listOfConditions){

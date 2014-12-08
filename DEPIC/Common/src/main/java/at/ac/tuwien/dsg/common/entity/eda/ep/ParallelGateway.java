@@ -19,6 +19,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ParallelGateway {
     
+    @XmlElement(name = "id", required = true)
+    String id; 
+    
     @XmlElement(name = "incomming", required = true)
     List<String> incomming;
     
@@ -28,9 +31,18 @@ public class ParallelGateway {
     public ParallelGateway() {
     }
 
-    public ParallelGateway(List<String> incomming, List<String> outgoing) {
+    public ParallelGateway(String id, List<String> incomming, List<String> outgoing) {
+        this.id = id;
         this.incomming = incomming;
         this.outgoing = outgoing;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public List<String> getIncomming() {
@@ -48,7 +60,7 @@ public class ParallelGateway {
     public void setOutgoing(List<String> outgoing) {
         this.outgoing = outgoing;
     }
-    
+
     
     
     

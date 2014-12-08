@@ -51,13 +51,6 @@ public class ElasticState {
         this.listOfConditions = listOfConditions;
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
+
     
 }
