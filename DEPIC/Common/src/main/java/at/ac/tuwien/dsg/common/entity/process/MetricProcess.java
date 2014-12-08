@@ -7,12 +7,20 @@
 package at.ac.tuwien.dsg.common.entity.process;
 
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Jun
  */
+@XmlRootElement(name = "MetricProcess")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class MetricProcess {
+    
+    @XmlElement(name = "listOfMetricElasticityProcesses", required = true)
     List<MetricElasticityProcess> listOfMetricElasticityProcesses;
 
     public MetricProcess() {

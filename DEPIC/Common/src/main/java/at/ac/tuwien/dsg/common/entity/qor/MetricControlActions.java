@@ -13,15 +13,15 @@ import java.util.List;
  *
  * @author Jun
  */
-public class TriggerActions {
+public class MetricControlActions {
     String fromRange;
     String toRange;
     List<ControlAction> listOfControlActions;
 
-    public TriggerActions() {
+    public MetricControlActions() {
     }
 
-    public TriggerActions(String fromRange, String toRange, List<ControlAction> listOfControlActions) {
+    public MetricControlActions(String fromRange, String toRange, List<ControlAction> listOfControlActions) {
         this.fromRange = fromRange;
         this.toRange = toRange;
         this.listOfControlActions = listOfControlActions;

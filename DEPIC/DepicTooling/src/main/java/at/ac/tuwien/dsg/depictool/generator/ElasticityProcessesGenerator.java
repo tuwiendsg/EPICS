@@ -19,7 +19,7 @@ import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
 import at.ac.tuwien.dsg.common.entity.process.MetricElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.common.entity.qor.MetricRange;
-import at.ac.tuwien.dsg.common.entity.qor.TriggerActions;
+import at.ac.tuwien.dsg.common.entity.qor.MetricControlActions;
 
 import at.ac.tuwien.dsg.common.entity.process.ActionDependency;
 import at.ac.tuwien.dsg.common.entity.qor.QElement;
@@ -31,6 +31,7 @@ import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -64,35 +65,143 @@ public class ElasticityProcessesGenerator {
 
         return monitorProcess;
     }
+    
+    
+    public List<ElasticState> generateSetOfInitialElasticState(){
+        List<QoRMetric> listOfMetrics = qorModel.getListOfMetrics();
+        List<MetricElasticityProcess> listOfProcessMetric = metricProcess.getListOfMetricElasticityProcesses();
+        List<List> listOfConditionSet = new ArrayList<List>();
+        List<ElasticState> listOfInitialElasticStates = new ArrayList<ElasticState>();
+        
+       
+        
+        for (QoRMetric metric : listOfMetrics){
+            
+            String metricName = metric.getName();
+            MetricElasticityProcess metricProcess = getMetricLElasticityProcessFromMetricName(metricName, listOfProcessMetric);
+            List<MetricCondition> listOfConditions = metricProcess.getListOfConditions();
+            listOfConditionSet.add(listOfConditions);
+            
+           
+        }
+        
+  
+        
+        
+            
+        int noOfMetric = listOfConditionSet.size();
+        List<int[]> combinations = new ArrayList<int[]>();
 
-    public List<ControlProcess> generateControlProcesses() {
+        for (int k = 0; k < 1000; k++) {
+            int[] conditionIndice = new int[noOfMetric];
 
-        List<ControlProcess> listOfControlProcesses = new ArrayList<ControlProcess>();
-        List<QElement> listOfQElements = qorModel.getListOfQElements();
+            for (int i = 0; i < noOfMetric; i++) {
 
-        for (QElement qE_i : listOfQElements) {
-            for (QElement qE_j : listOfQElements) {
-                if (!qE_i.equals(qE_j)) {
-                    ControlProcess controlProcess = findControlProcess(qE_i, qE_j);
-                    if (controlProcess != null) {
-                        listOfControlProcesses.add(controlProcess);
-                    }
-                }
+                List<MetricCondition> conditionMetric_i = listOfConditionSet.get(i);
+                int noOfConditions = conditionMetric_i.size();
+                int conditionIndex = randomInt(0, noOfConditions);
+                conditionIndice[i] = conditionIndex;
+
             }
+            
+            if (!isDuplicated(combinations, conditionIndice)){
+                combinations.add(conditionIndice);
+            }
+            
+        }
+        
+        
+        for (int[] conbination: combinations){
+            
+            List<MetricCondition> eStateConditions = new ArrayList<MetricCondition>();
+            
+            for (int i=0;i<conbination.length;i++){
+                
+                List<MetricCondition> conditionMetric_i = listOfConditionSet.get(i);
+                MetricCondition metricCondition = conditionMetric_i.get(conbination[i]); 
+                MetricCondition newMetricCondition = new MetricCondition(metricCondition.getMetricName(), metricCondition.getUpperBound(), metricCondition.getLowerBound());
+                eStateConditions.add(newMetricCondition);
+                
+            } 
+            
+            ElasticState elasticState = new ElasticState("", eStateConditions);
+            listOfInitialElasticStates.add(elasticState);
+        }
+       
+        
+        
+        return listOfInitialElasticStates;
+    }
+    
+    public List<ElasticState> generateSetOfFinalElasticState(List<ElasticState> listOfInitialElasticStates, List<QElement> listOfQElements) {
+
+        List<ElasticState> listOfFinalElasticStates = new ArrayList<ElasticState>();
+
+        for (QElement qElement : listOfQElements) {
+
+            for (ElasticState elasticState : listOfInitialElasticStates) {
+
+                List<MetricCondition> listOfMetricConditions = elasticState.getListOfConditions();
+
+                for (MetricCondition metricCondition : listOfMetricConditions) {
+
+                    String metricName = metricCondition.getMetricName();
+                    Range range = findMatchingRange(qElement, metricName);
+                    double price = qElement.getPrice();
+
+                    if ((metricCondition.getLowerBound() >= range.getFromValue())
+                            && (metricCondition.getUpperBound() <= range.getToValue())) {
+                        ElasticState newElasticState = initializeElasticState(elasticState, price);
+                        listOfFinalElasticStates.add(newElasticState);
+                    }
+
+                }
+
+            }
+
+        }
+        return listOfFinalElasticStates;
+    }
+
+    public List<ControlProcess> generateControlProcesses(List<ElasticState> listOfInitialElasticStates, List<ElasticState> listOfFinalElasticStates) {
+
+       List<ControlProcess> listOfControlProcesses = new ArrayList<ControlProcess>();
+        
+        for (ElasticState elasticState_in : listOfInitialElasticStates) {
+            for (ElasticState elasticState_fi : listOfFinalElasticStates){
+                ControlProcess controlProcess = findControlProcess(elasticState_in, elasticState_fi);
+                listOfControlProcesses.add(controlProcess);
+            }
+            
         }
 
-        for (ControlProcess controlProcess : listOfControlProcesses) {
-            sortControlActionOrder(controlProcess);
-        }
+//        for (ControlProcess controlProcess : listOfControlProcesses) {
+//            sortControlActionOrder(controlProcess);
+//        }
         return listOfControlProcesses;
     }
     
     
 
-    private ControlProcess findControlProcess(QElement qE_i, QElement qE_j) {
+    private ControlProcess findControlProcess(ElasticState elasticState_in, ElasticState elasticState_fi) {
 
         ControlProcess controlProcess = null;
+  
         List<ControlAction> listOfControlActions = new ArrayList<ControlAction>(); 
+        
+        List<MetricCondition> listOfConditions_in = elasticState_in.getListOfConditions();
+        List<MetricCondition> listOfConditions_fi = elasticState_fi.getListOfConditions();
+        
+        for (MetricCondition metricCondition_in : listOfConditions_in){
+            
+            String metricName_in = metricCondition_in.getMetricName();
+            MetricCondition metricCondition_fi = findMetricConditionByMetricName(metricName_in, listOfConditions_fi);
+            
+            List<ControlAction> findControlAction(metricName_in, metricCondition_in, metricCondition_fi);
+            
+        }
+        
+        
         List<MetricRange> listOfMetricRanges_i = qE_i.getListOfMetricRanges();
         List<MetricRange> listOfMetricRanges_j = qE_j.getListOfMetricRanges();
         
@@ -119,6 +228,19 @@ public class ElasticityProcessesGenerator {
         }
         return controlProcess;
     }
+    
+    private MetricCondition findMetricConditionByMetricName(String metricName, List<MetricCondition> listOfConditions){
+        MetricCondition rs = null;
+        
+        for (MetricCondition condition : listOfConditions){
+            if (condition.getMetricName().equals(metricName)){
+                rs = condition;
+                break;
+            }
+            
+        }
+        return rs;
+    }
 
     private void sortControlActionOrder(ControlProcess controlProcess) {
 
@@ -144,21 +266,51 @@ public class ElasticityProcessesGenerator {
         }
     }
 
-    private ControlAction findControlAction(String metricName, String rangeVal_i, String rangeVal_j) {
-        ControlAction returnControlAction = null;
+    private List<ControlAction> findControlAction(String metricName, MetricCondition condition_in, MetricCondition condition_fi) {
+        List<ControlAction> returnControlActions=null;
+        
         List<MetricElasticityProcess> listOfMetricElasticityProcesses = metricProcess.getListOfMetricElasticityProcesses();
+      
+        
+        
+        
         for (MetricElasticityProcess elasticityProcess : listOfMetricElasticityProcesses) {
+        
+            
             if (elasticityProcess.getMetricName().equals(metricName)) {
-                List<TriggerActions> listOfTriggerActions = elasticityProcess.getListOfTriggerActions();
-                for (TriggerActions triggerAction : listOfTriggerActions) {
-                    if (triggerAction.getFromRange().equals(rangeVal_i) && triggerAction.getToRange().equals(rangeVal_j)) {
-                        returnControlAction = triggerAction.getListOfControlActions().get(0);
+                List<MetricControlActions> listOfTriggerActions = elasticityProcess.getListOfMetricControlActions();
+                String conditionID_in = findConditionID(condition_in, elasticityProcess);
+                String conditionID_fi = findConditionID(condition_fi, elasticityProcess);
+                
+                
+                
+                for (MetricControlActions metricControlAction : listOfTriggerActions) {
+                    
+                   
+                    if ((metricControlAction.getFromRange().equals(conditionID_in)) && 
+                            (metricControlAction.getToRange().equals(conditionID_fi))) {
+                        
+                        returnControlActions = metricControlAction.getListOfControlActions();
+                    
                     }
                 }
             }
         }
 
-        return returnControlAction;
+        return returnControlActions;
+    }
+    
+    private String findConditionID(MetricCondition condition, MetricElasticityProcess elasticityProcess){
+        String conditionID="";
+        
+        List<MetricCondition> listOfConditions = elasticityProcess.getListOfConditions();
+        for (MetricCondition metricCondition : listOfConditions){
+            if ((condition.getLowerBound()>=metricCondition.getLowerBound()) 
+                    && (condition.getUpperBound()<=metricCondition.getUpperBound())){
+                conditionID = metricCondition.getMetricName();
+            }
+        }
+        return conditionID;
     }
 
     private String findRangeValueFromMetricName(String metricName, List<MetricRange> listOfMetricRanges) {
@@ -205,7 +357,15 @@ public class ElasticityProcessesGenerator {
         return  elasticState;
     }
     
-    
+    private MetricElasticityProcess getMetricLElasticityProcessFromMetricName(String metricName, List<MetricElasticityProcess> listOfMetricElasticityProcesses){
+        
+        for (MetricElasticityProcess metricElasticityProcess : listOfMetricElasticityProcesses){
+            if(metricElasticityProcess.getMetricName().equals(metricName)){
+                return metricElasticityProcess;
+            }
+        }
+        return null;
+    }
     
      /*
     public void deployElasticityProcess(ElasticityProcess elasticityProcesses){
@@ -251,5 +411,102 @@ public class ElasticityProcessesGenerator {
     */
 
 
+    
+    
+    private boolean isDuplicated(List<int[]> combinations, int[] conditionIndice){
+        
+        boolean rs=false;
+        
+        for (int i=0;i<combinations.size();i++){
+            int[] condition_i = combinations.get(i);
+            
+            String conditionString_i = "";
+            String comparedCondition = "";
+            
+            for (int j=0;j<condition_i.length;j++){
+                conditionString_i =conditionString_i + String.valueOf(condition_i[j]) + ";";
+                comparedCondition = comparedCondition + String.valueOf(conditionIndice[j])+";" ;
+            }
+            
+            if (conditionString_i.equals(comparedCondition)){
+                rs=true;
+                break;
+            }
+        }
+        
+        
+        return rs;
+    }
+
+    private int randomInt(int min, int max) {
+        Random random = new Random();
+        int randomNumber = random.nextInt(max - min) + min;
+        return randomNumber;
+    }
+    
+    private Range getMetricRangeFromID(String rangeID){
+        Range rs = null;
+        
+        List<QoRMetric> listOfMetrics = qorModel.getListOfMetrics();
+        
+        for (QoRMetric qoRMetric : listOfMetrics){
+            
+            List<Range> listOfRanges = qoRMetric.getListOfRanges();
+            
+            for (Range range: listOfRanges){
+                if (rangeID.equals(range.getRangeID())){
+                    rs = range;
+                    break;
+                }
+                
+            }
+        }
+                
+        return rs;
+    }
+    
+  
+    
+    private ElasticState initializeElasticState(ElasticState elasticState, double price){
+        
+        
+        
+        List<MetricCondition> listOfMetricConditions = elasticState.getListOfConditions();
+        
+        List<MetricCondition> newlistOfMetricConditions = new ArrayList<MetricCondition>();
+        for (MetricCondition condition : listOfMetricConditions){
+
+            MetricCondition newMetricCondition = 
+                    new MetricCondition(condition.getMetricName(), 
+                            condition.getUpperBound(), 
+                            condition.getLowerBound());
+           newlistOfMetricConditions.add(newMetricCondition);
+        }
+
+        MetricCondition costCondition = new MetricCondition("cost", price, price);
+        newlistOfMetricConditions.add(costCondition);
+        
+        ElasticState newElasticState = new ElasticState(elasticState.geteStateID(), newlistOfMetricConditions);
+        
+        return newElasticState;
+    }
+    
+    private Range findMatchingRange(QElement qElement, String metricName){
+        
+        Range range = null;
+        List<MetricRange> listOfMetricRanges = qElement.getListOfMetricRanges();
+       
+        for (MetricRange metricRange : listOfMetricRanges){
+            if (metricName.equals(metricRange.getMetricName())){
+                String rangeID = metricRange.getRange();
+                range = getMetricRangeFromID(rangeID);
+                break;
+            }
+            
+            
+        }
+        return range;
+        
+    }
     
 }

@@ -31,6 +31,9 @@ public class ControlProcess {
     
     @XmlElement(name = "listOfControlActions", required = true)
     List<ControlAction> listOfControlActions;
+    
+    @XmlElement(name = "listOfParallelGateways")
+    List<ParallelGateway> listOfParallelGateways;
 
     public ControlProcess() {
     }
@@ -65,5 +68,14 @@ public class ControlProcess {
         this.listOfControlActions = listOfControlActions;
     }
 
+    public List<ParallelGateway> getListOfParallelGateways() {
+        return listOfParallelGateways;
+    }
+
+    public void setListOfParallelGateways(List<ParallelGateway> listOfParallelGateways) {
+        this.listOfParallelGateways = listOfParallelGateways;
+    }
+
+    
     
 }

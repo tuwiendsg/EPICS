@@ -27,7 +27,13 @@ public class ControlAction {
     
     @XmlElement(name = "listOfParameters", required = true)
     List<Parameter> listOfParameters;
-
+    
+    @XmlElement(name = "incomming")
+    String incomming;
+    
+    @XmlElement(name = "outgoing")
+    String outgoing;
+    
     public ControlAction() {
     }
 
@@ -51,6 +57,24 @@ public class ControlAction {
     public void setListOfParameters(List<Parameter> listOfParameters) {
         this.listOfParameters = listOfParameters;
     }
+
+    public String getIncomming() {
+        return incomming;
+    }
+
+    public void setIncomming(String incomming) {
+        this.incomming = incomming;
+    }
+
+    public String getOutgoing() {
+        return outgoing;
+    }
+
+    public void setOutgoing(String outgoing) {
+        this.outgoing = outgoing;
+    }
+
+    
 
     
     
