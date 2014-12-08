@@ -133,10 +133,10 @@ public class ElasticityProcessesGenerator {
         return listOfInitialElasticStates;
     }
     
-    public List<ElasticState> generateSetOfFinalElasticState(List<ElasticState> listOfInitialElasticStates, List<QElement> listOfQElements) {
+    public List<ElasticState> generateSetOfFinalElasticState(List<ElasticState> listOfInitialElasticStates) {
 
         List<ElasticState> listOfFinalElasticStates = new ArrayList<ElasticState>();
-
+        List<QElement> listOfQElements = qorModel.getListOfQElements();
         for (QElement qElement : listOfQElements) {
 
             for (ElasticState elasticState : listOfInitialElasticStates) {
@@ -197,34 +197,35 @@ public class ElasticityProcessesGenerator {
             String metricName_in = metricCondition_in.getMetricName();
             MetricCondition metricCondition_fi = findMetricConditionByMetricName(metricName_in, listOfConditions_fi);
             
-            List<ControlAction> findControlAction(metricName_in, metricCondition_in, metricCondition_fi);
-            
-        }
-        
-        
-        List<MetricRange> listOfMetricRanges_i = qE_i.getListOfMetricRanges();
-        List<MetricRange> listOfMetricRanges_j = qE_j.getListOfMetricRanges();
-        
-        for (MetricRange metricRange_i : listOfMetricRanges_i) {
-            String metricName_i = metricRange_i.getMetricName();
-            String rangeVal_i = metricRange_i.getRange();
-            String rangeVal_j = findRangeValueFromMetricName(metricName_i, listOfMetricRanges_j);
-            ControlAction controlAction = findControlAction(metricName_i, rangeVal_i, rangeVal_j);
-
-            if (controlAction == null && !rangeVal_i.equals(rangeVal_j)) {
-                listOfControlActions.clear();
-                break;
-            }
-
-            if (controlAction != null) {
-                listOfControlActions.add(controlAction);
+            List<ControlAction> controlActions = findControlAction(metricName_in, metricCondition_in, metricCondition_fi);
+            if (controlActions != null) {
+                listOfControlActions.addAll(controlActions);
             }
         }
+        
+//        
+//        List<MetricRange> listOfMetricRanges_i = qE_i.getListOfMetricRanges();
+//        List<MetricRange> listOfMetricRanges_j = qE_j.getListOfMetricRanges();
+//        
+//        for (MetricRange metricRange_i : listOfMetricRanges_i) {
+//            String metricName_i = metricRange_i.getMetricName();
+//            String rangeVal_i = metricRange_i.getRange();
+//            String rangeVal_j = findRangeValueFromMetricName(metricName_i, listOfMetricRanges_j);
+//            ControlAction controlAction = findControlAction(metricName_i, rangeVal_i, rangeVal_j);
+//
+//            if (controlAction == null && !rangeVal_i.equals(rangeVal_j)) {
+//                listOfControlActions.clear();
+//                break;
+//            }
+//
+//            if (controlAction != null) {
+//                listOfControlActions.add(controlAction);
+//            }
+//        }
 
         if (listOfControlActions.size() != 0) {
-            ElasticState eState_i = eStateMap(qE_i);
-            ElasticState eState_j = eStateMap(qE_j);          
-            controlProcess = new ControlProcess(eState_i, eState_j, listOfControlActions);
+       
+            controlProcess = new ControlProcess(elasticState_in, elasticState_fi, listOfControlActions);
         }
         return controlProcess;
     }
