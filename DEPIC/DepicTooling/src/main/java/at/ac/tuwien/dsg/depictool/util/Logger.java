@@ -5,10 +5,15 @@
  */
 package at.ac.tuwien.dsg.depictool.util;
 
+import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
+import at.ac.tuwien.dsg.common.entity.eda.MetricCondition;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
+import at.ac.tuwien.dsg.common.entity.eda.ep.ParallelGateway;
+import at.ac.tuwien.dsg.common.entity.process.Parameter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,11 +43,72 @@ public class Logger {
         System.out.println("\n***");    
         List<ControlAction> listOfControlActions =  controlProcess.getListOfControlActions();
         
+        
+         System.out.println("PROCESS ----------- ");
+         System.out.println("eState in: "+ controlProcess.geteStateID_i().geteStateID());
+         List<MetricCondition> conditions_in = controlProcess.geteStateID_i().getListOfConditions();
+         for (MetricCondition c: conditions_in){
+             System.out.println("   id: " + c.getConditionID());
+             System.out.println("   metric: " + c.getMetricName());
+             System.out.println("   lower: " + c.getLowerBound());
+             System.out.println("   upper: " + c.getUpperBound());
+             
+         }
+         
+         System.out.println("eState fi: "+ controlProcess.geteStateID_j().geteStateID());
+         List<MetricCondition> conditions_fi = controlProcess.geteStateID_j().getListOfConditions();
+         for (MetricCondition c: conditions_fi){
+             System.out.println("   id: " + c.getConditionID());
+             System.out.println("   metric: " + c.getMetricName());
+             System.out.println("   lower: " + c.getLowerBound());
+             System.out.println("   upper: " + c.getUpperBound());
+             
+         }
+                 
         for (ControlAction controlAction : listOfControlActions) {
-            System.out.println("control action ID: " + controlAction.getControlActionID());
+            System.out.println("control action: " + controlAction.getControlActionName());
+            System.out.print("  incomming: " + controlAction.getIncomming());
+            System.out.print("  outgoing: " + controlAction.getOutgoing());
+            List<Parameter> listOfParams = controlAction.getListOfParameters();
+            
+            for (Parameter param : listOfParams){
+                System.out.println("    parameter: " + param.getParaName());
+                System.out.print("    value: " + param.getValue());
+            }
             
         }
+        
+        List<ParallelGateway> listOfParallelGateways = new ArrayList<ParallelGateway>();
+        
+        for (ParallelGateway parallelGateway : listOfParallelGateways){
+            System.out.println("parallel gateway: " + parallelGateway.getId());
+            System.out.print("  incoming: " + parallelGateway.getIncomming());
+            System.out.print("  outgoing: " + parallelGateway.getOutgoing());
         }
+        
+        
+        
+        }
+    }
+    
+    public void logElasticState(List<ElasticState> listOfElasticStates){
+        System.out.println("Number of Elastic States: " + listOfElasticStates.size());
+        
+        for (ElasticState elasticState : listOfElasticStates){
+            System.out.println("\n***"); 
+            System.out.println("eState ID: " + elasticState.geteStateID());
+            List<MetricCondition> conditions = elasticState.getListOfConditions();
+            for(MetricCondition condition : conditions){
+                System.out.println("\n---"); 
+                System.out.print("    metric: " + condition.getMetricName());
+                System.out.print("    id: " + condition.getConditionID());
+                System.out.print("    lower: " + condition.getLowerBound());
+                System.out.print("    uppper: " + condition.getUpperBound());
+                
+            }
+            
+        }
+        
     }
     
 }

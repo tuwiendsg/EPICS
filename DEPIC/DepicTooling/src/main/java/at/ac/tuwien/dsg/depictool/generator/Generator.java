@@ -125,7 +125,17 @@ public class Generator {
         ElasticityProcessesGenerator elasticityProcessGenerator = new ElasticityProcessesGenerator(qorModel, elasticityProcessConfiguration);
         MonitorProcess monitorProcess = elasticityProcessGenerator.generateMonitorProcess();
         List<ElasticState> initialElasticStateSet = elasticityProcessGenerator.generateSetOfInitialElasticState();
+        
+        Logger logger = new Logger();
+        System.out.println("Inital eState Set");
+        logger.logElasticState(initialElasticStateSet);
+        
+        
         List<ElasticState> finalElasticStateSet = elasticityProcessGenerator.generateSetOfFinalElasticState(initialElasticStateSet);
+        System.out.println("");
+        System.out.println("Final eState Set");
+        logger.logElasticState(finalElasticStateSet);
+        
         ElasticStateSet elasticStateSet = new ElasticStateSet(initialElasticStateSet, finalElasticStateSet);
         
         List<ControlProcess> listOfControlProcesses = elasticityProcessGenerator.generateControlProcesses(initialElasticStateSet, finalElasticStateSet);
@@ -133,7 +143,8 @@ public class Generator {
 
         ElasticDataAsset elasticDataAsset = new ElasticDataAsset(eDaaSName, elasticityProcesses, elasticStateSet);
         //log
-        Logger logger = new Logger();
+       
+        
         logger.logMonitorProcesses(monitorProcess);
         logger.logControlProcesses(listOfControlProcesses);
 
@@ -169,8 +180,8 @@ public class Generator {
             for (ControlAction ca : controlActions) {
                 
 
-                if (!isDeployActionExisting(listOfDeployActions, ca.getControlActionID())) {
-                    DeployAction deployAction = epStore.getPrimitiveAction(ca.getControlActionID());
+                if (!isDeployActionExisting(listOfDeployActions, ca.getControlActionName())) {
+                    DeployAction deployAction = epStore.getPrimitiveAction(ca.getControlActionName());
                     listOfDeployActions.add(deployAction);
                 }
             }
@@ -191,7 +202,7 @@ public class Generator {
         salsaCon.config(eDaaSName);
         deployementDescriptionXml = salsaCon.toToscaString();
         
-        salsaCon.newServicesInstance(deployementDescriptionXml);
+        //salsaCon.newServicesInstance(deployementDescriptionXml);
 
         return deployementDescriptionXml;
     }

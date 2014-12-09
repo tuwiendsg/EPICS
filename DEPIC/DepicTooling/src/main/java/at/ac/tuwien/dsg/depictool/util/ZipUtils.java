@@ -33,7 +33,7 @@ public class ZipUtils {
         File dirObj = new File(dir);
 
         parentDir = dirObj.getParent();
-        System.out.println(" DIR: " + parentDir);
+     //   System.out.println(" DIR: " + parentDir);
 
         try {
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFileName));
@@ -57,7 +57,7 @@ public class ZipUtils {
                     continue;
                 }
                 FileInputStream in = new FileInputStream(files[i].getAbsolutePath());
-                System.out.println(" Adding: " + files[i].getAbsolutePath());
+             //   System.out.println(" Adding: " + files[i].getAbsolutePath());
 
                 out.putNextEntry(new ZipEntry(files[i].getAbsolutePath().replaceAll(parentDir, "")));
                 int len;

@@ -24,19 +24,23 @@ public class MetricCondition {
     @XmlElement(name = "metricName", required = true)
     String metricName;
     
-    @XmlElement(name = "upperBound", required = true)
-    double upperBound;
+    @XmlElement(name = "conditionID", required = true)
+    String conditionID;
     
     @XmlElement(name = "lowerBound", required = true)
     double lowerBound;
+    
+    @XmlElement(name = "upperBound", required = true)
+    double upperBound;
 
     public MetricCondition() {
     }
 
-    public MetricCondition(String metricName, double upperBound, double lowerBound) {
+    public MetricCondition(String metricName, String conditionID, double lowerBound, double upperBound) {
         this.metricName = metricName;
-        this.upperBound = upperBound;
+        this.conditionID = conditionID;
         this.lowerBound = lowerBound;
+        this.upperBound = upperBound;
     }
 
     public String getMetricName() {
@@ -47,12 +51,12 @@ public class MetricCondition {
         this.metricName = metricName;
     }
 
-    public double getUpperBound() {
-        return upperBound;
+    public String getConditionID() {
+        return conditionID;
     }
 
-    public void setUpperBound(double upperBound) {
-        this.upperBound = upperBound;
+    public void setConditionID(String conditionID) {
+        this.conditionID = conditionID;
     }
 
     public double getLowerBound() {
@@ -62,8 +66,15 @@ public class MetricCondition {
     public void setLowerBound(double lowerBound) {
         this.lowerBound = lowerBound;
     }
-    
-    
+
+    public double getUpperBound() {
+        return upperBound;
+    }
+
+    public void setUpperBound(double upperBound) {
+        this.upperBound = upperBound;
+    }
+
     
     
     

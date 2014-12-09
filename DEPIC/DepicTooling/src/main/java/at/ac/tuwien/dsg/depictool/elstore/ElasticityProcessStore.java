@@ -113,6 +113,8 @@ public class ElasticityProcessStore {
                 listOfActionDependencies.add(actionDependency);
 
             }
+            
+            rs.close();
 
         } catch (Exception ex) {
 
@@ -122,8 +124,35 @@ public class ElasticityProcessStore {
     }
     
     
-    public DeployAction getPrimitiveAction(String actionID){
-        String sql = "select * from PrimitiveAction where actionID='" + actionID+"'";
+    public List<ActionDependency> getAllActionDependencies(){
+        String sql = "select * from ActionDependency";
+        
+        List<ActionDependency> listOfActionDependencies = new ArrayList<ActionDependency>();
+        
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        try {
+
+            while (rs.next()) {
+                String actionID = rs.getString("actionID");
+                String prerequisiteActionID = rs.getString("prerequisiteActionID");     
+                ActionDependency actionDependency = new ActionDependency(actionID, prerequisiteActionID);
+                listOfActionDependencies.add(actionDependency);
+
+            }
+            
+            rs.close();
+
+        } catch (Exception ex) {
+
+        }
+        
+        return listOfActionDependencies;
+    }
+    
+    
+    public DeployAction getPrimitiveAction(String actionName){
+        String sql = "select * from PrimitiveAction where actionName='" + actionName+"'";
         DeployAction deployAction=null;
         
         List<ActionDependency> listOfActionDependencies = new ArrayList<ActionDependency>();
@@ -132,11 +161,12 @@ public class ElasticityProcessStore {
         try {
             while (rs.next()) {
             
-                String actionName = rs.getString("actionName");    
+            
                 String artifact = rs.getString("artifact"); 
                 String type = rs.getString("type"); 
-                deployAction = new DeployAction(actionID, actionName, type, artifact);          
+                deployAction = new DeployAction(actionName,actionName, type, artifact);          
             }
+            rs.close();
 
         } catch (Exception ex) {
 
@@ -157,6 +187,8 @@ public class ElasticityProcessStore {
                 listOfEDaases.add(name);
        
             }
+            
+            rs.close();
 
         } catch (Exception ex) {
 

@@ -43,13 +43,17 @@ public class ElasticityProcessesGenerator {
 
     QoRModel qorModel;
     MetricProcess metricProcess;
+    List<ActionDependency> ActionDependencySet;
+    
     
     public ElasticityProcessesGenerator() {
+        config();
     }
 
     public ElasticityProcessesGenerator(QoRModel qorModel, MetricProcess metricProcess) {
         this.qorModel = qorModel;
         this.metricProcess = metricProcess;
+        config();
     }
 
 
@@ -83,14 +87,9 @@ public class ElasticityProcessesGenerator {
             MetricElasticityProcess metricProcess = getMetricLElasticityProcessFromMetricName(metricName, listOfProcessMetric);
             List<MetricCondition> listOfConditions = metricProcess.getListOfConditions();
             listOfConditionSet.add(listOfConditions);
-            
-           
+
         }
-        
-  
-        
-        
-            
+
         int noOfMetric = listOfConditionSet.size();
         List<int[]> combinations = new ArrayList<int[]>();
 
@@ -105,36 +104,35 @@ public class ElasticityProcessesGenerator {
                 conditionIndice[i] = conditionIndex;
 
             }
-            
-            if (!isDuplicated(combinations, conditionIndice)){
+
+            if (!isDuplicated(combinations, conditionIndice)) {
                 combinations.add(conditionIndice);
             }
-            
+
         }
-        
-        
-        for (int[] conbination: combinations){
-            
+
+        for (int[] conbination : combinations) {
+
             List<MetricCondition> eStateConditions = new ArrayList<MetricCondition>();
-            
-            for (int i=0;i<conbination.length;i++){
-                
+            String eStateID = "";
+
+            for (int i = 0; i < conbination.length; i++) {
+
                 List<MetricCondition> conditionMetric_i = listOfConditionSet.get(i);
-                MetricCondition metricCondition = conditionMetric_i.get(conbination[i]); 
-                MetricCondition newMetricCondition = new MetricCondition(metricCondition.getMetricName(), metricCondition.getUpperBound(), metricCondition.getLowerBound());
+                MetricCondition metricCondition = conditionMetric_i.get(conbination[i]);
+                MetricCondition newMetricCondition = new MetricCondition(metricCondition.getMetricName(), metricCondition.getConditionID(), metricCondition.getLowerBound(), metricCondition.getUpperBound());
                 eStateConditions.add(newMetricCondition);
-                
-            } 
-            
-            ElasticState elasticState = new ElasticState("", eStateConditions);
+                eStateID = eStateID + metricCondition.getConditionID() + ";";
+
+            }
+
+            ElasticState elasticState = new ElasticState(eStateID, eStateConditions);
             listOfInitialElasticStates.add(elasticState);
         }
-       
-        
-        
+
         return listOfInitialElasticStates;
     }
-    
+
     public List<ElasticState> generateSetOfFinalElasticState(List<ElasticState> listOfInitialElasticStates) {
 
         List<ElasticState> listOfFinalElasticStates = new ArrayList<ElasticState>();
@@ -145,18 +143,32 @@ public class ElasticityProcessesGenerator {
 
                 List<MetricCondition> listOfMetricConditions = elasticState.getListOfConditions();
 
+                
+                boolean isMatching = true;
+
+                System.out.println("qElement: " + qElement.getqElementID());
+                
+                
                 for (MetricCondition metricCondition : listOfMetricConditions) {
 
                     String metricName = metricCondition.getMetricName();
                     Range range = findMatchingRange(qElement, metricName);
-                    double price = qElement.getPrice();
-
-                    if ((metricCondition.getLowerBound() >= range.getFromValue())
-                            && (metricCondition.getUpperBound() <= range.getToValue())) {
-                        ElasticState newElasticState = initializeElasticState(elasticState, price);
-                        listOfFinalElasticStates.add(newElasticState);
+                    System.out.println("    metric: " + metricName);
+                    System.out.println("    from range: " + range.getFromValue() + "    to range: " + range.getToValue()) ;
+                    System.out.println("    condition from: " + metricCondition.getLowerBound() + "    condition to: " + metricCondition.getUpperBound()) ;
+                    
+                    if (!((metricCondition.getLowerBound() >= range.getFromValue())
+                            && (metricCondition.getUpperBound() <= range.getToValue()))) {
+                        isMatching = false;
+                        System.out.println("FALSE CASE");
+                        break;
                     }
 
+                }
+
+                if (isMatching) {
+                    ElasticState newElasticState = initializeElasticState(elasticState, qElement);
+                    listOfFinalElasticStates.add(newElasticState);
                 }
 
             }
@@ -172,7 +184,12 @@ public class ElasticityProcessesGenerator {
         for (ElasticState elasticState_in : listOfInitialElasticStates) {
             for (ElasticState elasticState_fi : listOfFinalElasticStates){
                 ControlProcess controlProcess = findControlProcess(elasticState_in, elasticState_fi);
-                listOfControlProcesses.add(controlProcess);
+                
+                if (controlProcess!=null) {
+                    listOfControlProcesses.add(controlProcess);
+                }
+                
+                
             }
             
         }
@@ -188,21 +205,26 @@ public class ElasticityProcessesGenerator {
     private ControlProcess findControlProcess(ElasticState elasticState_in, ElasticState elasticState_fi) {
 
         ControlProcess controlProcess = null;
+        boolean isMovingEStatePossible = true;
   
         List<ControlAction> listOfControlActions = new ArrayList<ControlAction>(); 
         
         List<MetricCondition> listOfConditions_in = elasticState_in.getListOfConditions();
         List<MetricCondition> listOfConditions_fi = elasticState_fi.getListOfConditions();
-        
+     
         for (MetricCondition metricCondition_in : listOfConditions_in){
             
             String metricName_in = metricCondition_in.getMetricName();
             MetricCondition metricCondition_fi = findMetricConditionByMetricName(metricName_in, listOfConditions_fi);
             
             List<ControlAction> controlActions = findControlAction(metricName_in, metricCondition_in, metricCondition_fi);
+           
             if (controlActions != null) {
                 listOfControlActions.addAll(controlActions);
+            } else {
+                isMovingEStatePossible=false;
             }
+           
         }
         
 //        
@@ -225,7 +247,7 @@ public class ElasticityProcessesGenerator {
 //            }
 //        }
 
-        if (listOfControlActions.size() != 0) {
+        if (isMovingEStatePossible) {
        
             controlProcess = new ControlProcess(elasticState_in, elasticState_fi, listOfControlActions);
             buildWorkflowForControlProcess(controlProcess);
@@ -241,11 +263,17 @@ public class ElasticityProcessesGenerator {
         
         List<ParallelGateway> listOfParallelGateways = new ArrayList<ParallelGateway>();
         
-        ElasticityProcessStore epRepo = new ElasticityProcessStore();
+        
+        for (ControlAction controlAction : listOfControlActions) {
+            UUID controlActionID = UUID.randomUUID();
+            controlAction.setControlActionID(controlActionID.toString());
+        }
+        
+        
         
         
         for (ControlAction controlAction : listOfControlActions) {
-            List<ActionDependency> listOfActionDependencies = epRepo.getActionDependencyDB(controlAction.getControlActionID());
+            List<ActionDependency> listOfActionDependencies = findDependencyActionFromID(controlAction.getControlActionName());
             
             if (listOfActionDependencies.size()>1) {
                 
@@ -253,7 +281,7 @@ public class ElasticityProcessesGenerator {
                 List<String> incomingList = new ArrayList<String>();
                 List<String> outgoingList = new ArrayList<String>();
                 
-                outgoingList.add(controlAction.getControlActionID());
+                outgoingList.add(controlAction.getControlActionName());
                 
                 UUID parallelGatewayID = UUID.randomUUID();
                 parallelGateway.setId(parallelGatewayID.toString());
@@ -262,7 +290,7 @@ public class ElasticityProcessesGenerator {
                     int prerequisiteControlActionIndex = findControlActionIndex(listOfControlActions, actionDependency.getPrerequisiteActionID());
                     ControlAction prerequisiteControlAction = listOfControlActions.get(prerequisiteControlActionIndex);
                     prerequisiteControlAction.setOutgoing(parallelGateway.getId());
-                    incomingList.add(prerequisiteControlAction.getControlActionID());
+                    incomingList.add(prerequisiteControlAction.getControlActionName());
                     
                 }
                 
@@ -278,8 +306,8 @@ public class ElasticityProcessesGenerator {
                 int prerequisiteControlActionIndex = findControlActionIndex(listOfControlActions, actionDependency.getPrerequisiteActionID());
                 ControlAction prerequisiteControlAction = listOfControlActions.get(prerequisiteControlActionIndex);
                 
-                controlAction.setIncomming(prerequisiteControlAction.getControlActionID());
-                prerequisiteControlAction.setOutgoing(controlAction.getControlActionID());
+                controlAction.setIncomming(prerequisiteControlAction.getControlActionName());
+                prerequisiteControlAction.setOutgoing(controlAction.getControlActionName());
                 
             } 
             
@@ -289,8 +317,7 @@ public class ElasticityProcessesGenerator {
             
         }
         
-        
-        
+        controlProcess.setListOfParallelGateways(listOfParallelGateways);
         
         
     }
@@ -300,7 +327,7 @@ public class ElasticityProcessesGenerator {
         int index=0;
         
         for (ControlAction ca : listOfControlActions){
-            if (ca.getControlActionID().equals(prerequisiteActionID)){
+            if (ca.getControlActionName().equals(prerequisiteActionID)){
                 index = listOfControlActions.indexOf(ca);
                 break;
             }
@@ -331,7 +358,7 @@ public class ElasticityProcessesGenerator {
 
         for (int i=0;i<listOfActions.size();i++) {
             ControlAction controlAction_i = listOfActions.get(i);
-            List<ActionDependency> listOfActionDependencies = epRepo.getActionDependencyDB(controlAction_i.getControlActionID());
+            List<ActionDependency> listOfActionDependencies = epRepo.getActionDependencyDB(controlAction_i.getControlActionName());
                     
             for (int j=i+1;j<listOfActions.size();j++) {
             
@@ -339,7 +366,7 @@ public class ElasticityProcessesGenerator {
             
                     for (ActionDependency actionDependency : listOfActionDependencies) {  
                         String rerequisiteActionID= actionDependency.getPrerequisiteActionID();
-                        if (controlAction_j.getControlActionID().equals(rerequisiteActionID)){                
+                        if (controlAction_j.getControlActionName().equals(rerequisiteActionID)){                
                             Collections.swap(listOfActions, i, j);               
                         }              
                     }
@@ -359,13 +386,14 @@ public class ElasticityProcessesGenerator {
         
             
             if (elasticityProcess.getMetricName().equals(metricName)) {
-                List<MetricControlActions> listOfTriggerActions = elasticityProcess.getListOfMetricControlActions();
-                String conditionID_in = findConditionID(condition_in, elasticityProcess);
-                String conditionID_fi = findConditionID(condition_fi, elasticityProcess);
+                List<MetricControlActions> metricControlActionList = elasticityProcess.getListOfMetricControlActions();
+              //  String conditionID_in = findConditionID(condition_in, elasticityProcess);
+              //  String conditionID_fi = findConditionID(condition_fi, elasticityProcess);
+                String conditionID_in = condition_in.getConditionID();
+                String conditionID_fi = condition_fi.getConditionID();
                 
                 
-                
-                for (MetricControlActions metricControlAction : listOfTriggerActions) {
+                for (MetricControlActions metricControlAction : metricControlActionList) {
                     
                    
                     if ((metricControlAction.getFromRange().equals(conditionID_in)) && 
@@ -406,37 +434,37 @@ public class ElasticityProcessesGenerator {
         return rangeVal;
     }
     
-    private ElasticState eStateMap(QElement qElement) {
-        
-        List<QoRMetric> listOfMetrics = qorModel.getListOfMetrics();
-        List<MetricRange> listOfMetricRanges =  qElement.getListOfMetricRanges();
-        
-        List<MetricCondition> listOfMetricConditions = new ArrayList<MetricCondition>();
-        
-        for (MetricRange metricRange : listOfMetricRanges) {
-            String metricName = metricRange.getMetricName();
-            String rangeID = metricRange.getRange();
-            
-            for (QoRMetric metric : listOfMetrics) {
-                if (metric.equals(metricName)){
-                   List<Range> listOfRanges =  metric.getListOfRanges();              
-                   for (Range r : listOfRanges) {
-                       if (r.getRangeID().equals(rangeID)){
-                           double lowerBound = r.getFromValue();
-                           double upperBound = r.getToValue();
-                           MetricCondition metricCondition = new MetricCondition(metricName, upperBound, lowerBound);
-                           listOfMetricConditions.add(metricCondition);
-                           break;
-                       }              
-                   }        
-                }           
-            }           
-        }
-        
-        String eStateID = qElement.getqElementID();
-        ElasticState elasticState = new ElasticState(eStateID, listOfMetricConditions);
-        return  elasticState;
-    }
+//    private ElasticState eStateMap(QElement qElement) {
+//        
+//        List<QoRMetric> listOfMetrics = qorModel.getListOfMetrics();
+//        List<MetricRange> listOfMetricRanges =  qElement.getListOfMetricRanges();
+//        
+//        List<MetricCondition> listOfMetricConditions = new ArrayList<MetricCondition>();
+//        
+//        for (MetricRange metricRange : listOfMetricRanges) {
+//            String metricName = metricRange.getMetricName();
+//            String rangeID = metricRange.getRange();
+//            
+//            for (QoRMetric metric : listOfMetrics) {
+//                if (metric.equals(metricName)){
+//                   List<Range> listOfRanges =  metric.getListOfRanges();              
+//                   for (Range r : listOfRanges) {
+//                       if (r.getRangeID().equals(rangeID)){
+//                           double lowerBound = r.getFromValue();
+//                           double upperBound = r.getToValue();
+//                           MetricCondition metricCondition = new MetricCondition(metricName, upperBound, lowerBound);
+//                           listOfMetricConditions.add(metricCondition);
+//                           break;
+//                       }              
+//                   }        
+//                }           
+//            }           
+//        }
+//        
+//        String eStateID = qElement.getqElementID();
+//        ElasticState elasticState = new ElasticState(eStateID, listOfMetricConditions);
+//        return  elasticState;
+//    }
     
     private MetricElasticityProcess getMetricLElasticityProcessFromMetricName(String metricName, List<MetricElasticityProcess> listOfMetricElasticityProcesses){
         
@@ -535,8 +563,11 @@ public class ElasticityProcessesGenerator {
             List<Range> listOfRanges = qoRMetric.getListOfRanges();
             
             for (Range range: listOfRanges){
+               // System.out.println("range ID ith: " + range.getRangeID());
                 if (rangeID.equals(range.getRangeID())){
-                    rs = range;
+                    rs = new Range(rangeID, range.getFromValue(), range.getToValue());
+                    //System.out.println("RANGE CHECK: from value " + range.getFromValue() + " - to value: " + range.getToValue());
+                    
                     break;
                 }
                 
@@ -548,7 +579,7 @@ public class ElasticityProcessesGenerator {
     
   
     
-    private ElasticState initializeElasticState(ElasticState elasticState, double price){
+    private ElasticState initializeElasticState(ElasticState elasticState, QElement qElement){
         
         
         
@@ -558,13 +589,17 @@ public class ElasticityProcessesGenerator {
         for (MetricCondition condition : listOfMetricConditions){
 
             MetricCondition newMetricCondition = 
-                    new MetricCondition(condition.getMetricName(), 
-                            condition.getUpperBound(), 
-                            condition.getLowerBound());
+                    new MetricCondition(
+                            condition.getMetricName(), 
+                            condition.getConditionID(),
+                            condition.getLowerBound(), 
+                            condition.getUpperBound());
            newlistOfMetricConditions.add(newMetricCondition);
         }
 
-        MetricCondition costCondition = new MetricCondition("cost", price, price);
+        
+        
+        MetricCondition costCondition = new MetricCondition("cost",qElement.getqElementID(), qElement.getPrice(), qElement.getPrice());
         newlistOfMetricConditions.add(costCondition);
         
         ElasticState newElasticState = new ElasticState(elasticState.geteStateID(), newlistOfMetricConditions);
@@ -573,13 +608,16 @@ public class ElasticityProcessesGenerator {
     }
     
     private Range findMatchingRange(QElement qElement, String metricName){
-        
+    
         Range range = null;
         List<MetricRange> listOfMetricRanges = qElement.getListOfMetricRanges();
        
         for (MetricRange metricRange : listOfMetricRanges){
+            
+           
             if (metricName.equals(metricRange.getMetricName())){
                 String rangeID = metricRange.getRange();
+            
                 range = getMetricRangeFromID(rangeID);
                 break;
             }
@@ -588,6 +626,30 @@ public class ElasticityProcessesGenerator {
         }
         return range;
         
+    }
+    
+    
+    private void config(){
+        ElasticityProcessStore epRepo = new ElasticityProcessStore();
+        ActionDependencySet = epRepo.getAllActionDependencies();
+        
+    }
+    
+    private List<ActionDependency> findDependencyActionFromID(String actionID){
+        
+        List<ActionDependency> dependencyList = new ArrayList<ActionDependency>();
+        for (ActionDependency actionDependency : ActionDependencySet){
+            if (actionDependency.getActionID().equals(actionID)){
+                ActionDependency ad = new ActionDependency(
+                        actionDependency.getActionID(), 
+                        actionDependency.getPrerequisiteActionID());
+                dependencyList.add(ad);
+                
+            }
+            
+        }
+        
+        return dependencyList;
     }
     
 }

@@ -22,8 +22,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ControlAction {
     
-    @XmlElement(name = "controlActionID", required = true)
+    @XmlElement(name = "controlActionID")
     String controlActionID;
+    
+    @XmlElement(name = "controlActionName", required = true)
+    String controlActionName;
     
     @XmlElement(name = "listOfParameters", required = true)
     List<Parameter> listOfParameters;
@@ -37,8 +40,8 @@ public class ControlAction {
     public ControlAction() {
     }
 
-    public ControlAction(String controlActionID, List<Parameter> listOfParameters) {
-        this.controlActionID = controlActionID;
+    public ControlAction(String controlActionName, List<Parameter> listOfParameters) {
+        this.controlActionName = controlActionName;
         this.listOfParameters = listOfParameters;
     }
 
@@ -48,6 +51,14 @@ public class ControlAction {
 
     public void setControlActionID(String controlActionID) {
         this.controlActionID = controlActionID;
+    }
+
+    public String getControlActionName() {
+        return controlActionName;
+    }
+
+    public void setControlActionName(String controlActionName) {
+        this.controlActionName = controlActionName;
     }
 
     public List<Parameter> getListOfParameters() {
@@ -74,12 +85,6 @@ public class ControlAction {
         this.outgoing = outgoing;
     }
 
-    
-
-    
-    
-    
-    
     
     
 }
