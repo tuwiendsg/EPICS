@@ -138,7 +138,7 @@ public class DataElasticityMonitor implements Runnable{
         ElasticityProcess elasticityProcess= elasticityProcessesStore.getElasticityProcesses(monitoringSession.getDataAssetID());
        
         monitorProcess = elasticityProcess.getMonitorProcess(); 
-        mappingEState(monitoringSession.getDataAssetID());
+       // mappingEState(monitoringSession.getDataAssetID());
         List<String> expectElasticStateIDs = monitoringSession.getListOfExpectedElasticStates();
         mappingExpectedEStateIDs(expectElasticStateIDs);
        
@@ -169,51 +169,9 @@ public class DataElasticityMonitor implements Runnable{
         return null;
     }
     
-    private void mappingEState(String dataAssetID){
-        listOfElasticStates = new ArrayList<ElasticState>();
-        ElasticityProcessesStore elasticityProcessesStore = new ElasticityProcessesStore();
-        
-        QoRModel qoRModel = elasticityProcessesStore.getQoRModel(dataAssetID);
-        List<QElement> listOfQElements =  qoRModel.getListOfQElements();
-        
-        for (QElement qElement : listOfQElements){
-            ElasticState elasticState = eStateMap(qElement, qoRModel);
-            listOfElasticStates.add(elasticState);
-        }
-  
-    }
     
     
-    private ElasticState eStateMap(QElement qElement, QoRModel qorModel) {
-        
-        List<QoRMetric> listOfMetrics = qorModel.getListOfMetrics();
-        List<MetricRange> listOfMetricRanges =  qElement.getListOfMetricRanges();
-        
-        List<MetricCondition> listOfMetricConditions = new ArrayList<MetricCondition>();
-        
-        for (MetricRange metricRange : listOfMetricRanges) {
-            String metricName = metricRange.getMetricName();
-            String rangeID = metricRange.getRange();
-            
-            for (QoRMetric metric : listOfMetrics) {
-                if (metric.equals(metricName)){
-                   List<Range> listOfRanges =  metric.getListOfRanges();              
-                   for (Range r : listOfRanges) {
-                       if (r.getRangeID().equals(rangeID)){
-                           double lowerBound = r.getFromValue();
-                           double upperBound = r.getToValue();
-                           MetricCondition metricCondition = new MetricCondition(metricName, upperBound, lowerBound);
-                           listOfMetricConditions.add(metricCondition);
-                           break;
-                       }              
-                   }        
-                }           
-            }           
-        }
-        
-        String eStateID = qElement.getqElementID();
-        ElasticState elasticState = new ElasticState(eStateID, listOfMetricConditions);
-        return  elasticState;
-    }
+    
+ 
     
 }
