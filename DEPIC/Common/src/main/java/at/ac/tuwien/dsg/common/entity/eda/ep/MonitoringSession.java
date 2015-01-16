@@ -19,15 +19,42 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MonitoringSession {
     
+    @XmlElement(name = "sessionID", required = true)
+    String sessionID;
+    
+    @XmlElement(name = "edaasName", required = true)
+    String edaasName;
+    
     @XmlElement(name = "dataAssetID", required = true)
     String dataAssetID;
     
     @XmlElement(name = "listOfExpectedElasticStates", required = true)
     List<String> listOfExpectedElasticStates;
 
-    public MonitoringSession(String dataAssetID, List<String> listOfExpectedElasticStates) {
+    public MonitoringSession() {
+    }
+
+    public MonitoringSession(String sessionID, String edaasName, String dataAssetID, List<String> listOfExpectedElasticStates) {
+        this.sessionID = sessionID;
+        this.edaasName = edaasName;
         this.dataAssetID = dataAssetID;
         this.listOfExpectedElasticStates = listOfExpectedElasticStates;
+    }
+
+    public String getSessionID() {
+        return sessionID;
+    }
+
+    public void setSessionID(String sessionID) {
+        this.sessionID = sessionID;
+    }
+
+    public String getEdaasName() {
+        return edaasName;
+    }
+
+    public void setEdaasName(String edaasName) {
+        this.edaasName = edaasName;
     }
 
     public String getDataAssetID() {
@@ -45,6 +72,7 @@ public class MonitoringSession {
     public void setListOfExpectedElasticStates(List<String> listOfExpectedElasticStates) {
         this.listOfExpectedElasticStates = listOfExpectedElasticStates;
     }
+
     
     
     

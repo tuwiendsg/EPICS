@@ -32,7 +32,7 @@ import java.util.logging.Logger;
  *
  * @author Jun
  */
-public class DataElasticityMonitor implements Runnable{
+public class DataElasticityMonitor{
 
     List<MonitoringMetric> listOfMonitoringMetrics;
     List<ElasticState> listOfElasticStates;
@@ -41,58 +41,42 @@ public class DataElasticityMonitor implements Runnable{
     MonitorProcess monitorProcess;
     
 
-    public DataElasticityMonitor(MonitoringSession monitoringSession) {
+    public DataElasticityMonitor() {
         this.monitoringSession = monitoringSession;
+        listOfMonitoringMetrics = new ArrayList<MonitoringMetric>();
         config();
     }
-        
-    
+     
 
-    @Override
-    public void run() {
-        startMonitoringService();
-    }
-    
     public void startMonitoringService() {
         List<MonitorAction> listOfMonitoringActions = monitorProcess.getListOfMonitorActions();
         
-        Configuration configuration = new Configuration();
-        long monitoringInterval = Long.parseLong(configuration.getConfig("MONITORING.INTERVAL"));
-        
-        while (true) {
-            
             for (MonitorAction monitorAction : listOfMonitoringActions) {
+                
+            
                 String monitoringServiceID = monitorAction.getMonitorActionID();
                 MonitoringServiceRegistry monitoringServiceRegistry = new MonitoringServiceRegistry();
                 
                 String uri = monitoringServiceRegistry.getMonitoringServiceURI(monitoringServiceID);
                 RestfulWSClient ws = new RestfulWSClient(uri);
-                double monitoringValue = Double.parseDouble(ws.callPutMethod(""));
+                double monitoringValue = Double.parseDouble(ws.callPutMethod(monitoringSession.getDataAssetID()));
                 String metricName = monitoringServiceRegistry.getMonitoringMetricName(monitoringServiceID);
                 
                 MonitoringMetric monitoringMetric = new MonitoringMetric(metricName, monitoringValue);
                 listOfMonitoringMetrics.add(monitoringMetric);
-                ElasticState currentElasticState = determineCurrentElasticState(monitoringMetric);
+                
+            }
+            
+            ElasticState currentElasticState = determineCurrentElasticState();
                 
                 if (!isExpectedElasticState(currentElasticState)) {
                     DataElasticityController controller = new DataElasticityController();
                     controller.startControlElasticState(currentElasticState);
                 }
-                
-                
-            }
-            
-            try {
-                Thread.sleep(monitoringInterval);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(DataElasticityMonitor.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
         
     }
     
-    private ElasticState determineCurrentElasticState(MonitoringMetric monitoringMetric){
+    private ElasticState determineCurrentElasticState(){
         ElasticState currentElasticState = null;
         
         for (ElasticState elasticState : listOfElasticStates) {
