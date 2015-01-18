@@ -5,6 +5,8 @@
  */
 package at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore;
 
+import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
+import at.ac.tuwien.dsg.common.entity.eda.ElasticStateSet;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
@@ -75,14 +77,17 @@ public class ElasticityProcessesStore {
     }
     
     
-    public ElasticityProcess getElasticityProcesses(String dataAssetID){
+    public ElasticDataAsset getElasticDataAsset(String dataAssetID){
         
-                    
+                 
             String elasticityProcessesXML="";
+            String elasticStateSetXML="";
         
         try {
 
-            InputStream inputStream = null;
+            InputStream elProcessStream = null;
+            InputStream eStateSetStream = null;
+            
             
             String sql = "SELECT * FROM ElasticDaaS, DataAssetFunction "
                     + "WHERE ElasticDaaS.name = DataAssetFunction.edaas "
@@ -90,19 +95,28 @@ public class ElasticityProcessesStore {
             
             ResultSet rs = connectionManager.ExecuteQuery(sql);
             
+            
+            
+            
             try {
                 while (rs.next()) {
-                    inputStream = rs.getBinaryStream("elasticity_processes");
+                    elProcessStream = rs.getBinaryStream("elasticity_processes");
+                    eStateSetStream = rs.getBinaryStream("elasticStateSet");
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
             }
         
-            StringWriter writer = new StringWriter();
+            StringWriter writer1 = new StringWriter();
             String encoding = StandardCharsets.UTF_8.name();
-
-            IOUtils.copy(inputStream, writer, encoding);
-            elasticityProcessesXML = writer.toString();
+            IOUtils.copy(elProcessStream, writer1, encoding);
+            elasticityProcessesXML = writer1.toString();
+            
+            StringWriter writer2 = new StringWriter();
+            IOUtils.copy(eStateSetStream, writer2, encoding);
+            elasticStateSetXML = writer2.toString();
+            
+            
             
         } catch (IOException ex) {
                 Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
@@ -115,7 +129,19 @@ public class ElasticityProcessesStore {
             Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return  elasticityProcess;
+        
+        ElasticStateSet elasticStateSet = null;
+        
+        try {
+            elasticStateSet = JAXBUtils.unmarshal(elasticStateSetXML, ElasticStateSet.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        ElasticDataAsset eda = new ElasticDataAsset(dataAssetID, elasticityProcess, elasticStateSet);
+        
+        
+        return  eda;
         
     }
     

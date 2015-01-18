@@ -6,7 +6,9 @@
 
 package at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor;
 
+import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
+import at.ac.tuwien.dsg.common.entity.eda.ElasticStateSet;
 import at.ac.tuwien.dsg.common.entity.eda.MetricCondition;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
@@ -22,11 +24,13 @@ import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 import at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller.DataElasticityController;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
+import at.ac.tuwien.dsg.orchestrator.entity.MonitoringService;
 import at.ac.tuwien.dsg.orchestrator.registry.MonitoringServiceRegistry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sun.java2d.pipe.BufferedMaskBlit;
 
 /**
  *
@@ -39,7 +43,7 @@ public class DataElasticityMonitor{
     List<ElasticState> listOfExpectedElasticStates;
     MonitoringSession monitoringSession;
     MonitorProcess monitorProcess;
-    
+    MonitoringServiceRegistry monitoringServiceRegistry;
 
     public DataElasticityMonitor() {
         this.monitoringSession = monitoringSession;
@@ -53,11 +57,9 @@ public class DataElasticityMonitor{
         
             for (MonitorAction monitorAction : listOfMonitoringActions) {
                 
-            
                 String monitoringServiceID = monitorAction.getMonitorActionID();
-                MonitoringServiceRegistry monitoringServiceRegistry = new MonitoringServiceRegistry();
-                
                 String uri = monitoringServiceRegistry.getMonitoringServiceURI(monitoringServiceID);
+                
                 RestfulWSClient ws = new RestfulWSClient(uri);
                 double monitoringValue = Double.parseDouble(ws.callPutMethod(monitoringSession.getDataAssetID()));
                 String metricName = monitoringServiceRegistry.getMonitoringMetricName(monitoringServiceID);
@@ -71,7 +73,7 @@ public class DataElasticityMonitor{
                 
                 if (!isExpectedElasticState(currentElasticState)) {
                     DataElasticityController controller = new DataElasticityController();
-                    controller.startControlElasticState(currentElasticState);
+                   // controller.startControlElasticState(currentElasticState);
                 }
         
     }
@@ -112,19 +114,36 @@ public class DataElasticityMonitor{
  
     private boolean isExpectedElasticState(ElasticState elasticState) {
         
-        return listOfExpectedElasticStates.contains(elasticState);
+        boolean rs= false;
         
+        for (ElasticState finalEState: listOfExpectedElasticStates){
+            if (elasticState.geteStateID().equals(finalEState.geteStateID())){
+                rs=true;
+                break;
+            }
+        }
+        
+        return rs;
     }
     
     private void config(){
         
-        ElasticityProcessesStore elasticityProcessesStore = new ElasticityProcessesStore();
-        ElasticityProcess elasticityProcess= elasticityProcessesStore.getElasticityProcesses(monitoringSession.getDataAssetID());
+        ElasticityProcessesStore elasticityProcessesStore = new ElasticityProcessesStore(); 
+        ElasticDataAsset eda = elasticityProcessesStore.getElasticDataAsset(monitoringSession.getDataAssetID());
+        ElasticityProcess elasticityProcess= eda.getElasticityProcess();
+        ElasticStateSet elasticStateSet = eda.getElasticStateSet();
+        
+        listOfElasticStates = elasticStateSet.getInitialElasticStateSet();
        
         monitorProcess = elasticityProcess.getMonitorProcess(); 
-       // mappingEState(monitoringSession.getDataAssetID());
+        // mappingEState(monitoringSession.getDataAssetID());
         List<String> expectElasticStateIDs = monitoringSession.getListOfExpectedElasticStates();
         mappingExpectedEStateIDs(expectElasticStateIDs);
+        
+        
+        monitoringServiceRegistry = new MonitoringServiceRegistry();
+        monitoringServiceRegistry.getMonitoringServices();
+                
        
     }
     

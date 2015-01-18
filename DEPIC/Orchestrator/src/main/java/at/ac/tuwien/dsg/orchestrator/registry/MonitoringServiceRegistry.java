@@ -9,15 +9,19 @@ import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import at.ac.tuwien.dsg.common.entity.process.ActionDependency;
 import at.ac.tuwien.dsg.common.utils.MySqlConnectionManager;
 import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
+import at.ac.tuwien.dsg.orchestrator.entity.MonitoringService;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
  * @author Jun
  */
 public class MonitoringServiceRegistry {
+    
+    List<MonitoringService> listOfMonitoringServices;
 
     MySqlConnectionManager connectionManager;
     
@@ -32,23 +36,55 @@ public class MonitoringServiceRegistry {
     }
 
     public String getMonitoringServiceURI(String serviceID){
-        String sql = "select * from MonitoringService where id='" + serviceID+"'";
-        String uri = "";
+        
+        List<String> listOfServices = new ArrayList<String>();
+        
+        for (MonitoringService monitoringService : listOfMonitoringServices){
+            
+            if (monitoringService.getActionID().equals(serviceID)){
+                String uri = monitoringService.getUri();
+                listOfServices.add(uri);
+            }
+        }
+        
+        int randomIndex = randomInt(0, listOfServices.size()-1);
+        return  listOfServices.get(randomIndex);
+        
+    }
+    
+    private int randomInt(int min, int max){
+        
+        Random random = new Random();
+        
+        int randomNumber = random.nextInt(max+1 - min) + min;
+        return randomNumber;
+    }
+    
+    
+    public void getMonitoringServices(){
+        String sql = "select * from MonitoringService";
+        
+        listOfMonitoringServices = new ArrayList<MonitoringService>();
         
         ResultSet rs = connectionManager.ExecuteQuery(sql);
         try {
             while (rs.next()) {
-                uri = rs.getString("uri");    
- 
+                String actionID = rs.getString("actionID");
+                String uri = rs.getString("uri");    
+                
+                MonitoringService monitoringService = new MonitoringService(actionID, uri);
+                listOfMonitoringServices.add(monitoringService);
             }
 
         } catch (Exception ex) {
 
         }
         
-        return  uri;
+        
+        
         
     }
+    
     
     public String getMonitoringMetricName(String serviceID){
         String sql = "select * from MonitoringService where id='" + serviceID+"'";
