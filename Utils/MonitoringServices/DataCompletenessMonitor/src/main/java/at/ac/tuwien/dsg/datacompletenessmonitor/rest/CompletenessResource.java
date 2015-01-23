@@ -62,10 +62,13 @@ public class CompletenessResource {
     @Produces(MediaType.APPLICATION_XML)
     public String monitorDataCompleteness(String daID) {
         
-        CompletenessService completenessService = new CompletenessService();
-        double completeness = completenessService.requestMonitorDataCompletenessService(daID);
+        Logger.getLogger(CompletenessResource.class.getName()).log(Level.INFO, "Monitoring Data Completeness ... :" + daID);
         
-        return String.valueOf(completeness);
+        
+        //CompletenessService completenessService = new CompletenessService();
+        //double completeness = completenessService.requestMonitorDataCompletenessService(daID);
+        
+        return String.valueOf(80);
     }
     
     

@@ -19,11 +19,12 @@ import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.common.utils.IOUtils;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depic.depictool.connector.ComotConnector;
 
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
 import at.ac.tuwien.dsg.depictool.util.Configuration;
 import at.ac.tuwien.dsg.depictool.util.Logger;
-import at.ac.tuwien.dsg.depictool.util.SALSAConnector;
+import at.ac.tuwien.dsg.mela.SALSAConnector;
 import at.ac.tuwien.dsg.depictool.util.ZipUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,8 +87,13 @@ public class Generator {
             java.util.logging.Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        String deploymenDescription = generateDeploymentDesciptionForElasticityProcesses(elasticDataAsset.getElasticityProcess());
+        //String deploymenDescription = generateDeploymentDesciptionForElasticityProcesses(elasticDataAsset.getElasticityProcess());
 
+        //String edaasArtifact  =  "http://128.130.172.215/salsa/upload/files/jun/edaas/install-edaas.sh" ;
+        DeployAction eDaaSDA = new DeployAction(eDaaSName, eDaaSName, "sh", "");
+        
+        ComotConnector comotConnector = new ComotConnector(elasticDataAsset.getElasticityProcess(), eDaaSDA);
+        comotConnector.deployCloudSevices();
         
         String elasticStateSetXML ="";
         
@@ -99,7 +105,7 @@ public class Generator {
         
         
         ElasticityProcessStore elStore = new ElasticityProcessStore();
-        elStore.storeElasticityProcesses(eDaaSName,elasticStateSetXML, elasticityProcessesXML, deploymenDescription);
+        elStore.storeElasticityProcesses(eDaaSName,elasticStateSetXML, elasticityProcessesXML, "");
         
         
         
@@ -151,12 +157,12 @@ public class Generator {
         return elasticDataAsset;
 
     }
-
+/*
     private String generateDeploymentDesciptionForElasticityProcesses(ElasticityProcess elasticityProcesses) {
 
         String deployementDescriptionXml = "";
 
-        List<DeployAction> listOfDeployActions = new ArrayList<DeployAction>();
+        List<DeployAction> deployMonitoringServices = new ArrayList<DeployAction>();
 
         ElasticityProcessStore epStore = new ElasticityProcessStore();
         MonitorProcess monitorProcess = elasticityProcesses.getMonitorProcess();
@@ -167,12 +173,15 @@ public class Generator {
         for (MonitorAction ma : monitorActions) {
             
 
-            if (!isDeployActionExisting(listOfDeployActions, ma.getMonitorActionID())) {
+            if (!isDeployActionExisting(deployMonitoringServices, ma.getMonitorActionID())) {
                 DeployAction deployAction = epStore.getPrimitiveAction(ma.getMonitorActionID());
-                listOfDeployActions.add(deployAction);
+                deployMonitoringServices.add(deployAction);
             }
 
         }
+        
+       
+        
         
 
         for (ControlProcess cp : listOfControlProcesses) {
@@ -180,9 +189,9 @@ public class Generator {
             for (ControlAction ca : controlActions) {
                 
 
-                if (!isDeployActionExisting(listOfDeployActions, ca.getControlActionName())) {
+                if (!isDeployActionExisting(deployMonitoringServices, ca.getControlActionName())) {
                     DeployAction deployAction = epStore.getPrimitiveAction(ca.getControlActionName());
-                    listOfDeployActions.add(deployAction);
+                    deployMonitoringServices.add(deployAction);
                 }
             }
         }
@@ -195,26 +204,20 @@ public class Generator {
         DeployAction eDaaSDA = new DeployAction(eDaaSName, eDaaSName, "sh", edaasArtifact);
       
         
-        listOfDeployActions.add(eDaaSDA);
+        deployMonitoringServices.add(eDaaSDA);
         
-        DeploymentDescription deploymentDescription = new DeploymentDescription(listOfDeployActions);
+        DeploymentDescription deploymentDescription = new DeploymentDescription(deployMonitoringServices);
         SALSAConnector salsaCon = new SALSAConnector(deploymentDescription);
         salsaCon.config(eDaaSName);
         deployementDescriptionXml = salsaCon.toToscaString();
         
-        //salsaCon.newServicesInstance(deployementDescriptionXml);
+        salsaCon.newServicesInstance(deployementDescriptionXml);
 
+              
+        
         return deployementDescriptionXml;
     }
+  */
 
-    private boolean isDeployActionExisting(List<DeployAction> listOfDeployActions, String deployActionID) {
-
-        for (DeployAction da : listOfDeployActions) {
-            if (da.getActionID().equals(deployActionID)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 }

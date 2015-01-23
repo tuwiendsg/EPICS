@@ -64,11 +64,9 @@ public class MonitoringProcessRest {
         } catch (JAXBException ex) {
             Logger.getLogger(MonitoringProcessRest.class.getName()).log(Level.SEVERE, null, ex);
         }
-      /*  
-      DataElasticityMonitor dataElasticityMonitor = new DataElasticityMonitor(monitoringSession);
-      dataElasticityMonitor.run();
-        */
         
+      DataElasticityMonitor dataElasticityMonitor = new DataElasticityMonitor(monitoringSession);
+      dataElasticityMonitor.startMonitoringService();
         
     }
     

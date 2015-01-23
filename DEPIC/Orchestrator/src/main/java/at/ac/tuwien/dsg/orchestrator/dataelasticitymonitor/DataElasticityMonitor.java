@@ -45,7 +45,7 @@ public class DataElasticityMonitor{
     MonitorProcess monitorProcess;
     MonitoringServiceRegistry monitoringServiceRegistry;
 
-    public DataElasticityMonitor() {
+    public DataElasticityMonitor(MonitoringSession monitoringSession) {
         this.monitoringSession = monitoringSession;
         listOfMonitoringMetrics = new ArrayList<MonitoringMetric>();
         config();
@@ -59,6 +59,9 @@ public class DataElasticityMonitor{
                 
                 String monitoringServiceID = monitorAction.getMonitorActionID();
                 String uri = monitoringServiceRegistry.getMonitoringServiceURI(monitoringServiceID);
+               
+                System.out.println("Monitoring Service ID: " + monitoringServiceID);
+                System.out.println("URI: " + uri);
                 
                 RestfulWSClient ws = new RestfulWSClient(uri);
                 double monitoringValue = Double.parseDouble(ws.callPutMethod(monitoringSession.getDataAssetID()));

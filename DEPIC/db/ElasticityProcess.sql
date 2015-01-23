@@ -11,7 +11,7 @@
  Target Server Version : 50521
  File Encoding         : utf-8
 
- Date: 11/19/2014 12:07:29 PM
+ Date: 01/20/2015 10:27:38 AM
 */
 
 SET NAMES utf8;
@@ -30,7 +30,7 @@ CREATE TABLE `ActionDependency` (
 --  Records of `ActionDependency`
 -- ----------------------------
 BEGIN;
-INSERT INTO `ActionDependency` VALUES ('LSR', 'AddVM'), ('LSR', 'RmVM'), ('MLR', 'RmVM'), ('MLR', 'AddVM'), ('LSR', 'DPL'), ('MLR', 'DPL'), ('DPL', 'AddVM');
+INSERT INTO `ActionDependency` VALUES ('DPL', 'AddVM'), ('LSR', 'MLR'), ('MVI', 'LSR');
 COMMIT;
 
 -- ----------------------------
@@ -49,6 +49,7 @@ CREATE TABLE `DataAssetFunction` (
 DROP TABLE IF EXISTS `ElasticDaaS`;
 CREATE TABLE `ElasticDaaS` (
   `name` varchar(255) DEFAULT NULL,
+  `elasticStateSet` longblob,
   `elasticity_processes` longblob,
   `deployment_descriptions` longblob
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -63,18 +64,34 @@ CREATE TABLE `InputSpecification` (
   `qor` longblob,
   `elasticity_process_config` longblob,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+--  Table structure for `MonitoringService`
+-- ----------------------------
+DROP TABLE IF EXISTS `MonitoringService`;
+CREATE TABLE `MonitoringService` (
+  `actionID` varchar(100) DEFAULT NULL,
+  `uri` text
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+--  Records of `MonitoringService`
+-- ----------------------------
+BEGIN;
+INSERT INTO `MonitoringService` VALUES ('datacompletenessMeasurement', null), ('throughputMeasurement', null);
+COMMIT;
 
 -- ----------------------------
 --  Table structure for `PrimitiveAction`
 -- ----------------------------
 DROP TABLE IF EXISTS `PrimitiveAction`;
 CREATE TABLE `PrimitiveAction` (
-  `actionID` varchar(255) NOT NULL DEFAULT '',
-  `actionName` varchar(255) DEFAULT NULL,
+  `actionName` varchar(255) NOT NULL DEFAULT '',
+  `description` varchar(255) DEFAULT NULL,
   `artifact` text,
   `type` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`actionID`)
+  PRIMARY KEY (`actionName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
