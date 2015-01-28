@@ -24,7 +24,7 @@ import at.ac.tuwien.dsg.depic.depictool.connector.ComotConnector;
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
 import at.ac.tuwien.dsg.depictool.util.Configuration;
 import at.ac.tuwien.dsg.depictool.util.Logger;
-import at.ac.tuwien.dsg.mela.SALSAConnector;
+
 import at.ac.tuwien.dsg.depictool.util.ZipUtils;
 import java.util.ArrayList;
 import java.util.List;
