@@ -37,9 +37,9 @@ public class Logger {
         
         System.out.println("\nLOG CONTROL PROCESS");
         
-        
+        System.out.println("Number of Control Processes: " + listOfControlProcesses.size());
         for (ControlProcess controlProcess : listOfControlProcesses) {
-        
+       
         System.out.println("\n***");    
         List<ControlAction> listOfControlActions =  controlProcess.getListOfControlActions();
         
@@ -66,24 +66,25 @@ public class Logger {
          }
                  
         for (ControlAction controlAction : listOfControlActions) {
+            System.out.println("control action: " + controlAction.getControlActionID());
             System.out.println("control action: " + controlAction.getControlActionName());
-            System.out.print("  incomming: " + controlAction.getIncomming());
-            System.out.print("  outgoing: " + controlAction.getOutgoing());
+            System.out.println("  incomming: " + controlAction.getIncomming());
+            System.out.println("  outgoing: " + controlAction.getOutgoing());
             List<Parameter> listOfParams = controlAction.getListOfParameters();
             
             for (Parameter param : listOfParams){
                 System.out.println("    parameter: " + param.getParaName());
-                System.out.print("    value: " + param.getValue());
+                System.out.println("    value: " + param.getValue());
             }
             
         }
         
-        List<ParallelGateway> listOfParallelGateways = new ArrayList<ParallelGateway>();
+        List<ParallelGateway> listOfParallelGateways = controlProcess.getListOfParallelGateways();
         
         for (ParallelGateway parallelGateway : listOfParallelGateways){
             System.out.println("parallel gateway: " + parallelGateway.getId());
-            System.out.print("  incoming: " + parallelGateway.getIncomming());
-            System.out.print("  outgoing: " + parallelGateway.getOutgoing());
+            System.out.println("  incoming: " + parallelGateway.getIncomming());
+            System.out.println("  outgoing: " + parallelGateway.getOutgoing());
         }
         
         

@@ -23,11 +23,13 @@ import at.ac.tuwien.dsg.common.entity.qor.MetricRange;
 import at.ac.tuwien.dsg.common.entity.qor.MetricControlActions;
 
 import at.ac.tuwien.dsg.common.entity.process.ActionDependency;
+import at.ac.tuwien.dsg.common.entity.process.Parameter;
 import at.ac.tuwien.dsg.common.entity.qor.QElement;
 import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.common.entity.qor.Range;
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
+import java.util.AbstractList;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -254,10 +256,93 @@ public class ElasticityProcessesGenerator {
           
         }
         
-        return controlProcess;
+        ControlProcess returnCP = null;
+        
+        if (controlProcess!=null) {
+        
+        returnCP = new ControlProcess(copyElasticState(controlProcess.geteStateID_i()), 
+                copyElasticState(controlProcess.geteStateID_j()), 
+                copyListControlAction(controlProcess.getListOfControlActions()));
+        
+        returnCP.setListOfParallelGateways(copyParallelGateway(controlProcess.getListOfParallelGateways()));
+        }
+        return returnCP;
+    }
+    
+    private ElasticState copyElasticState(ElasticState eState){
+        
+        String eStateID = eState.geteStateID();
+        List<MetricCondition> conditions = eState.getListOfConditions();
+        List<MetricCondition> newConditions = new ArrayList<MetricCondition>();
+        
+        for (MetricCondition c : conditions){
+            MetricCondition newC = new MetricCondition(c.getMetricName(), c.getConditionID(), c.getLowerBound(), c.getUpperBound());
+            newConditions.add(newC);
+        }
+        
+        ElasticState newElasticState = new ElasticState(eStateID, newConditions);
+        return newElasticState;
+    }
+    
+    private List<ControlAction> copyListControlAction(List<ControlAction> listOfControlActions){
+        
+        List<ControlAction> nListCas =new ArrayList<ControlAction>();
+        
+        for (ControlAction ca: listOfControlActions){
+            
+            String caID = ca.getControlActionID();
+            String caName = ca.getControlActionName();
+            String incomming = ca.getIncomming();
+            String outgoing = ca.getOutgoing();
+            List<Parameter> listOfParameters = ca.getListOfParameters();
+            List<Parameter> nList = new ArrayList<Parameter>();
+            for (Parameter p: listOfParameters){
+                
+                Parameter nP = new Parameter(p.getParaName(), p.getType(), p.getValue());
+                nList.add(nP);
+                
+            }
+            ControlAction nCA = new ControlAction(caName, nList);
+            nCA.setControlActionID(caID);
+            nCA.setIncomming(incomming);
+            nCA.setOutgoing(outgoing);
+            nListCas.add(nCA);
+            
+        }
+        return nListCas;
+    }
+    
+    private List<ParallelGateway> copyParallelGateway(List<ParallelGateway> parallelGatewayList){
+        
+        List<ParallelGateway> nPGList = new ArrayList<ParallelGateway>();
+        
+        for (ParallelGateway pg: parallelGatewayList){
+            
+            List<String> inList = pg.getIncomming();
+            List<String> outList = pg.getOutgoing();
+            
+            List<String> nInList = new ArrayList<String>();
+            List<String> nOutList = new ArrayList<String>();
+            
+            for (String link : inList){
+                nInList.add(link);
+            }
+            
+            for (String link : outList){
+                nOutList.add(link);
+            }
+            
+            ParallelGateway nPG = new ParallelGateway(pg.getId(), nInList, nOutList);
+            nPGList.add(nPG);
+        }
+        
+        return nPGList;
     }
     
     private void buildWorkflowForControlProcess(ControlProcess controlProcess){
+        
+        System.out.println("BUILDING WORKFLOW FOR CONTROL PROCESS ................ ");
+        
         
         List<ControlAction> listOfControlActions =  controlProcess.getListOfControlActions();
         
@@ -273,24 +358,38 @@ public class ElasticityProcessesGenerator {
         
         
         for (ControlAction controlAction : listOfControlActions) {
-            List<ActionDependency> listOfActionDependencies = findDependencyActionFromID(controlAction.getControlActionName());
             
+            System.out.println("Control Action: " + controlAction.getControlActionName());
+            System.out.println("Control Action ID: " + controlAction.getControlActionID());
+            
+            List<ActionDependency> listOfActionDependencies = findDependencyActionFromName(controlAction.getControlActionName(),listOfControlActions);
+            
+            
+            System.out.println("No of Dependency Actions: " + listOfActionDependencies.size());
             if (listOfActionDependencies.size()>1) {
                 
                 ParallelGateway parallelGateway = new ParallelGateway();
                 List<String> incomingList = new ArrayList<String>();
                 List<String> outgoingList = new ArrayList<String>();
                 
-                outgoingList.add(controlAction.getControlActionName());
+                outgoingList.add(controlAction.getControlActionID());
                 
                 UUID parallelGatewayID = UUID.randomUUID();
                 parallelGateway.setId(parallelGatewayID.toString());
+                controlAction.setIncomming(parallelGateway.getId());
+                
+                System.out.println("NEW Parallel Gateway ID: " + parallelGateway.getId());
+                System.out.println("PG set outgoing ID : " + controlAction.getControlActionID());
                 
                 for (ActionDependency actionDependency : listOfActionDependencies){
                     int prerequisiteControlActionIndex = findControlActionIndex(listOfControlActions, actionDependency.getPrerequisiteActionID());
                     ControlAction prerequisiteControlAction = listOfControlActions.get(prerequisiteControlActionIndex);
+                     
+                    System.out.println("ActionDependency Name: " + prerequisiteControlAction.getControlActionName());
+                    System.out.println("ActionDependency ID: " + prerequisiteControlAction.getControlActionID());
+                    
                     prerequisiteControlAction.setOutgoing(parallelGateway.getId());
-                    incomingList.add(prerequisiteControlAction.getControlActionName());
+                    incomingList.add(prerequisiteControlAction.getControlActionID());
                     
                 }
                 
@@ -306,8 +405,8 @@ public class ElasticityProcessesGenerator {
                 int prerequisiteControlActionIndex = findControlActionIndex(listOfControlActions, actionDependency.getPrerequisiteActionID());
                 ControlAction prerequisiteControlAction = listOfControlActions.get(prerequisiteControlActionIndex);
                 
-                controlAction.setIncomming(prerequisiteControlAction.getControlActionName());
-                prerequisiteControlAction.setOutgoing(controlAction.getControlActionName());
+                controlAction.setIncomming(prerequisiteControlAction.getControlActionID());
+                prerequisiteControlAction.setOutgoing(controlAction.getControlActionID());
                 
             } 
             
@@ -316,6 +415,94 @@ public class ElasticityProcessesGenerator {
             
             
         }
+        
+        // MAKE START ACTIVITY
+        
+        List<ControlAction> nullIncommingControlActions = new ArrayList<ControlAction>();
+        List<ParallelGateway> nullIncommingParallelGateways = new ArrayList<ParallelGateway>();
+        
+        for (ControlAction ca: listOfControlActions){
+            if (ca.getIncomming()==null){
+                nullIncommingControlActions.add(ca);
+            }
+            
+        }
+        
+        for (ParallelGateway pg: listOfParallelGateways){
+            if(pg.getIncomming().isEmpty()){
+                nullIncommingParallelGateways.add(pg);
+            }
+        }
+        
+        if (nullIncommingControlActions.size()+nullIncommingParallelGateways.size()>=2) {
+            List<String> startPGIncomingList = new ArrayList<String>();
+        List<String> startPGOutgoingList = new ArrayList<String>();
+        ParallelGateway startPG = new ParallelGateway();
+
+        UUID startParallelGatewayID = UUID.randomUUID();
+        startPG.setId(startParallelGatewayID.toString());
+        
+        for (ControlAction ca: nullIncommingControlActions){
+            startPGOutgoingList.add(ca.getControlActionID());
+            ca.setIncomming(startPG.getId());
+        }
+        
+        for (ParallelGateway pg: nullIncommingParallelGateways){
+            startPGOutgoingList.add(pg.getId());
+            pg.getIncomming().add(startPG.getId());
+        }
+        
+        startPG.setIncomming(startPGIncomingList);
+        startPG.setOutgoing(startPGOutgoingList);
+        listOfParallelGateways.add(startPG);
+        }
+        
+               // MAKE END ACTIVITY
+        List<ControlAction> nullOutgoingControlActions = new ArrayList<ControlAction>();
+        List<ParallelGateway> nullOutgoingParallelGateways = new ArrayList<ParallelGateway>();
+        for (ControlAction ca : listOfControlActions) {
+            if (ca.getOutgoing() == null) {
+                nullOutgoingControlActions.add(ca);
+            }
+
+        }
+
+        for (ParallelGateway pg : listOfParallelGateways) {
+            if (pg.getOutgoing().isEmpty()) {
+                nullOutgoingParallelGateways.add(pg);
+            }
+        }
+
+        if (nullOutgoingControlActions.size() + nullOutgoingParallelGateways.size() >= 2) {
+
+            List<String> endPGIncomingList = new ArrayList<String>();
+            List<String> endPGOutgoingList = new ArrayList<String>();
+            ParallelGateway endPG = new ParallelGateway();
+
+            UUID endParallelGatewayID = UUID.randomUUID();
+            endPG.setId(endParallelGatewayID.toString());
+
+            for (ControlAction ca : nullOutgoingControlActions) {
+                endPGIncomingList.add(ca.getControlActionID());
+                ca.setOutgoing(endPG.getId());
+            }
+        
+        for (ParallelGateway pg: nullOutgoingParallelGateways){
+            endPGIncomingList.add(pg.getId());
+            pg.getOutgoing().add(endPG.getId());
+        }
+        
+        endPG.setIncomming(endPGIncomingList);
+        endPG.setOutgoing(endPGOutgoingList);
+        listOfParallelGateways.add(endPG);
+        }
+        
+        
+        
+        
+        
+        
+        
         
         controlProcess.setListOfParallelGateways(listOfParallelGateways);
         
@@ -327,7 +514,7 @@ public class ElasticityProcessesGenerator {
         int index=0;
         
         for (ControlAction ca : listOfControlActions){
-            if (ca.getControlActionName().equals(prerequisiteActionID)){
+            if (ca.getControlActionID().equals(prerequisiteActionID)){
                 index = listOfControlActions.indexOf(ca);
                 break;
             }
@@ -635,16 +822,33 @@ public class ElasticityProcessesGenerator {
         
     }
     
-    private List<ActionDependency> findDependencyActionFromID(String actionID){
+    private List<ActionDependency> findDependencyActionFromName(String actionName, List<ControlAction> listOfControlActions) {
+
+        List<ActionDependency> dependencyList = new ArrayList<ActionDependency>();
+        for (ActionDependency actionDependency : ActionDependencySet) {
+            if (actionDependency.getActionID().equals(actionName)) {
+
+                dependencyList.addAll(containControlAction(actionDependency.getPrerequisiteActionID(), listOfControlActions)); 
+                
+            }
+
+        }
+        
+        return dependencyList;
+    }
+    
+    private List<ActionDependency> containControlAction(String actionName, List<ControlAction> listOfControlActions){
         
         List<ActionDependency> dependencyList = new ArrayList<ActionDependency>();
-        for (ActionDependency actionDependency : ActionDependencySet){
-            if (actionDependency.getActionID().equals(actionID)){
-                ActionDependency ad = new ActionDependency(
-                        actionDependency.getActionID(), 
-                        actionDependency.getPrerequisiteActionID());
-                dependencyList.add(ad);
-                
+        
+        
+        for (ControlAction ca: listOfControlActions){
+            if(ca.getControlActionName().equals(actionName)){
+                 ActionDependency ad = new ActionDependency(
+                            actionName,
+                            ca.getControlActionID());
+
+                    dependencyList.add(ad);
             }
             
         }
