@@ -185,8 +185,13 @@ public class ElasticityProcessesGenerator {
         
         for (ElasticState elasticState_in : listOfInitialElasticStates) {
             for (ElasticState elasticState_fi : listOfFinalElasticStates){
-                ControlProcess controlProcess = findControlProcess(elasticState_in, elasticState_fi);
                 
+                ControlProcess controlProcess = null;
+                
+                if (!elasticState_in.geteStateID().equals(elasticState_fi.geteStateID())){
+                    controlProcess = findControlProcess(elasticState_in, elasticState_fi);
+                }
+
                 if (controlProcess!=null) {
                     listOfControlProcesses.add(controlProcess);
                 }
@@ -213,22 +218,24 @@ public class ElasticityProcessesGenerator {
         
         List<MetricCondition> listOfConditions_in = elasticState_in.getListOfConditions();
         List<MetricCondition> listOfConditions_fi = elasticState_fi.getListOfConditions();
-     
-        for (MetricCondition metricCondition_in : listOfConditions_in){
-            
+   
+        for (MetricCondition metricCondition_in : listOfConditions_in) {
+
             String metricName_in = metricCondition_in.getMetricName();
             MetricCondition metricCondition_fi = findMetricConditionByMetricName(metricName_in, listOfConditions_fi);
-            
-            List<ControlAction> controlActions = findControlAction(metricName_in, metricCondition_in, metricCondition_fi);
-           
-            if (controlActions != null) {
-                listOfControlActions.addAll(controlActions);
-            } else {
-                isMovingEStatePossible=false;
+
+            if (!metricCondition_in.getConditionID().equals(metricCondition_fi.getConditionID())) {
+
+                List<ControlAction> controlActions = findControlAction(metricName_in, metricCondition_in, metricCondition_fi);
+
+                if (controlActions != null) {
+                    listOfControlActions.addAll(controlActions);
+                } else {
+                    isMovingEStatePossible = false;
+                }
             }
-           
         }
-        
+
 //        
 //        List<MetricRange> listOfMetricRanges_i = qE_i.getListOfMetricRanges();
 //        List<MetricRange> listOfMetricRanges_j = qE_j.getListOfMetricRanges();
@@ -419,7 +426,7 @@ public class ElasticityProcessesGenerator {
         // MAKE START ACTIVITY
         
         List<ControlAction> nullIncommingControlActions = new ArrayList<ControlAction>();
-        List<ParallelGateway> nullIncommingParallelGateways = new ArrayList<ParallelGateway>();
+       // List<ParallelGateway> nullIncommingParallelGateways = new ArrayList<ParallelGateway>();
         
         for (ControlAction ca: listOfControlActions){
             if (ca.getIncomming()==null){
@@ -428,13 +435,14 @@ public class ElasticityProcessesGenerator {
             
         }
         
-        for (ParallelGateway pg: listOfParallelGateways){
-            if(pg.getIncomming().isEmpty()){
-                nullIncommingParallelGateways.add(pg);
-            }
-        }
+//        for (ParallelGateway pg: listOfParallelGateways){
+//            if(pg.getIncomming().isEmpty()){
+//                nullIncommingParallelGateways.add(pg);
+//            }
+//        }
+//        
         
-        if (nullIncommingControlActions.size()+nullIncommingParallelGateways.size()>=2) {
+        if (nullIncommingControlActions.size()>=2) {
             List<String> startPGIncomingList = new ArrayList<String>();
         List<String> startPGOutgoingList = new ArrayList<String>();
         ParallelGateway startPG = new ParallelGateway();
@@ -447,10 +455,10 @@ public class ElasticityProcessesGenerator {
             ca.setIncomming(startPG.getId());
         }
         
-        for (ParallelGateway pg: nullIncommingParallelGateways){
-            startPGOutgoingList.add(pg.getId());
-            pg.getIncomming().add(startPG.getId());
-        }
+//        for (ParallelGateway pg: nullIncommingParallelGateways){
+//            startPGOutgoingList.add(pg.getId());
+//            pg.getIncomming().add(startPG.getId());
+//        }
         
         startPG.setIncomming(startPGIncomingList);
         startPG.setOutgoing(startPGOutgoingList);
@@ -459,7 +467,7 @@ public class ElasticityProcessesGenerator {
         
                // MAKE END ACTIVITY
         List<ControlAction> nullOutgoingControlActions = new ArrayList<ControlAction>();
-        List<ParallelGateway> nullOutgoingParallelGateways = new ArrayList<ParallelGateway>();
+       // List<ParallelGateway> nullOutgoingParallelGateways = new ArrayList<ParallelGateway>();
         for (ControlAction ca : listOfControlActions) {
             if (ca.getOutgoing() == null) {
                 nullOutgoingControlActions.add(ca);
@@ -467,13 +475,13 @@ public class ElasticityProcessesGenerator {
 
         }
 
-        for (ParallelGateway pg : listOfParallelGateways) {
-            if (pg.getOutgoing().isEmpty()) {
-                nullOutgoingParallelGateways.add(pg);
-            }
-        }
+//        for (ParallelGateway pg : listOfParallelGateways) {
+//            if (pg.getOutgoing().isEmpty()) {
+//                nullOutgoingParallelGateways.add(pg);
+//            }
+//        }
 
-        if (nullOutgoingControlActions.size() + nullOutgoingParallelGateways.size() >= 2) {
+        if (nullOutgoingControlActions.size()>= 2) {
 
             List<String> endPGIncomingList = new ArrayList<String>();
             List<String> endPGOutgoingList = new ArrayList<String>();
@@ -487,10 +495,10 @@ public class ElasticityProcessesGenerator {
                 ca.setOutgoing(endPG.getId());
             }
         
-        for (ParallelGateway pg: nullOutgoingParallelGateways){
-            endPGIncomingList.add(pg.getId());
-            pg.getOutgoing().add(endPG.getId());
-        }
+//        for (ParallelGateway pg: nullOutgoingParallelGateways){
+//            endPGIncomingList.add(pg.getId());
+//            pg.getOutgoing().add(endPG.getId());
+//        }
         
         endPG.setIncomming(endPGIncomingList);
         endPG.setOutgoing(endPGOutgoingList);
@@ -586,7 +594,7 @@ public class ElasticityProcessesGenerator {
                     if ((metricControlAction.getFromRange().equals(conditionID_in)) && 
                             (metricControlAction.getToRange().equals(conditionID_fi))) {
                         
-                        returnControlActions = metricControlAction.getListOfControlActions();
+                        returnControlActions = copyListControlAction(metricControlAction.getListOfControlActions());
                     
                     }
                 }

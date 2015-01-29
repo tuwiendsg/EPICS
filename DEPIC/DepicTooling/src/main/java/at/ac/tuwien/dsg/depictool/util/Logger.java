@@ -46,6 +46,14 @@ public class Logger {
         
          System.out.println("PROCESS ----------- ");
          System.out.println("eState in: "+ controlProcess.geteStateID_i().geteStateID());
+         System.out.println("eState fi: "+ controlProcess.geteStateID_j().geteStateID());
+         for (ControlAction controlAction : listOfControlActions) {
+            System.out.println("control action: " + controlAction.getControlActionName());
+        }
+         
+        System.out.println(".............");
+         
+         
          List<MetricCondition> conditions_in = controlProcess.geteStateID_i().getListOfConditions();
          for (MetricCondition c: conditions_in){
              System.out.println("   id: " + c.getConditionID());
