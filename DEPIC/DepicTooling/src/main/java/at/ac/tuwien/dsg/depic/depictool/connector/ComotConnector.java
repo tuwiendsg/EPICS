@@ -11,6 +11,8 @@ import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
+import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.comot.common.model.ArtifactTemplate;
 import static at.ac.tuwien.dsg.comot.common.model.ArtifactTemplate.SingleScriptArtifact;
 import static at.ac.tuwien.dsg.comot.common.model.ArtifactTemplate.WarArtifact;
@@ -44,6 +46,9 @@ import at.ac.tuwien.dsg.comot.orchestrator.interraction.COMOTOrchestrator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.bind.JAXBException;
 
 /**
  *
@@ -92,7 +97,7 @@ public class ComotConnector {
         List<MonitorAction> monitoringActions = monitorProcess.getListOfMonitorActions();
 
         for (MonitorAction ma : monitoringActions) {
-           
+          
             if (!isDeployActionExisting(monitoringServices, ma.getMonitorActionID())) {
                 DeployAction deployAction = epStore.getPrimitiveAction(ma.getMonitorActionID());
                 monitoringServices.add(deployAction);
@@ -114,11 +119,18 @@ public class ComotConnector {
             List<ControlAction> controlActions = controlProcess.getListOfControlActions();
 
             for (ControlAction ca : controlActions) {
+                
 
                  if (!isDeployActionExisting(controlServices, ca.getControlActionName())) {
                     DeployAction deployAction = epStore.getPrimitiveAction(ca.getControlActionName());
-                    controlServices.add(deployAction);
-                }
+                    
+                    if (deployAction!=null) {
+                        controlServices.add(deployAction);
+                    } else{
+                        System.out.println("COMOT CONNECTOR - Missing Artifact for Service: " +ca.getControlActionName());
+                    }
+                
+                 }
 
             }
 
@@ -130,15 +142,20 @@ public class ComotConnector {
     
     private boolean isDeployActionExisting(List<DeployAction> listOfDeployActions, String deployActionID) {
 
-        for (DeployAction da : listOfDeployActions) {
+        
+        for (int i=0;i<listOfDeployActions.size();i++){
+            DeployAction da = listOfDeployActions.get(i);
+
             if (da.getActionID().equals(deployActionID)) {
                 return true;
             }
         }
+        
+       
         return false;
     }
     
-    public void deployCloudSevices(){
+    public String deployCloudSevices(){
         
         // monitoring_services_topology 
         ServiceTopology monitoringServicesTopology = ServiceTopology("Monitoring_Services_Topology");
@@ -148,13 +165,14 @@ public class ComotConnector {
         controlServicesTopology.constrainedBy(Constraint.MetricConstraint("DET_CO2", new Metric("cpuUsage", "%")).lessThan("80"));
         
         // edaas_topology
-      //  ServiceTopology edaasServiceTopology = ServiceTopology("eDaaS_Services_Topology");
+        ServiceTopology edaasServiceTopology = ServiceTopology("eDaaS_Services_Topology");
+        edaasServiceTopology.constrainedBy(Constraint.MetricConstraint("DET_CO3", new Metric("cpuUsage", "%")).lessThan("80"));
         
         // add topology
         CloudService cloudService = ServiceTemplate(eDaaSDeployAction.getActionID()+"CloudService3")
                 .consistsOfTopologies(monitoringServicesTopology)
                 .consistsOfTopologies(controlServicesTopology)
-       //         .consistsOfTopologies(edaasServiceTopology)
+                .consistsOfTopologies(edaasServiceTopology)
                 .withDefaultMetrics();
         
         
@@ -170,10 +188,12 @@ public class ComotConnector {
                             .addSoftwarePackage("gmetad")
                     );
 
+//            ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
+//                    .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + "deployCassandraNode.sh"));
 
-            ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID()+"_SU")
-                    .deployedBy(SingleScriptArtifact(dpa.getActionID()+"Artifact", artifactRepo + "deployCassandraNode.sh"));
-            
+            ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
+                    .deployedBy(WarArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID()+".war"));
+
                    // .deployedBy(WarArtifact(dpa.getActionID(), dpa.getArtifact()));
   
             monitoringServicesTopology.addServiceUnit(virtualMachine);
@@ -193,11 +213,14 @@ public class ComotConnector {
             System.out.println("DEPLOY: Control Action: " +dpa.getActionID());
             
             OperatingSystemUnit virtualMachine = OperatingSystemUnit(dpa.getActionID() + "_VM")
-                    .providedBy(LocalDocker()
+                    .providedBy(OpenstackSmall()
+                            .addSoftwarePackage("openjdk-7-jre")
+                            .addSoftwarePackage("ganglia-monitor")
+                            .addSoftwarePackage("gmetad")
                     );
 
             ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID())
-                    .deployedBy(SingleScriptArtifact(dpa.getActionID()+"Artifact", artifactRepo + "deployCassandraNode.sh"));
+                    .deployedBy(WarArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID()+".war"));
 
             controlServicesTopology.addServiceUnit(virtualMachine);
             controlServicesTopology.addServiceUnit(serviceUnit);
@@ -209,25 +232,28 @@ public class ComotConnector {
         }
         
         
-        /*
+        
         
         // add VM + eDaaS
         
         OperatingSystemUnit vm_edaas = OperatingSystemUnit(eDaaSDeployAction.getActionID() + "_VM")
-                .providedBy(LocalDocker()
-                );
+                .providedBy(OpenstackSmall()
+                            .addSoftwarePackage("openjdk-7-jre")
+                            .addSoftwarePackage("ganglia-monitor")
+                            .addSoftwarePackage("gmetad")
+                    );
 
-        ServiceUnit serviceUnit_edaas = SingleSoftwareUnit(eDaaSDeployAction.getActionID())
-                .deployedBy(SingleScriptArtifact(eDaaSDeployAction.getActionID(), artifactRepo + "deployCassandraNode.sh"));
+        ServiceUnit serviceUnit_edaas = SingleSoftwareUnit(eDaaSDeployAction.getActionID()+"_SU")
+                .deployedBy(SingleScriptArtifact(eDaaSDeployAction.getActionID(), artifactRepo + eDaaSDeployAction.getActionID()+".sh"));
         
         edaasServiceTopology.addServiceUnit(serviceUnit_edaas);
         edaasServiceTopology.addServiceUnit(vm_edaas);
         
-        cloudService.andRelationships(HostedOnRelation(eDaaSDeployAction.getActionID() + "ToVM")
+        cloudService.andRelationships(HostedOnRelation(serviceUnit_edaas.getId() + "To"+vm_edaas.getId())
                 .from(serviceUnit_edaas)
                 .to(vm_edaas));
-*/
-        
+
+//        
         
         // deployment
         
@@ -247,10 +273,34 @@ public class ComotConnector {
         
         
         
+        return cloudService.getId();
+        
+        
+    }
+    
+    
+    public void checkDeploymentStatus(String cloudServiceID){
+        
+        Configuration cfg = new Configuration();
+        String deploymentDescriptionRest = cfg.getConfig("COMOT.DEPLOYMENT.REST");
+        RestfulWSClient ws = new RestfulWSClient(deploymentDescriptionRest+cloudServiceID);
+        
+        String salsaSpecs = ws.callGetMethod();
+        
+         System.out.println("DEPLOYMENT STATUS: " +salsaSpecs);
+         
+         
+//         
+//        try {
+//            CloudService cloudService = JAXBUtils.unmarshal(salsaSpecs, CloudService.class);
+//            System.out.println("DEPLOYMENT STATUS: " +cloudService);
+//        } catch (JAXBException ex) {
+//            Logger.getLogger(ComotConnector.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         
         
         
-    } 
+    }
     
     
 }

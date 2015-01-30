@@ -92,8 +92,11 @@ public class Generator {
         //String edaasArtifact  =  "http://128.130.172.215/salsa/upload/files/jun/edaas/install-edaas.sh" ;
         DeployAction eDaaSDA = new DeployAction(eDaaSName, eDaaSName, "sh", "");
         
-       // ComotConnector comotConnector = new ComotConnector(elasticDataAsset.getElasticityProcess(), eDaaSDA);
-       // comotConnector.deployCloudSevices();
+        ComotConnector comotConnector = new ComotConnector(elasticDataAsset.getElasticityProcess(), eDaaSDA);
+        String cloudServiceID = comotConnector.deployCloudSevices();
+        System.out.println("On Deployment Process: ..." + cloudServiceID );
+         
+        comotConnector.checkDeploymentStatus(edaasZipFile);
         
         String elasticStateSetXML ="";
         

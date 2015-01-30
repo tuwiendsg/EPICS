@@ -55,30 +55,35 @@ public class DataElasticityMonitor{
     public void startMonitoringService() {
         List<MonitorAction> listOfMonitoringActions = monitorProcess.getListOfMonitorActions();
         
+            System.out.println("Execute Monitoring Process ...");
             for (MonitorAction monitorAction : listOfMonitoringActions) {
                 
                 String monitoringServiceID = monitorAction.getMonitorActionID();
-                String uri = monitoringServiceRegistry.getMonitoringServiceURI(monitoringServiceID);
-               
-                System.out.println("Monitoring Service ID: " + monitoringServiceID);
-                System.out.println("URI: " + uri);
                 
-                RestfulWSClient ws = new RestfulWSClient(uri);
-                double monitoringValue = Double.parseDouble(ws.callPutMethod(monitoringSession.getDataAssetID()));
-                String metricName = monitoringServiceRegistry.getMonitoringMetricName(monitoringServiceID);
+                System.out.println("run monitoring service: " +monitoringServiceID);
                 
-                MonitoringMetric monitoringMetric = new MonitoringMetric(metricName, monitoringValue);
-                listOfMonitoringMetrics.add(monitoringMetric);
+                
+//                String uri = monitoringServiceRegistry.getMonitoringServiceURI(monitoringServiceID);
+//               
+//                System.out.println("Monitoring Service ID: " + monitoringServiceID);
+//                System.out.println("URI: " + uri);
+//                
+//                RestfulWSClient ws = new RestfulWSClient(uri);
+//                double monitoringValue = Double.parseDouble(ws.callPutMethod(monitoringSession.getDataAssetID()));
+//                String metricName = monitoringServiceRegistry.getMonitoringMetricName(monitoringServiceID);
+//                
+//                MonitoringMetric monitoringMetric = new MonitoringMetric(metricName, monitoringValue);
+//                listOfMonitoringMetrics.add(monitoringMetric);
                 
             }
             
-            ElasticState currentElasticState = determineCurrentElasticState();
-                
-                if (!isExpectedElasticState(currentElasticState)) {
-                    DataElasticityController controller = new DataElasticityController();
-                   // controller.startControlElasticState(currentElasticState);
-                }
-        
+//            ElasticState currentElasticState = determineCurrentElasticState();
+//                
+//                if (!isExpectedElasticState(currentElasticState)) {
+//                    DataElasticityController controller = new DataElasticityController();
+//                   // controller.startControlElasticState(currentElasticState);
+//                }
+//        
     }
     
     private ElasticState determineCurrentElasticState(){
