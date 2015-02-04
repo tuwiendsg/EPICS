@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
@@ -156,6 +157,46 @@ public class RestfulWSClient {
         } catch (Exception ex) {
             System.out.println("Exception: " + ex.toString());
         }
+
+    }
+    
+    
+    public String callGetMethod() {
+        String rs="";
+        try {
+
+            //HttpGet method = new HttpGet(url);
+          
+            System.out.println("Connection .. " + url);
+            //HttpPut request = new HttpPut(url);
+
+            HttpGet request = new HttpGet(url);
+            request.addHeader("content-type", "application/json");
+          // request.addHeader("content-type", "application/x-www-form-urlencoded");
+
+            // request.addHeader("Accept", "application/json, multipart/related");
+        
+
+            HttpResponse methodResponse = this.getHttpClient().execute(request);
+
+            int statusCode = methodResponse.getStatusLine().getStatusCode();
+
+            System.out.println("Status Code: " + statusCode);
+            BufferedReader rd = new BufferedReader(
+                    new InputStreamReader(methodResponse.getEntity().getContent()));
+
+            StringBuilder result = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                result.append(line);
+            }
+            rs=result.toString();
+            //System.out.println("Response String: " + result.toString());
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.toString());
+        }
+        
+        return rs;
 
     }
 

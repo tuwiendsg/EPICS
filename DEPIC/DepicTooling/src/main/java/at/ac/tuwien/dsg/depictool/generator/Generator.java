@@ -20,10 +20,12 @@ import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.common.utils.IOUtils;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.depictool.connector.ComotConnector;
+import at.ac.tuwien.dsg.depic.depictool.connector.SalsaConnector;
 
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
 import at.ac.tuwien.dsg.depictool.util.Configuration;
 import at.ac.tuwien.dsg.depictool.util.Logger;
+
 
 import at.ac.tuwien.dsg.depictool.util.ZipUtils;
 import java.util.ArrayList;
@@ -93,10 +95,14 @@ public class Generator {
         DeployAction eDaaSDA = new DeployAction(eDaaSName, eDaaSName, "sh", "");
         
         ComotConnector comotConnector = new ComotConnector(elasticDataAsset.getElasticityProcess(), eDaaSDA);
-        String cloudServiceID = comotConnector.deployCloudSevices();
+        //String cloudServiceID = comotConnector.deployCloudSevices();
+        String cloudServiceID = comotConnector.deployCloudSevices2();
         System.out.println("On Deployment Process: ..." + cloudServiceID );
-         
-        comotConnector.checkDeploymentStatus(edaasZipFile);
+       
+        SalsaConnector salsaConnector = new SalsaConnector();
+        salsaConnector.updateCloudServiceInfo(cloudServiceID);
+        salsaConnector.printCloudServiceInfo();
+        // salsaConnector = new 
         
         String elasticStateSetXML ="";
         

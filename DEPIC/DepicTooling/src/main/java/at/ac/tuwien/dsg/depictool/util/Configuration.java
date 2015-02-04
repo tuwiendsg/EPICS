@@ -24,15 +24,7 @@ public class Configuration {
 
     public String getConfig(String configureName) {
 
-        String path = Configuration.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-
-        int index = path.indexOf("/classes/at/ac");
-        path = path.substring(0, index);
-        try {
-            path = URLDecoder.decode(path, "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        String path = getConfigPath();
 
         Properties prop = new Properties();
         String configString = "";
@@ -62,6 +54,21 @@ public class Configuration {
         String path = Configuration.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 
         int index = path.indexOf("/WEB-INF/classes/at/ac");
+        path = path.substring(0, index);
+        try {
+            path = URLDecoder.decode(path, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return path;
+    }
+    
+    
+    public String getConfigPath(){
+        String path = Configuration.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+
+        int index = path.indexOf("/classes/at/ac");
         path = path.substring(0, index);
         try {
             path = URLDecoder.decode(path, "UTF-8");

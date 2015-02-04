@@ -190,13 +190,13 @@ public class ComotConnector {
                     );
 
 
-//            ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID()+"_SU")
-//                    .deployedBy(SingleScriptArtifact(dpa.getActionID()+"Artifact", artifactRepo + "deployCassandraNode.sh"));
-        
+            ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID()+"_SU")
+                    .deployedBy(SingleScriptArtifact(dpa.getActionID()+"Artifact", artifactRepo + dpa.getActionID() + ".sh"));
+        /*
             ServiceUnit serviceUnit = SoftwareNode.SingleWarUnit(dpa.getActionID()+"_SU")
                     .deployedBy(WarArtifact(dpa.getActionID()+"Artifact", artifactRepo + dpa.getActionID() +".war"));
                    // .deployedBy(WarArtifact(dpa.getActionID(), dpa.getArtifact()));
-  
+  */
             monitoringServicesTopology.addServiceUnit(virtualMachine);
             monitoringServicesTopology.addServiceUnit(serviceUnit);
             
@@ -211,8 +211,8 @@ public class ComotConnector {
         // add VM + control service units
         for (DeployAction dpa : controlServices) {
 
-            System.out.println("DEPLOY: Control Action: " +dpa.getActionID());
-            
+            System.out.println("DEPLOY: Control Action: " + dpa.getActionID());
+
             OperatingSystemUnit virtualMachine = OperatingSystemUnit(dpa.getActionID() + "_VM")
                     .providedBy(OpenstackSmall()
                             .addSoftwarePackage("openjdk-7-jre")
@@ -220,20 +220,20 @@ public class ComotConnector {
                             .addSoftwarePackage("gmetad")
                     );
 
-//            ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID())
-//                    .deployedBy(SingleScriptArtifact(dpa.getActionID()+"Artifact", artifactRepo + "deployCassandraNode.sh"));
-            ServiceUnit serviceUnit = SoftwareNode.SingleWarUnit(dpa.getActionID()+"_SU")
-                    .deployedBy(WarArtifact(dpa.getActionID()+"Artifact", artifactRepo + dpa.getActionID() +".war"));
+            ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
+                    .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"));
+//            ServiceUnit serviceUnit = SoftwareNode.SingleWarUnit(dpa.getActionID()+"_SU")
+//                    .deployedBy(WarArtifact(dpa.getActionID()+"Artifact", artifactRepo + dpa.getActionID() +".war"));
 
             controlServicesTopology.addServiceUnit(virtualMachine);
             controlServicesTopology.addServiceUnit(serviceUnit);
-            
-            cloudService.andRelationships(HostedOnRelation(serviceUnit.getId()+"To"+virtualMachine.getId())
-                        .from(serviceUnit)
-                        .to(virtualMachine));
+
+            cloudService.andRelationships(HostedOnRelation(serviceUnit.getId() + "To" + virtualMachine.getId())
+                    .from(serviceUnit)
+                    .to(virtualMachine));
 
         }
-        
+
         
         
         
@@ -281,29 +281,133 @@ public class ComotConnector {
         
     }
     
-    
-    public void checkDeploymentStatus(String cloudServiceID){
+    public String deployCloudSevices2(){
         
+        // monitoring_services_topology 
+        ServiceTopology monitoringServicesTopology = ServiceTopology("Monitoring_Services_Topology");
+        monitoringServicesTopology.constrainedBy(Constraint.MetricConstraint("DET_CO1", new Metric("cpuUsage", "%")).lessThan("80"));
+        // control_services_topology
+        ServiceTopology controlServicesTopology = ServiceTopology("Control_Services_Topology");
+        controlServicesTopology.constrainedBy(Constraint.MetricConstraint("DET_CO2", new Metric("cpuUsage", "%")).lessThan("80"));
+        
+        // edaas_topology
+//        ServiceTopology edaasServiceTopology = ServiceTopology("eDaaS_Services_Topology");
+//        edaasServiceTopology.constrainedBy(Constraint.MetricConstraint("DET_CO3", new Metric("cpuUsage", "%")).lessThan("80"));
+              // add topology
         Configuration cfg = new Configuration();
-        String deploymentDescriptionRest = cfg.getConfig("COMOT.DEPLOYMENT.REST");
-        RestfulWSClient ws = new RestfulWSClient(deploymentDescriptionRest+cloudServiceID);
+        String compositionRules = cfg.getConfigPath() + "/compositionRules.xml";
+        CloudService cloudService = ServiceTemplate(eDaaSDeployAction.getActionID() + "CloudService")
+                .consistsOfTopologies(monitoringServicesTopology)
+                .consistsOfTopologies(controlServicesTopology)
+                //             .consistsOfTopologies(edaasServiceTopology)
+                //             .withDefaultMetrics();
+                .withMetricCompositonRulesFile(compositionRules);
+
+
         
-        String salsaSpecs = ws.callGetMethod();
         
-         System.out.println("DEPLOYMENT STATUS: " +salsaSpecs);
+        // add VM + monitoring service units
+        
+        OperatingSystemUnit monitoringVM = OperatingSystemUnit("MonitoringServices_VM")
+                    .providedBy(OpenstackSmall()
+                            .addSoftwarePackage("tomcat7")
+                            .addSoftwarePackage("ganglia-monitor")
+                            .addSoftwarePackage("gmetad")
+                    );
+        monitoringServicesTopology.addServiceUnit(monitoringVM);
+        
+        for (DeployAction dpa : monitoringServices) {
+
+            System.out.println("DEPLOY: Monitoring Action: " +dpa.getActionID());
+            ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID()+"_SU")
+                    .deployedBy(SingleScriptArtifact(dpa.getActionID()+"Artifact", artifactRepo + dpa.getActionID() + ".sh"));
+
+            monitoringServicesTopology.addServiceUnit(serviceUnit);
+            cloudService.andRelationships(HostedOnRelation(serviceUnit.getId()+"To"+monitoringVM.getId())
+                        .from(serviceUnit)
+                        .to(monitoringVM));
+
+        }
+        
+        
+        
+        
+        // add VM + control service units
+        
+        OperatingSystemUnit controlVM = OperatingSystemUnit("ControlServices_VM")
+                    .providedBy(OpenstackSmall()
+                            .addSoftwarePackage("tomcat7")
+                            .addSoftwarePackage("ganglia-monitor")
+                            .addSoftwarePackage("gmetad")
+                    );
+        controlServicesTopology.addServiceUnit(controlVM);
+        
+        for (DeployAction dpa : controlServices) {
+
+            System.out.println("DEPLOY: Control Action: " + dpa.getActionID());
+            ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
+                    .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"));
+
+            
+            controlServicesTopology.addServiceUnit(serviceUnit);
+
+            cloudService.andRelationships(HostedOnRelation(serviceUnit.getId() + "To" + controlVM.getId())
+                    .from(serviceUnit)
+                    .to(controlVM));
+
+        }
+
+        
+        
+        
+        // add VM + eDaaS
+        
+//        OperatingSystemUnit vm_edaas = OperatingSystemUnit(eDaaSDeployAction.getActionID() + "_VM")
+//                .providedBy(OpenstackSmall()
+//                            .addSoftwarePackage("openjdk-7-jre")
+//                            .addSoftwarePackage("ganglia-monitor")
+//                            .addSoftwarePackage("gmetad")
+//                    );
+//
+//        ServiceUnit serviceUnit_edaas = SingleSoftwareUnit(eDaaSDeployAction.getActionID()+"_SU")
+//                .deployedBy(SingleScriptArtifact(eDaaSDeployAction.getActionID(), artifactRepo + "deployCassandraNode.sh"));
+//        
+//        edaasServiceTopology.addServiceUnit(serviceUnit_edaas);
+//        edaasServiceTopology.addServiceUnit(vm_edaas);
+//        
+//        cloudService.andRelationships(HostedOnRelation(serviceUnit_edaas.getId() + "To"+vm_edaas.getId())
+//                .from(serviceUnit_edaas)
+//                .to(vm_edaas));
+//
+//        
+        
+        // deployment
+        
+        
+       
+
+         COMOTOrchestrator orchestrator = new COMOTOrchestrator()
+                //we have SALSA as cloud management tool
+                //curently deployed separately
+ 
+                .withSalsaIP(cfg.getConfig("SALSA.IP"))
+                .withSalsaPort(Integer.parseInt(cfg.getConfig("SALSA.PORT")))
+                .withRsyblIP(cfg.getConfig("RSYBL.IP"))
+                .withRsyblPort(Integer.parseInt(cfg.getConfig("RSYBL.PORT")));
          
-         
-//         
-//        try {
-//            CloudService cloudService = JAXBUtils.unmarshal(salsaSpecs, CloudService.class);
-//            System.out.println("DEPLOYMENT STATUS: " +cloudService);
-//        } catch (JAXBException ex) {
-//            Logger.getLogger(ComotConnector.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        //deploy, monitor and control
+        orchestrator.deployAndControl(cloudService);
         
+        
+        
+        
+        return cloudService.getId();
         
         
     }
+    
+    
+    
     
     
 }
