@@ -11,7 +11,7 @@
  Target Server Version : 50521
  File Encoding         : utf-8
 
- Date: 01/20/2015 10:27:38 AM
+ Date: 02/05/2015 11:16:50 AM
 */
 
 SET NAMES utf8;
@@ -30,7 +30,7 @@ CREATE TABLE `ActionDependency` (
 --  Records of `ActionDependency`
 -- ----------------------------
 BEGIN;
-INSERT INTO `ActionDependency` VALUES ('DPL', 'AddVM'), ('LSR', 'MLR'), ('MVI', 'LSR');
+INSERT INTO `ActionDependency` VALUES ('DPL', 'AddVM'), ('DIR', 'LSR'), ('DIR', 'MLR'), ('DER', 'LSR'), ('DER', 'MLR');
 COMMIT;
 
 -- ----------------------------
@@ -55,6 +55,16 @@ CREATE TABLE `ElasticDaaS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
+--  Table structure for `ElasticService`
+-- ----------------------------
+DROP TABLE IF EXISTS `ElasticService`;
+CREATE TABLE `ElasticService` (
+  `actionID` varchar(100) DEFAULT NULL,
+  `serviceID` varchar(100) DEFAULT NULL,
+  `uri` text
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
 --  Table structure for `InputSpecification`
 -- ----------------------------
 DROP TABLE IF EXISTS `InputSpecification`;
@@ -64,23 +74,7 @@ CREATE TABLE `InputSpecification` (
   `qor` longblob,
   `elasticity_process_config` longblob,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
--- ----------------------------
---  Table structure for `MonitoringService`
--- ----------------------------
-DROP TABLE IF EXISTS `MonitoringService`;
-CREATE TABLE `MonitoringService` (
-  `actionID` varchar(100) DEFAULT NULL,
-  `uri` text
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- ----------------------------
---  Records of `MonitoringService`
--- ----------------------------
-BEGIN;
-INSERT INTO `MonitoringService` VALUES ('datacompletenessMeasurement', null), ('throughputMeasurement', null);
-COMMIT;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 --  Table structure for `PrimitiveAction`
@@ -91,6 +85,7 @@ CREATE TABLE `PrimitiveAction` (
   `description` varchar(255) DEFAULT NULL,
   `artifact` text,
   `type` varchar(255) DEFAULT NULL,
+  `restapi` text,
   PRIMARY KEY (`actionName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -98,7 +93,7 @@ CREATE TABLE `PrimitiveAction` (
 --  Records of `PrimitiveAction`
 -- ----------------------------
 BEGIN;
-INSERT INTO `PrimitiveAction` VALUES ('AddVM', 'Add Virtual Machine', 'http://128.130.172.215/salsa/upload/files/jun/controlservices/AddVM.war', 'war'), ('datacompletenessMeasurement', 'Monitor Data Completeness', 'http://128.130.172.215/salsa/upload/files/jun/monitoringservices/DataCompletenessMonitor.war', 'war'), ('DPL', 'Deploy Web Service', 'http://128.130.172.215/salsa/upload/files/jun/controlservices/DPL.war', 'war'), ('LSR', 'Linear Least Square Regression', 'http://128.130.172.215/salsa/upload/files/jun/controlservices/LSR.war', 'war'), ('MLR', 'Multi-linear Regression', 'http://128.130.172.215/salsa/upload/files/jun/controlservices/MLR.war', 'war'), ('MVI', 'Missing Value Imputation', 'http://128.130.172.215/salsa/upload/files/jun/controlservices/MVI.war', 'war'), ('RmCtrl', 'Remove Control VM', 'http://128.130.172.215/salsa/upload/files/jun/controlservices/RmCtrl.war', 'war'), ('throughputMeasurement', 'Monitor Throughput', 'http://128.130.172.215/salsa/upload/files/jun/monitoringservices/ThroughputMonitor.war', 'war');
+INSERT INTO `PrimitiveAction` VALUES ('dataaccuracyMeasurement', 'Monitor Data Accuracy', 'http://128.130.172.215/salsa/upload/files/jun/artifact_sh/dataaccuracyMeasurement.sh', 'sh', '/dataaccuracyMeasurement/rest/dataaccuracy'), ('datacompletenessMeasurement', 'Monitor Data Completeness', 'http://128.130.172.215/salsa/upload/files/jun/artifact_sh/datacompletenessMeasurement.sh', 'sh', '/datacompletenessMeasurement/rest/completeness'), ('DIR', 'Distance-based outiler removal', 'http://128.130.172.215/salsa/upload/files/jun/artifact_sh/DIR.sh', 'sh', '/DIR/rest/control'), ('LSR', 'Linear Least Square Regression', 'http://128.130.172.215/salsa/upload/files/jun/artifact_sh/LSR.sh', 'sh', '/LSR/rest/control'), ('MLR', 'Multi-linear Regression', 'http://128.130.172.215/salsa/upload/files/jun/artifact_sh/MLR.sh', 'sh', '/MLR/rest/control'), ('STC', 'SYBL Throughput Control', 'http://128.130.172.215/salsa/upload/files/jun/artifact_sh/STC.sh', 'sh', '/STC/rest/control'), ('throughputMeasurement', 'Monitor Throughput', 'http://128.130.172.215/salsa/upload/files/jun/artifact_sh/throughputMeasurement.sh', 'sh', '/throughputMeasurement/rest/throughput');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

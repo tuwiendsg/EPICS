@@ -6,6 +6,7 @@
 package at.ac.tuwien.dsg.depic.depictool.connector;
 
 import at.ac.tuwien.dsg.common.deployment.DeployAction;
+import at.ac.tuwien.dsg.common.deployment.ElasticService;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
@@ -56,7 +57,7 @@ import javax.xml.bind.JAXBException;
  * @author Jun
  */
 public class ComotConnector {
-
+    private String cloudServiceID;
     private String artifactRepo;
     private ElasticityProcess elasticityProcess;
     private DeployAction eDaaSDeployAction;
@@ -80,7 +81,14 @@ public class ComotConnector {
         
         Configuration cfg = new Configuration();
         artifactRepo = cfg.getConfig("ARTIFACT.REPO"); 
+        cloudServiceID = eDaaSDeployAction.getActionID()+"CloudService";
     }
+
+    public String getCloudServiceID() {
+        return cloudServiceID;
+    }
+    
+    
     
     private void prepareSoftwareArtifact(){
         
@@ -170,7 +178,7 @@ public class ComotConnector {
 //        edaasServiceTopology.constrainedBy(Constraint.MetricConstraint("DET_CO3", new Metric("cpuUsage", "%")).lessThan("80"));
         
         // add topology
-        CloudService cloudService = ServiceTemplate(eDaaSDeployAction.getActionID()+"CloudService")
+        CloudService cloudService = ServiceTemplate(cloudServiceID)
                 .consistsOfTopologies(monitoringServicesTopology)
                 .consistsOfTopologies(controlServicesTopology)
    //             .consistsOfTopologies(edaasServiceTopology)
@@ -281,7 +289,7 @@ public class ComotConnector {
         
     }
     
-    public String deployCloudSevices2(){
+    public void deployCloudSevices2(){
         
         // monitoring_services_topology 
         ServiceTopology monitoringServicesTopology = ServiceTopology("Monitoring_Services_Topology");
@@ -401,8 +409,20 @@ public class ComotConnector {
         
         
         
-        return cloudService.getId();
+      //  return cloudService.getId();
         
+        
+    }
+    
+    
+    public List<ElasticService> getCloudServiceInfo(){
+        
+               
+        SalsaConnector salsaConnector = new SalsaConnector();
+        salsaConnector.updateCloudServiceInfo(cloudServiceID);
+        List<ElasticService> listOfElasticServices = salsaConnector.getDeployedElasticServices(controlServices, monitoringServices);
+        
+        return listOfElasticServices;
         
     }
     

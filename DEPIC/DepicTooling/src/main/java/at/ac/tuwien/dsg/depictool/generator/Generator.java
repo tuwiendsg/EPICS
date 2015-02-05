@@ -7,6 +7,7 @@ package at.ac.tuwien.dsg.depictool.generator;
 
 import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import at.ac.tuwien.dsg.common.deployment.DeploymentDescription;
+import at.ac.tuwien.dsg.common.deployment.ElasticService;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
@@ -67,7 +68,7 @@ public class Generator {
 
     public void prepareDeployment(ElasticDataAsset elasticDataAsset) {
 
-        
+        ElasticityProcessStore elStore = new ElasticityProcessStore();
         Configuration config = new Configuration();
         String parentPath = config.getCurrentPath();
         
@@ -96,13 +97,11 @@ public class Generator {
         
         ComotConnector comotConnector = new ComotConnector(elasticDataAsset.getElasticityProcess(), eDaaSDA);
         //String cloudServiceID = comotConnector.deployCloudSevices();
-        String cloudServiceID = comotConnector.deployCloudSevices2();
-        System.out.println("On Deployment Process: ..." + cloudServiceID );
-       
-        SalsaConnector salsaConnector = new SalsaConnector();
-        salsaConnector.updateCloudServiceInfo(cloudServiceID);
-        salsaConnector.printCloudServiceInfo();
-        // salsaConnector = new 
+        comotConnector.deployCloudSevices2();
+        System.out.println("On Deployment Process: ..." + comotConnector.getCloudServiceID() );
+        
+        List<ElasticService> listOfElasticServices = comotConnector.getCloudServiceInfo();
+        elStore.storeElasticServices(listOfElasticServices);
         
         String elasticStateSetXML ="";
         
@@ -113,7 +112,7 @@ public class Generator {
         }
         
         
-        ElasticityProcessStore elStore = new ElasticityProcessStore();
+        
         elStore.storeElasticityProcesses(eDaaSName,elasticStateSetXML, elasticityProcessesXML, "");
         
         

@@ -6,6 +6,7 @@
 package at.ac.tuwien.dsg.depictool.elstore;
 
 import at.ac.tuwien.dsg.common.deployment.DeployAction;
+import at.ac.tuwien.dsg.common.deployment.ElasticService;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.process.ActionDependency;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
@@ -154,8 +155,7 @@ public class ElasticityProcessStore {
     public DeployAction getPrimitiveAction(String actionName){
         String sql = "select * from PrimitiveAction where actionName='" + actionName+"'";
         DeployAction deployAction=null;
-        
-        List<ActionDependency> listOfActionDependencies = new ArrayList<ActionDependency>();
+  
         
         ResultSet rs = connectionManager.ExecuteQuery(sql);
         try {
@@ -164,7 +164,8 @@ public class ElasticityProcessStore {
             
                 String artifact = rs.getString("artifact"); 
                 String type = rs.getString("type"); 
-                deployAction = new DeployAction(actionName,actionName, type, artifact);          
+                String restapi = rs.getString("restapi"); 
+                deployAction = new DeployAction(actionName,actionName, type, artifact, restapi);          
             }
             rs.close();
 
@@ -204,5 +205,15 @@ public class ElasticityProcessStore {
         ResultSet rs = connectionManager.ExecuteQuery(sql);
         return rs;
         
+    }
+    
+    public void storeElasticServices(List<ElasticService> listOfElasticServices){
+        
+        for (ElasticService es : listOfElasticServices){
+            
+            String sql = "INSERT INTO ElasticService (actionID, serviceID, uri) VALUES ('"+es.getActionID()+"','"+es.getServiceID()+"','"+es.getUri()+"')";
+            connectionManager.ExecuteUpdate(sql);
+            
+        }
     }
 }

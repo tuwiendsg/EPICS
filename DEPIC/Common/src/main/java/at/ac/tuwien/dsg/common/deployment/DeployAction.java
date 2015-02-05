@@ -39,6 +39,16 @@ public class DeployAction {
         this.artifact = artifactRef;
     }
 
+    public DeployAction(String actionID, String actionName, String artifactType, String artifact, String apiEndpoint) {
+        this.actionID = actionID;
+        this.actionName = actionName;
+        this.artifact = artifact;
+        this.artifactType = artifactType;
+        this.apiEndpoint = apiEndpoint;
+    }
+    
+    
+
     public String getActionID() {
         return actionID;
     }
