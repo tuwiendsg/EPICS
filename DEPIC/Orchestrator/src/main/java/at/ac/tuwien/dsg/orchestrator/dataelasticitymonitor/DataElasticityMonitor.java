@@ -70,12 +70,12 @@ public class DataElasticityMonitor{
                 System.out.println("Run Monitoring Service ID: " + monitoringServiceID);
                 System.out.println("URI: " + uri);
                 
-            //    RestfulWSClient ws = new RestfulWSClient(uri);
-            //    double monitoringValue = Double.parseDouble(ws.callPutMethod(monitoringSession.getDataAssetID()));
+                RestfulWSClient ws = new RestfulWSClient(uri);
+         
                 
                 String metricName = elasticServiceRegistry.getMonitoringMetricName(monitoringServiceID);
                 System.out.println("metric name: " + metricName);
-                double monitoringValue = sampleValue(metricName);
+                double monitoringValue = Double.parseDouble(ws.callPutMethod(monitoringSession.getDataAssetID()));
                 
                 
                 MonitoringMetric monitoringMetric = new MonitoringMetric(metricName, monitoringValue);
@@ -199,22 +199,7 @@ public class DataElasticityMonitor{
     }
     
     
-    
-    private double sampleValue(String metricName){
-        double value=0;
-        
-        if (metricName.equals("datacompleteness")){
-            value=50;
-        } else if (metricName.equals("dataaccuracy")){
-            value=60;
-        } else if (metricName.equals("throughput")){
-            value =0.3;
-        } 
-        
-        
-        return value;
-        
-    }
+ 
     
     private void logElasticState(ElasticState elasticState ){
   

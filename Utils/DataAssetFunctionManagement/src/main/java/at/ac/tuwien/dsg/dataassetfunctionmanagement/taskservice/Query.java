@@ -96,7 +96,8 @@ public class Query {
             int partitionIndex =0;     
             int partitionCounter=0;
             
-            while (rs.next()){
+            
+                while (rs.next()){
                 
 
                 List<DataAttribute> attsList = new ArrayList<DataAttribute>();
