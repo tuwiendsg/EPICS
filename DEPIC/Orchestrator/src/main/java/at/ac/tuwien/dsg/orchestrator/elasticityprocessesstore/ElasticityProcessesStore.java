@@ -5,12 +5,15 @@
  */
 package at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore;
 
+import at.ac.tuwien.dsg.common.deployment.ElasticService;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticStateSet;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
+import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.MySqlConnectionManager;
+import at.ac.tuwien.dsg.common.utils.YamlUtils;
 import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +21,8 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
@@ -193,4 +198,56 @@ public class ElasticityProcessesStore {
         
     }
     
+    public List<ElasticService> getElasticServices() {
+        String sql = "SELECT * from ElasticService";
+
+        List<ElasticService> listOfElasticServices = new ArrayList<ElasticService>();
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+        try {
+            while (rs.next()) {
+                String actionID = rs.getString("actionID");
+                String serviceID = rs.getString("serviceID");
+                String uri = rs.getString("uri");
+
+                ElasticService elasticService = new ElasticService(actionID, serviceID, uri);
+                listOfElasticServices.add(elasticService);
+            }
+
+        } catch (Exception ex) {
+
+        }
+
+        
+        
+        return listOfElasticServices;
+    }
+    
+       public MetricProcess getMetricProcess(String eDaaSName) {
+           
+           System.out.println("eDaaSName: " + eDaaSName);   
+        String sql = "SELECT * FROM InputSpecification WHERE name ='" + eDaaSName + "'";
+        InputStream inputStream = null;
+        String metricProcessXML = "";
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        try {
+            while (rs.next()) {
+                inputStream = rs.getBinaryStream("elasticity_process_config");
+            }
+
+            StringWriter writer = new StringWriter();
+            String encoding = StandardCharsets.UTF_8.name();
+
+            IOUtils.copy(inputStream, writer, encoding);
+            metricProcessXML = writer.toString();
+        } catch (Exception ex) {
+
+        }
+
+        MetricProcess metricProcess = YamlUtils.unmarshallYaml(MetricProcess.class, metricProcessXML);
+
+        return metricProcess;
+    }
+
 }

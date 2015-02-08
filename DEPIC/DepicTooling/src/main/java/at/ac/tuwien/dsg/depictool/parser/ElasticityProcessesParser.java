@@ -9,7 +9,8 @@ package at.ac.tuwien.dsg.depictool.parser;
 import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.depictool.util.YamlUtils;
+import at.ac.tuwien.dsg.common.utils.YamlUtils;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;

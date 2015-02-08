@@ -13,6 +13,7 @@ public class ElasticService {
     private String actionID;
     private String serviceID;
     private String uri;
+    private int request;
 
     public ElasticService() {
     }
@@ -21,6 +22,7 @@ public class ElasticService {
         this.actionID = actionID;
         this.serviceID = serviceID;
         this.uri = uri;
+        request=0;
     }
 
     public String getActionID() {
@@ -45,6 +47,14 @@ public class ElasticService {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    public int getRequest() {
+        return request;
+    }
+
+    public void setRequest(int request) {
+        this.request = request;
     }
     
     

@@ -46,7 +46,7 @@ public class ElasticityProcessStore {
     
     public void storeQoRAndElasticityProcesses(String edaas, String qor, String elasticityProcesses){
         InputStream qorStream = new ByteArrayInputStream(qor.getBytes(StandardCharsets.UTF_8));
-        InputStream elasticityProcessesStream = new ByteArrayInputStream(qor.getBytes(StandardCharsets.UTF_8));
+        InputStream elasticityProcessesStream = new ByteArrayInputStream(elasticityProcesses.getBytes(StandardCharsets.UTF_8));
         
         
         List<InputStream> listOfInputStreams = new ArrayList<InputStream>();

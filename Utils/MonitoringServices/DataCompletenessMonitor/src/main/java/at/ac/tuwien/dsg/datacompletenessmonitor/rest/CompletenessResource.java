@@ -5,11 +5,10 @@
 package at.ac.tuwien.dsg.datacompletenessmonitor.rest;
 
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
+import at.ac.tuwien.dsg.common.utils.IOUtils;
 import at.ac.tuwien.dsg.datacompletenessmonitor.algorithm.CompletenessMonitor;
 import at.ac.tuwien.dsg.datacompletenessmonitor.service.CompletenessService;
-import at.ac.tuwien.dsg.externalserviceutils.DataAssetStore;
-import at.ac.tuwien.dsg.externalserviceutils.IOUtils;
-import at.ac.tuwien.dsg.externalserviceutils.JAXBUtils;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,15 +59,15 @@ public class CompletenessResource {
     @PUT
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    public String monitorDataCompleteness(String daID) {
+    public String monitorDataCompleteness(String dataAssetRequest) {
         
-        Logger.getLogger(CompletenessResource.class.getName()).log(Level.INFO, "Monitoring Data Completeness ... :" + daID);
+        Logger.getLogger(CompletenessResource.class.getName()).log(Level.INFO, "Monitoring Data Completeness ... :" + dataAssetRequest);
         
         
-        //CompletenessService completenessService = new CompletenessService();
-        //double completeness = completenessService.requestMonitorDataCompletenessService(daID);
+        CompletenessService completenessService = new CompletenessService();
+        double completeness = completenessService.requestMonitorDataCompletenessService(dataAssetRequest);
         
-        return String.valueOf(80);
+        return String.valueOf(completeness);
     }
     
     

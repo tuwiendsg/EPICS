@@ -6,7 +6,7 @@
 package at.ac.tuwien.dsg.dataassetloader.restws;
 
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
-import at.ac.tuwien.dsg.common.entity.eda.da.DataPartition;
+import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetloader.store.DataAssetStore;
@@ -74,15 +74,17 @@ public class DataassetResource {
     }
     
     
+    
+    
     @PUT
     @Path("daget")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String getDataAsset(String requestDataPartition) {
         
-        DataPartition dataPartition=null;
+        DataPartitionRequest dataPartition=null;
         try {
-            dataPartition = JAXBUtils.unmarshal(requestDataPartition, DataPartition.class);
+            dataPartition = JAXBUtils.unmarshal(requestDataPartition, DataPartitionRequest.class);
         } catch (JAXBException ex) {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -113,6 +115,98 @@ public class DataassetResource {
         dataAssetStore.removeDataAsset(da.getName());
        // dataAssetStore.saveDataAsset(daXML, da.getName());
 
+    }
+    
+    @PUT
+    @Path("repo/datacopy")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String copyDataAsset(String dataAssetRequestXML) {
+
+        String log ="RECEIVED: " + dataAssetRequestXML;
+        Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, log);
+        
+        DataPartitionRequest request=null;
+        try {
+            request = JAXBUtils.unmarshal(dataAssetRequestXML, DataPartitionRequest.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        DataLoader dataLoader = new DataLoader();
+        dataLoader.copyDataAssetRepo(request);
+        
+        
+        return "";
+    }
+    
+    
+    @PUT
+    @Path("repo/getpartition")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String getDataPartition(String dataAssetRequestXML) {
+
+       String log ="RECEIVED: " + dataAssetRequestXML;
+        Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, log);
+        
+        DataPartitionRequest request=null;
+        try {
+            request = JAXBUtils.unmarshal(dataAssetRequestXML, DataPartitionRequest.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        DataLoader dataLoader = new DataLoader();
+        String daXML =dataLoader.getDataPartitionRepo(request);
+        
+        return daXML;
+    }
+    
+    @PUT
+    @Path("repo/noofpartition")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String getNoOfPartition(String dataAssetRequestXML) {
+
+       String log ="RECEIVED: " + dataAssetRequestXML;
+        Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO, log);
+        
+        DataPartitionRequest request=null;
+        try {
+            request = JAXBUtils.unmarshal(dataAssetRequestXML, DataPartitionRequest.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        DataLoader dataLoader = new DataLoader();
+        String noOfDataPartitionRepo =dataLoader.getNoOfParitionRepo(request);
+        
+        return noOfDataPartitionRepo;
+        
+    }
+    
+    @PUT
+    @Path("repo/savepartition")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String saveDataPartition(String dataAssetXML) {
+
+         String log ="RECEIVED: " + dataAssetXML;
+        Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, log);
+        
+        DataAsset dataAsset=null;
+        try {
+            dataAsset = JAXBUtils.unmarshal(dataAssetXML, DataAsset.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        DataLoader dataLoader = new DataLoader();
+        dataLoader.saveDataPartitionRepo(dataAsset);
+        
+        return "";
     }
 
 }

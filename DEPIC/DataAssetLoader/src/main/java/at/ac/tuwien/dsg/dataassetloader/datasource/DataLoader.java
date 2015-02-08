@@ -8,7 +8,7 @@ package at.ac.tuwien.dsg.dataassetloader.datasource;
 
 import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
-import at.ac.tuwien.dsg.common.entity.eda.da.DataPartition;
+import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
@@ -81,12 +81,13 @@ public class DataLoader {
         String port = config.getConfig("DAF.MANAGEMENT.PORT");
         String resource = config.getConfig("DAF.MANAGEMENT.RESOURCE.DATAASSET");
 
-        DataPartition dataPartitionRequest = new DataPartition(dataAssetID, dataPartitionID);
+      
         
+        DataPartitionRequest dataPartitionRequest = new DataPartitionRequest("", "", dataAssetID, dataPartitionID);
         
         String dataPartitionXML = "";
         try {
-            dataPartitionXML = JAXBUtils.marshal(dataPartitionRequest, DataPartition.class);
+            dataPartitionXML = JAXBUtils.marshal(dataPartitionRequest, DataPartitionRequest.class);
         } catch (JAXBException ex) {
             Logger.getLogger(DataLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -96,6 +97,35 @@ public class DataLoader {
         String dataParstitionXML = rs.callPutMethod(dataPartitionXML);
         
         return dataParstitionXML;
+    }
+    
+    
+    
+    
+    public void copyDataAssetRepo(DataPartitionRequest request){
+        
+        DataAssetStore das = new DataAssetStore();
+        das.copyDataAssetRepo(request);
+        
+        
+    }
+    
+    public String getNoOfParitionRepo(DataPartitionRequest request){
+        DataAssetStore das = new DataAssetStore();
+        String noOfPartition =das.getNoOfPartitionRepo(request);
+        return noOfPartition;
+    }
+    
+    public String getDataPartitionRepo(DataPartitionRequest request){
+        DataAssetStore das = new DataAssetStore();
+        String daXML =das.getDataPartitionRepo(request);
+        return daXML;
+    }
+    
+    public void saveDataPartitionRepo(DataAsset dataAsset){
+        DataAssetStore das = new DataAssetStore();
+        das.saveDataPartitionRepo(dataAsset);
+        
     }
  
 }

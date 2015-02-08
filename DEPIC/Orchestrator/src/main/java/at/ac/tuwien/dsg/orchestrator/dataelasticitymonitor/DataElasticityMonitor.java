@@ -10,6 +10,7 @@ import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticStateSet;
 import at.ac.tuwien.dsg.common.entity.eda.MetricCondition;
+import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
@@ -24,8 +25,8 @@ import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 import at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller.DataElasticityController;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
-import at.ac.tuwien.dsg.orchestrator.entity.MonitoringService;
-import at.ac.tuwien.dsg.orchestrator.registry.MonitoringServiceRegistry;
+
+import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -43,7 +44,8 @@ public class DataElasticityMonitor{
     List<ElasticState> listOfExpectedElasticStates;
     MonitoringSession monitoringSession;
     MonitorProcess monitorProcess;
-    MonitoringServiceRegistry monitoringServiceRegistry;
+    List<ControlProcess> listOfControlProcesses;
+    ElasticServiceRegistry elasticServiceRegistry;
 
     public DataElasticityMonitor(MonitoringSession monitoringSession) {
         this.monitoringSession = monitoringSession;
@@ -60,31 +62,42 @@ public class DataElasticityMonitor{
                 
                 String monitoringServiceID = monitorAction.getMonitorActionID();
                 
-                System.out.println("run monitoring service: " +monitoringServiceID);
+                System.out.println("Get monitoring service info: " +monitoringServiceID);
                 
                 
-//                String uri = monitoringServiceRegistry.getMonitoringServiceURI(monitoringServiceID);
-//               
-//                System.out.println("Monitoring Service ID: " + monitoringServiceID);
-//                System.out.println("URI: " + uri);
-//                
-//                RestfulWSClient ws = new RestfulWSClient(uri);
-//                double monitoringValue = Double.parseDouble(ws.callPutMethod(monitoringSession.getDataAssetID()));
-//                String metricName = monitoringServiceRegistry.getMonitoringMetricName(monitoringServiceID);
-//                
-//                MonitoringMetric monitoringMetric = new MonitoringMetric(metricName, monitoringValue);
-//                listOfMonitoringMetrics.add(monitoringMetric);
+                String uri = elasticServiceRegistry.getMonitoringServiceURI(monitoringServiceID);
+               
+                System.out.println("Run Monitoring Service ID: " + monitoringServiceID);
+                System.out.println("URI: " + uri);
+                
+            //    RestfulWSClient ws = new RestfulWSClient(uri);
+            //    double monitoringValue = Double.parseDouble(ws.callPutMethod(monitoringSession.getDataAssetID()));
+                
+                String metricName = elasticServiceRegistry.getMonitoringMetricName(monitoringServiceID);
+                System.out.println("metric name: " + metricName);
+                double monitoringValue = sampleValue(metricName);
+                
+                
+                MonitoringMetric monitoringMetric = new MonitoringMetric(metricName, monitoringValue);
+                listOfMonitoringMetrics.add(monitoringMetric);
                 
             }
             
-//            ElasticState currentElasticState = determineCurrentElasticState();
-//                
-//                if (!isExpectedElasticState(currentElasticState)) {
-//                    DataElasticityController controller = new DataElasticityController();
-//                   // controller.startControlElasticState(currentElasticState);
-//                }
-//        
+            ElasticState currentElasticState = determineCurrentElasticState();
+            System.out.println("Current Elastic State ...");
+            logElasticState(currentElasticState);
+            System.out.println("");
+                if (!isExpectedElasticState(currentElasticState)) {
+                    System.out.println("FAIL VALIDATION");
+                    DataElasticityController controller = new DataElasticityController(listOfExpectedElasticStates, listOfControlProcesses);
+                    controller.startControlElasticState(currentElasticState);
+                } else {
+                    System.out.println("PASS VALIDATION");
+                }
+        
     }
+    
+    
     
     private ElasticState determineCurrentElasticState(){
         ElasticState currentElasticState = null;
@@ -92,18 +105,22 @@ public class DataElasticityMonitor{
         for (ElasticState elasticState : listOfElasticStates) {
             
             List<MetricCondition> conditions = elasticState.getListOfConditions();
-            
+            boolean rs = true;
             for (MetricCondition condition: conditions) {
                 String metricName  =condition.getMetricName();
                 double metricValue = findMetricValue(metricName);
                 
-                if (metricValue>condition.getLowerBound() && metricValue<condition.getUpperBound()){
-                    currentElasticState = elasticState;
-                    break;
+                if (!(metricValue>=condition.getLowerBound() && metricValue<=condition.getUpperBound())){
+                    rs = false;
                 }
-                
     
             }   
+            
+            if (rs){
+                currentElasticState = elasticState;
+                break;
+            }
+            
         }
         return currentElasticState;   
     }
@@ -133,7 +150,7 @@ public class DataElasticityMonitor{
         
         return rs;
     }
-    
+  
     private void config(){
         
         ElasticityProcessesStore elasticityProcessesStore = new ElasticityProcessesStore(); 
@@ -144,13 +161,14 @@ public class DataElasticityMonitor{
         listOfElasticStates = elasticStateSet.getInitialElasticStateSet();
        
         monitorProcess = elasticityProcess.getMonitorProcess(); 
+        listOfControlProcesses = elasticityProcess.getListOfControlProcesses();
         // mappingEState(monitoringSession.getDataAssetID());
         List<String> expectElasticStateIDs = monitoringSession.getListOfExpectedElasticStates();
         mappingExpectedEStateIDs(expectElasticStateIDs);
         
         
-        monitoringServiceRegistry = new MonitoringServiceRegistry();
-        monitoringServiceRegistry.getMonitoringServices();
+        elasticServiceRegistry = new ElasticServiceRegistry(monitoringSession.getEdaasName());
+        //elasticServiceRegistry.getElasticServices();
                 
        
     }
@@ -182,7 +200,39 @@ public class DataElasticityMonitor{
     
     
     
+    private double sampleValue(String metricName){
+        double value=0;
+        
+        if (metricName.equals("datacompleteness")){
+            value=50;
+        } else if (metricName.equals("dataaccuracy")){
+            value=60;
+        } else if (metricName.equals("throughput")){
+            value =0.3;
+        } 
+        
+        
+        return value;
+        
+    }
     
+    private void logElasticState(ElasticState elasticState ){
+  
+            System.out.println("\n***"); 
+            System.out.println("eState ID: " + elasticState.geteStateID());
+            List<MetricCondition> conditions = elasticState.getListOfConditions();
+            for(MetricCondition condition : conditions){
+                System.out.println("\n---"); 
+                System.out.print("    metric: " + condition.getMetricName());
+                System.out.print("    id: " + condition.getConditionID());
+                System.out.print("    lower: " + condition.getLowerBound());
+                System.out.print("    uppper: " + condition.getUpperBound());
+                
+            
+            
+        }
+        
+    }
  
     
 }

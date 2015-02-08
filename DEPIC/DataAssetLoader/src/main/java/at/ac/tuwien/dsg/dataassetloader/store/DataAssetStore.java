@@ -8,6 +8,8 @@ package at.ac.tuwien.dsg.dataassetloader.store;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAttribute;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataItem;
+import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
+import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.MySqlConnectionManager;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import java.io.ByteArrayInputStream;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBException;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -152,4 +155,135 @@ public class DataAssetStore {
         return da;
     }
 */
+     
+     
+    public  void copyDataAssetRepo(DataPartitionRequest request){
+        
+       
+            
+            InputStream inputStream = null;
+
+            MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
+
+            String sql = "Select * from DataAsset where daw_name='" + request.getDataAssetID()+"'";
+
+            ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+            try {
+                while (rs.next()) {
+                    inputStream = rs.getBinaryStream("da");
+                    StringWriter writer = new StringWriter();
+                    String encoding = StandardCharsets.UTF_8.name();
+
+                    IOUtils.copy(inputStream, writer, encoding);
+                    String daPartitionStr = writer.toString();
+                    
+                    String name = request.getEdaas()+";" + request.getCustomerID()+";" + request.getDataAssetID();
+                    
+                    DataAsset dataAssetPartition = JAXBUtils.unmarshal(daPartitionStr, DataAsset.class);
+                    dataAssetPartition.setName(name);
+                    saveDataPartitionRepo(dataAssetPartition);
+                    }
+
+                rs.close();
+            } catch (Exception ex) {
+
+            }
+    }
+    
+    public String getDataPartitionRepo(DataPartitionRequest request){
+        
+        String edaas = request.getEdaas();
+        String customerID = request.getCustomerID();
+        String dawID = request.getDataAssetID();
+        String paritionID = request.getPartitionID();
+        String daPartitionStr="";
+        
+            InputStream inputStream = null;
+
+            MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
+
+            String sql = "Select * from ProcessingDataAsset where edaas='"+edaas+"' AND customerID='"+customerID+"' AND daw_name='"+dawID+"' AND partitionID='"+paritionID+"' ";
+
+            ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+            try {
+                while (rs.next()) {
+                    inputStream = rs.getBinaryStream("da");
+                    StringWriter writer = new StringWriter();
+                    String encoding = StandardCharsets.UTF_8.name();
+
+                    IOUtils.copy(inputStream, writer, encoding);
+                    daPartitionStr = writer.toString();
+                    
+                 
+                    }
+
+                rs.close();
+            } catch (Exception ex) {
+
+            }
+            
+            return daPartitionStr;
+    }
+    
+    
+     public String getNoOfPartitionRepo(DataPartitionRequest request){
+        
+        String edaas = request.getEdaas();
+        String customerID = request.getCustomerID();
+        String dawID = request.getDataAssetID();
+
+        String noOfPartition="";
+        
+
+
+            MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
+
+            String sql = "Select COUNT(*) as counter from ProcessingDataAsset where edaas='"+edaas+"' AND customerID='"+customerID+"' AND daw_name='"+dawID+"'";
+
+            ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+            try {
+                while (rs.next()) {
+                    
+                    noOfPartition = String.valueOf(rs.getInt("counter"));
+                            
+                    }
+
+                rs.close();
+            } catch (Exception ex) {
+
+            }
+            
+            return noOfPartition;
+    }
+    
+    public void saveDataPartitionRepo(DataAsset dataAssetPartition){
+        
+        String daXML="";
+        try {
+            daXML = JAXBUtils.marshal(dataAssetPartition, DataAsset.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        String[] strs = dataAssetPartition.getName().split(";");
+        String edaasName = strs[0];
+        String customerID = strs[1];
+        String dawName = strs[2];
+        int partitionID = dataAssetPartition.getPartition();
+        
+        
+        
+        InputStream daStream = new ByteArrayInputStream(daXML.getBytes(StandardCharsets.UTF_8));
+        MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
+        
+        //String sql = "INSERT INTO ProcessingDataAsset(customerID,edaas,daw_name,partitionID,da) VALUES ('" + customerID + "','" + edaasName + "','" + dawName + "','"+partitionID+"',?)";
+        String sql= "UPDATE ProcessingDataAsset SET da=? WHERE edaas='"+edaasName+"' AND customerID='"+customerID+"' AND daw_name='"+dawName+"' AND partitionID='"+partitionID+"'";
+        List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
+        listOfInputStreams.add(daStream);
+        
+        connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
+    }
 }

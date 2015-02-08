@@ -4,7 +4,7 @@
  */
 package at.ac.tuwien.dsg.dataassetfunctionmanagement;
 
-import at.ac.tuwien.dsg.common.entity.eda.da.DataPartition;
+import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.engine.WorkflowEngine;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.store.DataAssetStore;
@@ -84,9 +84,9 @@ public class DawResource {
         
         Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + requestDataPartition);
         
-        DataPartition dataPartition=null;
+        DataPartitionRequest dataPartition=null;
         try {
-            dataPartition = JAXBUtils.unmarshal(requestDataPartition, DataPartition.class);
+            dataPartition = JAXBUtils.unmarshal(requestDataPartition, DataPartitionRequest.class);
         } catch (JAXBException ex) {
             Logger.getLogger(DawResource.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -8,8 +8,7 @@ package at.ac.tuwien.dsg.datacompletenessmonitor.service;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.datacompletenessmonitor.algorithm.CompletenessMonitor;
 import at.ac.tuwien.dsg.datacompletenessmonitor.rest.CompletenessResource;
-import at.ac.tuwien.dsg.externalserviceutils.DataAssetStore;
-import at.ac.tuwien.dsg.externalserviceutils.JAXBUtils;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
@@ -20,26 +19,18 @@ import javax.xml.bind.JAXBException;
  */
 public class CompletenessService {
     
-    public double requestMonitorDataCompletenessService(String daID){
+    public double requestMonitorDataCompletenessService(String dataAssetRequest){
+        
+         
         
         
-        DataAssetStore das = new DataAssetStore();
-        DataAsset da = das.getDataAsset(daID);
-        JAXBUtils jAXBUtils = new JAXBUtils();
-        String daXMl = "";
-        try {
-            daXMl = jAXBUtils.marshal(da, DataAsset.class);
-        } catch (JAXBException ex) {
-            Logger.getLogger(CompletenessResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.out.println("DA: " + daXMl);
-        
-        CompletenessMonitor monitor = new CompletenessMonitor(da);
+      //  CompletenessMonitor monitor = new CompletenessMonitor(da);
         
         
-        double completeness = monitor.measureDataCompleteness();
+       // double completeness = monitor.measureDataCompleteness();
         
-        return completeness;
+        //return completeness;
+        return 0;
     }
     
 }
