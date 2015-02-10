@@ -9,6 +9,7 @@ import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
 import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depictool.elstore.DataAssetStore;
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
 import at.ac.tuwien.dsg.depictool.generator.Generator;
 import at.ac.tuwien.dsg.depictool.parser.ElasticityProcessesParser;
@@ -169,6 +170,11 @@ public class DataAssetFunctionUploader extends HttpServlet {
         
         ElasticityProcessStore elasticityProcessStore = new ElasticityProcessStore();
         elasticityProcessStore.storeDataAssetFunction(eDaaSName, dataAssetID, dafXML);
+        
+        DataAssetStore das = new DataAssetStore();
+        das.requestToGetDataAsset(dataAssetID);
+        
+        
        
         request.getRequestDispatcher("/daf_manager.jsp?edaasname="+eDaaSName).forward(request, response);
     }

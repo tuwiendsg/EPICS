@@ -124,7 +124,7 @@ public class DataassetResource {
     public String copyDataAsset(String dataAssetRequestXML) {
 
         String log ="RECEIVED: " + dataAssetRequestXML;
-        Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, log);
+        Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO,  log);
         
         DataPartitionRequest request=null;
         try {
@@ -135,10 +135,10 @@ public class DataassetResource {
         
         
         DataLoader dataLoader = new DataLoader();
-        dataLoader.copyDataAssetRepo(request);
+        String noOfPartitions = dataLoader.copyDataAssetRepo(request);
         
         
-        return "";
+        return noOfPartitions;
     }
     
     

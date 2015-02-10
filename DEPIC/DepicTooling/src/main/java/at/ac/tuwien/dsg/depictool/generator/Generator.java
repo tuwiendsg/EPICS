@@ -76,11 +76,21 @@ public class Generator {
         String edaasZipFile  = parentPath + "/edaasproject/" + eDaaSName + ".zip";
         
         System.out.println("PARENT PATH: " + parentPath);
-         
-        
+
         ZipUtils zipUtils = new ZipUtils();
         zipUtils.zipDir(edaasZipFile, edaasPath);
+        String edaasZipURL = config.getConfig("EDAAS.URL") + "/edaasproject/" + eDaaSName + ".zip";
         
+        
+        
+        IOUtils fileReader = new IOUtils(config.getArtifactPath());
+        String edaasArtifactTemplate = fileReader.readData("install-edaas.sh");
+        edaasArtifactTemplate = edaasArtifactTemplate.replace("EDAAS.ZIP.URL", edaasZipURL);
+        edaasArtifactTemplate = edaasArtifactTemplate.replace("EDAAS.NAME", eDaaSName);
+        
+        IOUtils fileWriter = new IOUtils(parentPath+"/edaasproject");
+        fileWriter.writeData(edaasArtifactTemplate, eDaaSName+".sh");
+        String edaasShArtifactURL = config.getConfig("EDAAS.URL") + "/edaasproject/" + eDaaSName + ".sh";
         
         
         String elasticityProcessesXML = "";
@@ -90,14 +100,15 @@ public class Generator {
             java.util.logging.Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        //String deploymenDescription = generateDeploymentDesciptionForElasticityProcesses(elasticDataAsset.getElasticityProcess());
-
-        //String edaasArtifact  =  "http://128.130.172.215/salsa/upload/files/jun/edaas/install-edaas.sh" ;
-        DeployAction eDaaSDA = new DeployAction(eDaaSName, eDaaSName, "sh", "");
+   
+        DeployAction eDaaSDA = new DeployAction(eDaaSName, eDaaSName, "sh", edaasShArtifactURL);
+        System.out.println("EDAAS ARTIFACT URL: " + edaasShArtifactURL);
+        
         
         ComotConnector comotConnector = new ComotConnector(elasticDataAsset.getElasticityProcess(), eDaaSDA);
         //String cloudServiceID = comotConnector.deployCloudSevices();
         comotConnector.deployCloudSevices2();
+        //comotConnector.deployCloudSevices();
         System.out.println("On Deployment Process: ..." + comotConnector.getCloudServiceID() );
         
         List<ElasticService> listOfElasticServices = comotConnector.getCloudServiceInfo();

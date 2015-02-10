@@ -78,4 +78,29 @@ public class Configuration {
         
         return path;
     }
+    
+    
+    
+    public String getArtifactPath(){
+       
+
+        String path = Configuration.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+
+        int index = path.indexOf("/classes/at/ac");
+        path = path.substring(0, index);
+        try {
+            path = URLDecoder.decode(path, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        path = path + "/classes/artifact";
+        
+        System.out.println("Artifact Path: -" + path + "-");
+        
+        
+        
+        return path;
+    
+    }
 }

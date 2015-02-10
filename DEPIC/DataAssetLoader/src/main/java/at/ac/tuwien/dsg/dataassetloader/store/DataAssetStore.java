@@ -157,16 +157,18 @@ public class DataAssetStore {
 */
      
      
-    public  void copyDataAssetRepo(DataPartitionRequest request){
+    public String copyDataAssetRepo(DataPartitionRequest request){
         
-       
+        System.out.println("Staring Copying Data ...");
             
             InputStream inputStream = null;
 
             MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
 
             String sql = "Select * from DataAsset where daw_name='" + request.getDataAssetID()+"'";
-
+            
+            int noOfPartitions=0;
+            System.out.println("sql: " + sql);
             ResultSet rs = connectionManager.ExecuteQuery(sql);
 
             try {
@@ -182,13 +184,15 @@ public class DataAssetStore {
                     
                     DataAsset dataAssetPartition = JAXBUtils.unmarshal(daPartitionStr, DataAsset.class);
                     dataAssetPartition.setName(name);
-                    saveDataPartitionRepo(dataAssetPartition);
+                    insertDataPartitionRepo(dataAssetPartition);
+                    noOfPartitions++;
                     }
 
                 rs.close();
             } catch (Exception ex) {
 
             }
+            return  String.valueOf(noOfPartitions);
     }
     
     public String getDataPartitionRepo(DataPartitionRequest request){
@@ -202,9 +206,10 @@ public class DataAssetStore {
             InputStream inputStream = null;
 
             MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
-
+            
             String sql = "Select * from ProcessingDataAsset where edaas='"+edaas+"' AND customerID='"+customerID+"' AND daw_name='"+dawID+"' AND partitionID='"+paritionID+"' ";
-
+            
+           
             ResultSet rs = connectionManager.ExecuteQuery(sql);
 
             try {
@@ -281,6 +286,35 @@ public class DataAssetStore {
         
         //String sql = "INSERT INTO ProcessingDataAsset(customerID,edaas,daw_name,partitionID,da) VALUES ('" + customerID + "','" + edaasName + "','" + dawName + "','"+partitionID+"',?)";
         String sql= "UPDATE ProcessingDataAsset SET da=? WHERE edaas='"+edaasName+"' AND customerID='"+customerID+"' AND daw_name='"+dawName+"' AND partitionID='"+partitionID+"'";
+        List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
+        listOfInputStreams.add(daStream);
+        
+        connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
+    }
+    
+    
+    public void insertDataPartitionRepo(DataAsset dataAssetPartition){
+        
+        String daXML="";
+        try {
+            daXML = JAXBUtils.marshal(dataAssetPartition, DataAsset.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        String[] strs = dataAssetPartition.getName().split(";");
+        String edaasName = strs[0];
+        String customerID = strs[1];
+        String dawName = strs[2];
+        int partitionID = dataAssetPartition.getPartition();
+        
+        
+        
+        InputStream daStream = new ByteArrayInputStream(daXML.getBytes(StandardCharsets.UTF_8));
+        MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
+        
+        String sql = "INSERT INTO ProcessingDataAsset(customerID,edaas,daw_name,partitionID,da) VALUES ('" + customerID + "','" + edaasName + "','" + dawName + "','"+partitionID+"',?)";
+        //String sql= "UPDATE ProcessingDataAsset SET da=? WHERE edaas='"+edaasName+"' AND customerID='"+customerID+"' AND daw_name='"+dawName+"' AND partitionID='"+partitionID+"'";
         List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
         listOfInputStreams.add(daStream);
         

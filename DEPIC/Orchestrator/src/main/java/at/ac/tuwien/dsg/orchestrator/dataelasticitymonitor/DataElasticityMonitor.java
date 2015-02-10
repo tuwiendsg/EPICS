@@ -10,6 +10,7 @@ import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticStateSet;
 import at.ac.tuwien.dsg.common.entity.eda.MetricCondition;
+import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
@@ -21,6 +22,7 @@ import at.ac.tuwien.dsg.common.entity.qor.QElement;
 import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.common.entity.qor.Range;
+import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 import at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller.DataElasticityController;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBException;
 import sun.java2d.pipe.BufferedMaskBlit;
 
 /**
@@ -70,19 +73,41 @@ public class DataElasticityMonitor{
                 System.out.println("Run Monitoring Service ID: " + monitoringServiceID);
                 System.out.println("URI: " + uri);
                 
-                RestfulWSClient ws = new RestfulWSClient(uri);
-         
+                DataPartitionRequest request = new DataPartitionRequest(monitoringSession.getEdaasName()
+                        , monitoringSession.getSessionID()
+                        , monitoringSession.getDataAssetID(), "");
                 
-                String metricName = elasticServiceRegistry.getMonitoringMetricName(monitoringServiceID);
-                System.out.println("metric name: " + metricName);
-                double monitoringValue = Double.parseDouble(ws.callPutMethod(monitoringSession.getDataAssetID()));
+                String requestXML = "";
                 
-                
-                MonitoringMetric monitoringMetric = new MonitoringMetric(metricName, monitoringValue);
-                listOfMonitoringMetrics.add(monitoringMetric);
-                
+            try {
+                requestXML = JAXBUtils.marshal(request, DataPartitionRequest.class);
+            } catch (JAXBException ex) {
+                Logger.getLogger(DataElasticityMonitor.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+                
+                
+            double monitoringValue = 0;
+
+            String metricName = elasticServiceRegistry.getMonitoringMetricName(monitoringServiceID);
+            if (metricName.equals("throughput")) {
+
+                System.out.println("metric name: " + metricName);
+                monitoringValue = sampleValue(metricName);
+            } else {
+                RestfulWSClient ws = new RestfulWSClient(uri);
+                monitoringValue = Double.parseDouble(ws.callPutMethod(requestXML));
+            }
+
+            MonitoringMetric monitoringMetric = new MonitoringMetric(metricName, monitoringValue);
+            listOfMonitoringMetrics.add(monitoringMetric);
+
+        }
+            System.out.println("MONITORING RESULT:\n");
+            for (MonitoringMetric monitoringMetric : listOfMonitoringMetrics){
+                
+                System.out.println("Metric: " + monitoringMetric.getMetricName() + " - Value: " + monitoringMetric.getMetricValue());
+            }
+
             ElasticState currentElasticState = determineCurrentElasticState();
             System.out.println("Current Elastic State ...");
             logElasticState(currentElasticState);
@@ -199,7 +224,22 @@ public class DataElasticityMonitor{
     }
     
     
- 
+    
+    private double sampleValue(String metricName){
+        double value=0;
+        
+        if (metricName.equals("datacompleteness")){
+            value=50;
+        } else if (metricName.equals("dataaccuracy")){
+            value=60;
+        } else if (metricName.equals("throughput")){
+            value =0.3;
+        } 
+        
+        
+        return value;
+        
+    }
     
     private void logElasticState(ElasticState elasticState ){
   

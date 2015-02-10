@@ -49,8 +49,8 @@ public class DataElasticityController {
 
             ControlProcess cp = determineAppropriateControlProcess(currentElasticState.geteStateID(), expectedElasticState.geteStateID());
             if (cp != null) {
-                System.out.println("Potential Next eState FOUND");
-                logElasticState(cp.geteStateID_j());
+               // System.out.println("Potential Next eState FOUND");
+               // logElasticState(cp.geteStateID_j());
 
                 listOfPotentialControlProcesses.add(cp);
             }
@@ -59,9 +59,11 @@ public class DataElasticityController {
 
         ControlProcess controlProcess = determineTheBestControlProcess(listOfPotentialControlProcesses);
         System.out.println("BEST CONTROL PROCESS FOUND");
-        logControlProcesses(controlProcess);
+      //  logControlProcesses(controlProcess);
+        System.out.println("FINAL Elastic STATE");
+        logElasticState(controlProcess.geteStateID_j());
 
-        startControlProcess(controlProcess);
+      //  startControlProcess(controlProcess);
 
     }
 

@@ -17,13 +17,19 @@ import java.io.IOException;
  */
 public class IOUtils {
   
-    private static String tomcatTempFolder;
+    private String tomcatTempFolder;
 
     public IOUtils() {
-        tomcatTempFolder="/Volumes/DATA/BigData";
-       // tomcatTempFolder = System.getProperty("java.io.tmpdir");
+    
+        tomcatTempFolder = System.getProperty("java.io.tmpdir");
         
     }
+
+    public IOUtils(String tomcatTempFolder) {
+        this.tomcatTempFolder = tomcatTempFolder;
+    }
+
+    
   
     
 
