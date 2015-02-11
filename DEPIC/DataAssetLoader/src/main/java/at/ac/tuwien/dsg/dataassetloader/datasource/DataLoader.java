@@ -102,10 +102,10 @@ public class DataLoader {
     
     
     
-    public void copyDataAssetRepo(DataPartitionRequest request){
+    public String copyDataAssetRepo(DataPartitionRequest request){
         
         DataAssetStore das = new DataAssetStore();
-        das.copyDataAssetRepo(request);
+        return das.copyDataAssetRepo(request);
         
         
     }

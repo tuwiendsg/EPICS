@@ -126,6 +126,8 @@ public class DataElasticityMonitor{
     
     private ElasticState determineCurrentElasticState(){
         ElasticState currentElasticState = null;
+        Logger.getLogger(DataElasticityMonitor.class.getName()).log(Level.INFO, "Determine Current ElasticState");
+        Logger.getLogger(DataElasticityMonitor.class.getName()).log(Level.INFO, "NoOf EStates: " + listOfElasticStates.size());
         
         for (ElasticState elasticState : listOfElasticStates) {
             
@@ -134,6 +136,9 @@ public class DataElasticityMonitor{
             for (MetricCondition condition: conditions) {
                 String metricName  =condition.getMetricName();
                 double metricValue = findMetricValue(metricName);
+                
+                System.out.println("Metric: " + metricName +" - Value: " + metricValue);
+                System.out.println("Lower Bound: " + condition.getLowerBound() + " - upper bound: " + condition.getUpperBound() );
                 
                 if (!(metricValue>=condition.getLowerBound() && metricValue<=condition.getUpperBound())){
                     rs = false;

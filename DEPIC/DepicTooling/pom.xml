@@ -134,6 +134,7 @@
     </dependencies>
 
     <build>
+        <finalName>DepicTooling</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

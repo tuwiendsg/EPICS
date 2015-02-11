@@ -20,6 +20,7 @@ import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.common.utils.IOUtils;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.depic.depictool.connector.ComotConnector;
 import at.ac.tuwien.dsg.depic.depictool.connector.SalsaConnector;
 
@@ -127,9 +128,23 @@ public class Generator {
         elStore.storeElasticityProcesses(eDaaSName,elasticStateSetXML, elasticityProcessesXML, "");
         
         
-        
+        //configure elasticity services
+        configureElasticityServices(listOfElasticServices);
         
 
+    }
+    
+    private void configureElasticityServices(List<ElasticService> listOfElasticServices){
+        
+        for (ElasticService elasticService : listOfElasticServices){
+            String configureUri = elasticService.getUri()+"/conf";
+            Configuration cfg =new Configuration();
+            String daLoaderIp = cfg.getConfig("DATA.ASSET.LOADER.IP.LOCAL");
+            RestfulWSClient ws = new RestfulWSClient(configureUri);
+            ws.callPutMethod(daLoaderIp);
+        }
+        
+        
     }
 
     private void generateElasticDaaS() {

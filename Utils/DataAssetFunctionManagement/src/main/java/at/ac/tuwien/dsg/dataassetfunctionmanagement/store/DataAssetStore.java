@@ -120,5 +120,14 @@ public class DataAssetStore {
         return daXML;
     }
     
+    public void cleanTempStore(){
+        
+        
+        String sql ="TRUNCATE TABLE DataAsset";
+        
+        connectionManager.ExecuteUpdate(sql);
+        
+    }
+    
     
 }

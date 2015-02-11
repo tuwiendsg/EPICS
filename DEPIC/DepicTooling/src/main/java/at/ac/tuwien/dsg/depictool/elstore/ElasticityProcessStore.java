@@ -216,4 +216,20 @@ public class ElasticityProcessStore {
             
         }
     }
+    
+    public void cleanElasticityProcess(){
+
+        String sql_daf ="TRUNCATE TABLE DataAssetFunction";
+        String sql_es ="TRUNCATE TABLE ElasticService";
+        String sql_ed ="TRUNCATE TABLE ElasticDaaS";
+        String sql_in ="TRUNCATE TABLE InputSpecification";
+      
+        
+        connectionManager.ExecuteUpdate(sql_daf);
+        connectionManager.ExecuteUpdate(sql_es);
+        connectionManager.ExecuteUpdate(sql_ed);
+        connectionManager.ExecuteUpdate(sql_in);
+        
+
+    }
 }

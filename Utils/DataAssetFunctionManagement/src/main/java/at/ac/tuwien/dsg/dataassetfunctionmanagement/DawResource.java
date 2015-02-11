@@ -64,11 +64,14 @@ public class DawResource {
     
         Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + dataAssetFunctionXML);
         UUID dafID = UUID.randomUUID();
-
+        
+        DataAssetStore das = new DataAssetStore();
+        das.cleanTempStore();
+        
         WorkflowEngine wf = new WorkflowEngine(dataAssetFunctionXML,dafID.toString());
         wf.startWFEngine();
         
-        DataAssetStore das = new DataAssetStore();
+        
         int noOfPartitions = das.getNumberOfPartitionsByDataAssetID(dafID.toString());
         
         String returnString = dafID.toString()+";"+String.valueOf(noOfPartitions);

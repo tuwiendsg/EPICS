@@ -12,6 +12,7 @@ import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetloader.store.DataAssetStore;
 import at.ac.tuwien.dsg.dataassetloader.datasource.DataLoader;
 import at.ac.tuwien.dsg.dataassetloader.store.DataAssetFunctionStore;
+import at.ac.tuwien.dsg.dataassetloader.util.ThroughputMonitor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
@@ -149,7 +150,8 @@ public class DataassetResource {
     public String getDataPartition(String dataAssetRequestXML) {
 
        String log ="RECEIVED: " + dataAssetRequestXML;
-        Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, log);
+       
+        Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO, log);
         
         DataPartitionRequest request=null;
         try {
@@ -160,6 +162,16 @@ public class DataassetResource {
         
         DataLoader dataLoader = new DataLoader();
         String daXML =dataLoader.getDataPartitionRepo(request);
+        
+        
+        request.setPartitionID("");
+        try {
+            dataAssetRequestXML = JAXBUtils.marshal(request, DataPartitionRequest.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        ThroughputMonitor.trackingLoad(dataAssetRequestXML);
         
         return daXML;
     }
@@ -194,7 +206,7 @@ public class DataassetResource {
     public String saveDataPartition(String dataAssetXML) {
 
          String log ="RECEIVED: " + dataAssetXML;
-        Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, log);
+        Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO,log);
         
         DataAsset dataAsset=null;
         try {
@@ -207,6 +219,19 @@ public class DataassetResource {
         dataLoader.saveDataPartitionRepo(dataAsset);
         
         return "";
+    }
+    
+    @PUT
+    @Path("repo/throughput")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String getThroughput(String dataAssetRequestXML) {
+
+      
+       double throughput = ThroughputMonitor.calculateThroughput(dataAssetRequestXML);
+        
+        return String.valueOf(throughput);
+        
     }
 
 }

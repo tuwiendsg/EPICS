@@ -11,7 +11,8 @@ import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.datacompletenessmonitor.algorithm.CompletenessMonitor;
 import at.ac.tuwien.dsg.datacompletenessmonitor.rest.CompletenessResource;
-import at.ac.tuwien.dsg.datacompletenessmonitor.util.Configuration;
+import at.ac.tuwien.dsg.depic.dataaccuracymonitor.util.Configuration;
+
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

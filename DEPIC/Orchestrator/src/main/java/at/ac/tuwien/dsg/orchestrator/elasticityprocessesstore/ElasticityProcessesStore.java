@@ -38,18 +38,13 @@ public class ElasticityProcessesStore {
     
     public ElasticityProcessesStore() {
         Configuration config = new Configuration();
-//        String ip = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.IP");
-//        String port = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.PORT");
-//        String database = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.DATABASE");
-//        String username = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.USERNAME");
-//        String password = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.PASSWORD");
+        String ip = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.IP");
+        String port = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.PORT");
+        String database = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.DATABASE");
+        String username = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.USERNAME");
+        String password = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.PASSWORD");
         
-        
-         String ip = "localhost";
-        String port = "3306";
-        String database = "ElasticityProcess";
-        String username = "root";
-        String password = "123";
+
         connectionManager = new MySqlConnectionManager(ip, port, database, username, password);
 
     }

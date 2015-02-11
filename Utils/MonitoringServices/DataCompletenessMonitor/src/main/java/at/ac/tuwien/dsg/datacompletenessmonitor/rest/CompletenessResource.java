@@ -8,6 +8,7 @@ import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.utils.IOUtils;
 import at.ac.tuwien.dsg.datacompletenessmonitor.algorithm.CompletenessMonitor;
 import at.ac.tuwien.dsg.datacompletenessmonitor.service.CompletenessService;
+import at.ac.tuwien.dsg.depic.dataaccuracymonitor.util.Configuration;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,7 +49,9 @@ public class CompletenessResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String getXml() {
         //TODO return proper representation object
-        return "dc";
+        Configuration cfg = new Configuration();
+        String configStr = "Completeness: " + cfg.getConfig("DATA.ASSET.LOADER.IP");
+        return configStr;
     }
 
     /**
@@ -66,6 +69,7 @@ public class CompletenessResource {
         
         CompletenessService completenessService = new CompletenessService();
         double completeness = completenessService.requestMonitorDataCompletenessService(dataAssetRequest);
+        completeness = Math.round(completeness);
         
         return String.valueOf(completeness);
     }
@@ -74,8 +78,8 @@ public class CompletenessResource {
     @PUT
     @Path("conf")
     @Consumes(MediaType.APPLICATION_XML)
-    public void configure(String configure) {
-        IOUtils iou = new IOUtils();
-        iou.writeData(configure, "config.properties");
+    public void configure(String dataAssetLoaderIp) {
+        Configuration cfg = new Configuration();
+        cfg.setProperties("DATA.ASSET.LOADER.IP", dataAssetLoaderIp);
     }
 }
