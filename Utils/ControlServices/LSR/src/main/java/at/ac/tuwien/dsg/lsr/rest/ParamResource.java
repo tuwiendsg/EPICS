@@ -5,6 +5,7 @@
 package at.ac.tuwien.dsg.lsr.rest;
 
 import at.ac.tuwien.dsg.common.deployment.ControlParam;
+import at.ac.tuwien.dsg.depic.dataaccuracymonitor.util.Configuration;
 import at.ac.tuwien.dsg.externalserviceutils.IOUtils;
 import at.ac.tuwien.dsg.externalserviceutils.JAXBUtils;
 import at.ac.tuwien.dsg.lsr.algorithm.service.LSRService;
@@ -47,7 +48,9 @@ public class ParamResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String getXml() {
         //TODO return proper representation object
-        return "lrs";
+        Configuration cfg = new Configuration();
+        String configStr = "LSR: " + cfg.getConfig("DATA.ASSET.LOADER.IP");
+        return configStr;
     }
 
     /**
@@ -60,7 +63,7 @@ public class ParamResource {
     @Produces(MediaType.APPLICATION_XML)
     public String controlDataAsset(String controlParamsXml) {
         
-        Logger.getLogger(ParamResource.class.getName()).log(Level.SEVERE, "RECIEVED: " + controlParamsXml);
+        Logger.getLogger(ParamResource.class.getName()).log(Level.INFO, "RECIEVED: " + controlParamsXml);
         
         
         JAXBUtils jAXBUtils = new JAXBUtils();
@@ -73,18 +76,16 @@ public class ParamResource {
             Logger.getLogger(ParamResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return "ok";
+        return "";
     }
     
     
     @PUT
     @Path("conf")
     @Consumes(MediaType.APPLICATION_XML)
-    public void configure(String configure) {
-        Logger.getLogger(ParamResource.class.getName()).log(Level.SEVERE, "RECIEVED: " + configure);
-        
-        IOUtils iou = new IOUtils();
-        iou.writeData(configure, "config.properties");
+    public void configure(String dataAssetLoaderIp) {
+        Configuration cfg = new Configuration();
+        cfg.setProperties("DATA.ASSET.LOADER.IP", dataAssetLoaderIp);
     }
     
     

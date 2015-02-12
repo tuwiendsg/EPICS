@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.common.deployment;
+package at.ac.tuwien.dsg.common.entity.eda.da;
 
 import at.ac.tuwien.dsg.common.entity.process.Parameter;
 import java.util.List;
@@ -16,9 +16,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jun
  */
-@XmlRootElement(name = "ControlParam")
+@XmlRootElement(name = "DataControlRequest")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ControlParam {
+public class DataControlRequest {
+    
+    
+    @XmlElement(name = "edaas", required = true)
+    String edaas;
+    
+    @XmlElement(name = "customerID", required = true)
+    String customerID;
     
     @XmlElement(name = "dataAssetID", required = true)
     String dataAssetID;
@@ -26,12 +33,32 @@ public class ControlParam {
     @XmlElement(name = "listOfParameters", required = true)
     List<Parameter> listOfParameters;
 
-    public ControlParam() {
+    public DataControlRequest() {
     }
 
-    public ControlParam(String dataAssetID, List<Parameter> listOfParameters) {
+    public DataControlRequest(String edaas, String customerID, String dataAssetID, List<Parameter> listOfParameters) {
+        this.edaas = edaas;
+        this.customerID = customerID;
         this.dataAssetID = dataAssetID;
         this.listOfParameters = listOfParameters;
+    }
+    
+    
+
+    public String getEdaas() {
+        return edaas;
+    }
+
+    public void setEdaas(String edaas) {
+        this.edaas = edaas;
+    }
+
+    public String getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(String customerID) {
+        this.customerID = customerID;
     }
 
     public String getDataAssetID() {
@@ -49,6 +76,8 @@ public class ControlParam {
     public void setListOfParameters(List<Parameter> listOfParameters) {
         this.listOfParameters = listOfParameters;
     }
+    
+    
     
     
     
