@@ -12,6 +12,7 @@ import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.MySqlConnectionManager;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
+import at.ac.tuwien.dsg.dataassetloader.util.ThroughputMonitor;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -159,6 +160,7 @@ public class DataAssetStore {
      
     public String copyDataAssetRepo(DataPartitionRequest request){
         
+       
         System.out.println("Staring Copying Data ...");
             
             InputStream inputStream = null;
@@ -186,6 +188,11 @@ public class DataAssetStore {
                     dataAssetPartition.setName(name);
                     insertDataPartitionRepo(dataAssetPartition);
                     noOfPartitions++;
+                    
+                    
+                    ThroughputMonitor.trackingLoad(request);
+                    
+                    
                     }
 
                 rs.close();

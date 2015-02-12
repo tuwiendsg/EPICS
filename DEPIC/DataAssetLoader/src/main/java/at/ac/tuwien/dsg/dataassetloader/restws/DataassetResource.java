@@ -162,16 +162,8 @@ public class DataassetResource {
         
         DataLoader dataLoader = new DataLoader();
         String daXML =dataLoader.getDataPartitionRepo(request);
-        
-        
-        request.setPartitionID("");
-        try {
-            dataAssetRequestXML = JAXBUtils.marshal(request, DataPartitionRequest.class);
-        } catch (JAXBException ex) {
-            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        ThroughputMonitor.trackingLoad(dataAssetRequestXML);
+               
+        ThroughputMonitor.trackingLoad(request);
         
         return daXML;
     }
@@ -218,6 +210,18 @@ public class DataassetResource {
         DataLoader dataLoader = new DataLoader();
         dataLoader.saveDataPartitionRepo(dataAsset);
         
+        
+        String[] strs = dataAsset.getName().split(";");
+        String edaasName = strs[0];
+        String customerID = strs[1];
+        String dawName = strs[2];
+        
+        DataPartitionRequest request= new DataPartitionRequest(edaasName, customerID, dawName, "");
+        ThroughputMonitor.trackingLoad(request);
+       
+        
+        
+        
         return "";
     }
     
@@ -226,9 +230,14 @@ public class DataassetResource {
     @Consumes("application/xml")
     @Produces("application/xml")
     public String getThroughput(String dataAssetRequestXML) {
-
+        DataPartitionRequest request=null;
+        try {
+            request = JAXBUtils.unmarshal(dataAssetRequestXML, DataPartitionRequest.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
       
-       double throughput = ThroughputMonitor.calculateThroughput(dataAssetRequestXML);
+       double throughput = ThroughputMonitor.calculateThroughput(request);
         
         return String.valueOf(throughput);
         
