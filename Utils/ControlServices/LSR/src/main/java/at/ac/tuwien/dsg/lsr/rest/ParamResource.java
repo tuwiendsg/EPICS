@@ -4,10 +4,11 @@
  */
 package at.ac.tuwien.dsg.lsr.rest;
 
-import at.ac.tuwien.dsg.common.deployment.ControlParam;
+
+import at.ac.tuwien.dsg.common.entity.eda.da.DataControlRequest;
+import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.dataaccuracymonitor.util.Configuration;
-import at.ac.tuwien.dsg.externalserviceutils.IOUtils;
-import at.ac.tuwien.dsg.externalserviceutils.JAXBUtils;
+
 import at.ac.tuwien.dsg.lsr.algorithm.service.LSRService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,16 +62,16 @@ public class ParamResource {
     @PUT
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    public String controlDataAsset(String controlParamsXml) {
+    public String controlDataAsset(String dataControlRequestXML) {
         
-        Logger.getLogger(ParamResource.class.getName()).log(Level.INFO, "RECIEVED: " + controlParamsXml);
+        Logger.getLogger(ParamResource.class.getName()).log(Level.INFO, "RECIEVED: " + dataControlRequestXML);
         
         
         JAXBUtils jAXBUtils = new JAXBUtils();
         try {
-            ControlParam controlParam = jAXBUtils.unmarshal(controlParamsXml, ControlParam.class);
+            DataControlRequest controlRequest = jAXBUtils.unmarshal(dataControlRequestXML, DataControlRequest.class);
             LSRService lSRService = new LSRService();
-            lSRService.requestLSRService(controlParam);
+            lSRService.requestLSRService(controlRequest);
             
         } catch (JAXBException ex) {
             Logger.getLogger(ParamResource.class.getName()).log(Level.SEVERE, null, ex);

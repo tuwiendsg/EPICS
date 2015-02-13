@@ -17,7 +17,7 @@
 	<modules>
 		<module>DEPIC</module>
 	 <module>Utils</module>
-	 <module>CloudLyra</module>
+	
 	</modules>
     
 </project>
