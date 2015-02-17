@@ -7,6 +7,7 @@ package at.ac.tuwien.dsg.depictool.elstore;
 
 import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import at.ac.tuwien.dsg.common.deployment.ElasticService;
+import at.ac.tuwien.dsg.common.deployment.PrimitiveAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.process.ActionDependency;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
@@ -15,6 +16,7 @@ import at.ac.tuwien.dsg.common.utils.MySqlConnectionManager;
 import at.ac.tuwien.dsg.depictool.util.Configuration;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
+import org.apache.commons.io.IOUtils;
 
 /**
  *
@@ -32,12 +35,20 @@ public class ElasticityProcessStore {
     MySqlConnectionManager connectionManager;
     
     public ElasticityProcessStore() {
-        Configuration config = new Configuration();
-        String ip = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.IP");
-        String port = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.PORT");
-        String database = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.DATABASE");
-        String username = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.USERNAME");
-        String password = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.PASSWORD");
+//        Configuration config = new Configuration();
+//        String ip = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.IP");
+//        String port = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.PORT");
+//        String database = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.DATABASE");
+//        String username = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.USERNAME");
+//        String password = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.PASSWORD");
+        
+        String ip = "localhost";
+        String port = "3306";
+        String database = "ElasticityProcess";
+        String username = "root";
+        String password = "123";
+        
+        
         connectionManager = new MySqlConnectionManager(ip, port, database, username, password);
 
     }
@@ -79,6 +90,33 @@ public class ElasticityProcessStore {
         String sql = "INSERT INTO ElasticDaaS (name, elasticStateSet, elasticity_processes, deployment_descriptions) VALUES ('"+name+"',?,?,?)";
     
         connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
+    }
+    
+    public String getElasticityProcesses(String eDaaSName){
+     
+        String sql = "SELECT * FROM ElasticDaaS WHERE name='" + eDaaSName + "'";
+        String elProcessXML = "";
+       
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        try {
+            while (rs.next()) {
+                InputStream inputStream = rs.getBinaryStream("elasticity_processes");
+                StringWriter writer = new StringWriter();
+                String encoding = StandardCharsets.UTF_8.name();
+                IOUtils.copy(inputStream, writer, encoding);
+                elProcessXML = writer.toString();          
+                
+            }
+
+            rs.close();
+        } catch (Exception ex) {
+
+        }
+
+        return elProcessXML;
+
     }
     
     
@@ -174,6 +212,33 @@ public class ElasticityProcessStore {
         }
         
         return deployAction;
+    }
+    
+    
+    public PrimitiveAction getPrimitiveActions(){
+        String sql = "select * from PrimitiveAction";
+        List<DeployAction> listOfDeployActions = new ArrayList<DeployAction>();
+        
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+        try {
+            while (rs.next()) {
+            
+                String actionName = rs.getString("actionName"); 
+                String artifact = rs.getString("artifact"); 
+                String type = rs.getString("type"); 
+                String restapi = rs.getString("restapi"); 
+                DeployAction deployAction = new DeployAction(actionName, actionName, type, artifact, restapi);
+                listOfDeployActions.add(deployAction);
+            }
+            rs.close();
+
+        } catch (Exception ex) {
+
+        }
+        
+        PrimitiveAction primitiveAction = new PrimitiveAction(listOfDeployActions);
+        
+        return primitiveAction;
     }
     
     public List<String> getElasticDaasNames(){

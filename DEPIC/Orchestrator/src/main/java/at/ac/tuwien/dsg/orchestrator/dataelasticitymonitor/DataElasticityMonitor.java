@@ -68,7 +68,7 @@ public class DataElasticityMonitor{
                 System.out.println("Get monitoring service info: " +monitoringServiceID);
                 
                 
-                String uri = elasticServiceRegistry.getMonitoringServiceURI(monitoringServiceID);
+                String uri = elasticServiceRegistry.getElasticServiceURI(monitoringServiceID);
                
                 System.out.println("Run Monitoring Service ID: " + monitoringServiceID);
                 System.out.println("URI: " + uri);
@@ -108,7 +108,7 @@ public class DataElasticityMonitor{
             System.out.println("");
                 if (!isExpectedElasticState(currentElasticState)) {
                     System.out.println("FAIL VALIDATION");
-                    DataElasticityController controller = new DataElasticityController(listOfExpectedElasticStates, listOfControlProcesses);
+                    DataElasticityController controller = new DataElasticityController(listOfExpectedElasticStates, listOfControlProcesses, monitoringSession);
                     controller.startControlElasticState(currentElasticState);
                 } else {
                     System.out.println("PASS VALIDATION");

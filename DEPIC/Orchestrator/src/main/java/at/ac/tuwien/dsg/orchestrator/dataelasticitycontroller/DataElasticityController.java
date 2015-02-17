@@ -7,13 +7,16 @@ package at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller;
 
 import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
 import at.ac.tuwien.dsg.common.entity.eda.MetricCondition;
+import at.ac.tuwien.dsg.common.entity.eda.da.DataControlRequest;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
+import at.ac.tuwien.dsg.common.entity.eda.ep.MonitoringSession;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ParallelGateway;
 import at.ac.tuwien.dsg.common.entity.eda.ep.QueueTask;
 import at.ac.tuwien.dsg.common.entity.process.Parameter;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
+import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,12 +36,14 @@ public class DataElasticityController {
     List<ControlProcess> listOfControlProcesses;
     List<QueueTask> listOfTasks;
     List<String> traversedGatewayList;
+    MonitoringSession monitoringSession;
 
-    public DataElasticityController(List<ElasticState> listOfExpectedElasticStates, List<ControlProcess> listOfControlProcesses) {
+    public DataElasticityController(List<ElasticState> listOfExpectedElasticStates, List<ControlProcess> listOfControlProcesses, MonitoringSession monitoringSession) {
         this.listOfExpectedElasticStates = listOfExpectedElasticStates;
         this.listOfControlProcesses = listOfControlProcesses;
         listOfTasks = new ArrayList<QueueTask>();
         traversedGatewayList = new ArrayList<String>();
+        this.monitoringSession = monitoringSession;
     }
 
     public void startControlElasticState(ElasticState currentElasticState) {
@@ -159,8 +164,38 @@ public class DataElasticityController {
     
     private void executeControlProcess(ControlProcess cp){
         
+        List<ControlAction> listOfControlActions = cp.getListOfControlActions();
+        
         for (QueueTask task : listOfTasks) {
             System.out.println(task.getProperty() + " : TaskID: " + task.getTaskID());
+            String controlActionName = "";
+            List<Parameter> listOfParams = null;
+            for (ControlAction ca: listOfControlActions){
+                if (ca.getControlActionID().equals(task.getTaskID())){
+                    listOfParams = ca.getListOfParameters();
+                    controlActionName = ca.getControlActionName();
+                    break;
+                }
+            }
+            
+            DataControlRequest controlRequest = new DataControlRequest(monitoringSession.getEdaasName()
+                    , monitoringSession.getSessionID()
+                    , monitoringSession.getDataAssetID()
+                    , listOfParams);
+            
+            String requestXML="";
+            try {
+                requestXML = JAXBUtils.marshal(controlRequest, DataControlRequest.class);
+            } catch (JAXBException ex) {
+                Logger.getLogger(DataElasticityController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            ElasticServiceRegistry elasticServiceRegistry = new ElasticServiceRegistry(monitoringSession.getEdaasName());
+            String uri = elasticServiceRegistry.getElasticServiceURI(controlActionName);
+      
+            RestfulWSClient ws = new RestfulWSClient(uri);
+            ws.callPutMethod(requestXML);
         }
         
         

@@ -5,7 +5,11 @@
  */
 package at.ac.tuwien.dsg.orchestrator.restws;
 
-import at.ac.tuwien.dsg.orchestrator.deployment.Deployment;
+import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
+
+import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.PathParam;
@@ -41,7 +45,9 @@ public class ElasticityprocessesResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String getXml() {
         //TODO return proper representation object
-        return "orchestrator";
+        Configuration cfg = new Configuration();
+        String configStr = "ORCHESTRATOR: " + cfg.getConfig("DB.ELASTICITY.PROCESSES.REPO.IP");
+        return configStr;
     }
 
     /**
@@ -49,12 +55,19 @@ public class ElasticityprocessesResource {
      * @param content representation for the resource
      * @return an HTTP response with content of the updated or created resource.
      */
+    
+    
     @PUT
     @Consumes(MediaType.APPLICATION_XML)
-    public void startDeployment(String edaas) {
+    @Produces(MediaType.APPLICATION_XML)
+    public String getElasticityProcesses(String eDaaSName) {
         
-        Deployment deployment = new Deployment();
-        deployment.requestDeploymentService(edaas);
-        
+        Logger.getLogger(ElasticityprocessesResource.class.getName()).log(Level.INFO, "RECIEVED: " + eDaaSName);
+        ElasticityProcessesStore eps = new ElasticityProcessesStore();
+        String elProcess = eps.getElasticityProcesses(eDaaSName);
+     
+        return elProcess;
     }
+    
+   
 }

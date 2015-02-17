@@ -33,11 +33,6 @@
             <name>infosys-maven-releases</name>
             <url>http://repo.infosys.tuwien.ac.at/artifactory/comot</url>
         </repository>
-        
-      
-       
-        
-        
 
     </repositories>
 
@@ -69,14 +64,7 @@
         
         
 
-        <!--
-            
-       <dependency>
-            <groupId>tosca</groupId>
-            <artifactId>tosca-description</artifactId>
-            <version>1.0</version>
-        </dependency>
--->
+   
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -129,6 +117,11 @@
             <version>0.0.1-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
+        
+        
+        
+
+        
 
         
     </dependencies>

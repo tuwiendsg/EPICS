@@ -38,7 +38,7 @@ public class ElasticServiceRegistry {
         
     }
 
-    public String getMonitoringServiceURI(String serviceID){
+    public String getElasticServiceURI(String serviceID){
         
         List<String> listOfServices = new ArrayList<String>();
         

@@ -251,5 +251,32 @@ public class ElasticityProcessesStore {
 
         return metricProcess;
     }
+       
+       public String getElasticityProcesses(String eDaaSName){
+     
+        String sql = "SELECT * FROM ElasticDaaS WHERE name='" + eDaaSName + "'";
+        String elProcessXML = "";
+       
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        try {
+            while (rs.next()) {
+                InputStream inputStream = rs.getBinaryStream("elasticity_processes");
+                StringWriter writer = new StringWriter();
+                String encoding = StandardCharsets.UTF_8.name();
+                IOUtils.copy(inputStream, writer, encoding);
+                elProcessXML = writer.toString();          
+                
+            }
+
+            rs.close();
+        } catch (Exception ex) {
+
+        }
+
+        return elProcessXML;
+
+    }
 
 }

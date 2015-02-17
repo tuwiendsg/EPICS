@@ -6,6 +6,8 @@
 
 package at.ac.tuwien.dsg.common.deployment;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -13,20 +15,26 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jun
  */
-@XmlRootElement (name = "DeployAction")
+@XmlRootElement(name = "DeployAction")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DeployAction {
+ 
+    @XmlElement(name = "actionID", required = true)
     String actionID;
+    
+    @XmlElement(name = "actionName", required = true)
     String actionName;
     
+    @XmlElement(name = "artifact", required = false)
     String artifact;
+    
+    @XmlElement(name = "artifactType", required = false)
     String artifactType;
     
-    // call this API, the action is execute. This must be filled after deployment 
-    // to have the real IP of the VM which contain the artifact of the action
+    @XmlElement(name = "apiEndpoint", required = false)
     String apiEndpoint;	
     
-    // call this API, a new instance of the artifact is created.
-    // This will be fill after SALSA description is generated.
+    @XmlElement(name = "deploymentEndpoint", required = false)
     String deploymentEndpoint;
 
     public DeployAction() {
@@ -46,14 +54,11 @@ public class DeployAction {
         this.artifactType = artifactType;
         this.apiEndpoint = apiEndpoint;
     }
-    
-    
 
     public String getActionID() {
         return actionID;
     }
 
-    @XmlElement (name ="actionID")
     public void setActionID(String actionID) {
         this.actionID = actionID;
     }
@@ -62,43 +67,44 @@ public class DeployAction {
         return actionName;
     }
 
-    @XmlElement (name ="actionName")
     public void setActionName(String actionName) {
         this.actionName = actionName;
     }
 
-    public String getArtifactType() {
-		return artifactType;
-	}
-
-	public void setArtifactType(String artifactType) {
-		this.artifactType = artifactType;
-	}
-
-	public String getApiEndpoint() {
-		return apiEndpoint;
-	}
-
-	public void setApiEndpoint(String apiEndpoint) {
-		this.apiEndpoint = apiEndpoint;
-	}
-
-	public String getArtifact() {
+    public String getArtifact() {
         return artifact;
     }
 
-    @XmlElement (name ="artifact")
     public void setArtifact(String artifact) {
         this.artifact = artifact;
     }
 
-	public String getDeploymentEndpoint() {
-		return deploymentEndpoint;
-	}
+    public String getArtifactType() {
+        return artifactType;
+    }
 
-	public void setDeploymentEndpoint(String deploymentEndpoint) {
-		this.deploymentEndpoint = deploymentEndpoint;
-	}
+    public void setArtifactType(String artifactType) {
+        this.artifactType = artifactType;
+    }
+
+    public String getApiEndpoint() {
+        return apiEndpoint;
+    }
+
+    public void setApiEndpoint(String apiEndpoint) {
+        this.apiEndpoint = apiEndpoint;
+    }
+
+    public String getDeploymentEndpoint() {
+        return deploymentEndpoint;
+    }
+
+    public void setDeploymentEndpoint(String deploymentEndpoint) {
+        this.deploymentEndpoint = deploymentEndpoint;
+    }
+    
+    
+
     
     
     

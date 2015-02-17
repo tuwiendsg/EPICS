@@ -7,9 +7,10 @@ package at.ac.tuwien.dsg.lsr.rest;
 
 import at.ac.tuwien.dsg.common.entity.eda.da.DataControlRequest;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.depic.dataaccuracymonitor.util.Configuration;
+
 
 import at.ac.tuwien.dsg.lsr.algorithm.service.LSRService;
+import at.ac.tuwien.dsg.lsr.util.Configuration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Context;

@@ -23,13 +23,12 @@ public class LinearRegression {
         
     }
 
-    public DataAsset improveDataCompleteness(DataAsset dataAsset, double datacompleteness,String[] attributes) {
+    public DataAsset improveDataCompleteness(DataAsset dataAsset,int attributeIndex) {
      
         List<DataItem> listOfDataItems = dataAsset.getListOfDataItems();
 
-        int noOfAttributes = attributes.length;
-        
-        for (int attCounter=1;attCounter<noOfAttributes;attCounter++) {
+       
+     
         
         int n = 0;
 
@@ -38,12 +37,14 @@ public class LinearRegression {
         double sum_y = 0;
         double sum_xy = 0;
 
-        for (DataItem item : listOfDataItems) {
+        
+        for (int i = 0; i < listOfDataItems.size(); i++) {
+                DataItem item = listOfDataItems.get(i);
             
             List<DataAttribute> dataAttributes = item.getListOfAttributes();
             
-            DataAttribute dataAttributeX = getAttributeFromName(dataAttributes,attributes[0]);
-            DataAttribute dataAttributeY = getAttributeFromName(dataAttributes,attributes[attCounter]);
+            DataAttribute dataAttributeX = new DataAttribute(dataAttributes.get(0).getAttributeName(), String.valueOf(i));
+            DataAttribute dataAttributeY = dataAttributes.get(attributeIndex);
             
             double x = Double.parseDouble(dataAttributeX.getAttributeValue());
             double y = Double.parseDouble(dataAttributeY.getAttributeValue());
@@ -63,18 +64,18 @@ public class LinearRegression {
         double slope = (1.0 * n * sum_xy - sum_x * sum_y) / (1.0 * n * sum_x2 - sum_x * sum_x);
         double intercept;
         intercept = sum_y / n - slope * (sum_x / n);
-          
-            for (int i = 0; i < listOfDataItems.size(); i++) {
-                DataItem item = listOfDataItems.get(i);
-                
-                List<DataAttribute> dataAttributes = item.getListOfAttributes();
-                DataAttribute dataAttributeX = getAttributeFromName(dataAttributes,attributes[0]);
-                DataAttribute dataAttributeY = getAttributeFromName(dataAttributes,attributes[attCounter]);
-                
-                double x = Double.parseDouble(dataAttributeX.getAttributeValue());
-                
-                if (x==0.0 && i!=0) {
-                    DataItem previousItem = listOfDataItems.get(i-1);
+
+        for (int i = 0; i < listOfDataItems.size(); i++) {
+            DataItem item = listOfDataItems.get(i);
+
+            List<DataAttribute> dataAttributes = item.getListOfAttributes();
+            DataAttribute dataAttributeX = new DataAttribute(dataAttributes.get(0).getAttributeName(), String.valueOf(i));
+            DataAttribute dataAttributeY = dataAttributes.get(attributeIndex);
+
+            double x = Double.parseDouble(dataAttributeX.getAttributeValue());
+
+            if (x == 0.0 && i != 0) {
+                DataItem previousItem = listOfDataItems.get(i-1);
                     
                     List<DataAttribute> preDataAttributes = previousItem.getListOfAttributes();
                     dataAttributeX = preDataAttributes.get(0);
@@ -89,7 +90,7 @@ public class LinearRegression {
                 dataAttributeY.setAttributeValue(String.valueOf(y_i));
                        
             }
-        }
+        
 
         return dataAsset;
     }
