@@ -9,8 +9,10 @@ import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
+import at.ac.tuwien.dsg.dataassetloader.datasource.CassandraDataLoader;
 import at.ac.tuwien.dsg.dataassetloader.store.DataAssetStore;
-import at.ac.tuwien.dsg.dataassetloader.datasource.DataLoader;
+import at.ac.tuwien.dsg.dataassetloader.datasource.MySQLDataLoader;
+import at.ac.tuwien.dsg.dataassetloader.store.CassandraDataAssetStore;
 import at.ac.tuwien.dsg.dataassetloader.store.DataAssetFunctionStore;
 import at.ac.tuwien.dsg.dataassetloader.util.ThroughputMonitor;
 import java.util.logging.Level;
@@ -68,7 +70,7 @@ public class DataassetResource {
         DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
         String dataAssetFunctionXML = dafStore.getDataAssetFunction(dataAssetID);
         
-        DataLoader dataLoader = new DataLoader();
+        MySQLDataLoader dataLoader = new MySQLDataLoader();
         String noOfPartitions = dataLoader.loadDataAsset(dataAssetFunctionXML);
         
         return noOfPartitions;
@@ -135,7 +137,7 @@ public class DataassetResource {
         }
         
         
-        DataLoader dataLoader = new DataLoader();
+        MySQLDataLoader dataLoader = new MySQLDataLoader();
         String noOfPartitions = dataLoader.copyDataAssetRepo(request);
         
         
@@ -160,7 +162,7 @@ public class DataassetResource {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        DataLoader dataLoader = new DataLoader();
+        MySQLDataLoader dataLoader = new MySQLDataLoader();
         String daXML =dataLoader.getDataPartitionRepo(request);
                
         ThroughputMonitor.trackingLoad(request);
@@ -184,7 +186,7 @@ public class DataassetResource {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        DataLoader dataLoader = new DataLoader();
+        MySQLDataLoader dataLoader = new MySQLDataLoader();
         String noOfDataPartitionRepo =dataLoader.getNoOfParitionRepo(request);
         
         return noOfDataPartitionRepo;
@@ -207,7 +209,7 @@ public class DataassetResource {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        DataLoader dataLoader = new DataLoader();
+        MySQLDataLoader dataLoader = new MySQLDataLoader();
         dataLoader.saveDataPartitionRepo(dataAsset);
         
         
@@ -240,6 +242,77 @@ public class DataassetResource {
        double throughput = ThroughputMonitor.calculateThroughput(request);
         
         return String.valueOf(throughput);
+        
+    }
+    
+    @PUT
+    @Path("repo/cassandra/table")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String createCassandraTable(String xml) {
+       
+        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
+        cdas.openConnection();
+        cdas.createDataAssetTable();
+        cdas.closeConnection();
+        
+        
+        return "";
+        
+    }
+    
+    
+    @PUT
+    @Path("repo/cassandra/keyspace")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String createCassandraKeyspace(String xml) {
+       
+        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
+        cdas.openConnection();
+        cdas.createKeySpace();
+        cdas.closeConnection();
+        
+        
+        return "";
+        
+    }
+    
+    @PUT
+    @Path("repo/cassandra/insert")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String insertCassandraData(String xml) {
+       
+        try {
+            DataAsset dataAsset = JAXBUtils.unmarshal(xml, DataAsset.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
+        cdas.openConnection();
+        cdas.createKeySpace();
+        cdas.closeConnection();
+        
+        
+        return "";
+        
+    }
+    
+    @PUT
+    @Path("repo/cassandra/keyspace")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String getCassandraData(String xml) {
+       
+        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
+        cdas.openConnection();
+        cdas.createKeySpace();
+        cdas.closeConnection();
+        
+        
+        return "";
         
     }
 
