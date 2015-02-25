@@ -8,6 +8,7 @@ package at.ac.tuwien.dsg.depictool.elstore;
 import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import at.ac.tuwien.dsg.common.deployment.ElasticService;
 import at.ac.tuwien.dsg.common.deployment.PrimitiveAction;
+import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.process.ActionDependency;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
@@ -55,7 +56,7 @@ public class ElasticityProcessStore {
     
     
     
-    public void storeQoRAndElasticityProcesses(String edaas, String qor, String elasticityProcesses){
+    public void storeQoRAndElasticityProcesses(String edaas, String qor, String elasticityProcesses, EDaaSType type){
         InputStream qorStream = new ByteArrayInputStream(qor.getBytes(StandardCharsets.UTF_8));
         InputStream elasticityProcessesStream = new ByteArrayInputStream(elasticityProcesses.getBytes(StandardCharsets.UTF_8));
         
@@ -64,7 +65,7 @@ public class ElasticityProcessStore {
         listOfInputStreams.add(qorStream);
         listOfInputStreams.add(elasticityProcessesStream);
         
-        String sql = "INSERT INTO InputSpecification (name, qor, elasticity_process_config) VALUES ('"+edaas+"',?,?)";
+        String sql = "INSERT INTO InputSpecification (name, qor, elasticity_process_config, type) VALUES ('"+edaas+"',?,?,'"+type.geteDaaSType()+"')";
         connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
         
         

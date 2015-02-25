@@ -8,6 +8,7 @@ package at.ac.tuwien.dsg.depictool.generator;
 import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import at.ac.tuwien.dsg.common.deployment.DeploymentDescription;
 import at.ac.tuwien.dsg.common.deployment.ElasticService;
+import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
@@ -46,15 +47,21 @@ public class Generator {
     String eDaaSName;
     QoRModel qorModel;
     MetricProcess elasticityProcessConfiguration;
+    EDaaSType eDaaSType;
 
     public Generator() {
     }
 
-    public Generator(String eDaaSName, QoRModel qorModel, MetricProcess elasticityProcessConfiguration) {
+
+    public Generator(String eDaaSName, QoRModel qorModel, MetricProcess elasticityProcessConfiguration, EDaaSType eDaaSType) {
         this.eDaaSName = eDaaSName;
         this.qorModel = qorModel;
         this.elasticityProcessConfiguration = elasticityProcessConfiguration;
+        this.eDaaSType = eDaaSType;
     }
+    
+    
+    
 
     public Generator(ElasticDataAsset elasticDataObject, MetricProcess elasticityProcessConfiguration) {
         this.elasticDataObject = elasticDataObject;

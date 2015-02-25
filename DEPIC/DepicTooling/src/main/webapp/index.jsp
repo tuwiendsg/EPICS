@@ -59,6 +59,20 @@
                     <td>&nbsp;</td> 
                 </tr>
                 <tr>
+                    <td>Type</td>
+                    <td><select name="type" id="type">
+                            <option value="mysql" selected>MySql</option>
+                            <option value="cassandra" selected>Cassandra</option>
+                            <option value="cassandra_n" selected>Cassandra Near Real Time</option>
+                            <option value="mongodb" selected>MongoDB</option>
+                            <option value="mongodb_n" selected>MongoDB Near Real Time</option>
+                        </select></td> 
+                </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td> 
+                </tr>
+                <tr>
                     <td></td>
                     <td><input type="submit" name="submit" value="Generate eDaaS"/></td> 
                 </tr>

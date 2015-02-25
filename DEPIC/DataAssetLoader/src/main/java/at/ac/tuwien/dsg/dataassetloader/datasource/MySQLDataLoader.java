@@ -26,11 +26,11 @@ import javax.xml.bind.JAXBException;
 public class MySQLDataLoader implements DataLoader{
     
     
-    public String loadDataAsset(String dataAssetFunctionStr){
+    public String loadDataAsset(DataAssetFunction daf){
         
         String partitionNo="";
         try {
-            DataAssetFunction daf = JAXBUtils.unmarshal(dataAssetFunctionStr, DataAssetFunction.class);
+            
             String log = "DAF Name: " + daf.getName();
             Logger.getLogger(MySQLDataLoader.class.getName()).log(Level.INFO,log);
             

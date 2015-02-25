@@ -5,6 +5,8 @@
  */
 package at.ac.tuwien.dsg.dataassetloader.datasource;
 
+import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
+import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
 
@@ -14,7 +16,7 @@ import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
  */
 public interface DataLoader {
 
-    public String loadDataAsset(String dataAssetFunctionStr);
+    public String loadDataAsset(DataAssetFunction dataAssetFunction);
 
     public String copyDataAssetRepo(DataPartitionRequest request);
 
@@ -23,4 +25,6 @@ public interface DataLoader {
     public String getDataPartitionRepo(DataPartitionRequest request);
 
     public void saveDataPartitionRepo(DataAsset dataAsset);
+   
+   
 }

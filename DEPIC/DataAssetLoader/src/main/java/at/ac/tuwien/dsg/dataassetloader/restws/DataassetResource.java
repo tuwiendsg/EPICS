@@ -5,6 +5,7 @@
  */
 package at.ac.tuwien.dsg.dataassetloader.restws;
 
+import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
@@ -70,8 +71,16 @@ public class DataassetResource {
         DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
         String dataAssetFunctionXML = dafStore.getDataAssetFunction(dataAssetID);
         
+        DataAssetFunction daf=null;
+        try {
+            daf = JAXBUtils.unmarshal(dataAssetFunctionXML, DataAssetFunction.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
         MySQLDataLoader dataLoader = new MySQLDataLoader();
-        String noOfPartitions = dataLoader.loadDataAsset(dataAssetFunctionXML);
+        String noOfPartitions = dataLoader.loadDataAsset(daf);
         
         return noOfPartitions;
     }
@@ -284,15 +293,17 @@ public class DataassetResource {
     @Produces("application/xml")
     public String insertCassandraData(String xml) {
        
+        DataAsset dataAsset = null;
+        
         try {
-            DataAsset dataAsset = JAXBUtils.unmarshal(xml, DataAsset.class);
+            dataAsset = JAXBUtils.unmarshal(xml, DataAsset.class);
         } catch (JAXBException ex) {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         CassandraDataAssetStore cdas = new CassandraDataAssetStore();
         cdas.openConnection();
-        cdas.createKeySpace();
+        cdas.insertDataAsset(dataAsset);
         cdas.closeConnection();
         
         
@@ -301,14 +312,26 @@ public class DataassetResource {
     }
     
     @PUT
-    @Path("repo/cassandra/keyspace")
+    @Path("repo/cassandra/getda")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String getCassandraData(String xml) {
+        
+        
+        DataPartitionRequest request = null;
+        
+        try {
+            request = JAXBUtils.unmarshal(xml, DataPartitionRequest.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
        
         CassandraDataAssetStore cdas = new CassandraDataAssetStore();
         cdas.openConnection();
-        cdas.createKeySpace();
+        cdas.getDataAsset(request);
         cdas.closeConnection();
         
         

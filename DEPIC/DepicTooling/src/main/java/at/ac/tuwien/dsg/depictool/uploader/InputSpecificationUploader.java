@@ -5,6 +5,7 @@
  */
 package at.ac.tuwien.dsg.depictool.uploader;
 
+import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
@@ -93,6 +94,7 @@ public class InputSpecificationUploader extends HttpServlet {
         //process only if its multipart content
         
         String eDaaSName = "";
+        EDaaSType eDaaSType = null;
         String qor = "";
         String elasticityProcesses = "";
         
@@ -136,6 +138,22 @@ public class InputSpecificationUploader extends HttpServlet {
                             eDaaSName = fieldvalue;
                         }
                         
+                        if (fieldname.equals("type")){
+                            String typeStr = fieldvalue;
+                            
+                            if (typeStr.equals(EDaaSType.MYSQL.geteDaaSType())) {
+                                eDaaSType = EDaaSType.MYSQL;
+                            } else if (typeStr.equals(EDaaSType.CASSANDRA.geteDaaSType())) {
+                                eDaaSType = EDaaSType.CASSANDRA;
+                            } else if (typeStr.equals(EDaaSType.CASSANDRA_NEAR_REAL_TIME.geteDaaSType())) {
+                                eDaaSType = EDaaSType.CASSANDRA_NEAR_REAL_TIME;
+                            } else if (typeStr.equals(EDaaSType.MONGODB.geteDaaSType())) {
+                                eDaaSType = EDaaSType.MONGODB;
+                            } else if (typeStr.equals(EDaaSType.MONGODB_NEAR_REAL_TIME.geteDaaSType())) {
+                                eDaaSType = EDaaSType.MONGODB_NEAR_REAL_TIME;
+                            }
+                        }
+                        
                         
                         String log = "field: " + fieldname + " - value: " + fieldvalue;
                         Logger.getLogger(InputSpecificationUploader.class.getName()).log(Level.INFO, log);
@@ -159,7 +177,7 @@ public class InputSpecificationUploader extends HttpServlet {
         Logger.getLogger(InputSpecificationUploader.class.getName()).log(Level.INFO, log);
         
         ElasticityProcessStore elasticityProcessStore = new ElasticityProcessStore();
-        elasticityProcessStore.storeQoRAndElasticityProcesses(eDaaSName, qor, elasticityProcesses);
+        elasticityProcessStore.storeQoRAndElasticityProcesses(eDaaSName, qor, elasticityProcesses, eDaaSType);
   
         
         ElasticityProcessesParser elasticityProcessesParser = new ElasticityProcessesParser();
@@ -167,7 +185,7 @@ public class InputSpecificationUploader extends HttpServlet {
         QoRModel qorModel = elasticityProcessesParser.parseQoRModel(qor);
         MetricProcess metricProcess = elasticityProcessesParser.parseElasticityProcesses(elasticityProcesses);
         
-        Generator generator = new Generator(eDaaSName, qorModel, metricProcess);
+        Generator generator = new Generator(eDaaSName, qorModel, metricProcess, eDaaSType);
         generator.startGenerator();
        
 
