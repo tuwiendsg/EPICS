@@ -12,7 +12,7 @@ import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
-import at.ac.tuwien.dsg.dataassetloader.store.DataAssetStore;
+import at.ac.tuwien.dsg.dataassetloader.store.MySqlDataAssetStore;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,7 +48,7 @@ public class MySQLDataLoader implements DataLoader{
                 da.setName(daf.getName());
                 dataAssetXml = JAXBUtils.marshal(da, DataAsset.class);   
                 
-                DataAssetStore das = new DataAssetStore();
+                MySqlDataAssetStore das = new MySqlDataAssetStore();
                 das.saveDataAsset(dataAssetXml, daf.getName(), String.valueOf(i));
                 
             }
@@ -104,26 +104,26 @@ public class MySQLDataLoader implements DataLoader{
     
     public String copyDataAssetRepo(DataPartitionRequest request){
         
-        DataAssetStore das = new DataAssetStore();
+        MySqlDataAssetStore das = new MySqlDataAssetStore();
         return das.copyDataAssetRepo(request);
         
         
     }
     
     public String getNoOfParitionRepo(DataPartitionRequest request){
-        DataAssetStore das = new DataAssetStore();
+        MySqlDataAssetStore das = new MySqlDataAssetStore();
         String noOfPartition =das.getNoOfPartitionRepo(request);
         return noOfPartition;
     }
     
     public String getDataPartitionRepo(DataPartitionRequest request){
-        DataAssetStore das = new DataAssetStore();
+        MySqlDataAssetStore das = new MySqlDataAssetStore();
         String daXML =das.getDataPartitionRepo(request);
         return daXML;
     }
     
     public void saveDataPartitionRepo(DataAsset dataAsset){
-        DataAssetStore das = new DataAssetStore();
+        MySqlDataAssetStore das = new MySqlDataAssetStore();
         das.saveDataPartitionRepo(dataAsset);
         
     }

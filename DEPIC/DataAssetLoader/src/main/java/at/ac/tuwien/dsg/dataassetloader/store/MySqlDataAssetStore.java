@@ -32,7 +32,7 @@ import org.apache.commons.io.IOUtils;
  *
  * @author Jun
  */
-public class DataAssetStore {
+public class MySqlDataAssetStore implements DataStore{
 
     String ip;
     String port;
@@ -40,7 +40,7 @@ public class DataAssetStore {
     String user;
     String pass;
 
-    public DataAssetStore() {
+    public MySqlDataAssetStore() {
         Configuration config = new Configuration();
         ip = config.getConfig("EDA.REPOSITORY.IP");
         port = config.getConfig("EDA.REPOSITORY.PORT");
@@ -127,7 +127,7 @@ public class DataAssetStore {
                 colsList.add(colName);
             }   
         } catch (SQLException ex) {
-            Logger.getLogger(DataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MySqlDataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         
@@ -146,7 +146,7 @@ public class DataAssetStore {
                 
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MySqlDataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         
@@ -277,7 +277,7 @@ public class DataAssetStore {
         try {
             daXML = JAXBUtils.marshal(dataAssetPartition, DataAsset.class);
         } catch (JAXBException ex) {
-            Logger.getLogger(DataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MySqlDataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         String[] strs = dataAssetPartition.getName().split(";");
@@ -306,7 +306,7 @@ public class DataAssetStore {
         try {
             daXML = JAXBUtils.marshal(dataAssetPartition, DataAsset.class);
         } catch (JAXBException ex) {
-            Logger.getLogger(DataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MySqlDataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         String[] strs = dataAssetPartition.getName().split(";");

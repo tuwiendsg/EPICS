@@ -5,87 +5,122 @@
  */
 package at.ac.tuwien.dsg.dataassetloader.datasource;
 
+import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
+import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
-import at.ac.tuwien.dsg.dataassetloader.connector.CassandraManagementAPI;
-import at.ac.tuwien.dsg.dataassetloader.connector.entities.Keyspace;
-import at.ac.tuwien.dsg.dataassetloader.connector.entities.RowColumn;
-import at.ac.tuwien.dsg.dataassetloader.connector.entities.Table;
-import at.ac.tuwien.dsg.dataassetloader.connector.entities.TableRow;
+import at.ac.tuwien.dsg.dataassetloader.store.CassandraDataAssetStore;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBException;
 
 /**
  *
  * @author Jun
  */
-public class CassandraDataLoader implements DataLoader{
+public class CassandraDataLoader implements DataLoader {
 
     @Override
-    public String loadDataAsset(String dataAssetFunctionStr) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String loadDataAsset(DataAssetFunction dataAssetFunction) {
+
+        String partitionNo = "";
+        try {
+
+            String log = "DAF Name: " + dataAssetFunction.getName();
+            Logger.getLogger(CassandraDataLoader.class.getName()).log(Level.INFO, log);
+
+            String daw = dataAssetFunction.getDaw();
+            String returnStr = requestToGetDataAsset(daw);
+
+            String[] strs = returnStr.split(";");
+            String dataAssetID = strs[0];
+            int numberOfPartitions = Integer.parseInt(strs[1]);
+            partitionNo = String.valueOf(numberOfPartitions);
+
+            for (int i = 0; i < numberOfPartitions; i++) {
+                String dataAssetXml = getDataPartition(dataAssetID, String.valueOf(i));
+                DataAsset da = JAXBUtils.unmarshal(dataAssetXml, DataAsset.class);
+                da.setName(dataAssetFunction.getName());
+                dataAssetXml = JAXBUtils.marshal(da, DataAsset.class);
+
+                CassandraDataAssetStore cdas = new CassandraDataAssetStore();
+                cdas.saveDataAsset(dataAssetXml, dataAssetFunction.getName(), String.valueOf(i));
+
+            }
+
+        } catch (JAXBException ex) {
+            Logger.getLogger(CassandraDataLoader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return partitionNo;
+
     }
 
     @Override
     public String copyDataAssetRepo(DataPartitionRequest request) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
+        return cdas.copyDataAssetRepo(request);
     }
 
     @Override
     public String getNoOfParitionRepo(DataPartitionRequest request) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
+        String noOfPartition = cdas.getNoOfPartitionRepo(request);
+        return noOfPartition;
     }
 
     @Override
     public String getDataPartitionRepo(DataPartitionRequest request) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
+        String daXML = cdas.getDataPartitionRepo(request);
+        return daXML;
     }
 
     @Override
     public void saveDataPartitionRepo(DataAsset dataAsset) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
+        cdas.saveDataPartitionRepo(dataAsset);
     }
-    
-    public void insearTable(){
-        
-        Configuration cfg = new Configuration();
-        String ip = cfg.getConfig("CASSANDRA.DB.IP");
-        int port = Integer.parseInt(cfg.getConfig("CASSANDRA.DB.PORT"));
-        String key= cfg.getConfig("CASSANDRA.DB.KEY");
-        String table = cfg.getConfig("CASSANDRA.DB.TABLE");
-        
-        CassandraManagementAPI api = new CassandraManagementAPI();
-        api.setCassandraHostIP(ip);
-        api.setCasandraPort(port);
-        
-        Keyspace keyspace = new Keyspace(key);
-        Table tab = new Table(keyspace, table, "", "");
-        
-        TableRow row = new TableRow();
-        RowColumn c1 = new RowColumn("attr1", "21");
-        RowColumn c2 = new RowColumn("attr2", "22");
-        RowColumn c3 = new RowColumn("attr3", "23");
-        List<RowColumn> cs = new ArrayList<RowColumn>();
-        cs.add(c1);
-        cs.add(c2);
-        cs.add(c3);
-        row.setValues(cs);
 
-        try {
-            api.createKeyspace(keyspace);
-            api.createTable(tab);
-            api.insertRowsInTable(key, table, null);
-            
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(CassandraDataLoader.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
+    private String requestToGetDataAsset(String daw) {
+
+        Configuration config = new Configuration();
+        String ip = config.getConfig("DAF.MANAGEMENT.IP");
+        String port = config.getConfig("DAF.MANAGEMENT.PORT");
+        String resource = config.getConfig("DAF.MANAGEMENT.RESOURCE.DAW");
+
+        RestfulWSClient rs = new RestfulWSClient(ip, port, resource);
+        String returnStr = rs.callPutMethod(daw);
+
+        return returnStr;
     }
-    
+
+    private String getDataPartition(String dataAssetID, String dataPartitionID) {
+
+        Configuration config = new Configuration();
+        String ip = config.getConfig("DAF.MANAGEMENT.IP");
+        String port = config.getConfig("DAF.MANAGEMENT.PORT");
+        String resource = config.getConfig("DAF.MANAGEMENT.RESOURCE.DATAASSET");
+
+        DataPartitionRequest dataPartitionRequest = new DataPartitionRequest("", "", dataAssetID, dataPartitionID);
+
+        String dataPartitionXML = "";
+        try {
+            dataPartitionXML = JAXBUtils.marshal(dataPartitionRequest, DataPartitionRequest.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(MySQLDataLoader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        RestfulWSClient rs = new RestfulWSClient(ip, port, resource);
+        String dataParstitionXML = rs.callPutMethod(dataPartitionXML);
+
+        return dataParstitionXML;
+    }
+
 }
