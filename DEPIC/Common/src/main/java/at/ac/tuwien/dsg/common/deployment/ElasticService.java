@@ -5,15 +5,32 @@
  */
 package at.ac.tuwien.dsg.common.deployment;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  * @author Jun
  */
+
+@XmlRootElement(name = "ElasticService")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ElasticService {
+    
+    @XmlElement(name = "actionID", required = true)
     private String actionID;
+    
+    @XmlElement(name = "serviceID", required = true)
     private String serviceID;
+    
+    @XmlElement(name = "uri", required = true)
     private String uri;
+    
+    @XmlElement(name = "request", required = true)
     private int request;
+    
 
     public ElasticService() {
     }

@@ -16,6 +16,8 @@ import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.MonitoringSession;
+import at.ac.tuwien.dsg.common.entity.process.MetricElasticityProcess;
+import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.common.entity.process.MonitoringMetric;
 import at.ac.tuwien.dsg.common.entity.qor.MetricRange;
 import at.ac.tuwien.dsg.common.entity.qor.QElement;
@@ -48,7 +50,8 @@ public class DataElasticityMonitor{
     MonitoringSession monitoringSession;
     MonitorProcess monitorProcess;
     List<ControlProcess> listOfControlProcesses;
-    ElasticServiceRegistry elasticServiceRegistry;
+
+    MetricProcess metricProcess;
 
     public DataElasticityMonitor(MonitoringSession monitoringSession) {
         this.monitoringSession = monitoringSession;
@@ -68,7 +71,7 @@ public class DataElasticityMonitor{
                 System.out.println("Get monitoring service info: " +monitoringServiceID);
                 
                 
-                String uri = elasticServiceRegistry.getElasticServiceURI(monitoringServiceID);
+                String uri = ElasticServiceRegistry.getElasticServiceURI(monitoringServiceID);
                
                 System.out.println("Run Monitoring Service ID: " + monitoringServiceID);
                 System.out.println("URI: " + uri);
@@ -87,7 +90,7 @@ public class DataElasticityMonitor{
 
             double monitoringValue = 0;
 
-            String metricName = elasticServiceRegistry.getMonitoringMetricName(monitoringServiceID);
+            String metricName = getMonitoringMetricName(monitoringServiceID);
 
             RestfulWSClient ws = new RestfulWSClient(uri);
             monitoringValue = Double.parseDouble(ws.callPutMethod(requestXML));
@@ -190,9 +193,12 @@ public class DataElasticityMonitor{
         List<String> expectElasticStateIDs = monitoringSession.getListOfExpectedElasticStates();
         mappingExpectedEStateIDs(expectElasticStateIDs);
         
+        metricProcess = elasticityProcessesStore.getMetricProcess(monitoringSession.getEdaasName());
         
-        elasticServiceRegistry = new ElasticServiceRegistry(monitoringSession.getEdaasName());
+      
         //elasticServiceRegistry.getElasticServices();
+        
+        
                 
        
     }
@@ -241,6 +247,22 @@ public class DataElasticityMonitor{
             
         }
         
+    }
+    
+    
+    public String getMonitoringMetricName(String actionID){
+        String metricName="";
+      
+        List<MetricElasticityProcess> metricElasticityProcesses = metricProcess.getListOfMetricElasticityProcesses();
+        for (MetricElasticityProcess mp : metricElasticityProcesses) {
+            if (mp.getMonitorAction().getMonitorActionID().equals(actionID)) {
+                metricName=mp.getMetricName();
+                break;
+            }
+        }
+
+
+        return metricName;
     }
  
     

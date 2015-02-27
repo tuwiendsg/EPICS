@@ -5,19 +5,11 @@
  */
 package at.ac.tuwien.dsg.orchestrator.registry;
 
-import at.ac.tuwien.dsg.common.deployment.DeployAction;
-import at.ac.tuwien.dsg.common.deployment.ElasticService;
-import at.ac.tuwien.dsg.common.entity.process.ActionDependency;
-import at.ac.tuwien.dsg.common.entity.process.MetricElasticityProcess;
-import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
-import at.ac.tuwien.dsg.common.utils.MySqlConnectionManager;
-import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
-import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 
-import java.sql.ResultSet;
-import java.util.ArrayList;
+import at.ac.tuwien.dsg.common.deployment.ElasticService;
+
 import java.util.List;
-import java.util.Random;
+
 
 /**
  *
@@ -25,63 +17,47 @@ import java.util.Random;
  */
 public class ElasticServiceRegistry {
     
-    List<ElasticService> listOfElasticServices;
-    MetricProcess metricProcess;
-    String eDaaSName;
-    MySqlConnectionManager connectionManager;
-    
-    public ElasticServiceRegistry(String eDaaSName) {
-        this.eDaaSName=eDaaSName;
-        ElasticityProcessesStore eps = new ElasticityProcessesStore();
-        listOfElasticServices = eps.getElasticServices();
-        metricProcess = eps.getMetricProcess(eDaaSName);
-        
-    }
+    private static List<ElasticService> listOfElasticServices;
 
-    public String getElasticServiceURI(String serviceID){
+   
+    public static String getElasticServiceURI(String serviceID){
         
-        List<String> listOfServices = new ArrayList<String>();
+        
+        int minNoOfRequest=Integer.MAX_VALUE;
+        int elasticServiceIndex = 0;
         
         for (ElasticService elasticService : listOfElasticServices){
             
             if (elasticService.getActionID().equals(serviceID)){
-                String uri = elasticService.getUri();
-                listOfServices.add(uri);
+                if (elasticService.getRequest()<minNoOfRequest){                 
+                    elasticServiceIndex = listOfElasticServices.indexOf(elasticService);
+                }             
             }
         }
         
-        int randomIndex = randomInt(0, listOfServices.size()-1);
-        return  listOfServices.get(randomIndex);
+        ElasticService selectedElasticService = listOfElasticServices.get(elasticServiceIndex);
+        int currentRequest = selectedElasticService.getRequest();
+        selectedElasticService.setRequest(++currentRequest);
+          
+        return  selectedElasticService.getUri();
         
     }
     
-    private int randomInt(int min, int max){
+    public static void updateElasticServices(List<ElasticService> updatedElasticServices){
+        listOfElasticServices.clear();
+        listOfElasticServices.addAll(updatedElasticServices);
+    
         
-        Random random = new Random();
-        
-        int randomNumber = random.nextInt(max+1 - min) + min;
-        return randomNumber;
     }
     
+//    private int randomInt(int min, int max){
+//        
+//        Random random = new Random();
+//        
+//        int randomNumber = random.nextInt(max+1 - min) + min;
+//        return randomNumber;
+//    }
+//    
     
 
-    
-  
-    
-    
-    public String getMonitoringMetricName(String actionID){
-        String metricName="";
-      
-        List<MetricElasticityProcess> metricElasticityProcesses = metricProcess.getListOfMetricElasticityProcesses();
-        for (MetricElasticityProcess mp : metricElasticityProcesses) {
-            if (mp.getMonitorAction().getMonitorActionID().equals(actionID)) {
-                metricName=mp.getMetricName();
-                break;
-            }
-        }
-
-
-        return metricName;
-    }
-    
 }

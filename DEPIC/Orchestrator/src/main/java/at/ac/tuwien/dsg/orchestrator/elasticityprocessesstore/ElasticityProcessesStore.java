@@ -279,4 +279,22 @@ public class ElasticityProcessesStore {
 
     }
 
+    public void storeElasticServices(List<ElasticService> listOfElasticServices) {
+
+        for (ElasticService es : listOfElasticServices) {
+
+            String sql = "INSERT INTO ElasticService (actionID, serviceID, uri) VALUES ('" + es.getActionID() + "','" + es.getServiceID() + "','" + es.getUri() + "')";
+            connectionManager.ExecuteUpdate(sql);
+
+        }
+    }
+
+    public void cleanElasticServices() {
+
+        String sql = "TRUNCATE TABLE ElasticService";
+
+        connectionManager.ExecuteUpdate(sql);
+
+    }
+
 }

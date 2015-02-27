@@ -191,8 +191,8 @@ public class DataElasticityController {
             }
             
             
-            ElasticServiceRegistry elasticServiceRegistry = new ElasticServiceRegistry(monitoringSession.getEdaasName());
-            String uri = elasticServiceRegistry.getElasticServiceURI(controlActionName);
+       
+            String uri = ElasticServiceRegistry.getElasticServiceURI(controlActionName);
       
             RestfulWSClient ws = new RestfulWSClient(uri);
             ws.callPutMethod(requestXML);

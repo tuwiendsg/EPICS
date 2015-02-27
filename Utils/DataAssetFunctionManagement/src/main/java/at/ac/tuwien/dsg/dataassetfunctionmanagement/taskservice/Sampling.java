@@ -10,7 +10,7 @@ import at.ac.tuwien.dsg.common.entity.eda.da.DataAttribute;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataItem;
 import at.ac.tuwien.dsg.common.utils.MySqlConnectionManager;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.configuration.Configuration;
-import at.ac.tuwien.dsg.dataassetfunctionmanagement.store.DataAssetStore;
+import at.ac.tuwien.dsg.dataassetfunctionmanagement.store.MySqlDataAssetStore;
 
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.IOUtils;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.JAXBUtils;
@@ -61,7 +61,7 @@ public class Sampling {
     
     private void samplingData(double samplingPercentage, String dawID){
         
-        DataAssetStore das = new DataAssetStore();
+        MySqlDataAssetStore das = new MySqlDataAssetStore();
     
         ResultSet rs = das.getDataAssetByID(dawID);
         

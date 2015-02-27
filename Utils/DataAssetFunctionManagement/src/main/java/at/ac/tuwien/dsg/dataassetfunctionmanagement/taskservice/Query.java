@@ -11,7 +11,7 @@ import at.ac.tuwien.dsg.common.entity.eda.da.DataItem;
 import at.ac.tuwien.dsg.common.utils.MySqlConnectionManager;
 
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.configuration.Configuration;
-import at.ac.tuwien.dsg.dataassetfunctionmanagement.store.DataAssetStore;
+import at.ac.tuwien.dsg.dataassetfunctionmanagement.store.MySqlDataAssetStore;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.IOUtils;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.JAXBUtils;
 
@@ -116,7 +116,7 @@ public class Query {
                 if (partitionCounter==noOfPartitions-1){
                     partitionCounter=0;
                     DataAsset da = new DataAsset(dawID, partitionIndex, dataItemList);
-                    DataAssetStore das = new DataAssetStore();
+                    MySqlDataAssetStore das = new MySqlDataAssetStore();
                     das.storeDataAsset(da);
                     
                     partitionIndex++;

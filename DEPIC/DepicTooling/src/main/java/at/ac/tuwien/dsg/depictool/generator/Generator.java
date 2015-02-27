@@ -8,6 +8,7 @@ package at.ac.tuwien.dsg.depictool.generator;
 import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import at.ac.tuwien.dsg.common.deployment.DeploymentDescription;
 import at.ac.tuwien.dsg.common.deployment.ElasticService;
+import at.ac.tuwien.dsg.common.deployment.ElasticServices;
 import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
@@ -23,6 +24,7 @@ import at.ac.tuwien.dsg.common.utils.IOUtils;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.depic.depictool.connector.ComotConnector;
+import at.ac.tuwien.dsg.depic.depictool.connector.ElasticServiceMonitor;
 import at.ac.tuwien.dsg.depic.depictool.connector.SalsaConnector;
 
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
@@ -120,8 +122,12 @@ public class Generator {
         System.out.println("On Deployment Process: ..." + comotConnector.getCloudServiceID() );
         
         List<ElasticService> listOfElasticServices = comotConnector.getCloudServiceInfo();
-        elStore.storeElasticServices(listOfElasticServices);
+        ElasticServices elasticServices = new ElasticServices(listOfElasticServices);
+        configElasticServices(elasticServices);
         
+        ElasticServiceMonitor elasticServiceMonitor = new ElasticServiceMonitor(eDaaSName, comotConnector);
+        elasticServiceMonitor.start();
+                
         String elasticStateSetXML ="";
         
         try {
@@ -139,6 +145,23 @@ public class Generator {
         configureElasticityServices(listOfElasticServices);
         
 
+    }
+    
+    private void configElasticServices(ElasticServices elasticServices){
+        String eSXML="";
+        try {
+            eSXML = JAXBUtils.marshal(elasticServices, ElasticServices.class);
+        } catch (JAXBException ex) {
+            java.util.logging.Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Configuration configuration  = new Configuration();
+        String ip = configuration.getConfig("ORCHESTRATOR.IP");
+        String port = configuration.getConfig("ORCHESTRATOR.PORT");
+        String resource = configuration.getConfig("ORCHESTRATOR.ELASTIC.SERVICE.RESOURCE");
+        
+        RestfulWSClient ws = new RestfulWSClient(ip, port, resource);
+        ws.callPutMethod(eSXML);
+        
     }
     
     private void configureElasticityServices(List<ElasticService> listOfElasticServices){

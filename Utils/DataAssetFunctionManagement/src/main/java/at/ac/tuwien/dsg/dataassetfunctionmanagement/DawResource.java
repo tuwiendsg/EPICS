@@ -4,10 +4,11 @@
  */
 package at.ac.tuwien.dsg.dataassetfunctionmanagement;
 
+import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.engine.WorkflowEngine;
-import at.ac.tuwien.dsg.dataassetfunctionmanagement.store.DataAssetStore;
+import at.ac.tuwien.dsg.dataassetfunctionmanagement.store.MySqlDataAssetStore;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.IOUtils;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.JAXBUtils;
 import java.util.UUID;
@@ -65,7 +66,7 @@ public class DawResource {
         Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + dataAssetFunctionXML);
         UUID dafID = UUID.randomUUID();
         
-        DataAssetStore das = new DataAssetStore();
+        MySqlDataAssetStore das = new MySqlDataAssetStore();
         das.cleanTempStore();
         
         WorkflowEngine wf = new WorkflowEngine(dataAssetFunctionXML,dafID.toString());
@@ -99,7 +100,34 @@ public class DawResource {
         
         
         
-        DataAssetStore das = new DataAssetStore();
+        MySqlDataAssetStore das = new MySqlDataAssetStore();
+        String daXML = das.getDataPartition(dataAssetID, partitionID);
+        
+        return daXML;
+    }
+    
+
+    @PUT
+    @Path("cassandra/dataasset")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String getCassandraDataAsset(String requestDataPartition) {
+        
+        Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + requestDataPartition);
+        
+        DataPartitionRequest dataPartition=null;
+        try {
+            dataPartition = JAXBUtils.unmarshal(requestDataPartition, DataPartitionRequest.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DawResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        String dataAssetID = dataPartition.getDataAssetID();
+        String partitionID = dataPartition.getPartitionID();
+        
+        
+        
+        MySqlDataAssetStore das = new MySqlDataAssetStore();
         String daXML = das.getDataPartition(dataAssetID, partitionID);
         
         return daXML;
