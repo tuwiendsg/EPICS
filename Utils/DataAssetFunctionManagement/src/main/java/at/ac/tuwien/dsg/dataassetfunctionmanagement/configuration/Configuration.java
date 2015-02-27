@@ -21,11 +21,15 @@ import java.util.logging.Logger;
 
 public class Configuration {
 
+    private static Properties prop;
+    
     public Configuration() {
     }
 
     public static String getConfig(String configureName) {
 
+        if (prop==null) {
+        
         String path = Configuration.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 
         //System.out.println("Path: " + path);
@@ -37,8 +41,8 @@ public class Configuration {
             Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        Properties prop = new Properties();
-        String configString = "";
+        prop = new Properties();
+        
         InputStream input = null;
 
         try {
@@ -46,7 +50,6 @@ public class Configuration {
             input = new FileInputStream(path + "/config.properties");
             
             prop.load(input);
-            configString = prop.getProperty(configureName);
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -59,6 +62,9 @@ public class Configuration {
                 }
             }
         }
+        }
+     
+        String configString = prop.getProperty(configureName);
 
         return configString;
     }

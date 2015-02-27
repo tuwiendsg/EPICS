@@ -8,6 +8,7 @@ import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.engine.WorkflowEngine;
+import at.ac.tuwien.dsg.dataassetfunctionmanagement.store.CassandraDataAssetStore;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.store.MySqlDataAssetStore;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.IOUtils;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.JAXBUtils;
@@ -47,6 +48,7 @@ public class DawResource {
      * @return an instance of java.lang.String
      */
     @GET
+    @Path("mysql")
     @Produces(MediaType.TEXT_PLAIN)
     public String getXml() {
         //TODO return proper representation object
@@ -59,6 +61,7 @@ public class DawResource {
      * @return an HTTP response with content of the updated or created resource.
      */
     @PUT
+    @Path("mysql")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String executeDataAssetFunction(String dataAssetFunctionXML) {
@@ -81,7 +84,7 @@ public class DawResource {
     
     
     @PUT
-    @Path("dataasset")
+    @Path("mysql/dataasset")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String getData(String requestDataPartition) {
@@ -107,11 +110,36 @@ public class DawResource {
     }
     
 
+   
+    
+    
+    @PUT
+    @Path("cassandra")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String executeDataAssetFunctionCassandra(String dataAssetFunctionXML) {
+    
+        Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + dataAssetFunctionXML);
+        UUID dafID = UUID.randomUUID();
+        
+        CassandraDataAssetStore.truncateDataAssetTable();
+        
+        WorkflowEngine wf = new WorkflowEngine(dataAssetFunctionXML,dafID.toString());
+        wf.startWFEngine();
+        
+        
+        int noOfPartitions = CassandraDataAssetStore.getNoOfParitionDataAsset(dafID.toString());
+        
+        String returnString = dafID.toString()+";"+String.valueOf(noOfPartitions);
+        return returnString;
+    }
+    
+    
     @PUT
     @Path("cassandra/dataasset")
     @Consumes("application/xml")
     @Produces("application/xml")
-    public String getCassandraDataAsset(String requestDataPartition) {
+    public String getDataCassandra(String requestDataPartition) {
         
         Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + requestDataPartition);
         
@@ -122,13 +150,16 @@ public class DawResource {
             Logger.getLogger(DawResource.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        String dataAssetID = dataPartition.getDataAssetID();
-        String partitionID = dataPartition.getPartitionID();
+        DataAsset dataAsset = CassandraDataAssetStore.getDataAsset(dataPartition);
         
         
+        String daXML = "";
         
-        MySqlDataAssetStore das = new MySqlDataAssetStore();
-        String daXML = das.getDataPartition(dataAssetID, partitionID);
+        try {
+            daXML = JAXBUtils.marshal(dataAsset, DataAsset.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DawResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         return daXML;
     }

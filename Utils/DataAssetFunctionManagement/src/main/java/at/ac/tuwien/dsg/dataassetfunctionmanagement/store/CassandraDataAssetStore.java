@@ -45,29 +45,28 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jun
  */
-public class CassandraDataAssetStore implements DataAssetStore{
-     
-static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetStore.class);
-    private Session session;
-    private String ip;
-    private int port;
-    private String keyspace;
+public class CassandraDataAssetStore {
 
-    public CassandraDataAssetStore() {
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetStore.class);
+    private static Session session;
+    private static String ip;
+    private static int port;
+    private static String keyspace;
 
-        Configuration cfg = new Configuration();
-        ip = cfg.getConfig("CASSANDRA.DB.IP");
-        port = Integer.parseInt(cfg.getConfig("CASSANDRA.DB.PORT"));
-        keyspace = cfg.getConfig("CASSANDRA.DB.KEY");
+    private static void doConfig() {
+        if (ip == null) {
+
+            ip = Configuration.getConfig("CASSANDRA.DB.IP");
+            port = Integer.parseInt(Configuration.getConfig("CASSANDRA.DB.PORT"));
+            keyspace = Configuration.getConfig("CASSANDRA.DB.KEY");
+        }
     }
 
-    public CassandraDataAssetStore(String ip, int port, String keyspace) {
-        this.ip = ip;
-        this.port = port;
-        this.keyspace = keyspace;
-    }
+   
 
-    public void openConnection() {
+    public static void openConnection() {
+        
+        doConfig();
         log.info("Connecting to Cassandra at " + ip + ":" + port);
         if (session == null) {
             Cluster cluster = Cluster.builder()
@@ -85,7 +84,7 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
         }
     }
 
-    public void closeConnection() {
+    public static void closeConnection() {
         session.close();
         session = null;
     }
@@ -94,7 +93,7 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
 
 // Cassandra test
     
-    public void createKeySpace() {
+    public static void createKeySpace() {
 
         String sql = "CREATE KEYSPACE " + keyspace
                 + "  WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };";
@@ -103,7 +102,7 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
 
     }
     
-    public void createTableDataAsset() {
+    public static void createTableDataAsset() {
 
         String sql = "CREATE TABLE " + keyspace + ".DataAsset ("
                 + " id varchar,"
@@ -116,7 +115,7 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
         
     }
     
-    public void createTableSensor(){
+    public static void createTableSensor(){
         
         String sql = "CREATE TABLE " + keyspace + ".SENSOR ("
                 + " id varchar,"
@@ -128,7 +127,7 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
         session.execute(sql);
     }
     
-    public void createTableKDD(){
+    public static void createTableKDD(){
         
         String sql = "CREATE TABLE " + keyspace + ".KDD ("
                 + " id varchar,"
@@ -145,7 +144,7 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
     }
     
     
-    public void insertKDD(DataAsset dataAsset){
+    public static void insertKDD(DataAsset dataAsset){
         
         List<DataItem> listOfDataItems = dataAsset.getListOfDataItems();
         
@@ -174,7 +173,7 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
 
     
 
-    public void insertDataAsset(DataAsset dataAsset) {
+    public static void insertDataAsset(DataAsset dataAsset) {
 
         UUID uuid = UUID.randomUUID();
 
@@ -195,7 +194,7 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
         session.execute(sql);
 
     }
-    public void insertSensor(DataAsset dataAsset){
+    public static void insertSensor(DataAsset dataAsset){
         
         UUID uuid = UUID.randomUUID();
 
@@ -216,7 +215,7 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
     }
     
     
-    public DataAsset getDataKDD(String sql) {
+    public static DataAsset getDataKDD(String sql) {
       
         List<DataItem> listOfDataItems = new ArrayList<DataItem>();
         ResultSet resultSet = null;
@@ -269,9 +268,22 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
 
     }
     
+    public static ResultSet executeCQLStatement(String cql){
+        
+        ResultSet resultSet = null;
+        try {
+            resultSet = session.execute(cql);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            log.error("Exception cause: " + cql);
+        }
+        
+        return resultSet;
+    }
+    
     
 
-    public DataAsset getDataAsset(DataPartitionRequest dataPartitionRequest) {
+    public static DataAsset getDataAsset(DataPartitionRequest dataPartitionRequest) {
         String data ="";
         String dataAssetID = dataPartitionRequest.getDataAssetID();
         String dataPartitionID = dataPartitionRequest.getPartitionID();
@@ -315,8 +327,82 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
         return dataAsset;
 
     }
+    public static int getNoOfParitionDataAsset(String dataAssetID) {
+        String counter="";
+        
+
+        String sql = "SELECT COUNT(*) as counter FROM " + keyspace + ".DataAsset "
+                + "WHERE dataAssetID='" + dataAssetID + "' ALLOW FILTERING;";
+
+        ResultSet resultSet = null;
+        try {
+            resultSet = session.execute(sql);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            log.error("Exception cause: " + sql);
+        }
+        ExecutionInfo info = resultSet.getExecutionInfo();
+
+        if (!(resultSet == null || resultSet.isExhausted())) {
+
+            List<Row> rows = resultSet.all();
+
+            for (Row row : rows) {
+                 counter = row.getString("counter");
+              
+            }
+
+        }
+        
+        
+        
+        
+   
+        
+        
+        return Integer.parseInt(counter);
+
+    }
     
-    public void updateDataAsset(DataAsset dataAssetPartition){
+    
+    public static String getNoOfParitionKDD() {
+        long counter=0;
+        
+
+        String sql = "SELECT COUNT(*) FROM " + keyspace + ".KDD; ";
+             
+
+        ResultSet resultSet = null;
+        try {
+            resultSet = session.execute(sql);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            log.error("Exception cause: " + sql);
+        }
+        ExecutionInfo info = resultSet.getExecutionInfo();
+
+        if (!(resultSet == null || resultSet.isExhausted())) {
+
+            List<Row> rows = resultSet.all();
+
+            for (Row row : rows) {
+                 counter = row.getLong("count");
+              
+            }
+
+        }
+        
+        
+        
+        
+   
+        
+        
+        return String.valueOf(counter);
+
+    }
+    
+    public static void updateDataAsset(DataAsset dataAssetPartition){
         String daXML="";
         try {
             daXML = JAXBUtils.marshal(dataAssetPartition, DataAsset.class);
@@ -346,7 +432,7 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
     }
     
     
-    private String getDataAttributeValue(DataItem dataItem, String attributeName){
+    private static String getDataAttributeValue(DataItem dataItem, String attributeName){
         
         List<DataAttribute> listOfDataAttributes = dataItem.getListOfAttributes();
         
@@ -408,7 +494,7 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
 
     }
     
-    public void truncateKDDTable(){
+    public static void truncateKDDTable(){
         
          String sql = "TRUNCATE " + keyspace + ".KDD;";
          System.out.println("SQL: " + sql);
@@ -416,7 +502,7 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
         session.execute(sql);
     }
     
-    public void truncateDataAssetTable(){
+    public static void truncateDataAssetTable(){
           
          String sql = "TRUNCATE" + keyspace + ".DataAsset;";
          System.out.println("SQL: " + sql);
@@ -426,7 +512,7 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
         
     }
     
-    private String randomUDID(){
+    private static String randomUDID(){
         UUID uuid = UUID.randomUUID();
 
         String uuid_str = uuid.toString();
@@ -438,37 +524,7 @@ static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetSt
     // end cassandra test
     //////////////////////
 
-    @Override
-    public void storeDataAsset(DataAsset da) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void updateDataAsset(String dataAssetID, String dataParitionID, String data) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ResultSet getDataAssetByID(String dawID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int getNumberOfPartitionsByDataAssetID(String dataAssetID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String getDataPartition(String dataAssetID, String dataPartitionID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void cleanTempStore() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-   
+    
 
 
 }
