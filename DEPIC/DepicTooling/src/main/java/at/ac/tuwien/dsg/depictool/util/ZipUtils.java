@@ -18,8 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -33,15 +32,15 @@ public class ZipUtils {
         File dirObj = new File(dir);
 
         parentDir = dirObj.getParent();
-     //   System.out.println(" DIR: " + parentDir);
+     //   Logger.logInfo(" DIR: " + parentDir);
 
         try {
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFileName));
-            System.out.println("Creating : " + zipFileName);
+            Logger.logInfo("Creating : " + zipFileName);
             addDir(dirObj, out);
             out.close();
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(ZipUtils.class.getName()).log(Level.SEVERE, ex.toString());
+            Logger.logInfo(ex.toString());
         }
     }
 
@@ -57,7 +56,7 @@ public class ZipUtils {
                     continue;
                 }
                 FileInputStream in = new FileInputStream(files[i].getAbsolutePath());
-             //   System.out.println(" Adding: " + files[i].getAbsolutePath());
+             //   Logger.logInfo(" Adding: " + files[i].getAbsolutePath());
 
                 out.putNextEntry(new ZipEntry(files[i].getAbsolutePath().replaceAll(parentDir, "")));
                 int len;
@@ -68,7 +67,7 @@ public class ZipUtils {
                 in.close();
             }
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(ZipUtils.class.getName()).log(Level.SEVERE, ex.toString());
+            Logger.logInfo(ex.toString());
         }
     }
 
@@ -82,7 +81,7 @@ public class ZipUtils {
      */
     public void unZipIt(String zipFile) {
 
-        System.out.println(zipFile);
+        Logger.logInfo(zipFile);
         int BUFFER = 2048;
         File file = new File(zipFile);
 
@@ -90,7 +89,7 @@ public class ZipUtils {
         try {
             zip = new ZipFile(file);
         } catch (IOException ex) {
-            Logger.getLogger(ZipUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.logInfo(ex.toString());
         }
         
         
@@ -119,7 +118,7 @@ public class ZipUtils {
                     is = new BufferedInputStream(zip
                             .getInputStream(entry));
                 } catch (IOException ex) {
-                    Logger.getLogger(ZipUtils.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.logInfo(ex.toString());
                 }
                 int currentByte;
                 // establish buffer for writing file
@@ -130,7 +129,7 @@ public class ZipUtils {
                 try {
                     fos = new FileOutputStream(destFile);
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(ZipUtils.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.logInfo(ex.toString());
                 }
                 BufferedOutputStream dest = new BufferedOutputStream(fos,
                         BUFFER);
@@ -141,22 +140,22 @@ public class ZipUtils {
                         dest.write(data, 0, currentByte);
                     }
                 } catch (IOException ex) {
-                    Logger.getLogger(ZipUtils.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.logInfo(ex.toString());
                 }
                 try {
                     dest.flush();
                 } catch (IOException ex) {
-                    Logger.getLogger(ZipUtils.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.logInfo(ex.toString());
                 }
                 try {
                     dest.close();
                 } catch (IOException ex) {
-                    Logger.getLogger(ZipUtils.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.logInfo(ex.toString());
                 }
                 try {
                     is.close();
                 } catch (IOException ex) {
-                    Logger.getLogger(ZipUtils.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.logInfo(ex.toString());
                 }
             }
 

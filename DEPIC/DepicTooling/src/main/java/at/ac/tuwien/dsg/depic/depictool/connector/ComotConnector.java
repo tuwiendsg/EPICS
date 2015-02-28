@@ -46,11 +46,12 @@ import at.ac.tuwien.dsg.comot.common.model.SoftwareNode;
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
 import at.ac.tuwien.dsg.depictool.util.Configuration;
 import at.ac.tuwien.dsg.comot.orchestrator.interraction.COMOTOrchestrator;
+import at.ac.tuwien.dsg.depictool.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.xml.bind.JAXBException;
 
 /**
@@ -137,7 +138,7 @@ public class ComotConnector {
                     if (deployAction!=null) {
                         controlServices.add(deployAction);
                     } else{
-                        System.out.println("COMOT CONNECTOR - Missing Artifact for Service: " +ca.getControlActionName());
+                        Logger.logInfo("COMOT CONNECTOR - Missing Artifact for Service: " +ca.getControlActionName());
                     }
                 
                  }
@@ -189,7 +190,7 @@ public class ComotConnector {
         // add VM + monitoring service units
         for (DeployAction dpa : monitoringServices) {
 
-            System.out.println("DEPLOY: Monitoring Action: " +dpa.getActionID());
+            Logger.logInfo("DEPLOY: Monitoring Action: " +dpa.getActionID());
    
             OperatingSystemUnit virtualMachine = OperatingSystemUnit(dpa.getActionID() + "_VM")
                     .providedBy(OpenstackSmall()
@@ -220,7 +221,7 @@ public class ComotConnector {
         // add VM + control service units
         for (DeployAction dpa : controlServices) {
 
-            System.out.println("DEPLOY: Control Action: " + dpa.getActionID());
+            Logger.logInfo("DEPLOY: Control Action: " + dpa.getActionID());
 
             OperatingSystemUnit virtualMachine = OperatingSystemUnit(dpa.getActionID() + "_VM")
                     .providedBy(OpenstackSmall()
@@ -337,7 +338,7 @@ public class ComotConnector {
         for (DeployAction dpa : monitoringServices) {
 
        
-            System.out.println("DEPLOY: Monitoring Action: " +dpa.getActionID());
+            Logger.logInfo("DEPLOY: Monitoring Action: " +dpa.getActionID());
             ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID()+"_SU")
                     .deployedBy(SingleScriptArtifact(dpa.getActionID()+"Artifact", artifactRepo + dpa.getActionID() + ".sh"))
 //                    .controlledBy(Strategy("EP_ST1_"+(i++))
@@ -369,7 +370,7 @@ public class ComotConnector {
         for (DeployAction dpa : controlServices) {
 
             
-            System.out.println("DEPLOY: Control Action: " +dpa.getActionID());
+            Logger.logInfo("DEPLOY: Control Action: " +dpa.getActionID());
             ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID()+"_SU")
                     .deployedBy(SingleScriptArtifact(dpa.getActionID()+"Artifact", artifactRepo + dpa.getActionID() + ".sh"))
                 ;

@@ -11,6 +11,7 @@ import at.ac.tuwien.dsg.common.entity.process.DataSource;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
+import at.ac.tuwien.dsg.depictool.util.Logger;
 import at.ac.tuwien.dsg.depictool.util.ZipUtils;
 import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
 import java.io.BufferedReader;
@@ -31,7 +32,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.Types;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import org.apache.commons.lang.WordUtils;
 
 /**
@@ -100,7 +101,7 @@ public class DaaSGenerator {
 
         List<QoRMetric> listOfMetrics = qoRModel.getListOfMetrics();
         String templateConstraintClass = loadTemplateClass("ConstraintConverter");
-        System.out.println("class: " + templateConstraintClass);
+        Logger.logInfo("class: " + templateConstraintClass);
 
         String importContent = "";
         String conversionContent = "";
@@ -229,7 +230,7 @@ public class DaaSGenerator {
             fstream = new FileInputStream(filePath);
             // FileInputStream fstream = new FileInputStream("covertype.csv");
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DaaSGenerator.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.logInfo(ex.toString());
         }
 
         DataInputStream in = new DataInputStream(fstream);
@@ -243,7 +244,7 @@ public class DaaSGenerator {
 
             }
         } catch (IOException ex) {
-            Logger.getLogger(DaaSGenerator.class.getName()).log(Level.SEVERE, null, ex);
+           Logger.logInfo(ex.toString());
         }
 
         return templateConstraintClass;
@@ -258,7 +259,7 @@ public class DaaSGenerator {
         try {
             path = URLDecoder.decode(path, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(DaaSGenerator.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.logInfo(ex.toString());
         }
 
         System.out.println("Project Path: -" + path + "-");

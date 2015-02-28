@@ -29,6 +29,7 @@ import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.common.entity.qor.Range;
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
+import at.ac.tuwien.dsg.depictool.util.Logger;
 import java.util.AbstractList;
 
 import java.util.ArrayList;
@@ -148,21 +149,21 @@ public class ElasticityProcessesGenerator {
                 
                 boolean isMatching = true;
 
-                System.out.println("qElement: " + qElement.getqElementID());
+                Logger.logInfo("qElement: " + qElement.getqElementID());
                 
                 
                 for (MetricCondition metricCondition : listOfMetricConditions) {
 
                     String metricName = metricCondition.getMetricName();
                     Range range = findMatchingRange(qElement, metricName);
-                    System.out.println("    metric: " + metricName);
-                    System.out.println("    from range: " + range.getFromValue() + "    to range: " + range.getToValue()) ;
-                    System.out.println("    condition from: " + metricCondition.getLowerBound() + "    condition to: " + metricCondition.getUpperBound()) ;
+                    Logger.logInfo("    metric: " + metricName);
+                    Logger.logInfo("    from range: " + range.getFromValue() + "    to range: " + range.getToValue()) ;
+                    Logger.logInfo("    condition from: " + metricCondition.getLowerBound() + "    condition to: " + metricCondition.getUpperBound()) ;
                     
                     if (!((metricCondition.getLowerBound() >= range.getFromValue())
                             && (metricCondition.getUpperBound() <= range.getToValue()))) {
                         isMatching = false;
-                        System.out.println("FALSE CASE");
+                        Logger.logInfo("FALSE CASE");
                         break;
                     }
 
@@ -348,7 +349,7 @@ public class ElasticityProcessesGenerator {
     
     private void buildWorkflowForControlProcess(ControlProcess controlProcess){
         
-        System.out.println("BUILDING WORKFLOW FOR CONTROL PROCESS ................ ");
+        Logger.logInfo("BUILDING WORKFLOW FOR CONTROL PROCESS ................ ");
         
         
         List<ControlAction> listOfControlActions =  controlProcess.getListOfControlActions();
@@ -366,13 +367,13 @@ public class ElasticityProcessesGenerator {
         
         for (ControlAction controlAction : listOfControlActions) {
             
-            System.out.println("Control Action: " + controlAction.getControlActionName());
-            System.out.println("Control Action ID: " + controlAction.getControlActionID());
+            Logger.logInfo("Control Action: " + controlAction.getControlActionName());
+            Logger.logInfo("Control Action ID: " + controlAction.getControlActionID());
             
             List<ActionDependency> listOfActionDependencies = findDependencyActionFromName(controlAction.getControlActionName(),listOfControlActions);
             
             
-            System.out.println("No of Dependency Actions: " + listOfActionDependencies.size());
+            Logger.logInfo("No of Dependency Actions: " + listOfActionDependencies.size());
             if (listOfActionDependencies.size()>1) {
                 
                 ParallelGateway parallelGateway = new ParallelGateway();
@@ -385,15 +386,15 @@ public class ElasticityProcessesGenerator {
                 parallelGateway.setId(parallelGatewayID.toString());
                 controlAction.setIncomming(parallelGateway.getId());
                 
-                System.out.println("NEW Parallel Gateway ID: " + parallelGateway.getId());
-                System.out.println("PG set outgoing ID : " + controlAction.getControlActionID());
+                Logger.logInfo("NEW Parallel Gateway ID: " + parallelGateway.getId());
+                Logger.logInfo("PG set outgoing ID : " + controlAction.getControlActionID());
                 
                 for (ActionDependency actionDependency : listOfActionDependencies){
                     int prerequisiteControlActionIndex = findControlActionIndex(listOfControlActions, actionDependency.getPrerequisiteActionID());
                     ControlAction prerequisiteControlAction = listOfControlActions.get(prerequisiteControlActionIndex);
                      
-                    System.out.println("ActionDependency Name: " + prerequisiteControlAction.getControlActionName());
-                    System.out.println("ActionDependency ID: " + prerequisiteControlAction.getControlActionID());
+                    Logger.logInfo("ActionDependency Name: " + prerequisiteControlAction.getControlActionName());
+                    Logger.logInfo("ActionDependency ID: " + prerequisiteControlAction.getControlActionID());
                     
                     prerequisiteControlAction.setOutgoing(parallelGateway.getId());
                     incomingList.add(prerequisiteControlAction.getControlActionID());
@@ -758,10 +759,10 @@ public class ElasticityProcessesGenerator {
             List<Range> listOfRanges = qoRMetric.getListOfRanges();
             
             for (Range range: listOfRanges){
-               // System.out.println("range ID ith: " + range.getRangeID());
+               // Logger.logInfo("range ID ith: " + range.getRangeID());
                 if (rangeID.equals(range.getRangeID())){
                     rs = new Range(rangeID, range.getFromValue(), range.getToValue());
-                    //System.out.println("RANGE CHECK: from value " + range.getFromValue() + " - to value: " + range.getToValue());
+                    //Logger.logInfo("RANGE CHECK: from value " + range.getFromValue() + " - to value: " + range.getToValue());
                     
                     break;
                 }

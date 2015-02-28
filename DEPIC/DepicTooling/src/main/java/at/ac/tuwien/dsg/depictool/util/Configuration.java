@@ -11,8 +11,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -58,7 +57,7 @@ public class Configuration {
         try {
             path = URLDecoder.decode(path, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.logInfo(ex.toString());
         }
         
         return path;
@@ -73,7 +72,7 @@ public class Configuration {
         try {
             path = URLDecoder.decode(path, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.logInfo(ex.toString());
         }
         
         return path;
@@ -91,12 +90,12 @@ public class Configuration {
         try {
             path = URLDecoder.decode(path, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.logInfo(ex.toString());
         }
 
         path = path + "/classes/artifact";
         
-        System.out.println("Artifact Path: -" + path + "-");
+        Logger.logInfo("Artifact Path: -" + path + "-");
         
         
         

@@ -16,10 +16,10 @@ import at.ac.tuwien.dsg.cloud.salsa.tosca.extension.SalsaInstanceDescription_VM;
 import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import at.ac.tuwien.dsg.common.deployment.ElasticService;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depictool.util.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
 
 
@@ -43,11 +43,11 @@ public class SalsaConnector {
         
         String salsaSpecs = ws.callGetMethod();
         
-         System.out.println("DEPLOYMENT STATUS: " +salsaSpecs);
+        Logger.logInfo("DEPLOYMENT STATUS: " +salsaSpecs);
         try {
         deploymentDescription = JAXBUtils.unmarshal(salsaSpecs, DeploymentDescription.class);
         } catch (JAXBException ex) {
-            Logger.getLogger(SalsaConnector.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.logInfo(ex.toString());
         }
 
     }
@@ -59,8 +59,8 @@ public class SalsaConnector {
        List<ElasticService> elasticServiceList = new ArrayList<ElasticService>();
         
        for (DeploymentUnit du : deploymentUnits){
-           System.out.println("Service Unit: " + du.getServiceUnitID());
-           System.out.println("IP: " + du.getAssociatedVM().get(0).getIp());
+           Logger.logInfo("Service Unit: " + du.getServiceUnitID());
+           Logger.logInfo("IP: " + du.getAssociatedVM().get(0).getIp());
            
            String actionID = du.getServiceUnitID().replaceAll("_SU", "");
            String uri = "http://" + du.getAssociatedVM().get(0).getIp()+":8080" + 

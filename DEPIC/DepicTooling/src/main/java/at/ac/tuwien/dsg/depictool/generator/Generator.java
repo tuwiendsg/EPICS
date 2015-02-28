@@ -85,7 +85,7 @@ public class Generator {
         String edaasPath = parentPath + "/WEB-INF/classes/project/eDaaS";
         String edaasZipFile  = parentPath + "/edaasproject/" + eDaaSName + ".zip";
         
-        System.out.println("PARENT PATH: " + parentPath);
+        Logger.logInfo("PARENT PATH: " + parentPath);
 
         ZipUtils zipUtils = new ZipUtils();
         zipUtils.zipDir(edaasZipFile, edaasPath);
@@ -112,14 +112,14 @@ public class Generator {
 
    
         DeployAction eDaaSDA = new DeployAction(eDaaSName, eDaaSName, "sh", edaasShArtifactURL);
-        System.out.println("EDAAS ARTIFACT URL: " + edaasShArtifactURL);
+        Logger.logInfo("EDAAS ARTIFACT URL: " + edaasShArtifactURL);
         
         
         ComotConnector comotConnector = new ComotConnector(elasticDataAsset.getElasticityProcess(), eDaaSDA);
         //String cloudServiceID = comotConnector.deployCloudSevices();
         comotConnector.deployCloudSevices2();
         //comotConnector.deployCloudSevices();
-        System.out.println("On Deployment Process: ..." + comotConnector.getCloudServiceID() );
+        Logger.logInfo("On Deployment Process: ..." + comotConnector.getCloudServiceID() );
         
         List<ElasticService> listOfElasticServices = comotConnector.getCloudServiceInfo();
         ElasticServices elasticServices = new ElasticServices(listOfElasticServices);
@@ -179,7 +179,7 @@ public class Generator {
 
     private void generateElasticDaaS() {
 
-        System.out.println("Start generate APIs ...");
+        Logger.logInfo("Start generate APIs ...");
 
         DaaSGenerator daaSGenerator = new DaaSGenerator(qorModel);
         daaSGenerator.generateDaaS();
@@ -187,23 +187,23 @@ public class Generator {
     }
 
     private ElasticDataAsset generateElasticityProcesses() {
-        System.out.println("Start generate Elasticity Processes");
-        System.out.println("eDaaS: " + eDaaSName);
-        System.out.println("qor metrics: " + qorModel.getListOfMetrics().get(0).getName());
-        System.out.println("metric process: " + elasticityProcessConfiguration.getListOfMetricElasticityProcesses().get(0).getMetricName());
+        Logger.logInfo("Start generate Elasticity Processes");
+        Logger.logInfo("eDaaS: " + eDaaSName);
+        Logger.logInfo("qor metrics: " + qorModel.getListOfMetrics().get(0).getName());
+        Logger.logInfo("metric process: " + elasticityProcessConfiguration.getListOfMetricElasticityProcesses().get(0).getMetricName());
 
         ElasticityProcessesGenerator elasticityProcessGenerator = new ElasticityProcessesGenerator(qorModel, elasticityProcessConfiguration);
         MonitorProcess monitorProcess = elasticityProcessGenerator.generateMonitorProcess();
         List<ElasticState> initialElasticStateSet = elasticityProcessGenerator.generateSetOfInitialElasticState();
         
         Logger logger = new Logger();
-        System.out.println("Inital eState Set");
+        Logger.logInfo("Inital eState Set");
         logger.logElasticState(initialElasticStateSet);
         
         
         List<ElasticState> finalElasticStateSet = elasticityProcessGenerator.generateSetOfFinalElasticState(initialElasticStateSet);
-        System.out.println("");
-        System.out.println("Final eState Set");
+        Logger.logInfo("");
+        Logger.logInfo("Final eState Set");
         logger.logElasticState(finalElasticStateSet);
         
         ElasticStateSet elasticStateSet = new ElasticStateSet(initialElasticStateSet, finalElasticStateSet);

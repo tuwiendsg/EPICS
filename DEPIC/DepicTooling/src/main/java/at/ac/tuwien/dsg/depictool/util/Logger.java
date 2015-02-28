@@ -15,6 +15,7 @@ import at.ac.tuwien.dsg.common.entity.eda.ep.ParallelGateway;
 import at.ac.tuwien.dsg.common.entity.process.Parameter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  *
@@ -25,9 +26,9 @@ public class Logger {
     
     public void logMonitorProcesses(MonitorProcess monitorProcess){
         List<MonitorAction> listOfMonitorActions  = monitorProcess.getListOfMonitorActions();
-        System.out.println("\nLOG MONITOR PROCESS");
+        logInfo("\nLOG MONITOR PROCESS");
         for (MonitorAction monitorAction : listOfMonitorActions){
-            System.out.println("monitor action ID: " + monitorAction.getMonitorActionID());
+            logInfo("monitor action ID: " + monitorAction.getMonitorActionID());
         }
         
     }
@@ -35,54 +36,54 @@ public class Logger {
     
     public void logControlProcesses(List<ControlProcess> listOfControlProcesses){
         
-        System.out.println("\nLOG CONTROL PROCESS");
+        logInfo("\nLOG CONTROL PROCESS");
         
-        System.out.println("Number of Control Processes: " + listOfControlProcesses.size());
+        logInfo("Number of Control Processes: " + listOfControlProcesses.size());
         for (ControlProcess controlProcess : listOfControlProcesses) {
        
-        System.out.println("\n***");    
+        logInfo("\n***");    
         List<ControlAction> listOfControlActions =  controlProcess.getListOfControlActions();
         
         
-         System.out.println("PROCESS ----------- ");
-         System.out.println("eState in: "+ controlProcess.geteStateID_i().geteStateID());
-         System.out.println("eState fi: "+ controlProcess.geteStateID_j().geteStateID());
+         logInfo("PROCESS ----------- ");
+         logInfo("eState in: "+ controlProcess.geteStateID_i().geteStateID());
+         logInfo("eState fi: "+ controlProcess.geteStateID_j().geteStateID());
          for (ControlAction controlAction : listOfControlActions) {
-            System.out.println("control action: " + controlAction.getControlActionName());
+            logInfo("control action: " + controlAction.getControlActionName());
         }
          
-        System.out.println(".............");
+        logInfo(".............");
          
          
          List<MetricCondition> conditions_in = controlProcess.geteStateID_i().getListOfConditions();
          for (MetricCondition c: conditions_in){
-             System.out.println("   id: " + c.getConditionID());
-             System.out.println("   metric: " + c.getMetricName());
-             System.out.println("   lower: " + c.getLowerBound());
-             System.out.println("   upper: " + c.getUpperBound());
+             logInfo("   id: " + c.getConditionID());
+             logInfo("   metric: " + c.getMetricName());
+             logInfo("   lower: " + c.getLowerBound());
+             logInfo("   upper: " + c.getUpperBound());
              
          }
          
-         System.out.println("eState fi: "+ controlProcess.geteStateID_j().geteStateID());
+         logInfo("eState fi: "+ controlProcess.geteStateID_j().geteStateID());
          List<MetricCondition> conditions_fi = controlProcess.geteStateID_j().getListOfConditions();
          for (MetricCondition c: conditions_fi){
-             System.out.println("   id: " + c.getConditionID());
-             System.out.println("   metric: " + c.getMetricName());
-             System.out.println("   lower: " + c.getLowerBound());
-             System.out.println("   upper: " + c.getUpperBound());
+             logInfo("   id: " + c.getConditionID());
+             logInfo("   metric: " + c.getMetricName());
+             logInfo("   lower: " + c.getLowerBound());
+             logInfo("   upper: " + c.getUpperBound());
              
          }
                  
         for (ControlAction controlAction : listOfControlActions) {
-            System.out.println("control action: " + controlAction.getControlActionID());
-            System.out.println("control action: " + controlAction.getControlActionName());
-            System.out.println("  incomming: " + controlAction.getIncomming());
-            System.out.println("  outgoing: " + controlAction.getOutgoing());
+            logInfo("control action: " + controlAction.getControlActionID());
+            logInfo("control action: " + controlAction.getControlActionName());
+            logInfo("  incomming: " + controlAction.getIncomming());
+            logInfo("  outgoing: " + controlAction.getOutgoing());
             List<Parameter> listOfParams = controlAction.getListOfParameters();
             
             for (Parameter param : listOfParams){
-                System.out.println("    parameter: " + param.getParaName());
-                System.out.println("    value: " + param.getValue());
+                logInfo("    parameter: " + param.getParaName());
+                logInfo("    value: " + param.getValue());
             }
             
         }
@@ -90,9 +91,9 @@ public class Logger {
         List<ParallelGateway> listOfParallelGateways = controlProcess.getListOfParallelGateways();
         
         for (ParallelGateway parallelGateway : listOfParallelGateways){
-            System.out.println("parallel gateway: " + parallelGateway.getId());
-            System.out.println("  incoming: " + parallelGateway.getIncomming());
-            System.out.println("  outgoing: " + parallelGateway.getOutgoing());
+            logInfo("parallel gateway: " + parallelGateway.getId());
+            logInfo("  incoming: " + parallelGateway.getIncomming());
+            logInfo("  outgoing: " + parallelGateway.getOutgoing());
         }
         
         
@@ -101,23 +102,28 @@ public class Logger {
     }
     
     public void logElasticState(List<ElasticState> listOfElasticStates){
-        System.out.println("Number of Elastic States: " + listOfElasticStates.size());
+        logInfo("Number of Elastic States: " + listOfElasticStates.size());
         
         for (ElasticState elasticState : listOfElasticStates){
-            System.out.println("\n***"); 
-            System.out.println("eState ID: " + elasticState.geteStateID());
+            logInfo("\n***"); 
+            logInfo("eState ID: " + elasticState.geteStateID());
             List<MetricCondition> conditions = elasticState.getListOfConditions();
             for(MetricCondition condition : conditions){
-                System.out.println("\n---"); 
-                System.out.print("    metric: " + condition.getMetricName());
-                System.out.print("    id: " + condition.getConditionID());
-                System.out.print("    lower: " + condition.getLowerBound());
-                System.out.print("    uppper: " + condition.getUpperBound());
+                logInfo("\n---"); 
+                logInfo("    metric: " + condition.getMetricName());
+                logInfo("    id: " + condition.getConditionID());
+                logInfo("    lower: " + condition.getLowerBound());
+                logInfo("    uppper: " + condition.getUpperBound());
                 
             }
             
         }
         
+    }
+    
+    
+    public static void logInfo(String log) {
+        java.util.logging.Logger.getLogger(Logger.class.getName()).log(Level.INFO, log);
     }
     
 }

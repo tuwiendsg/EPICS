@@ -7,6 +7,7 @@ package at.ac.tuwien.dsg.depictool.elstore;
 
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.depictool.util.Configuration;
+import at.ac.tuwien.dsg.depictool.util.Logger;
 
 /**
  *
@@ -23,9 +24,9 @@ public class DataAssetStore {
         String resource = configuration.getConfig("DATA.ASSET.LOADER.RESOURCE.REQUEST");
       
         
-        System.out.println("IP: " + ip);
-        System.out.println("PORT: " + port);
-        System.out.println("RESOURSE: " + resource);
+        Logger.logInfo("IP: " + ip);
+        Logger.logInfo("PORT: " + port);
+        Logger.logInfo("RESOURSE: " + resource);
         
       //  IOUtils iou = new IOUtils();
       //  String dafXML = iou.readData(dataAssetID);
