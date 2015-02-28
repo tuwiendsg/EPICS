@@ -6,6 +6,7 @@
 package at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore;
 
 import at.ac.tuwien.dsg.common.deployment.ElasticService;
+import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticStateSet;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
@@ -89,11 +90,12 @@ public class ElasticityProcessesStore {
                  
             String elasticityProcessesXML="";
             String elasticStateSetXML="";
-        
+            EDaaSType eDaaSType = null;
         try {
 
             InputStream elProcessStream = null;
             InputStream eStateSetStream = null;
+            InputStream typeStream = null;
             
             
             String sql = "SELECT * FROM ElasticDaaS, DataAssetFunction "
@@ -109,6 +111,7 @@ public class ElasticityProcessesStore {
                 while (rs.next()) {
                     elProcessStream = rs.getBinaryStream("elasticity_processes");
                     eStateSetStream = rs.getBinaryStream("elasticStateSet");
+                    typeStream = rs.getBinaryStream("type");
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
@@ -122,6 +125,12 @@ public class ElasticityProcessesStore {
             StringWriter writer2 = new StringWriter();
             IOUtils.copy(eStateSetStream, writer2, encoding);
             elasticStateSetXML = writer2.toString();
+            
+            StringWriter writer3 = new StringWriter();
+            IOUtils.copy(typeStream, writer3, encoding);
+            String typeStr = writer3.toString();
+            eDaaSType = EDaaSType.valueOf(typeStr);
+            
             
             
             
@@ -145,12 +154,13 @@ public class ElasticityProcessesStore {
             Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        ElasticDataAsset eda = new ElasticDataAsset(dataAssetID, elasticityProcess, elasticStateSet);
+        ElasticDataAsset eda = new ElasticDataAsset(dataAssetID, eDaaSType, elasticityProcess, elasticStateSet);
         
         
         return  eda;
         
     }
+    
     
     
     

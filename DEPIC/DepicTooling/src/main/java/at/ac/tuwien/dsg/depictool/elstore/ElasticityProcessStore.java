@@ -77,18 +77,20 @@ public class ElasticityProcessStore {
     
     
     
-    public  void storeElasticityProcesses(String name, String elasticStateSetXML, String elasticityProcesses, String deploymentDesciption){
+    public  void storeElasticityProcesses(String name, String elasticStateSetXML, String elasticityProcesses, String deploymentDesciption, String type){
        
         InputStream elasticStateSetStream = new ByteArrayInputStream(elasticStateSetXML.getBytes(StandardCharsets.UTF_8));
         InputStream elasticityProcessesStream = new ByteArrayInputStream(elasticityProcesses.getBytes(StandardCharsets.UTF_8));
         InputStream deploymentDesciptionStream = new ByteArrayInputStream(deploymentDesciption.getBytes(StandardCharsets.UTF_8));
+        InputStream typeStream = new ByteArrayInputStream(type.getBytes(StandardCharsets.UTF_8));
         
         List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
         listOfInputStreams.add(elasticStateSetStream);
         listOfInputStreams.add(elasticityProcessesStream);
         listOfInputStreams.add(deploymentDesciptionStream);
+        listOfInputStreams.add(typeStream);
         
-        String sql = "INSERT INTO ElasticDaaS (name, elasticStateSet, elasticity_processes, deployment_descriptions) VALUES ('"+name+"',?,?,?)";
+        String sql = "INSERT INTO ElasticDaaS (name, elasticStateSet, elasticity_processes, deployment_descriptions, type) VALUES ('"+name+"',?,?,?,?)";
     
         connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
     }

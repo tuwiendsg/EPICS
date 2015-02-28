@@ -26,6 +26,9 @@ public class ElasticDataAsset {
     @XmlElement(name = "dataAssetID", required = true)
     String dataAssetID;
     
+    @XmlElement(name = "type", required = true)
+    EDaaSType type;
+    
     @XmlElement(name = "elasticityProcesses", required = true)
     ElasticityProcess elasticityProcess;
     
@@ -35,8 +38,9 @@ public class ElasticDataAsset {
     public ElasticDataAsset() {
     }
 
-    public ElasticDataAsset(String dataAssetID, ElasticityProcess elasticityProcess, ElasticStateSet elasticStateSet) {
+    public ElasticDataAsset(String dataAssetID, EDaaSType type, ElasticityProcess elasticityProcess, ElasticStateSet elasticStateSet) {
         this.dataAssetID = dataAssetID;
+        this.type = type;
         this.elasticityProcess = elasticityProcess;
         this.elasticStateSet = elasticStateSet;
     }
@@ -47,6 +51,14 @@ public class ElasticDataAsset {
 
     public void setDataAssetID(String dataAssetID) {
         this.dataAssetID = dataAssetID;
+    }
+
+    public EDaaSType getType() {
+        return type;
+    }
+
+    public void setType(EDaaSType type) {
+        this.type = type;
     }
 
     public ElasticityProcess getElasticityProcess() {
@@ -64,6 +76,8 @@ public class ElasticDataAsset {
     public void setElasticStateSet(ElasticStateSet elasticStateSet) {
         this.elasticStateSet = elasticStateSet;
     }
+
+    
 
     
     

@@ -6,6 +6,7 @@
 
 package at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor;
 
+import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticStateSet;
@@ -50,7 +51,7 @@ public class DataElasticityMonitor{
     MonitoringSession monitoringSession;
     MonitorProcess monitorProcess;
     List<ControlProcess> listOfControlProcesses;
-
+    EDaaSType eDaaSType;
     MetricProcess metricProcess;
 
     public DataElasticityMonitor(MonitoringSession monitoringSession) {
@@ -71,7 +72,7 @@ public class DataElasticityMonitor{
                 System.out.println("Get monitoring service info: " +monitoringServiceID);
                 
                 
-                String uri = ElasticServiceRegistry.getElasticServiceURI(monitoringServiceID);
+                String uri = ElasticServiceRegistry.getElasticServiceURI(monitoringServiceID, eDaaSType);
                
                 System.out.println("Run Monitoring Service ID: " + monitoringServiceID);
                 System.out.println("URI: " + uri);
@@ -111,7 +112,7 @@ public class DataElasticityMonitor{
             System.out.println("");
                 if (!isExpectedElasticState(currentElasticState)) {
                     System.out.println("FAIL VALIDATION");
-                    DataElasticityController controller = new DataElasticityController(listOfExpectedElasticStates, listOfControlProcesses, monitoringSession);
+                    DataElasticityController controller = new DataElasticityController(listOfExpectedElasticStates, listOfControlProcesses, monitoringSession, eDaaSType);
                     controller.startControlElasticState(currentElasticState);
                 } else {
                     System.out.println("PASS VALIDATION");
@@ -184,6 +185,7 @@ public class DataElasticityMonitor{
         ElasticDataAsset eda = elasticityProcessesStore.getElasticDataAsset(monitoringSession.getDataAssetID());
         ElasticityProcess elasticityProcess= eda.getElasticityProcess();
         ElasticStateSet elasticStateSet = eda.getElasticStateSet();
+        eDaaSType = eda.getType();
         
         listOfElasticStates = elasticStateSet.getInitialElasticStateSet();
        

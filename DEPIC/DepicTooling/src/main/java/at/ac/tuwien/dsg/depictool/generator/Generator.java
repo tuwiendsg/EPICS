@@ -138,7 +138,7 @@ public class Generator {
         
         
         
-        elStore.storeElasticityProcesses(eDaaSName,elasticStateSetXML, elasticityProcessesXML, "");
+        elStore.storeElasticityProcesses(eDaaSName,elasticStateSetXML, elasticityProcessesXML, "", eDaaSType.geteDaaSType());
         
         
         //configure elasticity services
@@ -211,7 +211,7 @@ public class Generator {
         List<ControlProcess> listOfControlProcesses = elasticityProcessGenerator.generateControlProcesses(initialElasticStateSet, finalElasticStateSet);
         ElasticityProcess elasticityProcesses = new ElasticityProcess(monitorProcess, listOfControlProcesses);
 
-        ElasticDataAsset elasticDataAsset = new ElasticDataAsset(eDaaSName, elasticityProcesses, elasticStateSet);
+        ElasticDataAsset elasticDataAsset = new ElasticDataAsset(eDaaSName,eDaaSType, elasticityProcesses, elasticStateSet);
         //log
        
         

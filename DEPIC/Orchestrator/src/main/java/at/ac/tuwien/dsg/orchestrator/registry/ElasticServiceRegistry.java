@@ -7,6 +7,7 @@ package at.ac.tuwien.dsg.orchestrator.registry;
 
 
 import at.ac.tuwien.dsg.common.deployment.ElasticService;
+import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class ElasticServiceRegistry {
     private static List<ElasticService> listOfElasticServices;
 
    
-    public static String getElasticServiceURI(String serviceID){
+    public static String getElasticServiceURI(String serviceID, EDaaSType eDaaSType){
         
         
         int minNoOfRequest=Integer.MAX_VALUE;
@@ -39,7 +40,7 @@ public class ElasticServiceRegistry {
         int currentRequest = selectedElasticService.getRequest();
         selectedElasticService.setRequest(++currentRequest);
           
-        return  selectedElasticService.getUri();
+        return  selectedElasticService.getUri() + "/" + eDaaSType.geteDaaSType();
         
     }
     

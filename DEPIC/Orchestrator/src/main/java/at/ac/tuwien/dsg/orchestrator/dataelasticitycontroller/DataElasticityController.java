@@ -5,6 +5,7 @@
  */
 package at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller;
 
+import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
 import at.ac.tuwien.dsg.common.entity.eda.MetricCondition;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataControlRequest;
@@ -36,14 +37,16 @@ public class DataElasticityController {
     List<ControlProcess> listOfControlProcesses;
     List<QueueTask> listOfTasks;
     List<String> traversedGatewayList;
+    EDaaSType eDaaSType;
     MonitoringSession monitoringSession;
 
-    public DataElasticityController(List<ElasticState> listOfExpectedElasticStates, List<ControlProcess> listOfControlProcesses, MonitoringSession monitoringSession) {
+    public DataElasticityController(List<ElasticState> listOfExpectedElasticStates, List<ControlProcess> listOfControlProcesses, MonitoringSession monitoringSession, EDaaSType eDaaSType) {
         this.listOfExpectedElasticStates = listOfExpectedElasticStates;
         this.listOfControlProcesses = listOfControlProcesses;
         listOfTasks = new ArrayList<QueueTask>();
         traversedGatewayList = new ArrayList<String>();
         this.monitoringSession = monitoringSession;
+        this.eDaaSType = eDaaSType;
     }
 
     public void startControlElasticState(ElasticState currentElasticState) {
@@ -192,7 +195,7 @@ public class DataElasticityController {
             
             
        
-            String uri = ElasticServiceRegistry.getElasticServiceURI(controlActionName);
+            String uri = ElasticServiceRegistry.getElasticServiceURI(controlActionName, eDaaSType);
       
             RestfulWSClient ws = new RestfulWSClient(uri);
             ws.callPutMethod(requestXML);
