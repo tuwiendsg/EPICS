@@ -11,7 +11,7 @@ import at.ac.tuwien.dsg.common.entity.process.DataSource;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
-import at.ac.tuwien.dsg.depictool.util.Logger;
+import at.ac.tuwien.dsg.common.utils.Logger;
 import at.ac.tuwien.dsg.depictool.util.ZipUtils;
 import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
 import java.io.BufferedReader;

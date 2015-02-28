@@ -29,7 +29,7 @@ import at.ac.tuwien.dsg.depic.depictool.connector.SalsaConnector;
 
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
 import at.ac.tuwien.dsg.depictool.util.Configuration;
-import at.ac.tuwien.dsg.depictool.util.Logger;
+import at.ac.tuwien.dsg.common.utils.Logger;
 
 
 import at.ac.tuwien.dsg.depictool.util.ZipUtils;

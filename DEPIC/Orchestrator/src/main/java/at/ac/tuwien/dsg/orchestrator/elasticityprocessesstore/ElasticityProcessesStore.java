@@ -237,7 +237,7 @@ public class ElasticityProcessesStore {
     
        public MetricProcess getMetricProcess(String eDaaSName) {
            
-           System.out.println("eDaaSName: " + eDaaSName);   
+        
         String sql = "SELECT * FROM InputSpecification WHERE name ='" + eDaaSName + "'";
         InputStream inputStream = null;
         String metricProcessXML = "";

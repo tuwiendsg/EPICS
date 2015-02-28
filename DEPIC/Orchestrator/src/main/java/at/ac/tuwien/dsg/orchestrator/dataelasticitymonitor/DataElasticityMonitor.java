@@ -26,6 +26,7 @@ import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.common.entity.qor.Range;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.common.utils.Logger;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 import at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller.DataElasticityController;
@@ -34,8 +35,7 @@ import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcesse
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.xml.bind.JAXBException;
 import sun.java2d.pipe.BufferedMaskBlit;
 
@@ -64,18 +64,18 @@ public class DataElasticityMonitor{
     public void startMonitoringService() {
         List<MonitorAction> listOfMonitoringActions = monitorProcess.getListOfMonitorActions();
         
-            System.out.println("Execute Monitoring Process ...");
+            Logger.logInfo("Execute Monitoring Process ...");
             for (MonitorAction monitorAction : listOfMonitoringActions) {
                 
                 String monitoringServiceID = monitorAction.getMonitorActionID();
                 
-                System.out.println("Get monitoring service info: " +monitoringServiceID);
+                Logger.logInfo("Get monitoring service info: " +monitoringServiceID);
                 
                 
                 String uri = ElasticServiceRegistry.getElasticServiceURI(monitoringServiceID, eDaaSType);
                
-                System.out.println("Run Monitoring Service ID: " + monitoringServiceID);
-                System.out.println("URI: " + uri);
+                Logger.logInfo("Run Monitoring Service ID: " + monitoringServiceID);
+                Logger.logInfo("URI: " + uri);
                 
                 DataPartitionRequest request = new DataPartitionRequest(monitoringSession.getEdaasName()
                         , monitoringSession.getSessionID()
@@ -86,7 +86,7 @@ public class DataElasticityMonitor{
             try {
                 requestXML = JAXBUtils.marshal(request, DataPartitionRequest.class);
             } catch (JAXBException ex) {
-                Logger.getLogger(DataElasticityMonitor.class.getName()).log(Level.SEVERE, null, ex);
+              
             }
 
             double monitoringValue = 0;
@@ -100,22 +100,22 @@ public class DataElasticityMonitor{
             listOfMonitoringMetrics.add(monitoringMetric);
 
         }
-        System.out.println("MONITORING RESULT:\n");
+        Logger.logInfo("MONITORING RESULT:\n");
             for (MonitoringMetric monitoringMetric : listOfMonitoringMetrics){
                 
-                System.out.println("Metric: " + monitoringMetric.getMetricName() + " - Value: " + monitoringMetric.getMetricValue());
+                Logger.logInfo("Metric: " + monitoringMetric.getMetricName() + " - Value: " + monitoringMetric.getMetricValue());
             }
 
             ElasticState currentElasticState = determineCurrentElasticState();
-            System.out.println("Current Elastic State ...");
+            Logger.logInfo("Current Elastic State ...");
             logElasticState(currentElasticState);
-            System.out.println("");
+            Logger.logInfo("");
                 if (!isExpectedElasticState(currentElasticState)) {
-                    System.out.println("FAIL VALIDATION");
+                    Logger.logInfo("FAIL VALIDATION");
                     DataElasticityController controller = new DataElasticityController(listOfExpectedElasticStates, listOfControlProcesses, monitoringSession, eDaaSType);
                     controller.startControlElasticState(currentElasticState);
                 } else {
-                    System.out.println("PASS VALIDATION");
+                    Logger.logInfo("PASS VALIDATION");
                 }
         
     }
@@ -124,8 +124,8 @@ public class DataElasticityMonitor{
     
     private ElasticState determineCurrentElasticState(){
         ElasticState currentElasticState = null;
-        Logger.getLogger(DataElasticityMonitor.class.getName()).log(Level.INFO, "Determine Current ElasticState");
-        Logger.getLogger(DataElasticityMonitor.class.getName()).log(Level.INFO, "NoOf EStates: " + listOfElasticStates.size());
+        Logger.logInfo("Determine Current ElasticState");
+        Logger.logInfo("NoOf EStates: " + listOfElasticStates.size());
         
         for (ElasticState elasticState : listOfElasticStates) {
             
@@ -135,8 +135,8 @@ public class DataElasticityMonitor{
                 String metricName  =condition.getMetricName();
                 double metricValue = findMetricValue(metricName);
                 
-                System.out.println("Metric: " + metricName +" - Value: " + metricValue);
-                System.out.println("Lower Bound: " + condition.getLowerBound() + " - upper bound: " + condition.getUpperBound() );
+                Logger.logInfo("Metric: " + metricName +" - Value: " + metricValue);
+                Logger.logInfo("Lower Bound: " + condition.getLowerBound() + " - upper bound: " + condition.getUpperBound() );
                 
                 if (!(metricValue>=condition.getLowerBound() && metricValue<=condition.getUpperBound())){
                     rs = false;
@@ -235,11 +235,11 @@ public class DataElasticityMonitor{
     
     private void logElasticState(ElasticState elasticState ){
   
-            System.out.println("\n***"); 
-            System.out.println("eState ID: " + elasticState.geteStateID());
+            Logger.logInfo("\n***"); 
+            Logger.logInfo("eState ID: " + elasticState.geteStateID());
             List<MetricCondition> conditions = elasticState.getListOfConditions();
             for(MetricCondition condition : conditions){
-                System.out.println("\n---"); 
+                Logger.logInfo("\n---"); 
                 System.out.print("    metric: " + condition.getMetricName());
                 System.out.print("    id: " + condition.getConditionID());
                 System.out.print("    lower: " + condition.getLowerBound());

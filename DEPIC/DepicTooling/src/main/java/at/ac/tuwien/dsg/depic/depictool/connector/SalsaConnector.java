@@ -16,7 +16,7 @@ import at.ac.tuwien.dsg.cloud.salsa.tosca.extension.SalsaInstanceDescription_VM;
 import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import at.ac.tuwien.dsg.common.deployment.ElasticService;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.depictool.util.Logger;
+import at.ac.tuwien.dsg.common.utils.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;

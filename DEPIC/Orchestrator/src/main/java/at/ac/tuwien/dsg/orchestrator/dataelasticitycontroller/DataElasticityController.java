@@ -16,14 +16,14 @@ import at.ac.tuwien.dsg.common.entity.eda.ep.ParallelGateway;
 import at.ac.tuwien.dsg.common.entity.eda.ep.QueueTask;
 import at.ac.tuwien.dsg.common.entity.process.Parameter;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.common.utils.Logger;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.xml.bind.JAXBException;
 import org.eclipse.persistence.internal.core.helper.CoreClassConstants;
 
@@ -57,7 +57,7 @@ public class DataElasticityController {
 
             ControlProcess cp = determineAppropriateControlProcess(currentElasticState.geteStateID(), expectedElasticState.geteStateID());
             if (cp != null) {
-               // System.out.println("Potential Next eState FOUND");
+               // Logger.logInfo("Potential Next eState FOUND");
                // logElasticState(cp.geteStateID_j());
 
                 listOfPotentialControlProcesses.add(cp);
@@ -66,9 +66,9 @@ public class DataElasticityController {
         }
 
         ControlProcess controlProcess = determineTheBestControlProcess(listOfPotentialControlProcesses);
-        System.out.println("BEST CONTROL PROCESS FOUND");
+        Logger.logInfo("BEST CONTROL PROCESS FOUND");
       //  logControlProcesses(controlProcess);
-        System.out.println("FINAL Elastic STATE");
+        Logger.logInfo("FINAL Elastic STATE");
         logElasticState(controlProcess.geteStateID_j());
 
       //  startControlProcess(controlProcess);
@@ -105,10 +105,10 @@ public class DataElasticityController {
 
     private void startControlProcess(ControlProcess cp) {
 
-        System.out.println("PLANNING Control Process ...");
+        Logger.logInfo("PLANNING Control Process ...");
 
         planControlProcess(cp);
-        System.out.println("EXECUTE Control Process ...");
+        Logger.logInfo("EXECUTE Control Process ...");
         executeControlProcess(cp);
 
 //        for (ControlAction ca : listOfControlActions){
@@ -148,7 +148,7 @@ public class DataElasticityController {
             }
         }
 
-        System.out.println("START: " + startTaskID);
+        Logger.logInfo("START: " + startTaskID);
 
         if (isActionTask(startTaskID, listOfParallelGateways)) {
 
@@ -170,7 +170,7 @@ public class DataElasticityController {
         List<ControlAction> listOfControlActions = cp.getListOfControlActions();
         
         for (QueueTask task : listOfTasks) {
-            System.out.println(task.getProperty() + " : TaskID: " + task.getTaskID());
+            Logger.logInfo(task.getProperty() + " : TaskID: " + task.getTaskID());
             String controlActionName = "";
             List<Parameter> listOfParams = null;
             for (ControlAction ca: listOfControlActions){
@@ -190,7 +190,7 @@ public class DataElasticityController {
             try {
                 requestXML = JAXBUtils.marshal(controlRequest, DataControlRequest.class);
             } catch (JAXBException ex) {
-                Logger.getLogger(DataElasticityController.class.getName()).log(Level.SEVERE, null, ex);
+               
             }
             
             
@@ -208,7 +208,7 @@ public class DataElasticityController {
 
         boolean isEndTask = false;
 
-        System.out.println("Next Task of : " + taskID);
+        Logger.logInfo("Next Task of : " + taskID);
 
         
         for (ControlAction ca : listOfControlActions) {
@@ -303,11 +303,11 @@ public class DataElasticityController {
 
     private void logElasticState(ElasticState elasticState) {
 
-        System.out.println("\n***");
-        System.out.println("eState ID: " + elasticState.geteStateID());
+        Logger.logInfo("\n***");
+        Logger.logInfo("eState ID: " + elasticState.geteStateID());
         List<MetricCondition> conditions = elasticState.getListOfConditions();
         for (MetricCondition condition : conditions) {
-            System.out.println("\n---");
+            Logger.logInfo("\n---");
             System.out.print("    metric: " + condition.getMetricName());
             System.out.print("    id: " + condition.getConditionID());
             System.out.print("    lower: " + condition.getLowerBound());
@@ -319,49 +319,49 @@ public class DataElasticityController {
 
     public void logControlProcesses(ControlProcess controlProcess) {
 
-        System.out.println("\nLOG CONTROL PROCESS");
+        Logger.logInfo("\nLOG CONTROL PROCESS");
 
-        System.out.println("\n***");
+        Logger.logInfo("\n***");
         List<ControlAction> listOfControlActions = controlProcess.getListOfControlActions();
 
-        System.out.println("PROCESS ----------- ");
-        System.out.println("eState in: " + controlProcess.geteStateID_i().geteStateID());
-        System.out.println("eState fi: " + controlProcess.geteStateID_j().geteStateID());
+        Logger.logInfo("PROCESS ----------- ");
+        Logger.logInfo("eState in: " + controlProcess.geteStateID_i().geteStateID());
+        Logger.logInfo("eState fi: " + controlProcess.geteStateID_j().geteStateID());
         for (ControlAction controlAction : listOfControlActions) {
-            System.out.println("control action: " + controlAction.getControlActionName());
+            Logger.logInfo("control action: " + controlAction.getControlActionName());
         }
 
-        System.out.println(".............");
+        Logger.logInfo(".............");
 
         List<MetricCondition> conditions_in = controlProcess.geteStateID_i().getListOfConditions();
         for (MetricCondition c : conditions_in) {
-            System.out.println("   id: " + c.getConditionID());
-            System.out.println("   metric: " + c.getMetricName());
-            System.out.println("   lower: " + c.getLowerBound());
-            System.out.println("   upper: " + c.getUpperBound());
+            Logger.logInfo("   id: " + c.getConditionID());
+            Logger.logInfo("   metric: " + c.getMetricName());
+            Logger.logInfo("   lower: " + c.getLowerBound());
+            Logger.logInfo("   upper: " + c.getUpperBound());
 
         }
 
-        System.out.println("eState fi: " + controlProcess.geteStateID_j().geteStateID());
+        Logger.logInfo("eState fi: " + controlProcess.geteStateID_j().geteStateID());
         List<MetricCondition> conditions_fi = controlProcess.geteStateID_j().getListOfConditions();
         for (MetricCondition c : conditions_fi) {
-            System.out.println("   id: " + c.getConditionID());
-            System.out.println("   metric: " + c.getMetricName());
-            System.out.println("   lower: " + c.getLowerBound());
-            System.out.println("   upper: " + c.getUpperBound());
+            Logger.logInfo("   id: " + c.getConditionID());
+            Logger.logInfo("   metric: " + c.getMetricName());
+            Logger.logInfo("   lower: " + c.getLowerBound());
+            Logger.logInfo("   upper: " + c.getUpperBound());
 
         }
 
         for (ControlAction controlAction : listOfControlActions) {
-            System.out.println("control action: " + controlAction.getControlActionID());
-            System.out.println("control action: " + controlAction.getControlActionName());
-            System.out.println("  incomming: " + controlAction.getIncomming());
-            System.out.println("  outgoing: " + controlAction.getOutgoing());
+            Logger.logInfo("control action: " + controlAction.getControlActionID());
+            Logger.logInfo("control action: " + controlAction.getControlActionName());
+            Logger.logInfo("  incomming: " + controlAction.getIncomming());
+            Logger.logInfo("  outgoing: " + controlAction.getOutgoing());
             List<Parameter> listOfParams = controlAction.getListOfParameters();
 
             for (Parameter param : listOfParams) {
-                System.out.println("    parameter: " + param.getParaName());
-                System.out.println("    value: " + param.getValue());
+                Logger.logInfo("    parameter: " + param.getParaName());
+                Logger.logInfo("    value: " + param.getValue());
             }
 
         }
@@ -369,9 +369,9 @@ public class DataElasticityController {
         List<ParallelGateway> listOfParallelGateways = controlProcess.getListOfParallelGateways();
 
         for (ParallelGateway parallelGateway : listOfParallelGateways) {
-            System.out.println("parallel gateway: " + parallelGateway.getId());
-            System.out.println("  incoming: " + parallelGateway.getIncomming());
-            System.out.println("  outgoing: " + parallelGateway.getOutgoing());
+            Logger.logInfo("parallel gateway: " + parallelGateway.getId());
+            Logger.logInfo("  incoming: " + parallelGateway.getIncomming());
+            Logger.logInfo("  outgoing: " + parallelGateway.getOutgoing());
         }
 
     }

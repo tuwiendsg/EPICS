@@ -5,6 +5,7 @@
  */
 package at.ac.tuwien.dsg.depictool.util;
 
+import at.ac.tuwien.dsg.common.utils.Logger;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -90,7 +91,7 @@ public class Configuration {
         try {
             path = URLDecoder.decode(path, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            Logger.logInfo(ex.toString());
+           
         }
 
         path = path + "/classes/artifact";

@@ -9,6 +9,7 @@ package at.ac.tuwien.dsg.depictool.util;
  *
  * @author Jun
  */
+import at.ac.tuwien.dsg.common.utils.Logger;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;

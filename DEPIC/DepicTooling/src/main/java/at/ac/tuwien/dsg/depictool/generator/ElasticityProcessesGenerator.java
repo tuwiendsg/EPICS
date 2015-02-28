@@ -29,7 +29,7 @@ import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.common.entity.qor.Range;
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
-import at.ac.tuwien.dsg.depictool.util.Logger;
+import at.ac.tuwien.dsg.common.utils.Logger;
 import java.util.AbstractList;
 
 import java.util.ArrayList;
