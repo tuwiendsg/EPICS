@@ -14,7 +14,7 @@ import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
  */
 public interface DataStore {
 
-    public void saveDataAsset(String daXML, String dafName, String partitionID);
+    public  void saveDataAsset(String daXML, String dafName, String partitionID);
 
     public void removeDataAsset(String dafName);
 

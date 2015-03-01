@@ -46,29 +46,30 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jun
  */
-public class CassandraDataAssetStore implements DataStore {
+public class CassandraDataAssetStore  {
 
-    static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetStore.class);
-    private Session session;
-    private String ip;
-    private int port;
-    private String keyspace;
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetStore.class);
+    private static Session session;
+    private static String ip;
+    private static int port;
+    private static String keyspace;
 
-    public CassandraDataAssetStore() {
 
-        Configuration cfg = new Configuration();
-        ip = cfg.getConfig("CASSANDRA.DB.IP");
-        port = Integer.parseInt(cfg.getConfig("CASSANDRA.DB.PORT"));
-        keyspace = cfg.getConfig("CASSANDRA.DB.KEY");
+    
+    private static void doConfig() {
+        if (ip == null) {
+            Configuration cfg = new Configuration();
+            ip = cfg.getConfig("CASSANDRA.DB.IP");
+            port = Integer.parseInt(cfg.getConfig("CASSANDRA.DB.PORT"));
+            keyspace = cfg.getConfig("CASSANDRA.DB.KEY");
+        }
     }
 
-    public CassandraDataAssetStore(String ip, int port, String keyspace) {
-        this.ip = ip;
-        this.port = port;
-        this.keyspace = keyspace;
-    }
+   
 
-    public void openConnection() {
+    public static void openConnection() {
+        doConfig();
+        
         log.info("Connecting to Cassandra at " + ip + ":" + port);
         if (session == null) {
             Cluster cluster = Cluster.builder()
@@ -86,14 +87,13 @@ public class CassandraDataAssetStore implements DataStore {
         }
     }
 
-    public void closeConnection() {
+    public static void closeConnection() {
         session.close();
         session = null;
     }
 
-   
-    @Override
-    public void saveDataAsset(String daXML, String dafName, String partitionID) {
+
+    public static void saveDataAsset(String daXML, String dafName, String partitionID) {
 
         UUID uuid = UUID.randomUUID();
         String uuid_str = uuid.toString();
@@ -105,16 +105,16 @@ public class CassandraDataAssetStore implements DataStore {
 
     }
 
-    @Override
-    public void removeDataAsset(String dafName) {
+
+    public static void removeDataAsset(String dafName) {
 
         String sql = "DElETE FROM " + keyspace + ".DataAsset WHERE dataAssetID='" + dafName + "'";
         session.execute(sql);
 
     }
 
-    @Override
-    public String getDataAssetXML(String dafName, String partitionID) {
+    
+    public static String getDataAssetXML(String dafName, String partitionID) {
 
         String data = "";
         String sql = "SELECT * FROM " + keyspace + ".DataAsset "
@@ -146,8 +146,8 @@ public class CassandraDataAssetStore implements DataStore {
 
     }
 
-    @Override
-    public String copyDataAssetRepo(DataPartitionRequest request) {
+   
+    public static String copyDataAssetRepo(DataPartitionRequest request) {
 
         System.out.println("Staring Copying Data ...");
 
@@ -191,8 +191,8 @@ public class CassandraDataAssetStore implements DataStore {
         return String.valueOf(noOfPartitions);
     }
 
-    @Override
-    public String getDataPartitionRepo(DataPartitionRequest request) {
+
+    public static String getDataPartitionRepo(DataPartitionRequest request) {
 
         String edaas = request.getEdaas();
         String customerID = request.getCustomerID();
@@ -229,8 +229,8 @@ public class CassandraDataAssetStore implements DataStore {
 
     }
 
-    @Override
-    public String getNoOfPartitionRepo(DataPartitionRequest request) {
+ 
+    public static String getNoOfPartitionRepo(DataPartitionRequest request) {
     
           String edaas = request.getEdaas();
         String customerID = request.getCustomerID();
@@ -268,8 +268,8 @@ public class CassandraDataAssetStore implements DataStore {
         return noOfPartition;
     }
 
-    @Override
-    public void saveDataPartitionRepo(DataAsset dataAssetPartition) {
+    
+    public static void saveDataPartitionRepo(DataAsset dataAssetPartition) {
    
         String daXML="";
         try {
@@ -291,8 +291,8 @@ public class CassandraDataAssetStore implements DataStore {
         
     }
 
-    @Override
-    public void insertDataPartitionRepo(DataAsset dataAssetPartition) {
+  
+    public static void insertDataPartitionRepo(DataAsset dataAssetPartition) {
          String daXML="";
         try {
             daXML = JAXBUtils.marshal(dataAssetPartition, DataAsset.class);

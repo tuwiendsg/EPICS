@@ -13,9 +13,6 @@ import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetloader.store.CassandraDataAssetStore;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
@@ -49,8 +46,8 @@ public class CassandraDataLoader implements DataLoader {
                 da.setName(dataAssetFunction.getName());
                 dataAssetXml = JAXBUtils.marshal(da, DataAsset.class);
 
-                CassandraDataAssetStore cdas = new CassandraDataAssetStore();
-                cdas.saveDataAsset(dataAssetXml, dataAssetFunction.getName(), String.valueOf(i));
+                
+                CassandraDataAssetStore.saveDataAsset(dataAssetXml, dataAssetFunction.getName(), String.valueOf(i));
 
             }
 
@@ -64,28 +61,25 @@ public class CassandraDataLoader implements DataLoader {
 
     @Override
     public String copyDataAssetRepo(DataPartitionRequest request) {
-        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
-        return cdas.copyDataAssetRepo(request);
+       
+        return CassandraDataAssetStore.copyDataAssetRepo(request);
     }
 
     @Override
     public String getNoOfParitionRepo(DataPartitionRequest request) {
-        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
-        String noOfPartition = cdas.getNoOfPartitionRepo(request);
+        String noOfPartition = CassandraDataAssetStore.getNoOfPartitionRepo(request);
         return noOfPartition;
     }
 
     @Override
     public String getDataPartitionRepo(DataPartitionRequest request) {
-        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
-        String daXML = cdas.getDataPartitionRepo(request);
+        String daXML = CassandraDataAssetStore.getDataPartitionRepo(request);
         return daXML;
     }
 
     @Override
     public void saveDataPartitionRepo(DataAsset dataAsset) {
-        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
-        cdas.saveDataPartitionRepo(dataAsset);
+        CassandraDataAssetStore.saveDataPartitionRepo(dataAsset);
     }
 
     private String requestToGetDataAsset(String daw) {

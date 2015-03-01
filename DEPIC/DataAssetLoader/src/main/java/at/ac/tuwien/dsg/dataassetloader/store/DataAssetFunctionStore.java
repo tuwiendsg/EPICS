@@ -6,6 +6,7 @@
 package at.ac.tuwien.dsg.dataassetloader.store;
 
 import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
+import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.MySqlConnectionManager;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
@@ -71,6 +72,64 @@ public class DataAssetFunctionStore {
         
         
         return dafXML;
+    }
+    
+    
+    public EDaaSType gEDaaSTypeFromEDaaSName(String eDaaSName){
+        
+        String sql = "SELECT * FROM ElasticDaaS WHERE name='" + eDaaSName + "'";
+        EDaaSType eDaaSType = null;
+       
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        try {
+            while (rs.next()) {
+                InputStream inputStream = rs.getBinaryStream("type");
+                StringWriter writer = new StringWriter();
+                String encoding = StandardCharsets.UTF_8.name();
+                IOUtils.copy(inputStream, writer, encoding);
+                String type = writer.toString();          
+                eDaaSType = EDaaSType.valueOf(type);
+            }
+
+            rs.close();
+        } catch (Exception ex) {
+
+        }
+
+        return eDaaSType;
+
+        
+    }
+    
+    
+    public EDaaSType gEDaaSTypeFromDataAssetID(String dataAssetID){
+        
+       String sql = "SELECT * FROM ElasticDaaS, DataAssetFunction "
+                    + "WHERE ElasticDaaS.name = DataAssetFunction.edaas "
+                    + "AND DataAssetFunction.dataAssetID='"+dataAssetID+"'";
+        EDaaSType eDaaSType = null;
+       
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        try {
+            while (rs.next()) {
+                InputStream inputStream = rs.getBinaryStream("type");
+                StringWriter writer = new StringWriter();
+                String encoding = StandardCharsets.UTF_8.name();
+                IOUtils.copy(inputStream, writer, encoding);
+                String type = writer.toString();          
+                eDaaSType = EDaaSType.valueOf(type);
+            }
+
+            rs.close();
+        } catch (Exception ex) {
+
+        }
+
+        return eDaaSType;
     }
     
     

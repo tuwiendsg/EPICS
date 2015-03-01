@@ -6,12 +6,14 @@
 package at.ac.tuwien.dsg.dataassetloader.restws;
 
 import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
+import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 
 import at.ac.tuwien.dsg.dataassetloader.datasource.GenericDataLoader;
+import at.ac.tuwien.dsg.dataassetloader.store.CassandraDataAssetStore;
 
 import at.ac.tuwien.dsg.dataassetloader.store.DataAssetFunctionStore;
 import at.ac.tuwien.dsg.dataassetloader.util.ThroughputMonitor;
@@ -69,6 +71,7 @@ public class DataassetResource {
         
         DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
         String dataAssetFunctionXML = dafStore.getDataAssetFunction(dataAssetID);
+        EDaaSType eDaaSType = dafStore.gEDaaSTypeFromDataAssetID(dataAssetID);
         
         DataAssetFunction daf=null;
         try {
@@ -77,7 +80,7 @@ public class DataassetResource {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        GenericDataLoader dataLoader = new GenericDataLoader();
+        GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
         String noOfPartitions = dataLoader.loadDataAsset(daf);
         
         return noOfPartitions;
@@ -100,8 +103,9 @@ public class DataassetResource {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
-        GenericDataLoader dataLoader = new GenericDataLoader();
+        DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
+        EDaaSType eDaaSType = dafStore.gEDaaSTypeFromEDaaSName(request.getEdaas());
+        GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
         String noOfPartitions = dataLoader.copyDataAssetRepo(request);
         
         
@@ -126,7 +130,9 @@ public class DataassetResource {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        GenericDataLoader dataLoader = new GenericDataLoader();
+        DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
+        EDaaSType eDaaSType = dafStore.gEDaaSTypeFromEDaaSName(request.getEdaas());
+        GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
         String daXML =dataLoader.getDataPartitionRepo(request);
                
         ThroughputMonitor.trackingLoad(request);
@@ -150,7 +156,11 @@ public class DataassetResource {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        GenericDataLoader dataLoader = new GenericDataLoader();
+        
+        DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
+        EDaaSType eDaaSType = dafStore.gEDaaSTypeFromEDaaSName(request.getEdaas());
+        
+        GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
         String noOfDataPartitionRepo =dataLoader.getNoOfParitionRepo(request);
         
         return noOfDataPartitionRepo;
@@ -173,14 +183,19 @@ public class DataassetResource {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        GenericDataLoader dataLoader = new GenericDataLoader();
-        dataLoader.saveDataPartitionRepo(dataAsset);
+        
         
         
         String[] strs = dataAsset.getName().split(";");
         String edaasName = strs[0];
         String customerID = strs[1];
         String dawName = strs[2];
+        
+        
+        DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
+        EDaaSType eDaaSType = dafStore.gEDaaSTypeFromEDaaSName(edaasName);
+        GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
+        dataLoader.saveDataPartitionRepo(dataAsset);
         
         DataPartitionRequest request= new DataPartitionRequest(edaasName, customerID, dawName, "");
         ThroughputMonitor.trackingLoad(request);
@@ -202,10 +217,36 @@ public class DataassetResource {
         } catch (JAXBException ex) {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
+       
       
        double throughput = ThroughputMonitor.calculateThroughput(request);
         
         return String.valueOf(throughput);
+        
+    }
+    
+    
+    @PUT
+    @Path("repo/cassandra/open")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String openConnection(String xml) {
+
+        CassandraDataAssetStore.openConnection();
+        return "";
+        
+    }
+    
+    @PUT
+    @Path("repo/cassandra/close")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String closeConnection(String xml) {
+       
+        CassandraDataAssetStore.closeConnection();
+        
+        
+        return "";
         
     }
     
