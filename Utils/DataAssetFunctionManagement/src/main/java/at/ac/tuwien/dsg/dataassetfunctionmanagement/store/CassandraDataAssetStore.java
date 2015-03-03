@@ -131,7 +131,7 @@ public class CassandraDataAssetStore {
         
         String sql = "CREATE TABLE " + keyspace + ".KDD ("
                 + " id varchar,"
-                + " adID varchar,"
+                + " adID int,"
                 + " userID varchar,"
                 + " click varchar,"
                 + " data text,"
@@ -151,7 +151,7 @@ public class CassandraDataAssetStore {
         for (DataItem dataItem : listOfDataItems){
             
             String id = randomUDID();
-            String adID = getDataAttributeValue(dataItem, "adID");
+            int adID = Integer.parseInt(getDataAttributeValue(dataItem, "adID"));
             String userID = getDataAttributeValue(dataItem, "userID");
             String click = getDataAttributeValue(dataItem, "click");
             String data = getDataAttributeValue(dataItem, "data");
@@ -159,7 +159,7 @@ public class CassandraDataAssetStore {
             
             
          String sql = "INSERT INTO " + keyspace + ".KDD (id, adID, userID, click, data) "
-                + "VALUES ( '" + id + "', '" + adID + "', '" + userID + "', '" + click + "', '" + data + "' )";
+                + "VALUES ( '" + id + "', " + adID + ", '" + userID + "', '" + click + "', '" + data + "' )";
 
             System.out.println("SQL: " + sql);
         session.execute(sql);
@@ -169,6 +169,59 @@ public class CassandraDataAssetStore {
         
         
         
+    }
+    
+    public static DataAsset getDataKDD(String sql) {
+      
+        List<DataItem> listOfDataItems = new ArrayList<DataItem>();
+        ResultSet resultSet = null;
+        try {
+            resultSet = session.execute(sql);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            log.error("Exception cause: " + sql);
+        }
+        ExecutionInfo info = resultSet.getExecutionInfo();
+
+        if (!(resultSet == null || resultSet.isExhausted())) {
+
+            List<Row> rows = resultSet.all();
+
+            for (Row row : rows) {
+
+               
+                List<DataAttribute> listOfDataAttributes = new ArrayList<DataAttribute>();
+               
+                    
+                    DataAttribute id = new DataAttribute("id", row.getString("id"));
+                    DataAttribute adID = new DataAttribute("adID", String.valueOf(row.getInt("adID")));
+                    DataAttribute userID = new DataAttribute("userID", row.getString("userID"));
+                    DataAttribute click = new DataAttribute("click", row.getString("click"));
+                    DataAttribute data = new DataAttribute("data", row.getString("data"));
+                    
+                    
+                    listOfDataAttributes.add(id);
+                    listOfDataAttributes.add(adID);
+                    listOfDataAttributes.add(userID);
+                    listOfDataAttributes.add(click);
+                    listOfDataAttributes.add(data);
+
+                
+                
+                DataItem dataItem = new DataItem(listOfDataAttributes);
+                listOfDataItems.add(dataItem);
+                
+                
+            }
+
+        }
+        
+        DataAsset da = new DataAsset("", 0, listOfDataItems);
+        
+        
+        return da;
+        
+
     }
 
     
@@ -215,58 +268,7 @@ public class CassandraDataAssetStore {
     }
     
     
-    public static DataAsset getDataKDD(String sql) {
-      
-        List<DataItem> listOfDataItems = new ArrayList<DataItem>();
-        ResultSet resultSet = null;
-        try {
-            resultSet = session.execute(sql);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            log.error("Exception cause: " + sql);
-        }
-        ExecutionInfo info = resultSet.getExecutionInfo();
-
-        if (!(resultSet == null || resultSet.isExhausted())) {
-
-            List<Row> rows = resultSet.all();
-
-            for (Row row : rows) {
-
-               
-                List<DataAttribute> listOfDataAttributes = new ArrayList<DataAttribute>();
-               
-                    
-                    DataAttribute id = new DataAttribute("id", row.getString("id"));
-                    DataAttribute adID = new DataAttribute("adID", row.getString("adID"));
-                    DataAttribute userID = new DataAttribute("userID", row.getString("userID"));
-                    DataAttribute click = new DataAttribute("click", row.getString("click"));
-                    DataAttribute data = new DataAttribute("data", row.getString("data"));
-                    
-                    
-                    listOfDataAttributes.add(id);
-                    listOfDataAttributes.add(adID);
-                    listOfDataAttributes.add(userID);
-                    listOfDataAttributes.add(click);
-                    listOfDataAttributes.add(data);
-
-                
-                
-                DataItem dataItem = new DataItem(listOfDataAttributes);
-                listOfDataItems.add(dataItem);
-                
-                
-            }
-
-        }
-        
-        DataAsset da = new DataAsset("", 0, listOfDataItems);
-        
-        
-        return da;
-        
-
-    }
+    
     
     public static ResultSet executeCQLStatement(String cql){
         
@@ -331,7 +333,7 @@ public class CassandraDataAssetStore {
         String counter="";
         
 
-        String sql = "SELECT COUNT(*) as counter FROM " + keyspace + ".DataAsset "
+        String sql = "SELECT COUNT(*) FROM " + keyspace + ".DataAsset "
                 + "WHERE dataAssetID='" + dataAssetID + "' ALLOW FILTERING;";
 
         ResultSet resultSet = null;
@@ -348,7 +350,7 @@ public class CassandraDataAssetStore {
             List<Row> rows = resultSet.all();
 
             for (Row row : rows) {
-                 counter = row.getString("counter");
+                 counter = String.valueOf(row.getLong("count"));
               
             }
 
@@ -504,13 +506,18 @@ public class CassandraDataAssetStore {
     
     public static void truncateDataAssetTable(){
           
-         String sql = "TRUNCATE" + keyspace + ".DataAsset;";
+         String sql = "TRUNCATE " + keyspace + ".DataAsset;";
          System.out.println("SQL: " + sql);
 
 
         session.execute(sql);
         
     }
+    
+    
+    
+    
+    
     
     private static String randomUDID(){
         UUID uuid = UUID.randomUUID();

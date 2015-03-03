@@ -84,7 +84,7 @@ public class DawResource {
     
     
     @PUT
-    @Path("mysql/dataasset")
+    @Path("dataasset/mysql")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String getData(String requestDataPartition) {
@@ -136,7 +136,7 @@ public class DawResource {
     
     
     @PUT
-    @Path("cassandra/dataasset")
+    @Path("dataasset/cassandra")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String getDataCassandra(String requestDataPartition) {

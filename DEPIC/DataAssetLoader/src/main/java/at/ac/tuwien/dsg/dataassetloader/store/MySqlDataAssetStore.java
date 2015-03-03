@@ -42,11 +42,11 @@ public class MySqlDataAssetStore implements DataStore{
 
     public MySqlDataAssetStore() {
         Configuration config = new Configuration();
-        ip = config.getConfig("EDA.REPOSITORY.IP");
-        port = config.getConfig("EDA.REPOSITORY.PORT");
-        db = config.getConfig("EDA.REPOSITORY.DB");
-        user = config.getConfig("EDA.REPOSITORY.USER");
-        pass = config.getConfig("EDA.REPOSITORY.PASS");
+        ip = config.getConfig("EDA.REPOSITORY.MYSQL.IP");
+        port = config.getConfig("EDA.REPOSITORY.MYSQL.PORT");
+        db = config.getConfig("EDA.REPOSITORY.MYSQL.DB");
+        user = config.getConfig("EDA.REPOSITORY.MYSQL.USER");
+        pass = config.getConfig("EDA.REPOSITORY.MYSQL.PASS");
 
     }
 

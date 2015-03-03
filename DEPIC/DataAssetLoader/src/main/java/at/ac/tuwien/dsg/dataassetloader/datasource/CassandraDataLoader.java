@@ -6,6 +6,7 @@
 package at.ac.tuwien.dsg.dataassetloader.datasource;
 
 import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
+import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
@@ -44,10 +45,10 @@ public class CassandraDataLoader implements DataLoader {
                 String dataAssetXml = getDataPartition(dataAssetID, String.valueOf(i));
                 DataAsset da = JAXBUtils.unmarshal(dataAssetXml, DataAsset.class);
                 da.setName(dataAssetFunction.getName());
-                dataAssetXml = JAXBUtils.marshal(da, DataAsset.class);
+                //dataAssetXml = JAXBUtils.marshal(da, DataAsset.class);
 
                 
-                CassandraDataAssetStore.saveDataAsset(dataAssetXml, dataAssetFunction.getName(), String.valueOf(i));
+                CassandraDataAssetStore.saveDataAsset(da);
 
             }
 
@@ -87,7 +88,7 @@ public class CassandraDataLoader implements DataLoader {
         Configuration config = new Configuration();
         String ip = config.getConfig("DAF.MANAGEMENT.IP");
         String port = config.getConfig("DAF.MANAGEMENT.PORT");
-        String resource = config.getConfig("DAF.MANAGEMENT.RESOURCE.DAW");
+        String resource = config.getConfig("DAF.MANAGEMENT.RESOURCE.DAW") + "/" + EDaaSType.CASSANDRA.geteDaaSType();
 
         RestfulWSClient rs = new RestfulWSClient(ip, port, resource);
         String returnStr = rs.callPutMethod(daw);
@@ -100,7 +101,7 @@ public class CassandraDataLoader implements DataLoader {
         Configuration config = new Configuration();
         String ip = config.getConfig("DAF.MANAGEMENT.IP");
         String port = config.getConfig("DAF.MANAGEMENT.PORT");
-        String resource = config.getConfig("DAF.MANAGEMENT.RESOURCE.DATAASSET");
+        String resource = config.getConfig("DAF.MANAGEMENT.RESOURCE.DATAASSET") + "/" + EDaaSType.CASSANDRA.geteDaaSType();
 
         DataPartitionRequest dataPartitionRequest = new DataPartitionRequest("", "", dataAssetID, dataPartitionID);
 

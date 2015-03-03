@@ -63,26 +63,19 @@ public class CqlQuery {
             
             
             
-            
-            for (Row row : rows) {
+                   for (Row row : rows) {
+
+                String data = row.getString("data");
+                String[] strs = data.split("\t");
+
                 List<DataAttribute> listOfDataAttributes = new ArrayList<DataAttribute>();
-               
-                    
-                    DataAttribute id = new DataAttribute("id", row.getString("id"));
-                    DataAttribute adID = new DataAttribute("adID", row.getString("adID"));
-                    DataAttribute userID = new DataAttribute("userID", row.getString("userID"));
-                    DataAttribute click = new DataAttribute("click", row.getString("click"));
-                    DataAttribute data = new DataAttribute("data", row.getString("data"));
-                    
-                    
-                    listOfDataAttributes.add(id);
-                    listOfDataAttributes.add(adID);
-                    listOfDataAttributes.add(userID);
-                    listOfDataAttributes.add(click);
-                    listOfDataAttributes.add(data);
-                    
-                    
-                    DataItem dataItem = new DataItem(listOfDataAttributes);
+
+                for (int i = 0; i < strs.length; i++) {
+                    DataAttribute dataAttribute = new DataAttribute("c" + i, strs[i]);
+                    listOfDataAttributes.add(dataAttribute);
+                }
+
+                DataItem dataItem = new DataItem(listOfDataAttributes);
                 dataItemList.add(dataItem);
                 
                 partitionCounter++;

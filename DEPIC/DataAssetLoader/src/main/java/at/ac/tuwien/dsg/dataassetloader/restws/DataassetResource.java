@@ -57,7 +57,7 @@ public class DataassetResource {
     public String getXml() {
         //TODO return proper representation object
         Configuration config = new Configuration();
-        return config.getConfig("EDA.REPOSITORY.IP"); 
+        return config.getConfig("EDA.REPOSITORY.MYSQL.IP"); 
     }
 
     @PUT
