@@ -11,7 +11,7 @@ package at.ac.tuwien.dsg.common.entity.eda;
  */
 public enum EDaaSType {
 
-    MYSQL("mysql"), CASSANDRA("cassandra"), MONGODB("mongodb"), MONGODB_NEAR_REAL_TIME("mongodb_n"), CASSANDRA_NEAR_REAL_TIME("cassandra_n");
+    MYSQL("MYSQL"), CASSANDRA("CASSANDRA"), MONGODB("MONGODB"), MONGODB_NEAR_REAL_TIME("MONGODB_NEAR_REAL_TIME"), CASSANDRA_NEAR_REAL_TIME("CASSANDRA_NEAR_REAL_TIME");
 
     private String eDaaSType;
 
@@ -23,6 +23,8 @@ public enum EDaaSType {
         return eDaaSType;
     }
 
+    
+    
     
 
 }

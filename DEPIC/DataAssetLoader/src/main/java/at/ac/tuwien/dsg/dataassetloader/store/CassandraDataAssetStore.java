@@ -310,6 +310,36 @@ public class CassandraDataAssetStore  {
         return data;
 
     }
+    
+    public static String getNoOfPartitionDataAssetTable(){
+        String sql = "SELECT COUNT(*) FROM " + keyspace + ".DataAsset;";
+        
+         String noOfPartition="";
+         ResultSet resultSet = null;
+        try {
+            resultSet = session.execute(sql);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            log.error("Exception cause: " + sql);
+        }
+        ExecutionInfo info = resultSet.getExecutionInfo();
+
+        if (!(resultSet == null || resultSet.isExhausted())) {
+
+            List<Row> rows = resultSet.all();
+
+            for (Row row : rows) {
+        
+                noOfPartition = String.valueOf(row.getLong("count"));
+
+            }
+
+        }
+        
+        
+        return noOfPartition;
+        
+    }
 
  
     public static String getNoOfPartitionRepo(DataPartitionRequest request) {

@@ -114,13 +114,13 @@ public class DataAssetFunctionStore {
 
         ResultSet rs = connectionManager.ExecuteQuery(sql);
 
+        System.out.println("Get DB Type ");
         try {
             while (rs.next()) {
-                InputStream inputStream = rs.getBinaryStream("type");
-                StringWriter writer = new StringWriter();
-                String encoding = StandardCharsets.UTF_8.name();
-                IOUtils.copy(inputStream, writer, encoding);
-                String type = writer.toString();          
+
+                String type = rs.getString("type");
+                System.out.println("Type DB: " + type);
+                 
                 eDaaSType = EDaaSType.valueOf(type);
             }
 
@@ -128,6 +128,10 @@ public class DataAssetFunctionStore {
         } catch (Exception ex) {
 
         }
+        
+        System.out.println("Return Type: " + eDaaSType.geteDaaSType());
+         System.out.println("Return Type: " + eDaaSType.toString());
+         System.out.println("Return Type: " + eDaaSType.name());
 
         return eDaaSType;
     }

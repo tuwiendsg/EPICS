@@ -140,7 +140,7 @@ public class Generator {
         
         elStore.storeElasticityProcesses(eDaaSName,elasticStateSetXML, elasticityProcessesXML, "", eDaaSType.geteDaaSType());
         
-        
+        elStore.storeElasticServices(listOfElasticServices);
         //configure elasticity services
         configureElasticityServices(listOfElasticServices);
         
@@ -167,11 +167,31 @@ public class Generator {
     private void configureElasticityServices(List<ElasticService> listOfElasticServices){
         
         for (ElasticService elasticService : listOfElasticServices){
+            
+            if (elasticService.getActionID().equals(eDaaSName)){
+                String configureDataAssetLoaderUri = elasticService.getUri()+"/eDaaS/rest/dataasset/conf/dataassetloaderip";
+                String configureOrchestratorrUri = elasticService.getUri()+"/eDaaS/rest/dataasset/conf/orchestratorip";
+                Configuration cfg =new Configuration();
+                String daLoaderIp = cfg.getConfig("DATA.ASSET.LOADER.IP.LOCAL");
+                String orchestratorIp = cfg.getConfig("ORCHESTRATOR.IP.LOCAL");
+                
+                RestfulWSClient ws1 = new RestfulWSClient(configureDataAssetLoaderUri);
+                ws1.callPutMethod(daLoaderIp);
+                
+                RestfulWSClient ws2 = new RestfulWSClient(configureOrchestratorrUri);
+                ws2.callPutMethod(orchestratorIp);
+                
+                
+            } else {
+            
             String configureUri = elasticService.getUri()+"/conf";
             Configuration cfg =new Configuration();
             String daLoaderIp = cfg.getConfig("DATA.ASSET.LOADER.IP.LOCAL");
             RestfulWSClient ws = new RestfulWSClient(configureUri);
             ws.callPutMethod(daLoaderIp);
+            
+            }
+            
         }
         
         

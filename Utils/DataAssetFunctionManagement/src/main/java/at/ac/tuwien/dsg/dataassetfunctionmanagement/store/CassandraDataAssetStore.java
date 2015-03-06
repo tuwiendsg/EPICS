@@ -171,6 +171,9 @@ public class CassandraDataAssetStore {
         
     }
     
+    
+    
+    
     public static DataAsset getDataKDD(String sql) {
       
         List<DataItem> listOfDataItems = new ArrayList<DataItem>();
@@ -281,6 +284,39 @@ public class CassandraDataAssetStore {
         }
         
         return resultSet;
+    }
+    
+    public static void runCQLStatementKDD(String cql){
+        ResultSet resultSet = null;
+        try {
+            resultSet = session.execute(cql);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            log.error("Exception cause: " + cql);
+        }
+        ExecutionInfo info = resultSet.getExecutionInfo();
+
+        if (!(resultSet == null || resultSet.isExhausted())) {
+
+            List<Row> rows = resultSet.all();
+
+            for (Row row : rows) {
+
+               
+                    DataAttribute id = new DataAttribute("id", row.getString("id"));
+                    DataAttribute adID = new DataAttribute("adID", String.valueOf(row.getInt("adID")));
+                    DataAttribute userID = new DataAttribute("userID", row.getString("userID"));
+                    DataAttribute click = new DataAttribute("click", row.getString("click"));
+                    DataAttribute data = new DataAttribute("data", row.getString("data"));
+                    
+                 System.out.println("RS: " +" adID: " + adID.getAttributeValue() + " - userID: " + userID.getAttributeValue());
+                
+                
+            }
+
+        }
+        
+        
     }
     
     

@@ -87,6 +87,7 @@ public class DaaSGenerator {
             String className = metricName + "Constraint";
 
             String classContent = templateConstraintClass.replaceAll("Template", metricName);
+            classContent = classContent.replaceAll("template_metric_name", metric.getName());
             writeClass(className, packageName, classContent);
 
         }

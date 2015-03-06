@@ -26,6 +26,7 @@ public class TemplateConstraint {
     public TemplateConstraint(double minValue, double maxValue) {
         this.minValue = minValue;
         this.maxValue = maxValue;
+        this.constraintName = "template_metric_name";
     }
 
     public TemplateConstraint(String constraintName, double minValue, double maxValue) {

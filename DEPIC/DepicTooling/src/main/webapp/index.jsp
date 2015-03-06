@@ -61,11 +61,11 @@
                 <tr>
                     <td>Type</td>
                     <td><select name="type" id="type">
-                            <option value="mysql" selected>MySql</option>
-                            <option value="cassandra" selected>Cassandra</option>
-                            <option value="cassandra_n" selected>Cassandra Near Real Time</option>
-                            <option value="mongodb" selected>MongoDB</option>
-                            <option value="mongodb_n" selected>MongoDB Near Real Time</option>
+                            <option value="MYSQL" selected>MySql</option>
+                            <option value="CASSANDRA" selected>Cassandra</option>
+                            <option value="CASSANDRA_NEAR_REAL_TIME" selected>Cassandra Near Real Time</option>
+                            <option value="MONGODB" selected>MongoDB</option>
+                            <option value="MONGODB_NEAR_REAL_TIME" selected>MongoDB Near Real Time</option>
                         </select></td> 
                 </tr>
                   <tr>

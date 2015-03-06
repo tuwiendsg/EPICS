@@ -58,6 +58,7 @@ public class WorkflowEngine {
 
         try {
             // load up the knowledge base
+            System.out.println("Start workflow engine ... ");
             KnowledgeBase kbase = readKnowledgeBase();
             StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
             KnowledgeRuntimeLogger logger = KnowledgeRuntimeLoggerFactory.newThreadedFileLogger(ksession, "test", 1000);

@@ -124,6 +124,7 @@ public class MySqlDataAssetStore implements DataAssetStore{
         
         
         String sql ="TRUNCATE TABLE DataAsset";
+        System.out.println("cleanTempStore: " + sql);
         
         connectionManager.ExecuteUpdate(sql);
         

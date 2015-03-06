@@ -67,11 +67,17 @@ public class DataassetResource {
     public String requestDataAsset(String dataAssetID) {
 
         String log ="RECEIVED: " + dataAssetID;
-        Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, log);
+        Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO, null, log);
         
         DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
         String dataAssetFunctionXML = dafStore.getDataAssetFunction(dataAssetID);
+        
+        System.out.println("Data Asset Function: " +dataAssetFunctionXML);
+        
+        
         EDaaSType eDaaSType = dafStore.gEDaaSTypeFromDataAssetID(dataAssetID);
+        
+        System.out.println("EDaaSType: " +eDaaSType.geteDaaSType());
         
         DataAssetFunction daf=null;
         try {

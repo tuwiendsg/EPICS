@@ -48,7 +48,7 @@ public class DawResource {
      * @return an instance of java.lang.String
      */
     @GET
-    @Path("mysql")
+    @Path("MYSQL")
     @Produces(MediaType.TEXT_PLAIN)
     public String getXml() {
         //TODO return proper representation object
@@ -61,7 +61,7 @@ public class DawResource {
      * @return an HTTP response with content of the updated or created resource.
      */
     @PUT
-    @Path("mysql")
+    @Path("MYSQL")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String executeDataAssetFunction(String dataAssetFunctionXML) {
@@ -84,7 +84,7 @@ public class DawResource {
     
     
     @PUT
-    @Path("dataasset/mysql")
+    @Path("dataasset/MYSQL")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String getData(String requestDataPartition) {
@@ -114,7 +114,7 @@ public class DawResource {
     
     
     @PUT
-    @Path("cassandra")
+    @Path("CASSANDRA")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String executeDataAssetFunctionCassandra(String dataAssetFunctionXML) {
@@ -136,7 +136,28 @@ public class DawResource {
     
     
     @PUT
-    @Path("dataasset/cassandra")
+    @Path("connection/open/CASSANDRA")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String openConnection(String xml) {
+    
+        CassandraDataAssetStore.openConnection(); 
+        return "";
+        
+    }
+    
+    @PUT
+    @Path("connection/close/CASSANDRA")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String closeConnection(String xml) {   
+        CassandraDataAssetStore.closeConnection();
+        return "";
+        
+    }
+    
+    @PUT
+    @Path("dataasset/CASSANDRA")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String getDataCassandra(String requestDataPartition) {

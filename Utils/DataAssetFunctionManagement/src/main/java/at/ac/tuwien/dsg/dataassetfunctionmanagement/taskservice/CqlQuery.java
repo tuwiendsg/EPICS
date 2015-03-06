@@ -10,7 +10,7 @@ import at.ac.tuwien.dsg.common.entity.eda.da.DataAttribute;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataItem;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.store.CassandraDataAssetStore;
-import at.ac.tuwien.dsg.dataassetfunctionmanagement.store.MySqlDataAssetStore;
+
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import java.util.ArrayList;
@@ -23,16 +23,16 @@ import java.util.logging.Logger;
  * @author Jun
  */
 public class CqlQuery {
-    private static final Query INSTANCE = new Query();
+    private static final CqlQuery INSTANCE = new CqlQuery();
     
-    public static Query getInstance() {
+    public static CqlQuery getInstance() {
         return INSTANCE;
     }
 
     public void start(String param, String dawID) {
-        System.out.println("Query Starting ...");
+        System.out.println("CQL query Starting ...");
         //cassandra connection
-        System.out.println("SQL: " + param);
+        System.out.println("CQL: " + param);
         System.out.println("DAW ID : " + dawID);
                
         executeQueryStatement(param, dawID);
@@ -89,7 +89,7 @@ public class CqlQuery {
                     
                     partitionIndex++;
                     dataItemList = new ArrayList<DataItem>();
-                    Logger.getLogger(Query.class.getName()).log(Level.INFO, "Partition Index: " + partitionIndex);  
+                    Logger.getLogger(CqlQuery.class.getName()).log(Level.INFO, "Partition Index: " + partitionIndex);  
                 }                 
                     
                     

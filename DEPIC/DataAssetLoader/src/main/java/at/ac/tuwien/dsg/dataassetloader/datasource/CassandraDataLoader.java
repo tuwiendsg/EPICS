@@ -26,7 +26,9 @@ public class CassandraDataLoader implements DataLoader {
 
     @Override
     public String loadDataAsset(DataAssetFunction dataAssetFunction) {
-
+        
+        openConnection();
+        
         String partitionNo = "";
         try {
 
@@ -40,29 +42,53 @@ public class CassandraDataLoader implements DataLoader {
             String dataAssetID = strs[0];
             int numberOfPartitions = Integer.parseInt(strs[1]);
             partitionNo = String.valueOf(numberOfPartitions);
-
+            CassandraDataAssetStore.openConnection();
             for (int i = 0; i < numberOfPartitions; i++) {
                 String dataAssetXml = getDataPartition(dataAssetID, String.valueOf(i));
                 DataAsset da = JAXBUtils.unmarshal(dataAssetXml, DataAsset.class);
                 da.setName(dataAssetFunction.getName());
                 //dataAssetXml = JAXBUtils.marshal(da, DataAsset.class);
 
-                
                 CassandraDataAssetStore.saveDataAsset(da);
 
             }
+            CassandraDataAssetStore.closeConnection();
 
         } catch (JAXBException ex) {
             Logger.getLogger(CassandraDataLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        
+        closeConnection();
         return partitionNo;
 
     }
 
+    private void openConnection() {
+        Configuration config = new Configuration();
+        String ip = config.getConfig("DAF.MANAGEMENT.IP");
+        String port = config.getConfig("DAF.MANAGEMENT.PORT");
+
+        String resourceOpenConnection = config.getConfig("DAF.MANAGEMENT.RESOURCE.DAW") + "/connection/open/" + EDaaSType.CASSANDRA.geteDaaSType();
+       
+        RestfulWSClient rs_open = new RestfulWSClient(ip, port, resourceOpenConnection);
+        rs_open.callPutMethod("");
+    }
+
+    private void closeConnection() {
+        Configuration config = new Configuration();
+        String ip = config.getConfig("DAF.MANAGEMENT.IP");
+        String port = config.getConfig("DAF.MANAGEMENT.PORT");
+
+        String resourceCloseConnection = config.getConfig("DAF.MANAGEMENT.RESOURCE.DAW") + "/connection/close/" + EDaaSType.CASSANDRA.geteDaaSType();
+
+        RestfulWSClient rs_close = new RestfulWSClient(ip, port, resourceCloseConnection);
+        rs_close.callPutMethod("");
+    }
+
     @Override
     public String copyDataAssetRepo(DataPartitionRequest request) {
-       
+
         return CassandraDataAssetStore.copyDataAssetRepo(request);
     }
 
@@ -85,6 +111,7 @@ public class CassandraDataLoader implements DataLoader {
 
     private String requestToGetDataAsset(String daw) {
 
+        System.out.println("Request to Get Data Asset ...");
         Configuration config = new Configuration();
         String ip = config.getConfig("DAF.MANAGEMENT.IP");
         String port = config.getConfig("DAF.MANAGEMENT.PORT");
@@ -92,6 +119,8 @@ public class CassandraDataLoader implements DataLoader {
 
         RestfulWSClient rs = new RestfulWSClient(ip, port, resource);
         String returnStr = rs.callPutMethod(daw);
+
+        System.out.println("Return: " + returnStr);
 
         return returnStr;
     }
