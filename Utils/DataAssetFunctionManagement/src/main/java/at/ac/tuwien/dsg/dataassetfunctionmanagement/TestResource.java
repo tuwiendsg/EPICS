@@ -11,6 +11,7 @@ import at.ac.tuwien.dsg.dataassetfunctionmanagement.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.engine.WorkflowEngine;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.store.CassandraDataAssetStore;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.store.MySqlDataAssetStore;
+import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.CsvImporter;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.IOUtils;
 import at.ac.tuwien.dsg.dataassetfunctionmanagement.util.JAXBUtils;
 import java.util.UUID;
@@ -51,7 +52,36 @@ public class TestResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String getXml() {
         //TODO return proper representation object
+        
         return Configuration.getConfig("DATA.SOURCE.IP");
+    }
+    
+    @PUT
+    @Path("repo/cassandra/open")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String openConnection(String xml) {
+       
+        
+        CassandraDataAssetStore.openConnection();
+        
+        
+        
+        return "";
+        
+    }
+    
+    @PUT
+    @Path("repo/cassandra/close")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String closeConnection(String xml) {
+       
+        CassandraDataAssetStore.closeConnection();
+        
+        
+        return "";
+        
     }
     
     
@@ -61,10 +91,9 @@ public class TestResource {
     @Produces("application/xml")
     public String createCassandraKeyspace(String xml) {
        
-        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
-        cdas.openConnection();
-        cdas.createKeySpace();
-        cdas.closeConnection();
+     
+        CassandraDataAssetStore.createKeySpace();
+       
         
         
         return "";
@@ -79,10 +108,8 @@ public class TestResource {
     @Produces("application/xml")
     public String createCassandraTableKDD(String xml) {
        
-        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
-        cdas.openConnection();
-        cdas.createTableKDD();
-        cdas.closeConnection();
+     
+        CassandraDataAssetStore.createTableKDD();
         
         
         return "";
@@ -103,13 +130,25 @@ public class TestResource {
             Logger.getLogger(TestResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
-        cdas.openConnection();
-        cdas.insertKDD(dataAsset);
-        cdas.closeConnection();
+      
+        CassandraDataAssetStore.insertKDD(dataAsset);
         
         
         return "";
+        
+    }
+    
+    
+    @PUT
+    @Path("repo/cassandra/nokdd")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String getNoOfItemKDDData(String xml) {
+       
+        String no =CassandraDataAssetStore.getNoOfParitionKDD();
+        
+        
+        return no;
         
     }
     
@@ -122,10 +161,9 @@ public class TestResource {
       
         
        
-        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
-        cdas.openConnection();
-        DataAsset dataAsset = cdas.getDataKDD(query);
-        cdas.closeConnection();
+      
+        DataAsset dataAsset = CassandraDataAssetStore.getDataKDD(query);
+     
         
         String rsXML="";
         try {
@@ -144,18 +182,26 @@ public class TestResource {
     @Produces("application/xml")
     public String truncateTableKDD(String xml) {
        
-        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
-        cdas.openConnection();
-        cdas.truncateKDDTable();
-        cdas.closeConnection();
-        
-        
+ 
+        CassandraDataAssetStore.truncateKDDTable();
+     
         return "";
         
     }
     
     
     
+    @PUT
+    @Path("repo/cassandra/cql")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String runCQLKDD(String cql) {
+       
+ 
+        CassandraDataAssetStore.runCQLStatementKDD(cql);
+        return "";
+        
+    }
     
     
     
@@ -174,10 +220,9 @@ public class TestResource {
     @Produces("application/xml")
     public String createCassandraTableDataAsset(String xml) {
        
-        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
-        cdas.openConnection();
-        cdas.createTableDataAsset();
-        cdas.closeConnection();
+  
+        CassandraDataAssetStore.createTableDataAsset();
+     
         
         
         return "";
@@ -198,11 +243,9 @@ public class TestResource {
             Logger.getLogger(TestResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
-        cdas.openConnection();
-        cdas.insertDataAsset(dataAsset);
-        cdas.closeConnection();
-        
+    
+        CassandraDataAssetStore.insertDataAsset(dataAsset);
+       
         
         return "";
         
@@ -210,16 +253,15 @@ public class TestResource {
     
     
     
-     @PUT
+    @PUT
     @Path("repo/cassandra/truncatetabledataasset")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String truncateTableDataAsset(String xml) {
        
-        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
-        cdas.openConnection();
-        cdas.truncateDataAssetTable();
-        cdas.closeConnection();
+     
+        CassandraDataAssetStore.truncateDataAssetTable();
+     
         
         
         return "";
@@ -240,13 +282,9 @@ public class TestResource {
             Logger.getLogger(TestResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
-        
-       
-        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
-        cdas.openConnection();
-        DataAsset dataAsset = cdas.getDataAsset(request);
-        cdas.closeConnection();
+
+        DataAsset dataAsset = CassandraDataAssetStore.getDataAsset(request);
+
         
         String rsXML="";
         try {
@@ -257,7 +295,27 @@ public class TestResource {
         return rsXML;
         
     }
-   
+
+    @PUT
+    @Path("repo/cassandra/nodataasset")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String getNoOfPartitionsDataAsset(String xml) {
+
+        DataPartitionRequest request = null;
+
+        try {
+            request = at.ac.tuwien.dsg.common.utils.JAXBUtils.unmarshal(xml, DataPartitionRequest.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(TestResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        int no = CassandraDataAssetStore.getNoOfParitionDataAsset(request.getDataAssetID());
+
+        return String.valueOf(no);
+
+    }
+
     @PUT
     @Path("repo/cassandra/updatedataassetpartition")
     @Consumes("application/xml")
@@ -273,16 +331,29 @@ public class TestResource {
         } catch (JAXBException ex) {
             Logger.getLogger(TestResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
-        cdas.openConnection();
-        cdas.updateDataAsset(dataAsset);
-        cdas.closeConnection();
+   
+        CassandraDataAssetStore.updateDataAsset(dataAsset);
+     
         
        
         
         
         return "";
+    }
+    
+    
+    @PUT
+    @Path("repo/cassandra/loadcsv")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String loadCSV() {
+
+         String log ="Starting load csv file. ";
+        Logger.getLogger(TestResource.class.getName()).log(Level.INFO,log);
+     
+        CsvImporter csvImporter = new CsvImporter();
+        csvImporter.insertDataToCassandra();
+        return "Finish load csv file";
     }
     
    

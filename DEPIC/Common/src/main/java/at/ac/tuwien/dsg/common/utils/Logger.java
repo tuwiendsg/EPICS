@@ -23,6 +23,7 @@ import java.util.logging.Level;
  */
 public class Logger {
     
+    private static List<Double> designComplexity;
     
     public void logMonitorProcesses(MonitorProcess monitorProcess){
         List<MonitorAction> listOfMonitorActions  = monitorProcess.getListOfMonitorActions();
@@ -124,6 +125,73 @@ public class Logger {
     
     public static void logInfo(String log) {
         java.util.logging.Logger.getLogger(Logger.class.getName()).log(Level.INFO, log);
+    }
+    
+    public static void logDesignComplexity(double val){
+        
+        if (designComplexity==null) {
+        
+        designComplexity = new ArrayList<Double>();
+        }
+        
+        
+        
+        designComplexity.add(val);
+ 
+    }
+    
+    public static double getMinDesignComplexity (){
+        double minVal = Double.MAX_VALUE;
+        
+        for (Double val : designComplexity){
+            if (val<minVal){
+                minVal=val;
+            }
+                    
+        }
+        return minVal;
+    }
+    
+    public static double getMaxDesignComplexity (){
+        double maxVal = Double.MIN_VALUE;
+        
+        for (Double val : designComplexity){
+            if (val>maxVal){
+                maxVal=val;
+            }
+                    
+        }
+        return maxVal;
+        
+    }
+    
+    public static double getStandardDeviation (){
+        
+        double sum =0;
+        for (Double val : designComplexity){
+            sum +=val;
+                    
+        }
+        
+        double avg= sum/(double)designComplexity.size();
+        
+        double sd =0;
+        
+        for (Double val : designComplexity){
+            sd = sd +  Math.pow(val-avg,2);          
+        }
+        sd = sd/(double)designComplexity.size();
+        sd = Math.sqrt(sd);
+        
+        
+        return sd;
+        
+    }
+    
+    public static void clear (){
+        
+        designComplexity.clear();
+        
     }
     
 }

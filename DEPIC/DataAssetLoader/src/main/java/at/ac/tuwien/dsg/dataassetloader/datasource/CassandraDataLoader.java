@@ -88,8 +88,11 @@ public class CassandraDataLoader implements DataLoader {
 
     @Override
     public String copyDataAssetRepo(DataPartitionRequest request) {
-
-        return CassandraDataAssetStore.copyDataAssetRepo(request);
+        String rs = "";
+        //CassandraDataAssetStore.openConnection();
+        rs = CassandraDataAssetStore.copyDataAssetRepo(request);
+       // CassandraDataAssetStore.closeConnection();
+        return rs;
     }
 
     @Override

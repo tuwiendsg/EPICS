@@ -71,7 +71,7 @@ public class CsvImporter {
 
                 i++;
 
-                if (i == 1000) {
+                if (i == 1000000) {
                     break;
                 }
 

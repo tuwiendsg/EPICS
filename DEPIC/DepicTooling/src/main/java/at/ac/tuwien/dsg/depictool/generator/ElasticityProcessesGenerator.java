@@ -351,6 +351,7 @@ public class ElasticityProcessesGenerator {
         
         Logger.logInfo("BUILDING WORKFLOW FOR CONTROL PROCESS ................ ");
         
+        int numberOfActionConnection = 0;
         
         List<ControlAction> listOfControlActions =  controlProcess.getListOfControlActions();
         
@@ -385,6 +386,7 @@ public class ElasticityProcessesGenerator {
                 UUID parallelGatewayID = UUID.randomUUID();
                 parallelGateway.setId(parallelGatewayID.toString());
                 controlAction.setIncomming(parallelGateway.getId());
+                numberOfActionConnection++;
                 
                 Logger.logInfo("NEW Parallel Gateway ID: " + parallelGateway.getId());
                 Logger.logInfo("PG set outgoing ID : " + controlAction.getControlActionID());
@@ -398,13 +400,14 @@ public class ElasticityProcessesGenerator {
                     
                     prerequisiteControlAction.setOutgoing(parallelGateway.getId());
                     incomingList.add(prerequisiteControlAction.getControlActionID());
+                     numberOfActionConnection++;
                     
                 }
                 
                 parallelGateway.setIncomming(incomingList);
                 parallelGateway.setOutgoing(outgoingList);
                 listOfParallelGateways.add(parallelGateway);
-                
+              
                 
                
                 
@@ -415,6 +418,7 @@ public class ElasticityProcessesGenerator {
                 
                 controlAction.setIncomming(prerequisiteControlAction.getControlActionID());
                 prerequisiteControlAction.setOutgoing(controlAction.getControlActionID());
+                numberOfActionConnection++;
                 
             } 
             
@@ -454,6 +458,7 @@ public class ElasticityProcessesGenerator {
         for (ControlAction ca: nullIncommingControlActions){
             startPGOutgoingList.add(ca.getControlActionID());
             ca.setIncomming(startPG.getId());
+             numberOfActionConnection++;
         }
         
 //        for (ParallelGateway pg: nullIncommingParallelGateways){
@@ -494,6 +499,7 @@ public class ElasticityProcessesGenerator {
             for (ControlAction ca : nullOutgoingControlActions) {
                 endPGIncomingList.add(ca.getControlActionID());
                 ca.setOutgoing(endPG.getId());
+                 numberOfActionConnection++;
             }
         
 //        for (ParallelGateway pg: nullOutgoingParallelGateways){
@@ -514,8 +520,15 @@ public class ElasticityProcessesGenerator {
         
         
         controlProcess.setListOfParallelGateways(listOfParallelGateways);
+        numberOfActionConnection +=2;
+        int noOfActions = listOfControlActions.size();
         
+        double designComplexity = (double)numberOfActionConnection/(double)noOfActions;
         
+        Logger.logInfo("no_of_connection: " + numberOfActionConnection);
+        Logger.logInfo("no_of_action: " + noOfActions);
+        Logger.logInfo("design_complexity: " + designComplexity);
+        Logger.logDesignComplexity(designComplexity);
     }
     
     private int findControlActionIndex(List<ControlAction> listOfControlActions,String prerequisiteActionID){

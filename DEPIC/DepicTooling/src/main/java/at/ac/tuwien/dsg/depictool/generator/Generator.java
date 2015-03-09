@@ -71,9 +71,24 @@ public class Generator {
     }
 
     public void startGenerator() {
+        long t1 = System.currentTimeMillis();
         ElasticDataAsset elasticDataAsset = generateElasticityProcesses();
+        long t2 = System.currentTimeMillis();
         generateElasticDaaS();
+        long t3 = System.currentTimeMillis();
         prepareDeployment(elasticDataAsset);
+        long t4 = System.currentTimeMillis();
+    
+        
+        Logger.logInfo("GENERATE_ELASTICITY_PROCESSES_TIME: " + (t2-t1));
+        Logger.logInfo("GENERATE_EDAAS_PROCESSES_TIME: " + (t3-t2));
+        Logger.logInfo("DEPLOYMENT_TIME: " + (t4-t3));
+        Logger.logInfo("DESIGN_C_MIN: " + Logger.getMinDesignComplexity());
+        Logger.logInfo("DESIGN_C_MAX: " + Logger.getMaxDesignComplexity());
+        Logger.logInfo("DESIGN_C_STANDARD_DEVIATION: " + Logger.getStandardDeviation());
+        
+        Logger.clear();
+    
     }
 
     public void prepareDeployment(ElasticDataAsset elasticDataAsset) {
@@ -166,14 +181,22 @@ public class Generator {
     
     private void configureElasticityServices(List<ElasticService> listOfElasticServices){
         
+        System.out.println("CONFIGURE_EDAAS: " + eDaaSName);
+        
         for (ElasticService elasticService : listOfElasticServices){
             
+            System.out.println("CONFIGURE SERVICE: " + elasticService.getActionID());
+            Configuration cfg =new Configuration();
+            String daLoaderIp = cfg.getConfig("DATA.ASSET.LOADER.IP.LOCAL");
+            String orchestratorIp = cfg.getConfig("ORCHESTRATOR.IP.LOCAL");
+            
             if (elasticService.getActionID().equals(eDaaSName)){
-                String configureDataAssetLoaderUri = elasticService.getUri()+"/eDaaS/rest/dataasset/conf/dataassetloaderip";
-                String configureOrchestratorrUri = elasticService.getUri()+"/eDaaS/rest/dataasset/conf/orchestratorip";
-                Configuration cfg =new Configuration();
-                String daLoaderIp = cfg.getConfig("DATA.ASSET.LOADER.IP.LOCAL");
-                String orchestratorIp = cfg.getConfig("ORCHESTRATOR.IP.LOCAL");
+                String configureDataAssetLoaderUri = elasticService.getUri()+"/eDaaS/rest/dataasset/dataassetloaderip";
+                String configureOrchestratorrUri = elasticService.getUri()+"/eDaaS/rest/dataasset/orchestratorip";
+                System.out.println("uri: -" + configureDataAssetLoaderUri+"-");
+                System.out.println("uri: -" + configureOrchestratorrUri+"-");
+              
+                
                 
                 RestfulWSClient ws1 = new RestfulWSClient(configureDataAssetLoaderUri);
                 ws1.callPutMethod(daLoaderIp);
@@ -185,8 +208,7 @@ public class Generator {
             } else {
             
             String configureUri = elasticService.getUri()+"/conf";
-            Configuration cfg =new Configuration();
-            String daLoaderIp = cfg.getConfig("DATA.ASSET.LOADER.IP.LOCAL");
+            
             RestfulWSClient ws = new RestfulWSClient(configureUri);
             ws.callPutMethod(daLoaderIp);
             

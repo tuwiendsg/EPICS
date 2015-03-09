@@ -230,6 +230,8 @@ public class CassandraDataAssetStore  {
    
     public static String copyDataAssetRepo(DataPartitionRequest request) {
 
+        truncateProcessingDataAssetTable();
+        
         System.out.println("Staring Copying Data ...");
 
         

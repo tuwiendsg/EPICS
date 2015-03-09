@@ -192,7 +192,7 @@ public class DaaSGenerator {
         FileWriter fstream;
 
         try {
-            fstream = new FileWriter(filePath, true);
+            fstream = new FileWriter(filePath, false);
             BufferedWriter out = new BufferedWriter(fstream);
             out.write(classContent);
 
