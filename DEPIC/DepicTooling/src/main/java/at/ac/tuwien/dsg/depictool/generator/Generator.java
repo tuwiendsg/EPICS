@@ -131,9 +131,11 @@ public class Generator {
         
         
         ComotConnector comotConnector = new ComotConnector(elasticDataAsset.getElasticityProcess(), eDaaSDA);
-        //String cloudServiceID = comotConnector.deployCloudSevices();
+  
         comotConnector.deployCloudSevices2();
         //comotConnector.deployCloudSevices();
+        
+        
         Logger.logInfo("On Deployment Process: ..." + comotConnector.getCloudServiceID() );
         
         List<ElasticService> listOfElasticServices = comotConnector.getCloudServiceInfo();
@@ -153,11 +155,11 @@ public class Generator {
         
         
         
-        elStore.storeElasticityProcesses(eDaaSName,elasticStateSetXML, elasticityProcessesXML, "", eDaaSType.geteDaaSType());
+       elStore.storeElasticityProcesses(eDaaSName,elasticStateSetXML, elasticityProcessesXML, "", eDaaSType.geteDaaSType());
         
-        elStore.storeElasticServices(listOfElasticServices);
-        //configure elasticity services
-        configureElasticityServices(listOfElasticServices);
+        
+   
+       // configureElasticityServices(listOfElasticServices);
         
 
     }
@@ -174,50 +176,18 @@ public class Generator {
         String port = configuration.getConfig("ORCHESTRATOR.PORT");
         String resource = configuration.getConfig("ORCHESTRATOR.ELASTIC.SERVICE.RESOURCE");
         
+        
+        
+        
         RestfulWSClient ws = new RestfulWSClient(ip, port, resource);
         ws.callPutMethod(eSXML);
         
+      
+        
+        
     }
     
-    private void configureElasticityServices(List<ElasticService> listOfElasticServices){
-        
-        System.out.println("CONFIGURE_EDAAS: " + eDaaSName);
-        
-        for (ElasticService elasticService : listOfElasticServices){
-            
-            System.out.println("CONFIGURE SERVICE: " + elasticService.getActionID());
-            Configuration cfg =new Configuration();
-            String daLoaderIp = cfg.getConfig("DATA.ASSET.LOADER.IP.LOCAL");
-            String orchestratorIp = cfg.getConfig("ORCHESTRATOR.IP.LOCAL");
-            
-            if (elasticService.getActionID().equals(eDaaSName)){
-                String configureDataAssetLoaderUri = elasticService.getUri()+"/eDaaS/rest/dataasset/dataassetloaderip";
-                String configureOrchestratorrUri = elasticService.getUri()+"/eDaaS/rest/dataasset/orchestratorip";
-                System.out.println("uri: -" + configureDataAssetLoaderUri+"-");
-                System.out.println("uri: -" + configureOrchestratorrUri+"-");
-              
-                
-                
-                RestfulWSClient ws1 = new RestfulWSClient(configureDataAssetLoaderUri);
-                ws1.callPutMethod(daLoaderIp);
-                
-                RestfulWSClient ws2 = new RestfulWSClient(configureOrchestratorrUri);
-                ws2.callPutMethod(orchestratorIp);
-                
-                
-            } else {
-            
-            String configureUri = elasticService.getUri()+"/conf";
-            
-            RestfulWSClient ws = new RestfulWSClient(configureUri);
-            ws.callPutMethod(daLoaderIp);
-            
-            }
-            
-        }
-        
-        
-    }
+    
 
     private void generateElasticDaaS() {
 

@@ -22,7 +22,7 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+//import java.util.UUID;
 import static com.datastax.driver.core.DataType.Name.ASCII;
 import static com.datastax.driver.core.DataType.Name.BOOLEAN;
 import static com.datastax.driver.core.DataType.Name.COUNTER;
@@ -72,6 +72,11 @@ public class CassandraDataAssetStore {
             Cluster cluster = Cluster.builder()
                     .withPort(port)
                     .addContactPoint(ip).build();
+            
+            
+            cluster.getConfiguration().getSocketOptions().setConnectTimeoutMillis(10000000);
+            cluster.getConfiguration().getSocketOptions().setReadTimeoutMillis(10000000);
+            
             Metadata metadata = cluster.getMetadata();
 
             // print cassandra cluster status
@@ -105,11 +110,10 @@ public class CassandraDataAssetStore {
     public static void createTableDataAsset() {
 
         String sql = "CREATE TABLE " + keyspace + ".DataAsset ("
-                + " id varchar,"
                 + " dataAssetID varchar,"
                 + " dataPartitionID int,"
                 + " data text,"
-                + " PRIMARY KEY (id, dataAssetID, dataPartitionID));";
+                + " PRIMARY KEY (dataAssetID, dataPartitionID));";
 
         session.execute(sql);
         
@@ -118,7 +122,7 @@ public class CassandraDataAssetStore {
     public static void createTableSensor(){
         
         String sql = "CREATE TABLE " + keyspace + ".SENSOR ("
-                + " id varchar,"
+                + " id int,"
                 + " sensor_name varchar,"
                 + " position varchar,"
                 + " data text,"
@@ -130,12 +134,13 @@ public class CassandraDataAssetStore {
     public static void createTableKDD(){
         
         String sql = "CREATE TABLE " + keyspace + ".KDD ("
-                + " id varchar,"
+                + " id int,"
                 + " adID int,"
                 + " userID varchar,"
                 + " click varchar,"
                 + " data text,"
-                + " PRIMARY KEY (id, adID, userID, click));";
+       //         + " PRIMARY KEY (id, adID, userID, click));";
+        + " PRIMARY KEY (id, adID));";
         
         
       
@@ -150,7 +155,7 @@ public class CassandraDataAssetStore {
         
         for (DataItem dataItem : listOfDataItems){
             
-            String id = randomUDID();
+            int id = Integer.parseInt(getDataAttributeValue(dataItem, "id"));
             int adID = Integer.parseInt(getDataAttributeValue(dataItem, "adID"));
             String userID = getDataAttributeValue(dataItem, "userID");
             String click = getDataAttributeValue(dataItem, "click");
@@ -159,7 +164,7 @@ public class CassandraDataAssetStore {
             
             
          String sql = "INSERT INTO " + keyspace + ".KDD (id, adID, userID, click, data) "
-                + "VALUES ( '" + id + "', " + adID + ", '" + userID + "', '" + click + "', '" + data + "' )";
+                + "VALUES ( " + id + ", " + adID + ", '" + userID + "', '" + click + "', '" + data + "' )";
 
             System.out.println("SQL: " + sql);
         session.execute(sql);
@@ -231,9 +236,9 @@ public class CassandraDataAssetStore {
 
     public static void insertDataAsset(DataAsset dataAsset) {
 
-        UUID uuid = UUID.randomUUID();
-
-        String uuid_str = uuid.toString();
+//        UUID uuid = UUID.randomUUID();
+//
+//        String uuid_str = uuid.toString();
 
         String xml = "";
 
@@ -243,8 +248,8 @@ public class CassandraDataAssetStore {
             Logger.getLogger(CassandraDataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        String sql = "INSERT INTO " + keyspace + ".DataAsset (id , dataAssetID, dataPartitionID, data) "
-                + "VALUES ( '" + uuid_str + "', '" + dataAsset.getName() + "'," + dataAsset.getPartition() + ",'" + xml + "' )";
+        String sql = "INSERT INTO " + keyspace + ".DataAsset ( dataAssetID, dataPartitionID, data) "
+                + "VALUES ( '" + dataAsset.getName() + "'," + dataAsset.getPartition() + ",'" + xml + "' )";
 
 
         session.execute(sql);
@@ -252,22 +257,22 @@ public class CassandraDataAssetStore {
     }
     public static void insertSensor(DataAsset dataAsset){
         
-        UUID uuid = UUID.randomUUID();
-
-        String uuid_str = uuid.toString();
-
-        String xml = "";
-
-        try {
-            xml = JAXBUtils.marshal(dataAsset, DataAsset.class);
-        } catch (JAXBException ex) {
-            Logger.getLogger(CassandraDataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        String sql = "INSERT INTO " + keyspace + ".SENSOR (id , sensor_name, position, data) "
-                + "VALUES ( '" + uuid_str + "', '" + dataAsset.getName() + "','" + xml + "' )";
-
-        session.execute(sql);
+//        UUID uuid = UUID.randomUUID();
+//
+//        String uuid_str = uuid.toString();
+//
+//        String xml = "";
+//
+//        try {
+//            xml = JAXBUtils.marshal(dataAsset, DataAsset.class);
+//        } catch (JAXBException ex) {
+//            Logger.getLogger(CassandraDataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        String sql = "INSERT INTO " + keyspace + ".SENSOR (id , sensor_name, position, data) "
+//                + "VALUES ( '" + uuid_str + "', '" + dataAsset.getName() + "','" + xml + "' )";
+//
+//        session.execute(sql);
     }
     
     
@@ -346,10 +351,10 @@ public class CassandraDataAssetStore {
             List<Row> rows = resultSet.all();
 
             for (Row row : rows) {
-                String id = row.getString("id");
+               
                 data = row.getString("data");
 
-                System.out.println("ID: " + id + " - data: " + data);
+                System.out.println(" - data: " + data);
             }
 
         }
@@ -553,15 +558,15 @@ public class CassandraDataAssetStore {
     
     
     
-    
-    
-    private static String randomUDID(){
-        UUID uuid = UUID.randomUUID();
-
-        String uuid_str = uuid.toString();
-        
-        return uuid_str;
-    }
+//    
+//    
+//    private static String randomUDID(){
+//        UUID uuid = UUID.randomUUID();
+//
+//        String uuid_str = uuid.toString();
+//        
+//        return uuid_str;
+//    }
 
     //////////////////////
     // end cassandra test

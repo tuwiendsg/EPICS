@@ -23,7 +23,10 @@ import javax.xml.bind.JAXBException;
  * @author Jun
  */
 public class CsvImporter {
-    public  void insertDataToCassandra() {
+    public  void insertDataToCassandra(String rowNumbers) {
+        
+        int noOfRows = Integer.parseInt(rowNumbers);
+        
         String csvFilePath = "/home/ubuntu/kdd/track2/training.txt";
         BufferedReader br = null;
         int i = 0;
@@ -42,6 +45,7 @@ public class CsvImporter {
                 
 
                 List<DataAttribute> listOfDataAttributes = new ArrayList<DataAttribute>();
+                DataAttribute id = new DataAttribute("id", String.valueOf(i));
                 DataAttribute adID = new DataAttribute("adID", strs[3]);
                 DataAttribute userID = new DataAttribute("userID", strs[11]);
                 DataAttribute click = new DataAttribute("click", strs[0]);
@@ -50,7 +54,7 @@ public class CsvImporter {
                 listOfDataAttributes.add(userID);
                 listOfDataAttributes.add(click);
                 listOfDataAttributes.add(data);
-                
+                listOfDataAttributes.add(id);
                 
                 
                 System.out.println(i + " - impression: "+strs[1]+ "  depth: " + strs[5] + " - position: " + strs[6]);
@@ -71,7 +75,7 @@ public class CsvImporter {
 
                 i++;
 
-                if (i == 1000000) {
+                if (i == noOfRows) {
                     break;
                 }
 

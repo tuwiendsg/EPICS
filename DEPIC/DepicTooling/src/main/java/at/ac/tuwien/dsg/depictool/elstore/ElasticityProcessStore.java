@@ -277,6 +277,9 @@ public class ElasticityProcessStore {
     
     public void storeElasticServices(List<ElasticService> listOfElasticServices){
         
+        String sql_es ="TRUNCATE TABLE ElasticService";
+        connectionManager.ExecuteUpdate(sql_es);
+        
         for (ElasticService es : listOfElasticServices){
             
             String sql = "INSERT INTO ElasticService (actionID, serviceID, uri) VALUES ('"+es.getActionID()+"','"+es.getServiceID()+"','"+es.getUri()+"')";

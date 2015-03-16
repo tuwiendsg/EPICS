@@ -10,6 +10,7 @@ import at.ac.tuwien.dsg.depictool.util.Configuration;
 import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.CloudService;
 import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.ServiceTopology;
 import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.ServiceUnit;
+import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.rSYBL.deploymentDescription.AssociatedVM;
 import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.rSYBL.deploymentDescription.DeploymentDescription;
 import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.rSYBL.deploymentDescription.DeploymentUnit;
 import at.ac.tuwien.dsg.cloud.salsa.tosca.extension.SalsaInstanceDescription_VM;
@@ -17,6 +18,7 @@ import at.ac.tuwien.dsg.common.deployment.DeployAction;
 import at.ac.tuwien.dsg.common.deployment.ElasticService;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.Logger;
+import groovy.lang.ListWithDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,46 +32,61 @@ import javax.xml.bind.JAXBException;
 public class SalsaConnector {
     
     DeploymentDescription deploymentDescription;
-
+    
 
     public SalsaConnector() {
     }
 
-    public void updateCloudServiceInfo(String cloudServiceID){
+    public boolean updateCloudServiceInfo(String cloudServiceID){
         
         Configuration cfg = new Configuration();
         String deploymentDescriptionRest = cfg.getConfig("SALSA.DEPLOYMENT.REST");
         RestfulWSClient ws = new RestfulWSClient(deploymentDescriptionRest.replaceAll("cloudServiceID", cloudServiceID));
-        
-        String salsaSpecs = ws.callGetMethod();
-        
-        Logger.logInfo("DEPLOYMENT STATUS: " +salsaSpecs);
-        try {
-        deploymentDescription = JAXBUtils.unmarshal(salsaSpecs, DeploymentDescription.class);
-        } catch (JAXBException ex) {
-            Logger.logInfo(ex.toString());
-        }
 
-    }
-    
-    public List<ElasticService> getDeployedElasticServices(List<DeployAction> controlActions, List<DeployAction> monitoringActions){
+        String salsaSpecs = ws.callGetMethod();
+
+        if (!salsaSpecs.equals("") && salsaSpecs != null) {
+
+            Logger.logInfo("DEPLOYMENT STATUS: " + salsaSpecs);
+            try {
+                deploymentDescription = JAXBUtils.unmarshal(salsaSpecs, DeploymentDescription.class);
+            } catch (JAXBException ex) {
+                Logger.logInfo(ex.toString());
+            }
+        } else {
+            Logger.logInfo("ON SCALING ...");
+            return false;
+        }
         
+        
+        return true;
+    }
+
+    public List<ElasticService> getDeployedElasticServices(List<DeployAction> controlActions, List<DeployAction> monitoringActions) {
+
           
        List<DeploymentUnit> deploymentUnits = deploymentDescription.getDeployments();
        List<ElasticService> elasticServiceList = new ArrayList<ElasticService>();
-        
-       for (DeploymentUnit du : deploymentUnits){
-           Logger.logInfo("Service Unit: " + du.getServiceUnitID());
-           Logger.logInfo("IP: " + du.getAssociatedVM().get(0).getIp());
-           
-           String actionID = du.getServiceUnitID().replaceAll("_SU", "");
-           String uri = "http://" + du.getAssociatedVM().get(0).getIp()+":8080" + 
-                   findActionRestAPI(du.getServiceUnitID(), controlActions, monitoringActions);
-           
-           ElasticService elasticService = new ElasticService(actionID, du.getServiceUnitID(), uri);
-           elasticServiceList.add(elasticService);
-       }
-       
+      
+        for (DeploymentUnit du : deploymentUnits) {
+
+            List<AssociatedVM> listOfVMs = du.getAssociatedVM();
+
+            for (AssociatedVM vm : listOfVMs) {
+
+                Logger.logInfo("Service Unit: " + du.getServiceUnitID());
+                Logger.logInfo("IP: " + vm.getIp());
+
+                String actionID = du.getServiceUnitID().replaceAll("_SU", "");
+                String uri = "http://" + vm.getIp() + ":8080"
+                        + findActionRestAPI(du.getServiceUnitID(), controlActions, monitoringActions);
+
+                ElasticService elasticService = new ElasticService(actionID, du.getServiceUnitID(), uri);
+                elasticServiceList.add(elasticService);
+
+            }
+        }
+
        return elasticServiceList;
         
     }

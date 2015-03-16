@@ -15,14 +15,17 @@ import at.ac.tuwien.dsg.common.entity.eda.ep.MonitoringSession;
 import at.ac.tuwien.dsg.common.entity.eda.ep.ParallelGateway;
 import at.ac.tuwien.dsg.common.entity.eda.ep.QueueTask;
 import at.ac.tuwien.dsg.common.entity.process.Parameter;
+import at.ac.tuwien.dsg.common.utils.IOUtils;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.Logger;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
+import at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor.DataElasticityMonitor;
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.xml.bind.JAXBException;
 import org.eclipse.persistence.internal.core.helper.CoreClassConstants;
@@ -69,9 +72,36 @@ public class DataElasticityController {
         Logger.logInfo("BEST CONTROL PROCESS FOUND");
       //  logControlProcesses(controlProcess);
         Logger.logInfo("FINAL Elastic STATE");
+        
+        String log = "";
+        log += "FINAL Elastic STATE: " + currentElasticState.geteStateID();
+        
+        
         logElasticState(controlProcess.geteStateID_j());
 
-      //  startControlProcess(controlProcess);
+          long t1 = System.currentTimeMillis();
+        
+        
+        startControlProcess(controlProcess);
+        
+          long t2 = System.currentTimeMillis();
+        
+        System.out.println("CONTROL_PROCESS_RUNTIME: " +monitoringSession.getSessionID() + "  -  " + (t2-t1));
+        log = log + "CONTROL_PROCESS_RUNTIME: " +monitoringSession.getSessionID() + "  -  " + (t2-t1);
+        
+        
+        try {
+           
+            
+            IOUtils iou = new IOUtils("/home/ubuntu/log");
+            iou.writeData(log, "depic_controller.xml");
+            
+            System.out.println("\n" + log);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(DataElasticityController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
 
     }
 
@@ -107,9 +137,14 @@ public class DataElasticityController {
 
         Logger.logInfo("PLANNING Control Process ...");
 
-        planControlProcess(cp);
+        //planControlProcess(cp);
         Logger.logInfo("EXECUTE Control Process ...");
+        
+      
+        
         executeControlProcess(cp);
+        
+       
 
 //        for (ControlAction ca : listOfControlActions){
 //            String controlActionID = ca.getControlActionID();
@@ -166,40 +201,66 @@ public class DataElasticityController {
     }
     
     private void executeControlProcess(ControlProcess cp){
-        
+   
         List<ControlAction> listOfControlActions = cp.getListOfControlActions();
-        
-        for (QueueTask task : listOfTasks) {
-            Logger.logInfo(task.getProperty() + " : TaskID: " + task.getTaskID());
-            String controlActionName = "";
-            List<Parameter> listOfParams = null;
-            for (ControlAction ca: listOfControlActions){
-                if (ca.getControlActionID().equals(task.getTaskID())){
-                    listOfParams = ca.getListOfParameters();
-                    controlActionName = ca.getControlActionName();
-                    break;
-                }
-            }
-            
-            DataControlRequest controlRequest = new DataControlRequest(monitoringSession.getEdaasName()
-                    , monitoringSession.getSessionID()
-                    , monitoringSession.getDataAssetID()
-                    , listOfParams);
-            
-            String requestXML="";
+
+        for (ControlAction controlAction : listOfControlActions) {
+
+            List<Parameter> listOfParams = controlAction.getListOfParameters();
+
+            DataControlRequest controlRequest = new DataControlRequest(monitoringSession.getEdaasName(), monitoringSession.getSessionID(), monitoringSession.getDataAssetID(), listOfParams);
+
+            String requestXML = "";
             try {
                 requestXML = JAXBUtils.marshal(controlRequest, DataControlRequest.class);
             } catch (JAXBException ex) {
-               
+
             }
-            
-            
-       
-            String uri = ElasticServiceRegistry.getElasticServiceURI(controlActionName, eDaaSType);
-      
-            RestfulWSClient ws = new RestfulWSClient(uri);
-            ws.callPutMethod(requestXML);
+
+            if (!controlAction.getControlActionName().equals("STC")) {
+
+                String uri = ElasticServiceRegistry.getElasticServiceURI(controlAction.getControlActionName(), eDaaSType);
+                Logger.logInfo("RUN: " + uri);
+                RestfulWSClient ws = new RestfulWSClient(uri);
+                ws.callPutMethod(requestXML);
+            }
         }
+
+        
+        
+//        
+//        for (QueueTask task : listOfTasks) {
+//            Logger.logInfo(task.getProperty() + " : TaskID: " + task.getTaskID());
+//            String controlActionName = "";
+//            List<Parameter> listOfParams = null;
+//            for (ControlAction ca: listOfControlActions){
+//                if (ca.getControlActionID().equals(task.getTaskID())){
+//                    listOfParams = ca.getListOfParameters();
+//                    controlActionName = ca.getControlActionName();
+//                    break;
+//                }
+//            }
+//            
+//            DataControlRequest controlRequest = new DataControlRequest(monitoringSession.getEdaasName()
+//                    , monitoringSession.getSessionID()
+//                    , monitoringSession.getDataAssetID()
+//                    , listOfParams);
+//            
+//            String requestXML="";
+//            try {
+//                requestXML = JAXBUtils.marshal(controlRequest, DataControlRequest.class);
+//            } catch (JAXBException ex) {
+//               
+//            }
+//            
+//            if (controlActionName.equals("STC")) {
+//            
+//            String uri = ElasticServiceRegistry.getElasticServiceURI(controlActionName, eDaaSType);
+//      
+//            RestfulWSClient ws = new RestfulWSClient(uri);
+//            ws.callPutMethod(requestXML);
+//            }
+//        }
         
         
     }

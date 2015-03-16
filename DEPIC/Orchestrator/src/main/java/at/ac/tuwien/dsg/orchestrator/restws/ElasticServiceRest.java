@@ -11,6 +11,7 @@ import at.ac.tuwien.dsg.common.entity.eda.ep.MonitoringSession;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor.DataElasticityMonitor;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
+import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceMonitor;
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
 import java.util.List;
 import java.util.logging.Level;
@@ -53,23 +54,14 @@ public class ElasticServiceRest {
      */
     @PUT
     @Consumes(MediaType.APPLICATION_XML)
-    public void updateElasticServices(String elasticSerivcesXML) {
+    public void updateElasticServices(String xml) {
         
-          Logger.getLogger(ElasticServiceRest.class.getName()).log(Level.INFO, "Updating Elastic Serivces ... ");
+          Logger.getLogger(ElasticServiceRest.class.getName()).log(Level.INFO, "Start Monitoring Elastic Serivces ... ");
         
-        ElasticServices elasticServices=null;
-        try {
-            elasticServices = JAXBUtils.unmarshal(elasticSerivcesXML, ElasticServices.class);
-        } catch (JAXBException ex) {
-            Logger.getLogger(ElasticServiceRest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        List<ElasticService> listOfElasticSerivces = elasticServices.getListOfElasticServices();
-        
-        ElasticServiceRegistry.updateElasticServices(listOfElasticSerivces);
+          ElasticServiceMonitor elasticServiceMonitor = new ElasticServiceMonitor("");
+        elasticServiceMonitor.start();
       
-        ElasticityProcessesStore eps = new ElasticityProcessesStore();
-        eps.cleanElasticServices();
-        eps.storeElasticServices(listOfElasticSerivces);
+        
       
         
     }

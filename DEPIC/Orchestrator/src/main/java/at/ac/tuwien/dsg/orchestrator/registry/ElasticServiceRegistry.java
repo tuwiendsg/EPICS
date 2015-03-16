@@ -10,8 +10,10 @@ import at.ac.tuwien.dsg.common.deployment.ElasticService;
 import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 import at.ac.tuwien.dsg.common.utils.Logger;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
+import java.util.ArrayList;
 
 import java.util.List;
+import org.eclipse.persistence.queries.ANTLRQueryBuilder;
 
 
 /**
@@ -58,11 +60,81 @@ public class ElasticServiceRegistry {
     }
 
     public static void updateElasticServices(List<ElasticService> updatedElasticServices){
-        listOfElasticServices.clear();
-        listOfElasticServices.addAll(updatedElasticServices);
+        
+        System.out.println("On updateing new services");
+        
+        if (listOfElasticServices==null) {
+            listOfElasticServices = new ArrayList<ElasticService>();
+        }
+ 
+        
+        for (ElasticService es : updatedElasticServices){
+            
+            String uri = es.getUri();
+            if (!isServiceExist(uri)) {
+                System.out.println("Adding_new_serice: " + es.getActionID());
+                ElasticService newElasticService = new ElasticService(es.getActionID(), es.getServiceID(), es.getUri());
+                listOfElasticServices.add(newElasticService);
+            }
+ 
+        }
+        
+//        
+//        for (ElasticService es : listOfElasticServices){
+//            
+//            String uri = es.getUri();
+//            if (isServiceRemoved(uri, updatedElasticServices)) {
+//                listOfElasticServices.remove(es);
+//            }
+// 
+//        }
+        
+        for (ElasticService es : listOfElasticServices){
+            System.out.println("service: " + es.getServiceID() + 
+                    " - request: " + es.getRequest() + 
+                    " - uri: " + es.getUri());
+            
+        }
+        
+        
+        
+        // don't clear, check for new uri and add new uri to register
+        // check for no longer exist uri and remove from register
+        
+//        listOfElasticServices.clear();
+//        listOfElasticServices.addAll(updatedElasticServices);
+//        
+        
+//        
+
     
         
     }
+    
+    
+    
+    private static boolean isServiceExist(String uri){
+        
+        for (ElasticService elasticService : listOfElasticServices){
+            if (elasticService.getUri().equals(uri)){
+                return  true;
+            }  
+        }     
+        return false;
+    }
+    
+    
+    private static boolean isServiceRemoved(String uri,List<ElasticService> updatedElasticServices){
+        
+        for (ElasticService elasticService : updatedElasticServices){
+            if (elasticService.getUri().equals(uri)){
+                return  false;
+            }  
+        }     
+        return true;
+    }
+    
+    
     
 //    private int randomInt(int min, int max){
 //        

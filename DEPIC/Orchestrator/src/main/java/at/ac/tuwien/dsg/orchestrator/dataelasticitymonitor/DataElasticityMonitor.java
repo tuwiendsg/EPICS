@@ -6,6 +6,7 @@
 
 package at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor;
 
+import at.ac.tuwien.dsg.common.deployment.PrimitiveAction;
 import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
@@ -25,6 +26,7 @@ import at.ac.tuwien.dsg.common.entity.qor.QElement;
 import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.common.entity.qor.Range;
+import at.ac.tuwien.dsg.common.utils.IOUtils;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.Logger;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
@@ -35,6 +37,7 @@ import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcesse
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.xml.bind.JAXBException;
 import sun.java2d.pipe.BufferedMaskBlit;
@@ -65,6 +68,9 @@ public class DataElasticityMonitor{
         List<MonitorAction> listOfMonitoringActions = monitorProcess.getListOfMonitorActions();
         
             Logger.logInfo("Execute Monitoring Process ...");
+            
+              long t1 = System.currentTimeMillis();
+            
             for (MonitorAction monitorAction : listOfMonitoringActions) {
                 
                 String monitoringServiceID = monitorAction.getMonitorActionID();
@@ -100,26 +106,53 @@ public class DataElasticityMonitor{
             listOfMonitoringMetrics.add(monitoringMetric);
 
         }
-        Logger.logInfo("MONITORING RESULT:\n");
-            for (MonitoringMetric monitoringMetric : listOfMonitoringMetrics){
-                
-                Logger.logInfo("Metric: " + monitoringMetric.getMetricName() + " - Value: " + monitoringMetric.getMetricValue());
-            }
 
-            ElasticState currentElasticState = determineCurrentElasticState();
-            Logger.logInfo("Current Elastic State ...");
-            logElasticState(currentElasticState);
-            Logger.logInfo("");
-                if (!isExpectedElasticState(currentElasticState)) {
-                    Logger.logInfo("FAIL VALIDATION");
-                    DataElasticityController controller = new DataElasticityController(listOfExpectedElasticStates, listOfControlProcesses, monitoringSession, eDaaSType);
-                    controller.startControlElasticState(currentElasticState);
-                } else {
-                    Logger.logInfo("PASS VALIDATION");
-                }
+        long t2 = System.currentTimeMillis();
+        Logger.logInfo("MONITORING RESULT: "+monitoringSession.getSessionID()+" \n");
+        String log = "MONITORING RESULT: "+monitoringSession.getSessionID()+" \n";
+        
+        for (MonitoringMetric monitoringMetric : listOfMonitoringMetrics) {
+
+            Logger.logInfo("Metric: " + monitoringMetric.getMetricName() + " - Value: " + monitoringMetric.getMetricValue());
+            log = log + "Metric: " + monitoringMetric.getMetricName() + " - Value: " + monitoringMetric.getMetricValue() + "\n";
+            
+        }
+
+        ElasticState currentElasticState = determineCurrentElasticState();
+        Logger.logInfo("Current Elastic State ...");
+        log = log + "Current Elastic State ..." + currentElasticState.geteStateID() +"\n";
+        
+        
+        logElasticState(currentElasticState);
+        Logger.logInfo("");
+        if (!isExpectedElasticState(currentElasticState)) {
+            Logger.logInfo("FAIL VALIDATION");
+            log = log + "FAIL VALIDATION" + "\n";
+            
+            
+            DataElasticityController controller = new DataElasticityController(listOfExpectedElasticStates, listOfControlProcesses, monitoringSession, eDaaSType);
+            controller.startControlElasticState(currentElasticState);
+        } else {
+            Logger.logInfo("PASS VALIDATION");
+            log = log + "PASS VALIDATION" + "\n";
+        }
+        Logger.logInfo("MONITORING_RUNTIME: " + (t2 - t1));
+        log =  log +"MONITORING_RUNTIME: " + (t2 - t1) + "\n";
+        
+        
+        try {
+           
+            
+            IOUtils iou = new IOUtils("/home/ubuntu/log");
+            iou.writeData(log, "depic_monitor.xml");
+            
+            System.out.println("\n" + log);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(DataElasticityMonitor.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
-    
+
     
     
     private ElasticState determineCurrentElasticState(){

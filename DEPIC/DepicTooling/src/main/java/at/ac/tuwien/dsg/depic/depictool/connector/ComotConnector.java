@@ -59,14 +59,14 @@ import javax.xml.bind.JAXBException;
  * @author Jun
  */
 public class ComotConnector {
+
     private String cloudServiceID;
     private String artifactRepo;
     private ElasticityProcess elasticityProcess;
     private DeployAction eDaaSDeployAction;
     private List<DeployAction> monitoringServices;
     private List<DeployAction> controlServices;
-    
-    
+
     public ComotConnector() {
     }
 
@@ -76,39 +76,35 @@ public class ComotConnector {
         config();
         prepareSoftwareArtifact();
     }
-    
-    
-    
-    private void config(){
-        
+
+    private void config() {
+
         Configuration cfg = new Configuration();
-        artifactRepo = cfg.getConfig("ARTIFACT.REPO"); 
-        cloudServiceID = eDaaSDeployAction.getActionID()+"CloudService";
+        artifactRepo = cfg.getConfig("ARTIFACT.REPO");
+        cloudServiceID = eDaaSDeployAction.getActionID() + "CloudService";
     }
 
     public String getCloudServiceID() {
         return cloudServiceID;
     }
-    
-    
-    
-    private void prepareSoftwareArtifact(){
-        
-       prepareMonitoringServices();
-       prepareControlServices();
+
+    private void prepareSoftwareArtifact() {
+
+        prepareMonitoringServices();
+        prepareControlServices();
     }
-    
-    private void prepareMonitoringServices(){
-         
+
+    private void prepareMonitoringServices() {
+
         monitoringServices = new ArrayList<DeployAction>();
 
         ElasticityProcessStore epStore = new ElasticityProcessStore();
-        
+
         MonitorProcess monitorProcess = elasticityProcess.getMonitorProcess();
         List<MonitorAction> monitoringActions = monitorProcess.getListOfMonitorActions();
 
         for (MonitorAction ma : monitoringActions) {
-          
+
             if (!isDeployActionExisting(monitoringServices, ma.getMonitorActionID())) {
                 DeployAction deployAction = epStore.getPrimitiveAction(ma.getMonitorActionID());
                 monitoringServices.add(deployAction);
@@ -116,9 +112,9 @@ public class ComotConnector {
 
         }
     }
-    
-    private void prepareControlServices(){
-        
+
+    private void prepareControlServices() {
+
         controlServices = new ArrayList<DeployAction>();
 
         ElasticityProcessStore epStore = new ElasticityProcessStore();
@@ -130,39 +126,34 @@ public class ComotConnector {
             List<ControlAction> controlActions = controlProcess.getListOfControlActions();
 
             for (ControlAction ca : controlActions) {
-                
 
-                 if (!isDeployActionExisting(controlServices, ca.getControlActionName())) {
+                if (!isDeployActionExisting(controlServices, ca.getControlActionName())) {
                     DeployAction deployAction = epStore.getPrimitiveAction(ca.getControlActionName());
-                    
-                    if (deployAction!=null) {
+
+                    if (deployAction != null) {
                         controlServices.add(deployAction);
-                    } else{
-                        Logger.logInfo("COMOT CONNECTOR - Missing Artifact for Service: " +ca.getControlActionName());
+                    } else {
+                        Logger.logInfo("COMOT CONNECTOR - Missing Artifact for Service: " + ca.getControlActionName());
                     }
-                
-                 }
+
+                }
 
             }
 
         }
 
-
-        
     }
-    
+
     private boolean isDeployActionExisting(List<DeployAction> listOfDeployActions, String deployActionID) {
 
-        
-        for (int i=0;i<listOfDeployActions.size();i++){
+        for (int i = 0; i < listOfDeployActions.size(); i++) {
             DeployAction da = listOfDeployActions.get(i);
 
             if (da.getActionID().equals(deployActionID)) {
                 return true;
             }
         }
-        
-       
+
         return false;
     }
 //    
@@ -296,155 +287,263 @@ public class ComotConnector {
 //        
 //        
 //    }
-    
-    public void deployCloudSevices2(){
-        
+
+    public void deployCloudSevices2() {
+
         // monitoring_services_topology 
         ServiceTopology monitoringServicesTopology = ServiceTopology("Monitoring_Services_Topology");
-        
+
         // control_services_topology
         ServiceTopology controlServicesTopology = ServiceTopology("Control_Services_Topology");
-                
-//        ElasticityCapability eventProcessingUnitScaleIn = ElasticityCapability.ScaleIn().withPrimitiveOperations("scalein");
-//        ElasticityCapability eventProcessingUnitScaleOut = ElasticityCapability.ScaleOut().withPrimitiveOperations("scaleout" );
-        
-        // edaas_topology
-        
-        ServiceTopology edaasServiceTopology = ServiceTopology("eDaaS_Services_Topology");
 
+        // edaas_topology
+        ServiceTopology edaasServiceTopology = ServiceTopology("eDaaS_Services_Topology");
         // add topology
         Configuration cfg = new Configuration();
         String compositionRules = cfg.getConfigPath() + "/compositionRules.xml";
         CloudService cloudService = ServiceTemplate(eDaaSDeployAction.getActionID() + "CloudService")
                 .consistsOfTopologies(monitoringServicesTopology)
                 .consistsOfTopologies(controlServicesTopology)
-                             .consistsOfTopologies(edaasServiceTopology)
-                //             .withDefaultMetrics();
+                .consistsOfTopologies(edaasServiceTopology)
+                // .withDefaultMetrics()
                 .withMetricCompositonRulesFile(compositionRules);
 
-
-        
-        
         // add VM + monitoring service units
-        
         OperatingSystemUnit monitoringVM = OperatingSystemUnit("MonitoringServices_VM")
-                    .providedBy(OpenstackSmall()
-                            .addSoftwarePackage("tomcat7")
-                            .addSoftwarePackage("ganglia-monitor")
-                            .addSoftwarePackage("gmetad")
-                    );
+                .providedBy(OpenstackSmall()
+                        .addSoftwarePackage("tomcat7")
+                        .addSoftwarePackage("ganglia-monitor")
+                        .addSoftwarePackage("gmetad")
+                );
         monitoringServicesTopology.addServiceUnit(monitoringVM);
-//        int i = 0;
+        int i = 0;
         for (DeployAction dpa : monitoringServices) {
 
-       
-            Logger.logInfo("DEPLOY: Monitoring Action: " +dpa.getActionID());
-            ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID()+"_SU")
-                    .deployedBy(SingleScriptArtifact(dpa.getActionID()+"Artifact", artifactRepo + dpa.getActionID() + ".sh"))
-//                    .controlledBy(Strategy("EP_ST1_"+(i++))
-//                        .when(Constraint.MetricConstraint("EP_ST1_CO1_"+(i++), new Metric("cpuUsage", "%")).lessThan("20"))
-//                        .enforce(eventProcessingUnitScaleIn),
-//                            Strategy("EP_ST2_"+(i++))
-//                        .when(Constraint.MetricConstraint("EP_ST1_CO2_"+(i++), new Metric("cpuUsage", "%")).greaterThan("50"))
-//                        .enforce(eventProcessingUnitScaleOut))
-                ;
+            ElasticityCapability eventProcessingUnitScaleIn = ElasticityCapability.ScaleIn().withPrimitiveOperations("scalein");
+            ElasticityCapability eventProcessingUnitScaleOut = ElasticityCapability.ScaleOut().withPrimitiveOperations("scaleout");
+
+            Logger.logInfo("DEPLOY: Monitoring Action: " + dpa.getActionID());
+            ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
+                    .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"))
+                    .provides(eventProcessingUnitScaleIn, eventProcessingUnitScaleOut)
+//                    .controlledBy(
+//                            Strategy("EP_ST1_" + (i++))
+//                            .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric("cpuUsage", "%")).lessThan("10"))
+//                            .enforce(eventProcessingUnitScaleIn),
+//                            Strategy("EP_ST2_" + (i++))
+//                            .when(Constraint.MetricConstraint("EP_ST1_CO2_" + (i++), new Metric("cpuUsage", "%")).greaterThan("55"))
+//                            .enforce(eventProcessingUnitScaleOut))
+                    
+                    ;
 
             monitoringServicesTopology.addServiceUnit(serviceUnit);
-            cloudService.andRelationships(HostedOnRelation(serviceUnit.getId()+"To"+monitoringVM.getId())
-                        .from(serviceUnit)
-                        .to(monitoringVM));
-            
+            cloudService.andRelationships(HostedOnRelation(serviceUnit.getId() + "To" + monitoringVM.getId())
+                    .from(serviceUnit)
+                    .to(monitoringVM));
+
         }
-        
-        
-         // add VM + control service units
-        
+
+        // add VM + control service units
         OperatingSystemUnit controlVM = OperatingSystemUnit("ControlServices_VM")
-                    .providedBy(OpenstackSmall()
-                            .addSoftwarePackage("tomcat7")
-                            .addSoftwarePackage("ganglia-monitor")
-                            .addSoftwarePackage("gmetad")
-                    );
+                .providedBy(OpenstackSmall()
+                        .addSoftwarePackage("tomcat7")
+                        .addSoftwarePackage("ganglia-monitor")
+                        .addSoftwarePackage("gmetad")
+                );
         controlServicesTopology.addServiceUnit(controlVM);
-        
+
         for (DeployAction dpa : controlServices) {
 
-            
-            Logger.logInfo("DEPLOY: Control Action: " +dpa.getActionID());
-            ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID()+"_SU")
-                    .deployedBy(SingleScriptArtifact(dpa.getActionID()+"Artifact", artifactRepo + dpa.getActionID() + ".sh"))
-                ;
+            ElasticityCapability eventProcessingUnitScaleIn = ElasticityCapability.ScaleIn().withPrimitiveOperations("scalein");
+            ElasticityCapability eventProcessingUnitScaleOut = ElasticityCapability.ScaleOut().withPrimitiveOperations("scaleout");
+
+            Logger.logInfo("DEPLOY: Control Action: " + dpa.getActionID());
+            ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
+                    .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"))
+                    .provides(eventProcessingUnitScaleIn, eventProcessingUnitScaleOut)
+//                    .controlledBy(
+//                            Strategy("EP_ST1_" + (i++))
+//                            .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric("cpuUsage", "%")).lessThan("10"))
+//                            .enforce(eventProcessingUnitScaleIn),
+//                            Strategy("EP_ST2_" + (i++))
+//                            .when(Constraint.MetricConstraint("EP_ST1_CO2_" + (i++), new Metric("cpuUsage", "%")).greaterThan("55"))
+//                            .enforce(eventProcessingUnitScaleOut))
+                    
+                    ;
+            ;
 
             controlServicesTopology.addServiceUnit(serviceUnit);
-            cloudService.andRelationships(HostedOnRelation(serviceUnit.getId()+"To"+controlVM.getId())
-                        .from(serviceUnit)
-                        .to(controlVM));
-            
+            cloudService.andRelationships(HostedOnRelation(serviceUnit.getId() + "To" + controlVM.getId())
+                    .from(serviceUnit)
+                    .to(controlVM));
+
         }
-        
-        
+
         // add VM + eDaaS
-        
         OperatingSystemUnit vm_edaas = OperatingSystemUnit(eDaaSDeployAction.getActionID() + "_VM")
                 .providedBy(OpenstackSmall()
-                            .addSoftwarePackage("openjdk-7-jre")
-                            .addSoftwarePackage("ganglia-monitor")
-                            .addSoftwarePackage("gmetad")
-                    );
-
-        ServiceUnit serviceUnit_edaas = SingleSoftwareUnit(eDaaSDeployAction.getActionID()+"_SU")
+                        .addSoftwarePackage("openjdk-7-jre")
+                        .addSoftwarePackage("ganglia-monitor")
+                        .addSoftwarePackage("gmetad")
+                );
+        ServiceUnit serviceUnit_edaas = SingleSoftwareUnit(eDaaSDeployAction.getActionID() + "_SU")
                 .deployedBy(SingleScriptArtifact(eDaaSDeployAction.getActionID(), eDaaSDeployAction.getArtifact()));
-        
-       
-        
+
         edaasServiceTopology.addServiceUnit(serviceUnit_edaas);
         edaasServiceTopology.addServiceUnit(vm_edaas);
-        
-        cloudService.andRelationships(HostedOnRelation(serviceUnit_edaas.getId() + "To"+vm_edaas.getId())
+
+        cloudService.andRelationships(HostedOnRelation(serviceUnit_edaas.getId() + "To" + vm_edaas.getId())
                 .from(serviceUnit_edaas)
                 .to(vm_edaas));
-
-        
-        
         // deployment
-        
-     
-     
-
-         COMOTOrchestrator orchestrator = new COMOTOrchestrator()
+        COMOTOrchestrator orchestrator = new COMOTOrchestrator()
                 //we have SALSA as cloud management tool
                 //curently deployed separately
- 
+
                 .withSalsaIP(cfg.getConfig("SALSA.IP"))
                 .withSalsaPort(Integer.parseInt(cfg.getConfig("SALSA.PORT")))
                 .withRsyblIP(cfg.getConfig("RSYBL.IP"))
                 .withRsyblPort(Integer.parseInt(cfg.getConfig("RSYBL.PORT")));
-         
+
         //deploy, monitor and control
         orchestrator.deployAndControl(cloudService);
-        
-       //orchestrator.controlExisting(cloudService);
-        
-        
-      //  return cloudService.getId();
-        
-        
-    }
-    
-    
-    public List<ElasticService> getCloudServiceInfo(){
-        
-               
-        SalsaConnector salsaConnector = new SalsaConnector();
-        salsaConnector.updateCloudServiceInfo(cloudServiceID);
-        List<ElasticService> listOfElasticServices = salsaConnector.getDeployedElasticServices(controlServices, monitoringServices);
-        
-        return listOfElasticServices;
-        
+
+        //   orchestrator.controlExisting(cloudService);
+        //  return cloudService.getId();
     }
 
-   
-    
-    
-    
+    public void deployCloudSevices() {
+
+        // monitoring_services_topology 
+        ServiceTopology monitoringServicesTopology = ServiceTopology("Monitoring_Services_Topology");
+
+        // control_services_topology
+        ServiceTopology controlServicesTopology = ServiceTopology("Control_Services_Topology");
+
+        // edaas_topology
+        //      ServiceTopology edaasServiceTopology = ServiceTopology("eDaaS_Services_Topology");
+        // add topology
+        Configuration cfg = new Configuration();
+        String compositionRules = cfg.getConfigPath() + "/compositionRules.xml";
+        CloudService cloudService = ServiceTemplate(eDaaSDeployAction.getActionID() + "CloudService")
+                .consistsOfTopologies(monitoringServicesTopology)
+                .consistsOfTopologies(controlServicesTopology)
+                //   .consistsOfTopologies(edaasServiceTopology)
+                //             .withDefaultMetrics();
+                .withMetricCompositonRulesFile(compositionRules);
+
+        int i = 0;
+        for (DeployAction dpa : monitoringServices) {
+
+            // add VM + monitoring service units
+            OperatingSystemUnit monitoringVM = OperatingSystemUnit(dpa.getActionID() + "_VM")
+                    .providedBy(OpenstackSmall()
+                            .addSoftwarePackage("tomcat7")
+                            .addSoftwarePackage("ganglia-monitor")
+                            .addSoftwarePackage("gmetad")
+                    );
+            monitoringServicesTopology.addServiceUnit(monitoringVM);
+
+            ElasticityCapability eventProcessingUnitScaleIn = ElasticityCapability.ScaleIn().withPrimitiveOperations("scalein");
+            ElasticityCapability eventProcessingUnitScaleOut = ElasticityCapability.ScaleOut().withPrimitiveOperations("scaleout");
+
+            Logger.logInfo("DEPLOY: Monitoring Action: " + dpa.getActionID());
+            ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
+                    .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"))
+                    .provides(eventProcessingUnitScaleIn, eventProcessingUnitScaleOut)
+                    .controlledBy(
+                            Strategy("EP_ST1_" + (i++))
+                            .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric("cpuUsage", "%")).lessThan("5"))
+                            .enforce(eventProcessingUnitScaleIn),
+                            Strategy("EP_ST2_" + (i++))
+                            .when(Constraint.MetricConstraint("EP_ST1_CO2_" + (i++), new Metric("cpuUsage", "%")).greaterThan("25"))
+                            .enforce(eventProcessingUnitScaleOut));
+
+            monitoringServicesTopology.addServiceUnit(serviceUnit);
+            cloudService.andRelationships(HostedOnRelation(serviceUnit.getId() + "To" + monitoringVM.getId())
+                    .from(serviceUnit)
+                    .to(monitoringVM));
+
+        }
+
+        for (DeployAction dpa : controlServices) {
+
+            // add VM + control service units
+            OperatingSystemUnit controlVM = OperatingSystemUnit(dpa.getActionID() + "_VM")
+                    .providedBy(OpenstackSmall()
+                            .addSoftwarePackage("tomcat7")
+                            .addSoftwarePackage("ganglia-monitor")
+                            .addSoftwarePackage("gmetad")
+                    );
+            controlServicesTopology.addServiceUnit(controlVM);
+
+            ElasticityCapability eventProcessingUnitScaleIn = ElasticityCapability.ScaleIn().withPrimitiveOperations("scalein");
+            ElasticityCapability eventProcessingUnitScaleOut = ElasticityCapability.ScaleOut().withPrimitiveOperations("scaleout");
+
+            Logger.logInfo("DEPLOY: Control Action: " + dpa.getActionID());
+            ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
+                    .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"))
+                    .provides(eventProcessingUnitScaleIn, eventProcessingUnitScaleOut)
+                    .controlledBy(Strategy("EP_ST1_" + (i++))
+                            .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric("cpuUsage", "%")).lessThan("5"))
+                            .enforce(eventProcessingUnitScaleIn),
+                            Strategy("EP_ST2_" + (i++))
+                            .when(Constraint.MetricConstraint("EP_ST1_CO2_" + (i++), new Metric("cpuUsage", "%")).greaterThan("25"))
+                            .enforce(eventProcessingUnitScaleOut));
+            ;
+
+            controlServicesTopology.addServiceUnit(serviceUnit);
+            cloudService.andRelationships(HostedOnRelation(serviceUnit.getId() + "To" + controlVM.getId())
+                    .from(serviceUnit)
+                    .to(controlVM));
+
+        }
+
+        // add VM + eDaaS
+//        OperatingSystemUnit vm_edaas = OperatingSystemUnit(eDaaSDeployAction.getActionID() + "_VM")
+//                .providedBy(OpenstackSmall()
+//                        .addSoftwarePackage("openjdk-7-jre")
+//                        .addSoftwarePackage("ganglia-monitor")
+//                        .addSoftwarePackage("gmetad")
+//                );
+//        ServiceUnit serviceUnit_edaas = SingleSoftwareUnit(eDaaSDeployAction.getActionID() + "_SU")
+//                .deployedBy(SingleScriptArtifact(eDaaSDeployAction.getActionID(), eDaaSDeployAction.getArtifact()));
+//
+//        edaasServiceTopology.addServiceUnit(serviceUnit_edaas);
+//        edaasServiceTopology.addServiceUnit(vm_edaas);
+//
+//        cloudService.andRelationships(HostedOnRelation(serviceUnit_edaas.getId() + "To" + vm_edaas.getId())
+//                .from(serviceUnit_edaas)
+//                .to(vm_edaas));
+        // deployment
+        COMOTOrchestrator orchestrator = new COMOTOrchestrator()
+                //we have SALSA as cloud management tool
+                //curently deployed separately
+
+                .withSalsaIP(cfg.getConfig("SALSA.IP"))
+                .withSalsaPort(Integer.parseInt(cfg.getConfig("SALSA.PORT")))
+                .withRsyblIP(cfg.getConfig("RSYBL.IP"))
+                .withRsyblPort(Integer.parseInt(cfg.getConfig("RSYBL.PORT")));
+
+        //deploy, monitor and control
+        //  orchestrator.deployAndControl(cloudService);
+        orchestrator.deployAndControl(cloudService);
+
+        //   orchestrator.controlExisting(cloudService);
+        //  return cloudService.getId();
+    }
+
+    public List<ElasticService> getCloudServiceInfo() {
+
+        SalsaConnector salsaConnector = new SalsaConnector();
+        boolean rs = salsaConnector.updateCloudServiceInfo(cloudServiceID);
+        List<ElasticService> listOfElasticServices = null;
+        if (rs) {
+
+            listOfElasticServices = salsaConnector.getDeployedElasticServices(controlServices, monitoringServices);
+        }
+        return listOfElasticServices;
+
+    }
+
 }
