@@ -132,8 +132,8 @@ public class Generator {
         
         ComotConnector comotConnector = new ComotConnector(elasticDataAsset.getElasticityProcess(), eDaaSDA);
   
-        comotConnector.deployCloudSevices2();
-        //comotConnector.deployCloudSevices();
+        //comotConnector.deployCloudSevices2();
+        comotConnector.deployCloudSevices();
         
         
         Logger.logInfo("On Deployment Process: ..." + comotConnector.getCloudServiceID() );

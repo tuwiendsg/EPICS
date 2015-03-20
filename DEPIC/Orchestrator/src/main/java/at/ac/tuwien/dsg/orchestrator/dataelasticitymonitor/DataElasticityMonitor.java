@@ -74,18 +74,42 @@ public class DataElasticityMonitor{
             for (MonitorAction monitorAction : listOfMonitoringActions) {
                 
                 String monitoringServiceID = monitorAction.getMonitorActionID();
+      
+                Logger.logInfo("Get monitoring service info: " + monitoringServiceID);
+
+                String uri = "";
+
+                do {
+
+                    uri = ElasticServiceRegistry.getElasticServiceURI(monitoringServiceID, eDaaSType);
+                    if (uri.equals("")) {
+                        Logger.logInfo("Waiting_for_Active_Elastic_Serivce ... " + monitoringSession.getSessionID() +" - " +monitoringServiceID);
+                    } else {
+                        Logger.logInfo("Ready_Service: " + monitoringSession.getSessionID() +" - " + uri);
+                        ElasticServiceRegistry.occupyElasticService(uri);
+                    }
+                    
+                    
+                    
+                    
+                    try {
+                        Thread.sleep(10000);
+
+                    } catch (InterruptedException ex) {
+
+                    }
+                    
+                    
+                    
+
+                } while (uri.equals(""));
+
                 
-                Logger.logInfo("Get monitoring service info: " +monitoringServiceID);
-                
-                
-                String uri = ElasticServiceRegistry.getElasticServiceURI(monitoringServiceID, eDaaSType);
-               
+
                 Logger.logInfo("Run Monitoring Service ID: " + monitoringServiceID);
                 Logger.logInfo("URI: " + uri);
-                
-                DataPartitionRequest request = new DataPartitionRequest(monitoringSession.getEdaasName()
-                        , monitoringSession.getSessionID()
-                        , monitoringSession.getDataAssetID(), "");
+
+                DataPartitionRequest request = new DataPartitionRequest(monitoringSession.getEdaasName(), monitoringSession.getSessionID(), monitoringSession.getDataAssetID(), "");
                 
                 String requestXML = "";
                 
@@ -104,6 +128,8 @@ public class DataElasticityMonitor{
 
             MonitoringMetric monitoringMetric = new MonitoringMetric(metricName, monitoringValue);
             listOfMonitoringMetrics.add(monitoringMetric);
+            ElasticServiceRegistry.releaseElasticService(uri);
+            
 
         }
 

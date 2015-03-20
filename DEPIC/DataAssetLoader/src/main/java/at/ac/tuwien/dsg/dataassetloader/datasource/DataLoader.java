@@ -24,7 +24,7 @@ public interface DataLoader {
 
     public String getDataPartitionRepo(DataPartitionRequest request);
 
-    public void saveDataPartitionRepo(DataAsset dataAsset);
+
    
    
 }

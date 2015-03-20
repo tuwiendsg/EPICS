@@ -122,6 +122,35 @@ public class RestfulWSClient {
         }
         return rs;
     }
+    
+    
+    public int callPutMethodRC(String xmlString) {
+        int statusCode =0;
+        
+        try {
+
+            //HttpGet method = new HttpGet(url);
+            StringEntity inputKeyspace = new StringEntity(xmlString);
+
+            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO, "Connection .. " + url);
+
+            HttpPut request = new HttpPut(url);
+            request.addHeader("content-type", "application/xml; charset=utf-8");
+            request.addHeader("Accept", "application/xml, multipart/related");
+            request.setEntity(inputKeyspace);
+
+            HttpResponse methodResponse = this.getHttpClient().execute(request);
+
+            statusCode = methodResponse.getStatusLine().getStatusCode();
+
+            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO, "Status Code: " + statusCode);
+            
+            // System.out.println("Response String: " + result.toString());
+        } catch (Exception ex) {
+
+        }
+        return statusCode;
+    }
 
     public void callPostMethod(String xmlString) {
 

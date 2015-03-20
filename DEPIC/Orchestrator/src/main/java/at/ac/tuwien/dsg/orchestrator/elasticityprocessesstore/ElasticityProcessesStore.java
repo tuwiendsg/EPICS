@@ -223,6 +223,7 @@ public class ElasticityProcessesStore {
                 String uri = rs.getString("uri");
 
                 ElasticService elasticService = new ElasticService(actionID, serviceID, uri);
+                elasticService.setRequest(0);
                 listOfElasticServices.add(elasticService);
             }
 

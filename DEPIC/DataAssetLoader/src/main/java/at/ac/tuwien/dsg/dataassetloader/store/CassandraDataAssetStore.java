@@ -24,18 +24,7 @@ import com.datastax.driver.core.Session;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.datastax.driver.core.DataType.Name.ASCII;
-import static com.datastax.driver.core.DataType.Name.BOOLEAN;
-import static com.datastax.driver.core.DataType.Name.COUNTER;
-import static com.datastax.driver.core.DataType.Name.DECIMAL;
-import static com.datastax.driver.core.DataType.Name.DOUBLE;
-import static com.datastax.driver.core.DataType.Name.FLOAT;
-import static com.datastax.driver.core.DataType.Name.INET;
-import static com.datastax.driver.core.DataType.Name.INT;
-import static com.datastax.driver.core.DataType.Name.TEXT;
-import static com.datastax.driver.core.DataType.Name.TIMESTAMP;
-import static com.datastax.driver.core.DataType.Name.TIMEUUID;
-import static com.datastax.driver.core.DataType.Name.VARCHAR;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
@@ -48,16 +37,16 @@ import org.slf4j.LoggerFactory;
  */
 public class CassandraDataAssetStore  {
 
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetStore.class);
-    private static Session session;
-    private static String ip;
-    private static int port;
-    private static String keyspace;
+    private final org.slf4j.Logger log = LoggerFactory.getLogger(CassandraDataAssetStore.class);
+    private Session session;
+    private String ip;
+    private int port;
+    private String keyspace;
   
 
 
     
-    private static void doConfig() {
+    private void doConfig() {
         if (ip == null) {
             Configuration cfg = new Configuration();
             ip = cfg.getConfig("EDA.REPOSITORY.CASSANDRA.IP");
@@ -68,7 +57,7 @@ public class CassandraDataAssetStore  {
 
    
 
-    public static void openConnection() {
+    public void openConnection() {
         doConfig();
         
         log.info("Connecting to Cassandra at " + ip + ":" + port);
@@ -93,12 +82,12 @@ public class CassandraDataAssetStore  {
         }
     }
 
-    public static void closeConnection() {
+    public void closeConnection() {
         session.close();
         session = null;
     }
     
-    public static void createKeySpace() {
+    public void createKeySpace() {
 
         String sql = "CREATE KEYSPACE " + keyspace
                 + "  WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };";
@@ -107,7 +96,7 @@ public class CassandraDataAssetStore  {
 
     }
     
-    public static void createTableDataAsset() {
+    public void createTableDataAsset() {
 
         String sql = "CREATE TABLE " + keyspace + ".DataAsset ("
                 + " dataAssetID varchar,"
@@ -119,13 +108,13 @@ public class CassandraDataAssetStore  {
         
     }
     
-    public static void createTableProcessingDataAsset() {
+    public void createTableProcessingDataAsset() {
 
         String sql = "CREATE TABLE " + keyspace + ".ProcessingDataAsset ("
                 + " id varchar,"
-                + " dataPartitionID int,"
+    //            + " dataPartitionID int,"
                 + " data text,"
-                + " PRIMARY KEY (id, dataPartitionID));";
+                + " PRIMARY KEY (id));";
 
         session.execute(sql);
         
@@ -134,7 +123,7 @@ public class CassandraDataAssetStore  {
     }
 
 
-    public static void saveDataAsset(DataAsset dataAsset) {
+    public void saveDataAsset(DataAsset dataAsset) {
 
     
         String xml = "";
@@ -154,7 +143,7 @@ public class CassandraDataAssetStore  {
     }
 
 
-    public static void removeDataAsset(String dafName) {
+    public void removeDataAsset(String dafName) {
 
         String sql = "DElETE FROM " + keyspace + ".DataAsset WHERE dataAssetID='" + dafName + "'";
         session.execute(sql);
@@ -162,7 +151,7 @@ public class CassandraDataAssetStore  {
     }
 
     
-    public static String getDataAssetXML(String dafName, String partitionID) {
+    public String getDataAssetXML(String dafName, String partitionID) {
 
         String data ="";
  
@@ -207,7 +196,7 @@ public class CassandraDataAssetStore  {
 
     }
     
-    public static void truncateDataAssetTable(){
+    public void truncateDataAssetTable(){
           
          String sql = "TRUNCATE " + keyspace + ".DataAsset;";
          System.out.println("SQL: " + sql);
@@ -217,7 +206,7 @@ public class CassandraDataAssetStore  {
         
     }
     
-    public static void truncateProcessingDataAssetTable(){
+    public void truncateProcessingDataAssetTable(){
           
          String sql = "TRUNCATE " + keyspace + ".ProcessingDataAsset;";
          System.out.println("SQL: " + sql);
@@ -228,9 +217,9 @@ public class CassandraDataAssetStore  {
     }
 
    
-    public static String copyDataAssetRepo(DataPartitionRequest request) {
+    public String copyDataAssetRepo(DataPartitionRequest request) {
 
-        truncateProcessingDataAssetTable();
+       // truncateProcessingDataAssetTable();
         
         System.out.println("Staring Copying Data ...");
 
@@ -243,7 +232,7 @@ public class CassandraDataAssetStore  {
         Configuration cfg = new Configuration();
         System.out.println("ENLARGE.COEFFICIENT = " + cfg.getConfig("ENLARGE.COEFFICIENT"));
         int enlargeCoefficient = Integer.parseInt(cfg.getConfig("ENLARGE.COEFFICIENT"));
-        System.out.println("ENLARGE.COEFFICIENT = " +enlargeCoefficient);
+        
         
         
         ResultSet resultSet = null;
@@ -293,20 +282,20 @@ public class CassandraDataAssetStore  {
     }
 
 
-    public static String getDataPartitionRepo(DataPartitionRequest request) {
+    public String getDataPartitionRepo(DataPartitionRequest request) {
 
         String edaas = request.getEdaas();
         String customerID = request.getCustomerID();
         String dawID = request.getDataAssetID();
         String paritionID = request.getPartitionID();
         
-        String id = edaas+";" + customerID+";" + dawID;
+        String id = edaas+";" + customerID+";" + dawID+";" + paritionID ;
         
         String data = "";
 
         String sql = "SELECT * FROM " + keyspace + ".ProcessingDataAsset "
-                + "WHERE id='" + id +  "' AND dataPartitionID=" + paritionID + " ALLOW FILTERING;";
-
+                + "WHERE id='" + id +  "' ;";
+      
         ResultSet resultSet = null;
         try {
             resultSet = session.execute(sql);
@@ -333,7 +322,7 @@ public class CassandraDataAssetStore  {
 
     }
     
-    public static String getNoOfPartitionDataAssetTable(){
+    public String getNoOfPartitionDataAssetTable(){
         String sql = "SELECT COUNT(*) FROM " + keyspace + ".DataAsset;";
         
          String noOfPartition="";
@@ -364,46 +353,48 @@ public class CassandraDataAssetStore  {
     }
 
  
-    public static String getNoOfPartitionRepo(DataPartitionRequest request) {
+    public String getNoOfPartitionRepo(DataPartitionRequest request) {
     
-          String edaas = request.getEdaas();
-        String customerID = request.getCustomerID();
-        String dawID = request.getDataAssetID();
-        String id = edaas+";" + customerID+";" + dawID;
+//          String edaas = request.getEdaas();
+//        String customerID = request.getCustomerID();
+//        String dawID = request.getDataAssetID();
+//        String id = edaas+";" + customerID+";" + dawID;
         String noOfPartition="";
         
-
-     String sql = "SELECT COUNT(*) FROM " + keyspace + ".ProcessingDataAsset "
-                + "WHERE id='" + id + "' ALLOW FILTERING;";
-
-     
-     
-        ResultSet resultSet = null;
-        try {
-            resultSet = session.execute(sql);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            log.error("Exception cause: " + sql);
-        }
-        ExecutionInfo info = resultSet.getExecutionInfo();
-
-        if (!(resultSet == null || resultSet.isExhausted())) {
-
-            List<Row> rows = resultSet.all();
-
-            for (Row row : rows) {
         
-                noOfPartition = String.valueOf(row.getLong("count"));
-
-            }
-
-        }
+        DataAssetFunctionStore dafs = new DataAssetFunctionStore();
+        noOfPartition = String.valueOf(dafs.getNoOfPartitions(request.getDataAssetID()));
+        
+        
+//     String sql = "SELECT COUNT(*) FROM " + keyspace + ".ProcessingDataAsset "
+//                + " WHERE id='" + id + "' ALLOW FILTERING;";
+//     
+//        ResultSet resultSet = null;
+//        try {
+//            resultSet = session.execute(sql);
+//        } catch (Exception e) {
+//            log.error(e.getMessage(), e);
+//            log.error("Exception cause: " + sql);
+//        }
+//        ExecutionInfo info = resultSet.getExecutionInfo();
+//
+//        if (!(resultSet == null || resultSet.isExhausted())) {
+//
+//            List<Row> rows = resultSet.all();
+//
+//            for (Row row : rows) {
+//        
+//                noOfPartition = String.valueOf(row.getLong("count"));
+//
+//            }
+//
+//        }
         
         return noOfPartition;
     }
 
     
-    public static void saveDataPartitionRepo(DataAsset dataAssetPartition) {
+    public void saveDataPartitionRepo(DataAsset dataAssetPartition) {
    
         String daXML="";
         try {
@@ -417,7 +408,7 @@ public class CassandraDataAssetStore  {
         
      
         String sql = "UPDATE " + keyspace + ".ProcessingDataAsset SET data='"+daXML+"' "
-                + "WHERE id='"+dataAssetPartition.getName()+"' AND dataPartitionID="+partitionID+" ; ";
+                + "WHERE id='"+dataAssetPartition.getName()+";"+partitionID+"' ; ";
         
         
         session.execute(sql);
@@ -425,7 +416,7 @@ public class CassandraDataAssetStore  {
     }
 
   
-    public static void insertDataPartitionRepo(DataAsset dataAssetPartition) {
+    public void insertDataPartitionRepo(DataAsset dataAssetPartition) {
          String daXML="";
         try {
             daXML = JAXBUtils.marshal(dataAssetPartition, DataAsset.class);
@@ -435,8 +426,8 @@ public class CassandraDataAssetStore  {
 
         int partitionID = dataAssetPartition.getPartition();
   
-        String sql = "INSERT INTO " + keyspace + ".ProcessingDataAsset (id, dataPartitionID, data) "
-                + "VALUES ('" + dataAssetPartition.getName() + "', "+partitionID+", '"+daXML+"' );";
+        String sql = "INSERT INTO " + keyspace + ".ProcessingDataAsset (id, data) "
+                + "VALUES ('" + dataAssetPartition.getName() +";"+ partitionID+"', '"+daXML+"' );";
         
         session.execute(sql);
     

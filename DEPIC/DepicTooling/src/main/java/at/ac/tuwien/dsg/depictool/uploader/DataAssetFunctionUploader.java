@@ -170,10 +170,13 @@ public class DataAssetFunctionUploader extends HttpServlet {
         }
         
         ElasticityProcessStore elasticityProcessStore = new ElasticityProcessStore();
-        elasticityProcessStore.storeDataAssetFunction(eDaaSName, dataAssetID, dafXML);
+        elasticityProcessStore.storeDataAssetFunction(eDaaSName, dataAssetID, dafXML, "0");
         
         DataAssetStore das = new DataAssetStore();
-        das.requestToGetDataAsset(dataAssetID);
+        String noOfPartition = das.requestToGetDataAsset(dataAssetID);
+        
+        elasticityProcessStore.updateDataAssetFunction(eDaaSName, dataAssetID, dafXML, noOfPartition);
+        
         
         
        

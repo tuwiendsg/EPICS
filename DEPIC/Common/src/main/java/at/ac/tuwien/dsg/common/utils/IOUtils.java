@@ -38,7 +38,7 @@ public class IOUtils {
         fileName =  tomcatTempFolder +"/" + fileName;
         FileWriter fstream;
         try {
-            fstream = new FileWriter(fileName, false);
+            fstream = new FileWriter(fileName, true);
             BufferedWriter out = new BufferedWriter(fstream);
             out.write(data);
 

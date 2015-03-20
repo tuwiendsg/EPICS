@@ -123,7 +123,7 @@ public class ElasticityProcessStore {
     }
     
     
-    public  void storeDataAssetFunction(String edaasName, String dataAssetID, String dataAssetFunction){
+    public  void storeDataAssetFunction(String edaasName, String dataAssetID, String dataAssetFunction, String noOfPartition){
        
        
         InputStream dataAssetFunctionStream = new ByteArrayInputStream(dataAssetFunction.getBytes(StandardCharsets.UTF_8));
@@ -131,9 +131,15 @@ public class ElasticityProcessStore {
         List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
         listOfInputStreams.add(dataAssetFunctionStream);
 
-        String sql = "INSERT INTO DataAssetFunction (edaas, dataAssetID, dataAssetFunction) VALUES ('"+edaasName+"','"+dataAssetID+"',?)";
+        String sql = "INSERT INTO DataAssetFunction (edaas, dataAssetID, noOfPartition, dataAssetFunction) "
+                + "VALUES ('"+edaasName+"','"+dataAssetID+"',"+noOfPartition+",?)";
     
         connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
+    }
+    
+    public void updateDataAssetFunction(String edaasName, String dataAssetID, String dataAssetFunction, String noOfPartition){
+        String sql = "UPDATE DataAssetFunction SET noOfPartition="+noOfPartition+" WHERE dataAssetFunction='"+dataAssetFunction+"'";
+        connectionManager.ExecuteUpdate(sql);
     }
     
    
@@ -282,9 +288,10 @@ public class ElasticityProcessStore {
         
         for (ElasticService es : listOfElasticServices){
             
+            if (es.getRequest()!=-1) {
             String sql = "INSERT INTO ElasticService (actionID, serviceID, uri) VALUES ('"+es.getActionID()+"','"+es.getServiceID()+"','"+es.getUri()+"')";
             connectionManager.ExecuteUpdate(sql);
-            
+            }
         }
     }
     

@@ -82,6 +82,7 @@ public class SalsaConnector {
                         + findActionRestAPI(du.getServiceUnitID(), controlActions, monitoringActions);
 
                 ElasticService elasticService = new ElasticService(actionID, du.getServiceUnitID(), uri);
+                elasticService.setRequest(0);
                 elasticServiceList.add(elasticService);
 
             }

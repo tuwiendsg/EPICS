@@ -11,12 +11,14 @@ import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
+import at.ac.tuwien.dsg.dataassetloader.datasource.CassandraDataLoader;
 
 import at.ac.tuwien.dsg.dataassetloader.datasource.GenericDataLoader;
 import at.ac.tuwien.dsg.dataassetloader.store.CassandraDataAssetStore;
 
 import at.ac.tuwien.dsg.dataassetloader.store.DataAssetFunctionStore;
 import at.ac.tuwien.dsg.dataassetloader.util.ThroughputMonitor;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
@@ -64,7 +66,12 @@ public class DataassetResource {
     @Path("dafmanagement")
     @Consumes("application/xml")
     @Produces("application/xml")
-    public String requestDataAsset(String dataAssetID) {
+    public String requestDataAsset(String xml) {
+        
+        
+        String[] strs = xml.split(";");
+        String dataAssetID = strs[0];
+        String customerID = strs[1];
 
         String log ="RECEIVED: " + dataAssetID;
         Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO, null, log);
@@ -85,7 +92,7 @@ public class DataassetResource {
         } catch (JAXBException ex) {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        daf.setType(customerID);
         GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
         String noOfPartitions = dataLoader.loadDataAsset(daf);
         
@@ -179,8 +186,8 @@ public class DataassetResource {
     @Produces("application/xml")
     public String saveDataPartition(String dataAssetXML) {
 
-         String log ="RECEIVED: " + dataAssetXML;
-        Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO,log);
+        // String log ="RECEIVED: " + dataAssetXML;
+       // Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO,log);
         
         DataAsset dataAsset=null;
         try {
@@ -238,7 +245,17 @@ public class DataassetResource {
     @Produces("application/xml")
     public String openConnection(String xml) {
 
-        CassandraDataAssetStore.openConnection();
+        DataPartitionRequest request=null;
+        try {
+            request = JAXBUtils.unmarshal(xml, DataPartitionRequest.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        CassandraDataLoader cdl = new CassandraDataLoader();
+        cdl.openConnectionEDARepo(request);
+     
+        
         return "";
         
     }
@@ -249,8 +266,15 @@ public class DataassetResource {
     @Produces("application/xml")
     public String closeConnection(String xml) {
        
-        CassandraDataAssetStore.closeConnection();
+        DataPartitionRequest request=null;
+        try {
+            request = JAXBUtils.unmarshal(xml, DataPartitionRequest.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
+        CassandraDataLoader cdl = new CassandraDataLoader();
+        cdl.closeConnectionEDARepo(request);
         
         return "";
         

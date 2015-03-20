@@ -110,13 +110,14 @@ public class GenericDataLoader implements DataLoader{
         return xml;
     }
 
-    @Override
     public void saveDataPartitionRepo(DataAsset dataAsset) {
+        
+       
         if (eDaaSType.equals(EDaaSType.MYSQL)) {
             MySQLDataLoader msqldl = new MySQLDataLoader();
             msqldl.saveDataPartitionRepo(dataAsset);
-        } else if (eDaaSType.equals(EDaaSType.CASSANDRA)) {
-            CassandraDataLoader cdl = new CassandraDataLoader();
+        } else if (eDaaSType.equals(EDaaSType.CASSANDRA)) {  
+            CassandraDataLoader cdl = new CassandraDataLoader();   
             cdl.saveDataPartitionRepo(dataAsset);
         } else if (eDaaSType.equals(EDaaSType.CASSANDRA_NEAR_REAL_TIME)) {
             throw new UnsupportedOperationException("Not supported yet.");

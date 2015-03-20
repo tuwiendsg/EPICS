@@ -75,6 +75,31 @@ public class DataAssetFunctionStore {
     }
     
     
+    public int getNoOfPartitions(String dataAssetID){
+
+        int noOfPartition=0;
+      
+
+            String sql = "select * from DataAssetFunction WHERE dataAssetID='" + dataAssetID + "'";
+            ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+            try {
+                while (rs.next()) {
+                    noOfPartition = rs.getInt("noOfPartition");
+                }
+                
+                rs.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DataAssetFunctionStore.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+     
+        
+        
+        return noOfPartition;
+    }
+    
+    
     public EDaaSType gEDaaSTypeFromEDaaSName(String eDaaSName){
         
         String sql = "SELECT * FROM ElasticDaaS WHERE name='" + eDaaSName + "'";

@@ -13,6 +13,8 @@ import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetloader.store.CassandraDataAssetStore;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,11 +25,75 @@ import javax.xml.bind.JAXBException;
  * @author Jun
  */
 public class CassandraDataLoader implements DataLoader {
+    
+    private static List<CassandraSession> listOfCassandraObj;
+    
+    
+    
 
+    public CassandraDataLoader() {
+
+        if (listOfCassandraObj == null) {
+            listOfCassandraObj = new ArrayList<CassandraSession>();
+//            String customer1 = "c01";
+//            CassandraDataAssetStore cassandraDataAssetStore1 = new CassandraDataAssetStore();
+//            CassandraSession cassandraSession1 = new CassandraSession(customer1, cassandraDataAssetStore1);
+//            listOfCassandraObj.add(cassandraSession1);
+//                     
+//            String customer2 = "c02";
+//            CassandraDataAssetStore cassandraDataAssetStore2 = new CassandraDataAssetStore();
+//            CassandraSession cassandraSession2 = new CassandraSession(customer2, cassandraDataAssetStore2);
+//            listOfCassandraObj.add(cassandraSession2);
+
+        }
+
+    }
+    
+    private CassandraDataAssetStore getCassandraObject(String customerID){
+        
+        for (CassandraSession cassandraSession : listOfCassandraObj){
+            if (cassandraSession.getCustomerID().equals(customerID)){
+                return cassandraSession.getCassandraDataAssetStore();
+            }
+        }     
+        
+        CassandraDataAssetStore cassandraDataAssetStore = new CassandraDataAssetStore();
+        CassandraSession cassandraSession = new CassandraSession(customerID, cassandraDataAssetStore);
+        listOfCassandraObj.add(cassandraSession);
+
+        return cassandraDataAssetStore;
+        
+    }
+    
+    public void openConnectionEDARepo(DataPartitionRequest request){
+        CassandraDataAssetStore cassandraDataAssetStore = getCassandraObject(request.getCustomerID());
+        cassandraDataAssetStore.openConnection();
+    }
+    
+    public void closeConnectionEDARepo(DataPartitionRequest request){
+        CassandraDataAssetStore cassandraDataAssetStore = getCassandraObject(request.getCustomerID());
+        cassandraDataAssetStore.closeConnection();
+    }
+    
+    public void setupEDARepo(DataPartitionRequest request){
+        CassandraDataAssetStore cassandraDataAssetStore = getCassandraObject(request.getCustomerID());
+        
+        cassandraDataAssetStore.createKeySpace();
+        cassandraDataAssetStore.createTableDataAsset();
+        cassandraDataAssetStore.createTableProcessingDataAsset();
+    }
+    
+    
+    
+    
+    
     @Override
     public String loadDataAsset(DataAssetFunction dataAssetFunction) {
         
-        openConnection();
+        CassandraDataAssetStore cassandraDataAssetStore = getCassandraObject(dataAssetFunction.getType());
+        
+        
+        openConnectionDAFM();
         
         String partitionNo = "";
         try {
@@ -42,29 +108,42 @@ public class CassandraDataLoader implements DataLoader {
             String dataAssetID = strs[0];
             int numberOfPartitions = Integer.parseInt(strs[1]);
             partitionNo = String.valueOf(numberOfPartitions);
-            CassandraDataAssetStore.openConnection();
+            cassandraDataAssetStore.openConnection();
             for (int i = 0; i < numberOfPartitions; i++) {
                 String dataAssetXml = getDataPartition(dataAssetID, String.valueOf(i));
                 DataAsset da = JAXBUtils.unmarshal(dataAssetXml, DataAsset.class);
                 da.setName(dataAssetFunction.getName());
                 //dataAssetXml = JAXBUtils.marshal(da, DataAsset.class);
 
-                CassandraDataAssetStore.saveDataAsset(da);
+                cassandraDataAssetStore.saveDataAsset(da);
 
             }
-            CassandraDataAssetStore.closeConnection();
+            cassandraDataAssetStore.closeConnection();
 
         } catch (JAXBException ex) {
             Logger.getLogger(CassandraDataLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         
-        closeConnection();
+        closeConnectionDAFM();
         return partitionNo;
 
     }
 
-    private void openConnection() {
+    public void truncateDataAssetTable(DataPartitionRequest request) {
+        CassandraDataAssetStore cassandraDataAssetStore = getCassandraObject(request.getCustomerID());
+        cassandraDataAssetStore.truncateDataAssetTable();
+    }
+    
+    public void truncateProcessingDataAssetTable(DataPartitionRequest request) {
+        CassandraDataAssetStore cassandraDataAssetStore = getCassandraObject(request.getCustomerID());
+        cassandraDataAssetStore.truncateProcessingDataAssetTable();
+    }
+
+            
+            
+
+    private void openConnectionDAFM() {
         Configuration config = new Configuration();
         String ip = config.getConfig("DAF.MANAGEMENT.IP");
         String port = config.getConfig("DAF.MANAGEMENT.PORT");
@@ -75,7 +154,7 @@ public class CassandraDataLoader implements DataLoader {
         rs_open.callPutMethod("");
     }
 
-    private void closeConnection() {
+    private void closeConnectionDAFM() {
         Configuration config = new Configuration();
         String ip = config.getConfig("DAF.MANAGEMENT.IP");
         String port = config.getConfig("DAF.MANAGEMENT.PORT");
@@ -88,28 +167,37 @@ public class CassandraDataLoader implements DataLoader {
 
     @Override
     public String copyDataAssetRepo(DataPartitionRequest request) {
+        
+        CassandraDataAssetStore cassandraDataAssetStore = getCassandraObject(request.getCustomerID());
+        
         String rs = "";
-        //CassandraDataAssetStore.openConnection();
-        rs = CassandraDataAssetStore.copyDataAssetRepo(request);
-       // CassandraDataAssetStore.closeConnection();
+        //CassandraDataAssetStore.openConnectionDAFM();
+        rs = cassandraDataAssetStore.copyDataAssetRepo(request);
+       // CassandraDataAssetStore.closeConnectionDAFM();
         return rs;
     }
 
     @Override
     public String getNoOfParitionRepo(DataPartitionRequest request) {
-        String noOfPartition = CassandraDataAssetStore.getNoOfPartitionRepo(request);
+        CassandraDataAssetStore cassandraDataAssetStore = getCassandraObject(request.getCustomerID());
+        String noOfPartition = cassandraDataAssetStore.getNoOfPartitionRepo(request);
         return noOfPartition;
     }
 
     @Override
     public String getDataPartitionRepo(DataPartitionRequest request) {
-        String daXML = CassandraDataAssetStore.getDataPartitionRepo(request);
+        CassandraDataAssetStore cassandraDataAssetStore = getCassandraObject(request.getCustomerID());
+        String daXML = cassandraDataAssetStore.getDataPartitionRepo(request);
         return daXML;
     }
 
-    @Override
+
     public void saveDataPartitionRepo(DataAsset dataAsset) {
-        CassandraDataAssetStore.saveDataPartitionRepo(dataAsset);
+               
+        String[] strs = dataAsset.getName().split(";");
+        String customerID = strs[1];
+        CassandraDataAssetStore cassandraDataAssetStore = getCassandraObject(customerID);
+        cassandraDataAssetStore.saveDataPartitionRepo(dataAsset);
     }
 
     private String requestToGetDataAsset(String daw) {
@@ -129,7 +217,7 @@ public class CassandraDataLoader implements DataLoader {
     }
 
     private String getDataPartition(String dataAssetID, String dataPartitionID) {
-
+        
         Configuration config = new Configuration();
         String ip = config.getConfig("DAF.MANAGEMENT.IP");
         String port = config.getConfig("DAF.MANAGEMENT.PORT");

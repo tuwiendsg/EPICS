@@ -219,10 +219,37 @@ public class DataElasticityController {
 
             if (!controlAction.getControlActionName().equals("STC")) {
 
-                String uri = ElasticServiceRegistry.getElasticServiceURI(controlAction.getControlActionName(), eDaaSType);
+                String uri = "";
+                
+                
+                do {
+
+                    uri = ElasticServiceRegistry.getElasticServiceURI(controlAction.getControlActionName(), eDaaSType);
+                    if (uri.equals("")) {
+                        Logger.logInfo("Waiting_for_Active_Elastic_Serivce ... " + monitoringSession.getSessionID() +" - " +controlAction.getControlActionName());
+                    } else {
+                        Logger.logInfo("Ready_Service: " + monitoringSession.getSessionID() +" - " + uri);
+                        ElasticServiceRegistry.occupyElasticService(uri);
+                    }
+
+                    try {
+                        Thread.sleep(10000);
+
+                    } catch (InterruptedException ex) {
+
+                    }
+                    
+                } while (uri.equals(""));
+                
+                
+                
+                
                 Logger.logInfo("RUN: " + uri);
                 RestfulWSClient ws = new RestfulWSClient(uri);
                 ws.callPutMethod(requestXML);
+                
+                ElasticServiceRegistry.releaseElasticService(uri);
+                
             }
         }
 

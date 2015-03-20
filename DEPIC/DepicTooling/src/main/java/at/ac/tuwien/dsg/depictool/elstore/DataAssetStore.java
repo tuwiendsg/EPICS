@@ -32,7 +32,7 @@ public class DataAssetStore {
       //  String dafXML = iou.readData(dataAssetID);
         
         RestfulWSClient ws = new RestfulWSClient(ip, port, resource);
-        String noOfDataPartitions = ws.callPutMethod(dataAssetID);
+        String noOfDataPartitions = ws.callPutMethod(dataAssetID+";c01");
    
         return noOfDataPartitions;
     }
