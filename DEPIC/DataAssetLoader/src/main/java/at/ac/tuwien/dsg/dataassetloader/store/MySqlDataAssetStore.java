@@ -165,37 +165,46 @@ public class MySqlDataAssetStore implements DataStore{
             
             InputStream inputStream = null;
 
-            MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
+        MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
 
-            String sql = "Select * from DataAsset where daw_name='" + request.getDataAssetID()+"'";
-            
-            int noOfPartitions=0;
-            System.out.println("sql: " + sql);
-            ResultSet rs = connectionManager.ExecuteQuery(sql);
+        String sql = "Select * from DataAsset where daw_name='" + request.getDataAssetID() + "'";
 
-            try {
-                while (rs.next()) {
-                    inputStream = rs.getBinaryStream("da");
-                    StringWriter writer = new StringWriter();
-                    String encoding = StandardCharsets.UTF_8.name();
+        int noOfPartitions = 0;
+        System.out.println("sql: " + sql);
+
+        Configuration cfg = new Configuration();
+        System.out.println("ENLARGE.COEFFICIENT = " + cfg.getConfig("ENLARGE.COEFFICIENT"));
+        int enlargeCoefficient = Integer.parseInt(cfg.getConfig("ENLARGE.COEFFICIENT"));
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        try {
+            while (rs.next()) {
+                
+                
+                inputStream = rs.getBinaryStream("da");
+                StringWriter writer = new StringWriter();
+                String encoding = StandardCharsets.UTF_8.name();
 
                     IOUtils.copy(inputStream, writer, encoding);
-                    String daPartitionStr = writer.toString();
-                    
-                    String name = request.getEdaas()+";" + request.getCustomerID()+";" + request.getDataAssetID();
+                String daPartitionStr = writer.toString();
+
+                String name = request.getEdaas() + ";" + request.getCustomerID() + ";" + request.getDataAssetID();
+
+                for (int i = 0; i < enlargeCoefficient; i++) {
                     
                     DataAsset dataAssetPartition = JAXBUtils.unmarshal(daPartitionStr, DataAsset.class);
                     dataAssetPartition.setName(name);
+                    dataAssetPartition.setPartition(noOfPartitions);
                     insertDataPartitionRepo(dataAssetPartition);
                     noOfPartitions++;
-                    
-                    
-                    ThroughputMonitor.trackingLoad(request);
-                    
-                    
-                    }
 
-                rs.close();
+                    ThroughputMonitor.trackingLoad(request);
+                }
+
+            }
+
+            rs.close();
             } catch (Exception ex) {
 
             }

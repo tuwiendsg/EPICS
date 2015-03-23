@@ -45,7 +45,7 @@ public class SalsaConnector {
 
         String salsaSpecs = ws.callGetMethod();
 
-        if (!salsaSpecs.equals("") && salsaSpecs != null) {
+        if (!salsaSpecs.contains("<html><head><title>") && !salsaSpecs.equals("") && salsaSpecs != null) {
 
             Logger.logInfo("DEPLOYMENT STATUS: " + salsaSpecs);
             try {

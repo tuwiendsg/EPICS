@@ -10,5 +10,6 @@
     <packaging>pom</packaging>
   <modules>
     <module>DataAssetFunctionManagement</module>
+    <module>DepicInstall</module>
   </modules>
 </project>

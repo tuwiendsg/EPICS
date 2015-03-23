@@ -7,12 +7,14 @@ package at.ac.tuwien.dsg.depic.depictool.connector;
 
 import at.ac.tuwien.dsg.common.deployment.ElasticService;
 import at.ac.tuwien.dsg.common.deployment.ElasticServices;
+import at.ac.tuwien.dsg.common.utils.IOUtils;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.comot.client.DefaultSalsaClient;
 import at.ac.tuwien.dsg.comot.orchestrator.interraction.salsa.SalsaInterraction;
 import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
 import at.ac.tuwien.dsg.depictool.util.Configuration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.xml.bind.JAXBException;
@@ -55,8 +57,10 @@ public class ElasticServiceMonitor implements Runnable {
 
                     configureElasticityServices(listOfElasticServices);
                     
-                    ElasticityProcessStore elStore = new ElasticityProcessStore();
-                    elStore.storeElasticServices(listOfElasticServices);
+//                    ElasticityProcessStore elStore = new ElasticityProcessStore();
+//                    elStore.storeElasticServices(listOfElasticServices);
+                    saveElasticityServicesInfo(listOfElasticServices);
+                    
                 }
             }
             try {
@@ -100,6 +104,39 @@ public class ElasticServiceMonitor implements Runnable {
 //        
 //
 //    }
+    
+    private void saveElasticityServicesInfo(List<ElasticService> listOfElasticServices){
+        try {
+           
+            List<ElasticService> updateList = new ArrayList<ElasticService>();
+            
+            for (ElasticService es : listOfElasticServices){
+                
+                if (es.getRequest()!=-1){
+                    updateList.add(es);
+                }
+            }
+            
+            
+            ElasticServices elasticServices = new ElasticServices(updateList);
+            String xml = JAXBUtils.marshal(elasticServices, ElasticServices.class);
+            
+            
+            IOUtils iou = new IOUtils("/home/ubuntu/log");
+            iou.overWriteData(xml, "depic_elasticservice.xml");
+            
+            System.out.println("\n" + xml);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(ElasticServiceMonitor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    
+    
+        
+        
+        
     private void configureElasticityServices(List<ElasticService> listOfElasticServices) {
 
         System.out.println("CONFIGURE_EDAAS: " + threadName);

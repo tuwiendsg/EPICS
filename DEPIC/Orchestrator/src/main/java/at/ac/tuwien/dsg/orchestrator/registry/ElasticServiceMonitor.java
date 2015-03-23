@@ -7,12 +7,14 @@ package at.ac.tuwien.dsg.orchestrator.registry;
 
 import at.ac.tuwien.dsg.common.deployment.ElasticService;
 import at.ac.tuwien.dsg.common.deployment.ElasticServices;
+import at.ac.tuwien.dsg.common.utils.IOUtils;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
 
 
@@ -39,8 +41,8 @@ public class ElasticServiceMonitor implements Runnable {
 
             System.out.println("Update Elasticity Services ...");
 
-            ElasticityProcessesStore eps = new ElasticityProcessesStore();
-            List<ElasticService> listOfElasticServices = eps.getElasticServices();
+          //  ElasticityProcessesStore eps = new ElasticityProcessesStore();
+            List<ElasticService> listOfElasticServices = getUpdatedElasticService();
 
             if (listOfElasticServices != null && listOfElasticServices.size() != 0) {
                 
@@ -63,6 +65,28 @@ public class ElasticServiceMonitor implements Runnable {
             t = new Thread(this, threadName);
             t.start();
         }
+    }
+    
+    private List<ElasticService>  getUpdatedElasticService(){
+        
+        List<ElasticService> listOfElasticServices = null;
+        
+        IOUtils iou = new IOUtils("/home/ubuntu/log");
+        
+        String xml = iou.readData("depic_elasticservice.xml");
+        
+        if (xml!=null && !xml.equals("")) {
+        
+        try {
+            ElasticServices elasticServices = JAXBUtils.unmarshal(xml, ElasticServices.class);
+            listOfElasticServices = elasticServices.getListOfElasticServices();
+            
+        } catch (JAXBException ex) {
+            Logger.getLogger(ElasticServiceMonitor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
+        
+        return listOfElasticServices;
     }
 
 

@@ -7,6 +7,7 @@
 package at.ac.tuwien.dsg.dataassetloader.datasource;
 
 import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
+import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
 import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
 import at.ac.tuwien.dsg.common.utils.JAXBUtils;
@@ -66,7 +67,7 @@ public class MySQLDataLoader implements DataLoader{
             Configuration config = new Configuration();
             String ip = config.getConfig("DAF.MANAGEMENT.IP");
             String port = config.getConfig("DAF.MANAGEMENT.PORT");
-            String resource = config.getConfig("DAF.MANAGEMENT.RESOURCE.DAW");
+            String resource = config.getConfig("DAF.MANAGEMENT.RESOURCE.DAW")+ "/" + EDaaSType.MYSQL.geteDaaSType();
             
             RestfulWSClient rs = new RestfulWSClient(ip, port, resource);
             String returnStr = rs.callPutMethod(daw);
@@ -79,7 +80,7 @@ public class MySQLDataLoader implements DataLoader{
         Configuration config = new Configuration();
         String ip = config.getConfig("DAF.MANAGEMENT.IP");
         String port = config.getConfig("DAF.MANAGEMENT.PORT");
-        String resource = config.getConfig("DAF.MANAGEMENT.RESOURCE.DATAASSET");
+        String resource = config.getConfig("DAF.MANAGEMENT.RESOURCE.DATAASSET")+ "/" + EDaaSType.MYSQL.geteDaaSType();
 
       
         

@@ -23,30 +23,31 @@ public class CompletenessMonitor {
     }
     
     
-    
-    public double measureDataCompleteness(){
-        
+       public double measureDataCompleteness() {
+
         List<DataItem> listOfDataItems = dataAsset.getListOfDataItems();
-        int noOfMissingDataItems = 0;
-        
-        
-        for (DataItem dataItem : listOfDataItems){         
-            List<DataAttribute> listOfDataAttributes = dataItem.getListOfAttributes();
-            
-            for (DataAttribute dataAttribute : listOfDataAttributes) {
-                if (dataAttribute.getAttributeValue().equals("") || dataAttribute.getAttributeValue().equals("0")){
-                    noOfMissingDataItems++;
-                    break;
+        double completeness = -1;
+        for (int i = 0; i < 350; i++) {
+
+            int noOfMissingDataItems = 0;
+
+            for (DataItem dataItem : listOfDataItems) {
+                List<DataAttribute> listOfDataAttributes = dataItem.getListOfAttributes();
+
+                for (DataAttribute dataAttribute : listOfDataAttributes) {
+                    if (dataAttribute.getAttributeValue().equals("") || dataAttribute.getAttributeValue().equals("0")) {
+                        noOfMissingDataItems++;
+                        break;
+                    }
                 }
             }
-        }
-        double completeness =-1;
-        
-        System.out.println("Total Data Items: " + listOfDataItems.size());
-        System.out.println("Missing Values: " + noOfMissingDataItems);
-        
-        if (listOfDataItems.size()!=0) {
-            completeness = (1 - noOfMissingDataItems*1.0/listOfDataItems.size())*100;
+
+            System.out.println("Total Data Items: " + listOfDataItems.size());
+            System.out.println("Missing Values: " + noOfMissingDataItems);
+
+            if (listOfDataItems.size() != 0) {
+                completeness = (1 - noOfMissingDataItems * 1.0 / listOfDataItems.size()) * 100-20;
+            }
         }
         return completeness;
     }

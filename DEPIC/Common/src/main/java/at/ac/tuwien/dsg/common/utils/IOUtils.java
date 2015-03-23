@@ -46,6 +46,20 @@ public class IOUtils {
         } catch (IOException ex) {
         }
     }
+    
+    public void overWriteData(String data, String fileName) {
+
+        fileName =  tomcatTempFolder +"/" + fileName;
+        FileWriter fstream;
+        try {
+            fstream = new FileWriter(fileName, false);
+            BufferedWriter out = new BufferedWriter(fstream);
+            out.write(data);
+
+            out.close();
+        } catch (IOException ex) {
+        }
+    }
 
     public  String readData(String fileName) {
 
