@@ -36,14 +36,19 @@ public class LSRService {
              
         List<Parameter> listOfParameters = controlRequest.getListOfParameters();
 
-        int attributeIndex = 0;          
-        for (Parameter parameter : listOfParameters) {
-            if (parameter.getParaName().equals("attributeIndex")){     
-                attributeIndex = Integer.parseInt(parameter.getValue());   
-            }
-        }
+        int attributeIndex = 2;
+        
+        
+//        for (Parameter parameter : listOfParameters) {
+//            if (parameter.getParaName().equals("attributeIndex")){     
+//                attributeIndex = Integer.parseInt(parameter.getValue());   
+//            }
+//        }
         
         DataPartitionRequest dataRequest = new DataPartitionRequest(controlRequest.getEdaas(), controlRequest.getCustomerID(), controlRequest.getDataAssetID(), "");
+        
+        
+        
         
         String dataRequestXML="";
         try {
@@ -52,6 +57,10 @@ public class LSRService {
             Logger.getLogger(LSRService.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        
+        RegistrationService registrationService = new RegistrationService(dataRequest.getCustomerID());
+        registrationService.start();
+        
         int noOfPartitions = getDataAssetNoOfPartition(dataRequestXML);
 
         for (int i = 0; i < noOfPartitions; i++) {
@@ -69,6 +78,8 @@ public class LSRService {
             DataAsset dataAsset = linearRegression.improveDataCompleteness(da, attributeIndex);
             storeDataAssetPartition(dataAsset);
         }
+        
+        registrationService.stop();
 
     }
 

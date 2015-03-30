@@ -22,14 +22,14 @@ public class CompletenessMonitor {
         this.dataAsset = dataAsset;
     }
     
-    
-       public double measureDataCompleteness() {
+        public double measureDataCompleteness() {
 
         List<DataItem> listOfDataItems = dataAsset.getListOfDataItems();
         double completeness = -1;
-        for (int i = 0; i < 350; i++) {
+        int noOfMissingDataItems = 0;
 
-            int noOfMissingDataItems = 0;
+    
+            noOfMissingDataItems = 0;
 
             for (DataItem dataItem : listOfDataItems) {
                 List<DataAttribute> listOfDataAttributes = dataItem.getListOfAttributes();
@@ -42,13 +42,13 @@ public class CompletenessMonitor {
                 }
             }
 
-            System.out.println("Total Data Items: " + listOfDataItems.size());
-            System.out.println("Missing Values: " + noOfMissingDataItems);
+        System.out.println("Total Data Items: " + listOfDataItems.size());
+        System.out.println("Missing Values: " + noOfMissingDataItems);
 
-            if (listOfDataItems.size() != 0) {
-                completeness = (1 - noOfMissingDataItems * 1.0 / listOfDataItems.size()) * 100-20;
-            }
+        if (listOfDataItems.size() != 0) {
+            completeness = (1 - noOfMissingDataItems * 1.0 / listOfDataItems.size()) * 100;
         }
+
         return completeness;
     }
     

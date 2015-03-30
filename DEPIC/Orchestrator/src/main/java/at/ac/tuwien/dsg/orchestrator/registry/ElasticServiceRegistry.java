@@ -9,6 +9,7 @@ import at.ac.tuwien.dsg.common.deployment.ElasticService;
 import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
 import at.ac.tuwien.dsg.common.utils.IOUtils;
 import at.ac.tuwien.dsg.common.utils.Logger;
+import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 import java.util.ArrayList;
 
@@ -24,11 +25,17 @@ public class ElasticServiceRegistry {
     
     private static List<ElasticService> listOfElasticServices;
     private static List<String> listOfActiveServices;
+    private static int customerPerService=0;
     
     public static String getElasticServiceURI(String serviceID, EDaaSType eDaaSType) {
         
         String uri = "";
         
+        
+        if(customerPerService == 0){
+            Configuration cfg = new Configuration();
+            customerPerService = Integer.parseInt(cfg.getConfig("CUSTOMER.PER.SERVICE"));
+        }
         
         if (listOfActiveServices == null) {
             listOfActiveServices = new ArrayList<String>();
@@ -84,27 +91,36 @@ public class ElasticServiceRegistry {
 
     public static boolean isServiceBlock(String uri) {
 
+        
         boolean rs = false;
+        int blockCounter =0;
         
-        
+        if(customerPerService == 0){
+            Configuration cfg = new Configuration();
+            customerPerService = Integer.parseInt(cfg.getConfig("CUSTOMER.PER.SERVICE"));
+        }
        
 
         if (listOfActiveServices != null) {
             
             Logger.logInfo("NO_OF_BLOCK_SERVICES: " + listOfActiveServices.size());
 
-            for (String s : listOfActiveServices) {
-                
-                Logger.logInfo("BLOCK_SERVICES: " + s);
-                
+            for (String s : listOfActiveServices) {        
                 if (s.equals(uri)) {
-                    rs = true;
+                    blockCounter++;
                    
                 }
             }
         } else {
             listOfActiveServices = new ArrayList<String>();
         }
+        
+        if (blockCounter>=customerPerService){
+            rs=true;
+        }
+        
+        
+        
         return rs;
     }
 

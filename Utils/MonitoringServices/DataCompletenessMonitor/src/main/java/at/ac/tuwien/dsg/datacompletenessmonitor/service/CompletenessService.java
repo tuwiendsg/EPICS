@@ -26,7 +26,9 @@ public class CompletenessService {
     
     public double requestMonitorDataCompletenessService(String dataAssetRequest){
         
-         
+        
+        
+                
         DataPartitionRequest daRequest = null;
         
         try {
@@ -35,6 +37,8 @@ public class CompletenessService {
             Logger.getLogger(CompletenessService.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        RegistrationService registrationService = new RegistrationService(daRequest.getCustomerID());
+        registrationService.start();
         
         int noOfPartitions = getDataAssetNoOfPartition(dataAssetRequest);
         
@@ -58,6 +62,7 @@ public class CompletenessService {
         
         avgCompleteness /= noOfPartitions;
         
+        registrationService.stop();
         
         return avgCompleteness;
       
