@@ -5,16 +5,16 @@
  */
 package at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore;
 
-import at.ac.tuwien.dsg.common.deployment.ElasticService;
-import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
-import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
-import at.ac.tuwien.dsg.common.entity.eda.ElasticStateSet;
-import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
-import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
-import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
-import at.ac.tuwien.dsg.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.common.utils.MySqlConnectionManager;
-import at.ac.tuwien.dsg.common.utils.YamlUtils;
+import at.ac.tuwien.dsg.depic.common.deployment.ElasticService;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.EDaaSType;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.ElasticDataAsset;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.ElasticStateSet;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.ElasticityProcess;
+import at.ac.tuwien.dsg.depic.common.entity.process.MetricProcess;
+import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
+import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depic.common.utils.MySqlConnectionManager;
+import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
 import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 import java.io.IOException;
 import java.io.InputStream;

@@ -5,15 +5,15 @@
  */
 package at.ac.tuwien.dsg.depic.depictool.connector;
 
-import at.ac.tuwien.dsg.common.deployment.ElasticService;
-import at.ac.tuwien.dsg.common.deployment.ElasticServices;
-import at.ac.tuwien.dsg.common.utils.IOUtils;
-import at.ac.tuwien.dsg.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
+import at.ac.tuwien.dsg.depic.common.deployment.ElasticService;
+import at.ac.tuwien.dsg.depic.common.deployment.ElasticServices;
+import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
+import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.comot.client.DefaultSalsaClient;
 import at.ac.tuwien.dsg.comot.orchestrator.interraction.salsa.SalsaInterraction;
-import at.ac.tuwien.dsg.depictool.elstore.ElasticityProcessStore;
-import at.ac.tuwien.dsg.depictool.util.Configuration;
+import at.ac.tuwien.dsg.depic.depictool.elstore.ElasticityProcessStore;
+import at.ac.tuwien.dsg.depic.depictool.util.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;

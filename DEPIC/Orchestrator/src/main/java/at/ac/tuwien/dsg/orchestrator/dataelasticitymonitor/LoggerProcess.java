@@ -5,19 +5,19 @@
  */
 package at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor;
 
-import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
-import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
-import at.ac.tuwien.dsg.common.entity.eda.ElasticStateSet;
-import at.ac.tuwien.dsg.common.entity.eda.MetricCondition;
-import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
-import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
-import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
-import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
-import at.ac.tuwien.dsg.common.entity.eda.ep.MonitoringSession;
-import at.ac.tuwien.dsg.common.entity.eda.ep.ParallelGateway;
-import at.ac.tuwien.dsg.common.entity.process.MonitoringMetric;
-import at.ac.tuwien.dsg.common.entity.process.Parameter;
-import at.ac.tuwien.dsg.common.utils.Logger;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.ElasticDataAsset;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.ElasticState;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.ElasticStateSet;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.MetricCondition;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.ControlProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.ElasticityProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.MonitorProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.MonitoringSession;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.ParallelGateway;
+import at.ac.tuwien.dsg.depic.common.entity.process.MonitoringMetric;
+import at.ac.tuwien.dsg.depic.common.entity.process.Parameter;
+import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
 import java.util.List;

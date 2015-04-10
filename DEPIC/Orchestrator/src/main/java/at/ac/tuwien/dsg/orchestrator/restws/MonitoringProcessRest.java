@@ -10,9 +10,9 @@ package at.ac.tuwien.dsg.orchestrator.restws;
  * @author Jun
  */
 
-import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
-import at.ac.tuwien.dsg.common.entity.eda.ep.MonitoringSession;
-import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.ElasticityProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.MonitoringSession;
+import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor.DataElasticityMonitor;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 import java.util.logging.Level;

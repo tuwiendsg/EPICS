@@ -5,10 +5,10 @@
  */
 package at.ac.tuwien.dsg.dataassetloader.store;
 
-import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
-import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
-import at.ac.tuwien.dsg.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.common.utils.MySqlConnectionManager;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.EDaaSType;
+import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depic.common.utils.MySqlConnectionManager;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import java.io.IOException;
 import java.io.InputStream;

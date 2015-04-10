@@ -5,8 +5,8 @@
  */
 package at.ac.tuwien.dsg.dataassetloader.store;
 
-import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
-import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
+import at.ac.tuwien.dsg.depic.common.entity.eda.da.DataAsset;
+import at.ac.tuwien.dsg.depic.common.entity.eda.da.DataPartitionRequest;
 
 /**
  *

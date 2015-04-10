@@ -5,12 +5,12 @@
  */
 package at.ac.tuwien.dsg.dataassetloader.store;
 
-import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
-import at.ac.tuwien.dsg.common.entity.eda.da.DataAttribute;
-import at.ac.tuwien.dsg.common.entity.eda.da.DataItem;
-import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
-import at.ac.tuwien.dsg.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.common.utils.MySqlConnectionManager;
+import at.ac.tuwien.dsg.depic.common.entity.eda.da.DataAsset;
+import at.ac.tuwien.dsg.depic.common.entity.eda.da.DataAttribute;
+import at.ac.tuwien.dsg.depic.common.entity.eda.da.DataItem;
+import at.ac.tuwien.dsg.depic.common.entity.eda.da.DataPartitionRequest;
+import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depic.common.utils.MySqlConnectionManager;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetloader.util.ThroughputMonitor;
 import java.io.ByteArrayInputStream;

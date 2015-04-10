@@ -5,20 +5,20 @@
  */
 package at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller;
 
-import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
-import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
-import at.ac.tuwien.dsg.common.entity.eda.MetricCondition;
-import at.ac.tuwien.dsg.common.entity.eda.da.DataControlRequest;
-import at.ac.tuwien.dsg.common.entity.eda.ep.ControlAction;
-import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
-import at.ac.tuwien.dsg.common.entity.eda.ep.MonitoringSession;
-import at.ac.tuwien.dsg.common.entity.eda.ep.ParallelGateway;
-import at.ac.tuwien.dsg.common.entity.eda.ep.QueueTask;
-import at.ac.tuwien.dsg.common.entity.process.Parameter;
-import at.ac.tuwien.dsg.common.utils.IOUtils;
-import at.ac.tuwien.dsg.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.common.utils.Logger;
-import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.EDaaSType;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.ElasticState;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.MetricCondition;
+import at.ac.tuwien.dsg.depic.common.entity.eda.da.DataControlRequest;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.ControlProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.MonitoringSession;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.ParallelGateway;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.QueueTask;
+import at.ac.tuwien.dsg.depic.common.entity.process.Parameter;
+import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
+import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depic.common.utils.Logger;
+import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor.DataElasticityMonitor;
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
 

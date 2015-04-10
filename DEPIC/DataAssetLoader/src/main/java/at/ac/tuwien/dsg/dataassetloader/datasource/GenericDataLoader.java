@@ -5,10 +5,10 @@
  */
 package at.ac.tuwien.dsg.dataassetloader.datasource;
 
-import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
-import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
-import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
-import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.EDaaSType;
+import at.ac.tuwien.dsg.depic.common.entity.eda.da.DataAsset;
+import at.ac.tuwien.dsg.depic.common.entity.eda.da.DataPartitionRequest;
 
 /**
  *
@@ -27,7 +27,7 @@ public class GenericDataLoader implements DataLoader{
 
     
     @Override
-    public String loadDataAsset(DataAssetFunction dataAssetFunction) {
+    public String loadDataAsset(DataAnalyticsFunction dataAssetFunction) {
         String xml="";
         
         if (eDaaSType.equals(EDaaSType.MYSQL)) {

@@ -5,8 +5,8 @@
  */
 package at.ac.tuwien.dsg.depic.depictool.connector;
 
-import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
-import at.ac.tuwien.dsg.depictool.util.Configuration;
+import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
+import at.ac.tuwien.dsg.depic.depictool.util.Configuration;
 import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.CloudService;
 import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.ServiceTopology;
 import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.ServiceUnit;
@@ -14,10 +14,10 @@ import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.rSYBL.deploymentDe
 import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.rSYBL.deploymentDescription.DeploymentDescription;
 import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.rSYBL.deploymentDescription.DeploymentUnit;
 import at.ac.tuwien.dsg.cloud.salsa.tosca.extension.SalsaInstanceDescription_VM;
-import at.ac.tuwien.dsg.common.deployment.DeployAction;
-import at.ac.tuwien.dsg.common.deployment.ElasticService;
-import at.ac.tuwien.dsg.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.common.utils.Logger;
+import at.ac.tuwien.dsg.depic.common.deployment.DeployAction;
+import at.ac.tuwien.dsg.depic.common.deployment.ElasticService;
+import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import groovy.lang.ListWithDefault;
 import java.util.ArrayList;
 import java.util.List;

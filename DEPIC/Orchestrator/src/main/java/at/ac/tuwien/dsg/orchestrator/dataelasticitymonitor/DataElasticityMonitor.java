@@ -6,30 +6,30 @@
 
 package at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor;
 
-import at.ac.tuwien.dsg.common.deployment.PrimitiveAction;
-import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
-import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
-import at.ac.tuwien.dsg.common.entity.eda.ElasticState;
-import at.ac.tuwien.dsg.common.entity.eda.ElasticStateSet;
-import at.ac.tuwien.dsg.common.entity.eda.MetricCondition;
-import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
-import at.ac.tuwien.dsg.common.entity.eda.ep.ControlProcess;
-import at.ac.tuwien.dsg.common.entity.eda.ep.ElasticityProcess;
-import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorAction;
-import at.ac.tuwien.dsg.common.entity.eda.ep.MonitorProcess;
-import at.ac.tuwien.dsg.common.entity.eda.ep.MonitoringSession;
-import at.ac.tuwien.dsg.common.entity.process.MetricElasticityProcess;
-import at.ac.tuwien.dsg.common.entity.process.MetricProcess;
-import at.ac.tuwien.dsg.common.entity.process.MonitoringMetric;
-import at.ac.tuwien.dsg.common.entity.qor.MetricRange;
-import at.ac.tuwien.dsg.common.entity.qor.QElement;
-import at.ac.tuwien.dsg.common.entity.qor.QoRMetric;
-import at.ac.tuwien.dsg.common.entity.qor.QoRModel;
-import at.ac.tuwien.dsg.common.entity.qor.Range;
-import at.ac.tuwien.dsg.common.utils.IOUtils;
-import at.ac.tuwien.dsg.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.common.utils.Logger;
-import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
+import at.ac.tuwien.dsg.depic.common.deployment.PrimitiveAction;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.EDaaSType;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.ElasticDataAsset;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.ElasticState;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.ElasticStateSet;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.MetricCondition;
+import at.ac.tuwien.dsg.depic.common.entity.eda.da.DataPartitionRequest;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.ControlProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.ElasticityProcess;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.MonitorProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ep.MonitoringSession;
+import at.ac.tuwien.dsg.depic.common.entity.process.MetricElasticityProcess;
+import at.ac.tuwien.dsg.depic.common.entity.process.MetricProcess;
+import at.ac.tuwien.dsg.depic.common.entity.process.MonitoringMetric;
+import at.ac.tuwien.dsg.depic.common.entity.qor.MetricRange;
+import at.ac.tuwien.dsg.depic.common.entity.qor.QElement;
+import at.ac.tuwien.dsg.depic.common.entity.qor.QoRMetric;
+import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
+import at.ac.tuwien.dsg.depic.common.entity.qor.Range;
+import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
+import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depic.common.utils.Logger;
+import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 import at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller.DataElasticityController;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
@@ -65,13 +65,13 @@ public class DataElasticityMonitor{
      
 
     public void startMonitoringService() {
-        List<MonitorAction> listOfMonitoringActions = monitorProcess.getListOfMonitorActions();
+        List<MonitoringAction> listOfMonitoringActions = monitorProcess.getListOfMonitorActions();
         
             Logger.logInfo("Execute Monitoring Process ...");
             
               long t1 = System.currentTimeMillis();
             
-            for (MonitorAction monitorAction : listOfMonitoringActions) {
+            for (MonitoringAction monitorAction : listOfMonitoringActions) {
                 
                 String monitoringServiceID = monitorAction.getMonitorActionID();
       

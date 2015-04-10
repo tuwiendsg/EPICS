@@ -5,10 +5,10 @@
  */
 package at.ac.tuwien.dsg.orchestrator.registry;
 
-import at.ac.tuwien.dsg.common.deployment.ElasticService;
-import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
-import at.ac.tuwien.dsg.common.utils.IOUtils;
-import at.ac.tuwien.dsg.common.utils.Logger;
+import at.ac.tuwien.dsg.depic.common.deployment.ElasticService;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.EDaaSType;
+import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
+import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 import java.util.ArrayList;

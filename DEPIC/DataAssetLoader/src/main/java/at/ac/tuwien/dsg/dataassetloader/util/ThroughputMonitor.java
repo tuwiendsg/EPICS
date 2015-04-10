@@ -5,8 +5,8 @@
  */
 package at.ac.tuwien.dsg.dataassetloader.util;
 
-import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
-import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depic.common.entity.eda.da.DataPartitionRequest;
+import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;

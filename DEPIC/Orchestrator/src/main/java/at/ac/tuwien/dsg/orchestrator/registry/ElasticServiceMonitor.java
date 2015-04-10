@@ -5,11 +5,11 @@
  */
 package at.ac.tuwien.dsg.orchestrator.registry;
 
-import at.ac.tuwien.dsg.common.deployment.ElasticService;
-import at.ac.tuwien.dsg.common.deployment.ElasticServices;
-import at.ac.tuwien.dsg.common.utils.IOUtils;
-import at.ac.tuwien.dsg.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.common.utils.RestfulWSClient;
+import at.ac.tuwien.dsg.depic.common.deployment.ElasticService;
+import at.ac.tuwien.dsg.depic.common.deployment.ElasticServices;
+import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
+import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 
 import java.util.List;

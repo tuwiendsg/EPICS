@@ -5,10 +5,10 @@
  */
 package at.ac.tuwien.dsg.orchestrator.restws;
 
-import at.ac.tuwien.dsg.common.deployment.ElasticService;
-import at.ac.tuwien.dsg.common.deployment.ElasticServices;
-import at.ac.tuwien.dsg.common.entity.eda.ElasticDataAsset;
-import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depic.common.deployment.ElasticService;
+import at.ac.tuwien.dsg.depic.common.deployment.ElasticServices;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.ElasticDataAsset;
+import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
 import java.util.List;

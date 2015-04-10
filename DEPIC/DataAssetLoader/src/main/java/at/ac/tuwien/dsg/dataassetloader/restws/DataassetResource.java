@@ -5,11 +5,11 @@
  */
 package at.ac.tuwien.dsg.dataassetloader.restws;
 
-import at.ac.tuwien.dsg.common.entity.eda.DataAssetFunction;
-import at.ac.tuwien.dsg.common.entity.eda.EDaaSType;
-import at.ac.tuwien.dsg.common.entity.eda.da.DataAsset;
-import at.ac.tuwien.dsg.common.entity.eda.da.DataPartitionRequest;
-import at.ac.tuwien.dsg.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.EDaaSType;
+import at.ac.tuwien.dsg.depic.common.entity.eda.da.DataAsset;
+import at.ac.tuwien.dsg.depic.common.entity.eda.da.DataPartitionRequest;
+import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetloader.datasource.CassandraDataLoader;
 
@@ -86,9 +86,9 @@ public class DataassetResource {
         
         System.out.println("EDaaSType: " +eDaaSType.geteDaaSType());
         
-        DataAssetFunction daf=null;
+        DataAnalyticsFunction daf=null;
         try {
-            daf = JAXBUtils.unmarshal(dataAssetFunctionXML, DataAssetFunction.class);
+            daf = JAXBUtils.unmarshal(dataAssetFunctionXML, DataAnalyticsFunction.class);
         } catch (JAXBException ex) {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
