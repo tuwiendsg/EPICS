@@ -1,0 +1,339 @@
+!at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionRepository
+listOfControlActions: 
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction
+   artifact: 
+      name: LSR
+      description: Linear Least Square Regression to fill missing values
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/LSR.sh
+      restfulAPI: /LSR/rest/control
+      type: sh
+   associatedQoRMetric: columnCompletenessForVoltage
+   controlActionID: LSR
+   controlActionName: LSR
+   costPerHour: 0.45
+   listOfPrerequisiteActionIDs: []
+   listOfTransitions: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
+      finalCondition: &1
+         conditionID: c3
+         lowerBound: 91.0
+         metricName: columnCompletenessForVoltage
+         upperBound: 100.0
+      initialCondition: 
+         conditionID: c1
+         metricName: columnCompletenessForVoltage
+         upperBound: 75.0
+      listOfParameters: &2
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: attributeIndex
+         type: int
+         value: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
+      finalCondition: *1
+      initialCondition: 
+         conditionID: c2
+         lowerBound: 76.0
+         metricName: columnCompletenessForVoltage
+         upperBound: 90.0
+      listOfParameters: *2
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction
+   artifact: 
+      name: DIR
+      description: Distance-based Outlier Detection and Removal to improve data accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/DIR.sh
+      restfulAPI: /DIR/rest/control
+      type: sh
+   associatedQoRMetric: dataAccuracyForVoltage
+   controlActionID: DIR
+   controlActionName: DIR
+   costPerHour: 0.45
+   listOfPrerequisiteActionIDs: []
+   listOfTransitions: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
+      finalCondition: &3
+         conditionID: c3
+         lowerBound: 91.0
+         metricName: dataAccuracyForVoltage
+         upperBound: 100.0
+      initialCondition: 
+         conditionID: c1
+         metricName: dataAccuracyForVoltage
+         upperBound: 75.0
+      listOfParameters: &4
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: attributeIndex
+         type: int
+         value: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: lowerThreshold
+         type: int
+         value: 220
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: upperThreshold
+         type: int
+         value: 240
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
+      finalCondition: *3
+      initialCondition: 
+         conditionID: c2
+         lowerBound: 76.0
+         metricName: dataAccuracyForVoltage
+         upperBound: 90.0
+      listOfParameters: *4
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction
+   artifact: 
+      name: STC
+      description: control throughput
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/STC.sh
+      restfulAPI: /STC/rest/control
+      type: sh
+   associatedQoRMetric: throughputOfDataItemPerSecond
+   controlActionID: STC
+   controlActionName: STC
+   costPerHour: 0.45
+   listOfPrerequisiteActionIDs: []
+   listOfTransitions: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
+      finalCondition: &5
+         conditionID: c2
+         lowerBound: 0.5
+         metricName: throughputOfDataItemPerSecond
+         upperBound: 1.19
+      initialCondition: &6
+         conditionID: c1
+         metricName: throughputOfDataItemPerSecond
+         upperBound: 0.49
+      listOfParameters: &7
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: unit
+         type: String
+         value: dataItems/second
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
+      finalCondition: &8
+         conditionID: c3
+         lowerBound: 1.2
+         metricName: throughputOfDataItemPerSecond
+         upperBound: 1.7976931348623157E308
+      initialCondition: *5
+      listOfParameters: *7
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
+      finalCondition: *6
+      initialCondition: *8
+      listOfParameters: *7
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction
+   artifact: 
+      name: AIC
+      description: control Ads Impression Accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/AIC.sh
+      restfulAPI: /AIC/rest/control
+      type: sh
+   associatedQoRMetric: adsImpressionAccuracy
+   controlActionID: AIC
+   controlActionName: AIC
+   costPerHour: 0.45
+   listOfPrerequisiteActionIDs: []
+   listOfTransitions: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
+      finalCondition: &9
+         conditionID: c3
+         lowerBound: 91.0
+         metricName: adsImpressionAccuracy
+         upperBound: 100.0
+      initialCondition: 
+         conditionID: c1
+         metricName: adsImpressionAccuracy
+         upperBound: 75.0
+      listOfParameters: &10
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: attributeIndex
+         type: int
+         value: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
+      finalCondition: *9
+      initialCondition: 
+         conditionID: c2
+         lowerBound: 76.0
+         metricName: adsImpressionAccuracy
+         upperBound: 90.0
+      listOfParameters: *10
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction
+   artifact: 
+      name: APC
+      description: control Ads Position Accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/APC.sh
+      restfulAPI: /APC/rest/control
+      type: sh
+   associatedQoRMetric: adsPositionAccuracy
+   controlActionID: APC
+   controlActionName: APC
+   costPerHour: 0.45
+   listOfPrerequisiteActionIDs: []
+   listOfTransitions: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
+      finalCondition: &11
+         conditionID: c3
+         lowerBound: 91.0
+         metricName: adsPositionAccuracy
+         upperBound: 100.0
+      initialCondition: 
+         conditionID: c1
+         metricName: adsPositionAccuracy
+         upperBound: 75.0
+      listOfParameters: &12
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: attributeIndex
+         type: int
+         value: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
+      finalCondition: *11
+      initialCondition: 
+         conditionID: c2
+         lowerBound: 76.0
+         metricName: adsPositionAccuracy
+         upperBound: 90.0
+      listOfParameters: *12
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction
+   artifact: 
+      name: STC
+      description: control throughput
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/STC.sh
+      restfulAPI: /STC/rest/control
+      type: sh
+   associatedQoRMetric: throughputOfDataAssetsPerHour
+   controlActionID: STC
+   controlActionName: STC
+   costPerHour: 0.45
+   listOfPrerequisiteActionIDs: []
+   listOfTransitions: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
+      finalCondition: &13
+         conditionID: c2
+         lowerBound: 0.5
+         metricName: throughputOfDataAssetsPerHour
+         upperBound: 1.19
+      initialCondition: &14
+         conditionID: c1
+         metricName: throughputOfDataAssetsPerHour
+         upperBound: 0.49
+      listOfParameters: &15
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: unit
+         type: String
+         value: dataAssets/hour
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
+      finalCondition: &16
+         conditionID: c3
+         lowerBound: 1.2
+         metricName: throughputOfDataAssetsPerHour
+         upperBound: 1.7976931348623157E308
+      initialCondition: *13
+      listOfParameters: *15
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
+      finalCondition: *14
+      initialCondition: *16
+      listOfParameters: *15
+listOfMonitoringActions: 
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+   artifact: 
+      name: columnCompletenessMeasurement
+      description: artifact to monitor column completeness
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/datacompletenessMeasurement.sh
+      restfulAPI: /datacompletenessMeasurement/rest/completeness
+      type: sh
+   associatedQoRMetric: columnCompleteness
+   costPerHour: 0.35
+   listOfParameters: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: attributeIndex
+      type: int
+      value: 
+   monitorActionID: columnCompletenessMeasurement
+   monitoringActionName: columnCompletenessMeasurement
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+   artifact: 
+      name: distanceBasedOutlierMeasurement
+      description: measure outliers to determine data accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/dataaccuracyMeasurement.sh
+      restfulAPI: /dataaccuracyMeasurement/rest/dataaccuracy
+      type: sh
+   associatedQoRMetric: dataAccuracyForVotage
+   costPerHour: 0.35
+   listOfParameters: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: attributeIndex
+      type: int
+      value: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: lowerThreshold
+      type: int
+      value: 220
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: upperThreshold
+      type: int
+      value: 240
+   monitorActionID: distanceBasedOutlierMeasurement
+   monitoringActionName: distanceBasedOutlierMeasurement
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+   artifact: 
+      name: TPM
+      description: measure throughput - data items per second
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/TPM.sh
+      restfulAPI: /TPM/rest/monitor
+      type: sh
+   associatedQoRMetric: throughputOfDataItemPerSecond
+   costPerHour: 0.35
+   listOfParameters: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: unit
+      type: String
+      value: dataItems/second
+   monitorActionID: TPM
+   monitoringActionName: TPM
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+   artifact: 
+      name: AIM
+      description: monitor impression accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/AIM.sh
+      restfulAPI: /AIM/rest/monitor
+      type: sh
+   associatedQoRMetric: adsImpressionAccuracy
+   costPerHour: 0.35
+   listOfParameters: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: attributeIndex
+      type: int
+      value: 
+   monitorActionID: AIM
+   monitoringActionName: AIM
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+   artifact: 
+      name: APM
+      description: monitor Ads position accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/APM.sh
+      restfulAPI: /APM/rest/monitor
+      type: sh
+   associatedQoRMetric: adsPositionAccuracy
+   costPerHour: 0.35
+   listOfParameters: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: attributeIndex
+      type: int
+      value: 
+   monitorActionID: APM
+   monitoringActionName: APM
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+   artifact: 
+      name: TPM
+      description: measure throughput - data assets per hour
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/TPM.sh
+      restfulAPI: /TPM/rest/monitor
+      type: sh
+   associatedQoRMetric: throughputOfDataAssetsPerHour
+   costPerHour: 0.35
+   listOfParameters: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: unit
+      type: String
+      value: dataAssets/hour
+   monitorActionID: TPM
+   monitoringActionName: TPM
