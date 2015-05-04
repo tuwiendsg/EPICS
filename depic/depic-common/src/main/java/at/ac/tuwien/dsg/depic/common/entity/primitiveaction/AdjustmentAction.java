@@ -17,21 +17,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jun
  */
 
-@XmlRootElement(name = "ControlAction")
+@XmlRootElement(name = "AdjustmentAction")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ControlAction implements PrimitiveAction{
+public class AdjustmentAction implements PrimitiveAction{
     
     @XmlElement(name = "controlActionID", required = true)
-    String controlActionID;
+    String actionID;
     
     @XmlElement(name = "controlActionName", required = true)
-    String controlActionName;
+    String actionName;
     
     @XmlElement(name = "artifact", required = true)
     Artifact artifact;
-    
-    @XmlElement(name = "costPerHour", required = true)
-    double costPerHour;
     
     @XmlElement(name = "associatedQoRMetric", required = true)
     String associatedQoRMetric; 
@@ -39,8 +36,8 @@ public class ControlAction implements PrimitiveAction{
     @XmlElement(name = "listOfPrerequisiteActionIDs", required = true)
     List<String> listOfPrerequisiteActionIDs;
     
-    @XmlElement(name = "listOfTransitions", required = true)
-    List<Transition> listOfTransitions;
+    @XmlElement(name = "listOfAdjustmentCases", required = true)
+    List<AdjustmentCase> listOfAdjustmentCases;
     
     @XmlElement(name = "incomming")
     String incomming;
@@ -48,35 +45,32 @@ public class ControlAction implements PrimitiveAction{
     @XmlElement(name = "outgoing")
     String outgoing;
     
-    public ControlAction() {
+    public AdjustmentAction() {
     }
 
-    public ControlAction(String controlActionID, String controlActionName, Artifact artifact, double costPerHour, String associatedQoRMetric, List<String> listOfPrerequisiteActionIDs, List<Transition> listOfTransitions) {
-        this.controlActionID = controlActionID;
-        this.controlActionName = controlActionName;
+    public AdjustmentAction(String actionID, String actionName, Artifact artifact, String associatedQoRMetric, List<String> listOfPrerequisiteActionIDs, List<AdjustmentCase> listOfAdjustmentCases) {
+        this.actionID = actionID;
+        this.actionName = actionName;
         this.artifact = artifact;
-        this.costPerHour = costPerHour;
         this.associatedQoRMetric = associatedQoRMetric;
         this.listOfPrerequisiteActionIDs = listOfPrerequisiteActionIDs;
-        this.listOfTransitions = listOfTransitions;
+        this.listOfAdjustmentCases = listOfAdjustmentCases;
     }
 
-    
-
-    public String getControlActionID() {
-        return controlActionID;
+    public String getActionID() {
+        return actionID;
     }
 
-    public void setControlActionID(String controlActionID) {
-        this.controlActionID = controlActionID;
+    public void setActionID(String actionID) {
+        this.actionID = actionID;
     }
 
-    public String getControlActionName() {
-        return controlActionName;
+    public String getActionName() {
+        return actionName;
     }
 
-    public void setControlActionName(String controlActionName) {
-        this.controlActionName = controlActionName;
+    public void setActionName(String actionName) {
+        this.actionName = actionName;
     }
 
     public Artifact getArtifact() {
@@ -85,14 +79,6 @@ public class ControlAction implements PrimitiveAction{
 
     public void setArtifact(Artifact artifact) {
         this.artifact = artifact;
-    }
-
-    public double getCostPerHour() {
-        return costPerHour;
-    }
-
-    public void setCostPerHour(double costPerHour) {
-        this.costPerHour = costPerHour;
     }
 
     public String getAssociatedQoRMetric() {
@@ -111,12 +97,12 @@ public class ControlAction implements PrimitiveAction{
         this.listOfPrerequisiteActionIDs = listOfPrerequisiteActionIDs;
     }
 
-    public List<Transition> getListOfTransitions() {
-        return listOfTransitions;
+    public List<AdjustmentCase> getListOfAdjustmentCases() {
+        return listOfAdjustmentCases;
     }
 
-    public void setListOfTransitions(List<Transition> listOfTransitions) {
-        this.listOfTransitions = listOfTransitions;
+    public void setListOfAdjustmentCases(List<AdjustmentCase> listOfAdjustmentCases) {
+        this.listOfAdjustmentCases = listOfAdjustmentCases;
     }
 
     public String getIncomming() {
@@ -135,7 +121,6 @@ public class ControlAction implements PrimitiveAction{
         this.outgoing = outgoing;
     }
 
-   
     
     
     

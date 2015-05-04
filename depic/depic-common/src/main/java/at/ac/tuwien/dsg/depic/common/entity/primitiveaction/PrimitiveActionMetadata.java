@@ -16,12 +16,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jun
  */
 
-@XmlRootElement(name = "PrimitiveActionRepository")
+@XmlRootElement(name = "PrimitiveActionMetadata")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PrimitiveActionMetadata {
     
     @XmlElement(name = "listOfControlActions", required = true)
-    List<ControlAction> listOfControlActions;
+    List<AdjustmentAction> listOfControlActions;
     
     @XmlElement(name = "listOfMonitoringActions", required = true)
     List<MonitoringAction> listOfMonitoringActions;
@@ -29,16 +29,16 @@ public class PrimitiveActionMetadata {
     public PrimitiveActionMetadata() {
     }
 
-    public PrimitiveActionMetadata(List<ControlAction> listOfControlActions, List<MonitoringAction> listOfMonitoringActions) {
+    public PrimitiveActionMetadata(List<AdjustmentAction> listOfControlActions, List<MonitoringAction> listOfMonitoringActions) {
         this.listOfControlActions = listOfControlActions;
         this.listOfMonitoringActions = listOfMonitoringActions;
     }
 
-    public List<ControlAction> getListOfControlActions() {
+    public List<AdjustmentAction> getListOfControlActions() {
         return listOfControlActions;
     }
 
-    public void setListOfControlActions(List<ControlAction> listOfControlActions) {
+    public void setListOfControlActions(List<AdjustmentAction> listOfControlActions) {
         this.listOfControlActions = listOfControlActions;
     }
 

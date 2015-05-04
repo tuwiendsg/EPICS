@@ -16,42 +16,30 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jun
  */
 
-@XmlRootElement(name = "Transition")
+@XmlRootElement(name = "AdjustmentCase")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Transition {
+public class AdjustmentCase {
     
-    @XmlElement(name = "initialCondition", required = true)
-    MetricCondition initialCondition;
-    
-    @XmlElement(name = "finalCondition", required = true)
-    MetricCondition finalCondition;
+    @XmlElement(name = "estimatedResult", required = true)
+    MetricCondition estimatedResult;
     
     @XmlElement(name = "listOfParameters", required = true)
     List<Parameter> listOfParameters;
 
-    public Transition() {
+    public AdjustmentCase() {
     }
 
-    public Transition(MetricCondition initialCondition, MetricCondition finalCondition, List<Parameter> listOfParameters) {
-        this.initialCondition = initialCondition;
-        this.finalCondition = finalCondition;
+    public AdjustmentCase(MetricCondition estimatedResult, List<Parameter> listOfParameters) {
+        this.estimatedResult = estimatedResult;
         this.listOfParameters = listOfParameters;
     }
 
-    public MetricCondition getInitialCondition() {
-        return initialCondition;
+    public MetricCondition getEstimatedResult() {
+        return estimatedResult;
     }
 
-    public void setInitialCondition(MetricCondition initialCondition) {
-        this.initialCondition = initialCondition;
-    }
-
-    public MetricCondition getFinalCondition() {
-        return finalCondition;
-    }
-
-    public void setFinalCondition(MetricCondition finalCondition) {
-        this.finalCondition = finalCondition;
+    public void setEstimatedResult(MetricCondition estimatedResult) {
+        this.estimatedResult = estimatedResult;
     }
 
     public List<Parameter> getListOfParameters() {
@@ -61,6 +49,7 @@ public class Transition {
     public void setListOfParameters(List<Parameter> listOfParameters) {
         this.listOfParameters = listOfParameters;
     }
+
     
     
     

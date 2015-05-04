@@ -17,7 +17,7 @@ import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
 
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionRepository;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
@@ -46,7 +46,7 @@ public class Generator {
 
     DataAnalyticsFunction daf;
     QoRModel qorModel;
-    PrimitiveActionRepository primitiveActionRepository;
+    PrimitiveActionMetadata primitiveActionRepository;
       
     ElasticDataAsset elasticDataAsset;
     String eDaaSName;
@@ -69,6 +69,10 @@ public class Generator {
      //   ElasticDataAsset elasticDataAsset = generateElasticityProcesses();
         long t2 = System.currentTimeMillis();
         //generateElasticDaaS();
+        
+        // 
+        
+        
         long t3 = System.currentTimeMillis();
         //prepareDeployment(elasticDataAsset);
         long t4 = System.currentTimeMillis();

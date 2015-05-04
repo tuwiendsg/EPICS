@@ -5,7 +5,7 @@
  */
 package at.ac.tuwien.dsg.depic.depictool.repository;
 
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionRepository;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
 import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
 
@@ -15,7 +15,7 @@ import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
  */
 public class PrimitiveActionRepositoryManager {
 
-    PrimitiveActionRepository primitiveActionRepository;
+    PrimitiveActionMetadata primitiveActionRepository;
     
     public PrimitiveActionRepositoryManager() {
         
@@ -25,7 +25,7 @@ public class PrimitiveActionRepositoryManager {
         Configuration cfg = new Configuration();
         
         String filePath = cfg.getConfigPath()+ "/primitiveActionRepository.yml";       
-        PrimitiveActionRepository primitiveActionRepository = YamlUtils.fromYaml(PrimitiveActionRepository.class, filePath);
+        PrimitiveActionMetadata primitiveActionRepository = YamlUtils.fromYaml(PrimitiveActionMetadata.class, filePath);
     }
     
     

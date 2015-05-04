@@ -10,7 +10,7 @@ package at.ac.tuwien.dsg.depic.depictool.generator;
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ControlProcess;
 
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
@@ -18,7 +18,7 @@ import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway;
 
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionRepository;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QElement;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
@@ -40,14 +40,14 @@ public class ElasticityProcessesGenerator {
 
     DataAnalyticsFunction daf;
     QoRModel qorModel;
-    PrimitiveActionRepository primitiveActionRepository;
+    PrimitiveActionMetadata primitiveActionRepository;
     
     
     public ElasticityProcessesGenerator() {
        // config();
     }
 
-    public ElasticityProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionRepository primitiveActionRepository) {
+    public ElasticityProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository) {
         this.daf = daf;
         this.qorModel = qorModel;
         this.primitiveActionRepository = primitiveActionRepository;

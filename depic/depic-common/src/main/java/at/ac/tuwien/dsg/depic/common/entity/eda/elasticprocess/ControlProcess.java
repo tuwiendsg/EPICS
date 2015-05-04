@@ -6,7 +6,7 @@
 
 package at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess;
 
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -29,7 +29,7 @@ public class ControlProcess {
     ElasticState eStateID_j;
     
     @XmlElement(name = "listOfControlActions", required = true)
-    List<ControlAction> listOfControlActions;
+    List<AdjustmentAction> listOfControlActions;
     
     @XmlElement(name = "listOfParallelGateways")
     List<ParallelGateway> listOfParallelGateways;
@@ -37,7 +37,7 @@ public class ControlProcess {
     public ControlProcess() {
     }
 
-    public ControlProcess(ElasticState eStateID_i, ElasticState eStateID_j, List<ControlAction> listOfControlActions) {
+    public ControlProcess(ElasticState eStateID_i, ElasticState eStateID_j, List<AdjustmentAction> listOfControlActions) {
         this.eStateID_i = eStateID_i;
         this.eStateID_j = eStateID_j;
         this.listOfControlActions = listOfControlActions;
@@ -59,11 +59,11 @@ public class ControlProcess {
         this.eStateID_j = eStateID_j;
     }
 
-    public List<ControlAction> getListOfControlActions() {
+    public List<AdjustmentAction> getListOfControlActions() {
         return listOfControlActions;
     }
 
-    public void setListOfControlActions(List<ControlAction> listOfControlActions) {
+    public void setListOfControlActions(List<AdjustmentAction> listOfControlActions) {
         this.listOfControlActions = listOfControlActions;
     }
 

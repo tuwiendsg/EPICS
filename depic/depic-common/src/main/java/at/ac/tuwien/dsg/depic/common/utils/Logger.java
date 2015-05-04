@@ -7,7 +7,7 @@ package at.ac.tuwien.dsg.depic.common.utils;
 
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ControlProcess;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;

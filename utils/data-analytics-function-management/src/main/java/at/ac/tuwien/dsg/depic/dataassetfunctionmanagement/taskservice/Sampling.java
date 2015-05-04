@@ -73,7 +73,7 @@ public class Sampling {
 
                 StringWriter writer = new StringWriter();
                 String encoding = StandardCharsets.UTF_8.name();
-                org.apache.commons.io.IOUtils.copy(inputStream, writer, encoding);
+             //   org.apache.commons.io.IOUtils.copy(inputStream, writer, encoding);
                 String daXML = writer.toString();
 
                 DataAsset da = JAXBUtils.unmarshal(daXML, DataAsset.class);

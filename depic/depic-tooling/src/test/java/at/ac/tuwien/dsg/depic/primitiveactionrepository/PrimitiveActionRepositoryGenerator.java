@@ -6,12 +6,12 @@
 package at.ac.tuwien.dsg.depic.primitiveactionrepository;
 
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Artifact;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionRepository;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
@@ -25,13 +25,13 @@ public class PrimitiveActionRepositoryGenerator {
     public PrimitiveActionRepositoryGenerator() {
     }
 
-    public PrimitiveActionRepository getData() {
+    public PrimitiveActionMetadata getData() {
 
         List<MonitoringAction> listOfMonitoringActions = getMonitoringActionData();
-        List<ControlAction> listOfControlActions = getControlActionData();
+        List<AdjustmentAction> listOfControlActions = getControlActionData();
 
-        PrimitiveActionRepository primitiveActionRepository
-                = new PrimitiveActionRepository(listOfControlActions, listOfMonitoringActions);
+        PrimitiveActionMetadata primitiveActionRepository
+                = new PrimitiveActionMetadata(listOfControlActions, listOfMonitoringActions);
 
         return primitiveActionRepository;
     }
@@ -62,26 +62,26 @@ public class PrimitiveActionRepositoryGenerator {
         return listOfMonitoringActions;
     }
 
-    private List<ControlAction> getControlActionData() {
+    private List<AdjustmentAction> getControlActionData() {
 
-        List<ControlAction> listOfControlActions = new ArrayList<ControlAction>();
+        List<AdjustmentAction> listOfControlActions = new ArrayList<AdjustmentAction>();
 
-        ControlAction ca1 = controlActionLSR();
+        AdjustmentAction ca1 = controlActionLSR();
         listOfControlActions.add(ca1);
         
-        ControlAction ca2 = controlActionDIR();
+        AdjustmentAction ca2 = controlActionDIR();
         listOfControlActions.add(ca2);
         
-        ControlAction ca3 = controlActionThroughputDataItemsPerSecond();
+        AdjustmentAction ca3 = controlActionThroughputDataItemsPerSecond();
         listOfControlActions.add(ca3);
         
-        ControlAction ca4 = controlActionAIC();
+        AdjustmentAction ca4 = controlActionAIC();
         listOfControlActions.add(ca4);
         
-        ControlAction ca5 = controlActionAPC();
+        AdjustmentAction ca5 = controlActionAPC();
         listOfControlActions.add(ca5);
         
-        ControlAction ca6 = controlActionSTC();
+        AdjustmentAction ca6 = controlActionSTC();
         listOfControlActions.add(ca6);
         
 
@@ -312,7 +312,7 @@ public class PrimitiveActionRepositoryGenerator {
     //
     //
     /////////////////////////////
-    private ControlAction controlActionLSR() {
+    private AdjustmentAction controlActionLSR() {
 
     // power - data completenes    
         String controlActionID = "LSR";
@@ -337,14 +337,14 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 91, 100);
 
-        Transition transition1 = new Transition(c1, c3, listOfParameters);
-        Transition transition2 = new Transition(c2, c3, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase(c1, c3, listOfParameters);
+        AdjustmentCase transition2 = new AdjustmentCase(c2, c3, listOfParameters);
 
-        List<Transition> listOfTransitions = new ArrayList<Transition>();
+        List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
         listOfTransitions.add(transition2);
 
-        ControlAction controlAction = new ControlAction(
+        AdjustmentAction controlAction = new AdjustmentAction(
                 controlActionID,
                 controlActionName,
                 artifact,
@@ -357,7 +357,7 @@ public class PrimitiveActionRepositoryGenerator {
 
     }
 
-    private ControlAction controlActionDIR() {
+    private AdjustmentAction controlActionDIR() {
 
     // power - data accuracy  
         String controlActionID = "DIR";
@@ -386,14 +386,14 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 91, 100);
 
-        Transition transition1 = new Transition(c1, c3, listOfParameters);
-        Transition transition2 = new Transition(c2, c3, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase(c1, c3, listOfParameters);
+        AdjustmentCase transition2 = new AdjustmentCase(c2, c3, listOfParameters);
 
-        List<Transition> listOfTransitions = new ArrayList<Transition>();
+        List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
         listOfTransitions.add(transition2);
 
-        ControlAction controlAction = new ControlAction(
+        AdjustmentAction controlAction = new AdjustmentAction(
                 controlActionID,
                 controlActionName,
                 artifact,
@@ -406,7 +406,7 @@ public class PrimitiveActionRepositoryGenerator {
 
     }
 
-    private ControlAction controlActionThroughputDataItemsPerSecond() {
+    private AdjustmentAction controlActionThroughputDataItemsPerSecond() {
 
         // power - throughput  
         String controlActionID = "STC";
@@ -433,16 +433,16 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 0.5, 1.19);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 1.2, Double.MAX_VALUE);
 
-        Transition transition1 = new Transition(c1, c2, listOfParameters);
-        Transition transition2 = new Transition(c2, c3, listOfParameters);
-        Transition transition3 = new Transition(c3, c1, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase(c1, c2, listOfParameters);
+        AdjustmentCase transition2 = new AdjustmentCase(c2, c3, listOfParameters);
+        AdjustmentCase transition3 = new AdjustmentCase(c3, c1, listOfParameters);
 
-        List<Transition> listOfTransitions = new ArrayList<Transition>();
+        List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
         listOfTransitions.add(transition2);
         listOfTransitions.add(transition3);
 
-        ControlAction controlAction = new ControlAction(
+        AdjustmentAction controlAction = new AdjustmentAction(
                 controlActionID,
                 controlActionName,
                 artifact,
@@ -455,7 +455,7 @@ public class PrimitiveActionRepositoryGenerator {
 
     }
 
-    private ControlAction controlActionAIC() {
+    private AdjustmentAction controlActionAIC() {
 
         // kdd - impression accuracy  
         
@@ -482,14 +482,14 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 91, 100);
 
-        Transition transition1 = new Transition(c1, c3, listOfParameters);
-        Transition transition2 = new Transition(c2, c3, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase(c1, c3, listOfParameters);
+        AdjustmentCase transition2 = new AdjustmentCase(c2, c3, listOfParameters);
 
-        List<Transition> listOfTransitions = new ArrayList<Transition>();
+        List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
         listOfTransitions.add(transition2);
 
-        ControlAction controlAction = new ControlAction(
+        AdjustmentAction controlAction = new AdjustmentAction(
                 controlActionID,
                 controlActionName,
                 artifact,
@@ -502,7 +502,7 @@ public class PrimitiveActionRepositoryGenerator {
 
     }
 
-    private ControlAction controlActionAPC() {
+    private AdjustmentAction controlActionAPC() {
 
     // kdd - position accuracy  
         
@@ -528,14 +528,14 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 91, 100);
 
-        Transition transition1 = new Transition(c1, c3, listOfParameters);
-        Transition transition2 = new Transition(c2, c3, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase(c1, c3, listOfParameters);
+        AdjustmentCase transition2 = new AdjustmentCase(c2, c3, listOfParameters);
 
-        List<Transition> listOfTransitions = new ArrayList<Transition>();
+        List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
         listOfTransitions.add(transition2);
 
-        ControlAction controlAction = new ControlAction(
+        AdjustmentAction controlAction = new AdjustmentAction(
                 controlActionID,
                 controlActionName,
                 artifact,
@@ -550,7 +550,7 @@ public class PrimitiveActionRepositoryGenerator {
 
     }
 
-    private ControlAction controlActionSTC() {
+    private AdjustmentAction controlActionSTC() {
 
     // kdd - throughput
          
@@ -578,16 +578,16 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 0.5, 1.19);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 1.2, Double.MAX_VALUE);
 
-        Transition transition1 = new Transition(c1, c2, listOfParameters);
-        Transition transition2 = new Transition(c2, c3, listOfParameters);
-        Transition transition3 = new Transition(c3, c1, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase(c1, c2, listOfParameters);
+        AdjustmentCase transition2 = new AdjustmentCase(c2, c3, listOfParameters);
+        AdjustmentCase transition3 = new AdjustmentCase(c3, c1, listOfParameters);
 
-        List<Transition> listOfTransitions = new ArrayList<Transition>();
+        List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
         listOfTransitions.add(transition2);
         listOfTransitions.add(transition3);
 
-        ControlAction controlAction = new ControlAction(
+        AdjustmentAction controlAction = new AdjustmentAction(
                 controlActionID,
                 controlActionName,
                 artifact,

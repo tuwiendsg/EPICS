@@ -108,7 +108,7 @@ public class MySqlDataAssetStore implements DataAssetStore{
 
                 StringWriter writer = new StringWriter();
                 String encoding = StandardCharsets.UTF_8.name();
-                org.apache.commons.io.IOUtils.copy(inputStream, writer, encoding);
+       //         org.apache.commons.io.IOUtils.copy(inputStream, writer, encoding);
                 daXML = writer.toString();
             }
             

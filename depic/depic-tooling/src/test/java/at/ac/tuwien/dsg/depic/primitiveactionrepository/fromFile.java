@@ -5,7 +5,7 @@
  */
 package at.ac.tuwien.dsg.depic.primitiveactionrepository;
 
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionRepository;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
 import com.esotericsoftware.yamlbeans.YamlReader;
 import java.io.FileReader;
@@ -26,16 +26,16 @@ public class fromFile {
         // TODO code application logic here
         
         String filePath = "/Volumes/DATA/Temp/primitiveActionRepository.yml";
-        PrimitiveActionRepository primitiveActionRepository = fromYaml(PrimitiveActionRepository.class, filePath);
+        PrimitiveActionMetadata primitiveActionRepository = fromYaml(PrimitiveActionMetadata.class, filePath);
         
         System.out.println("rs: " + primitiveActionRepository.getListOfMonitoringActions().get(0).getAssociatedQoRMetric());
         
         
-        String yStr = YamlUtils.marshallYaml(PrimitiveActionRepository.class, primitiveActionRepository);
+        String yStr = YamlUtils.marshallYaml(PrimitiveActionMetadata.class, primitiveActionRepository);
         
         System.out.println("SSS: " + yStr);
         
-        PrimitiveActionRepository rp = YamlUtils.unmarshallYaml(PrimitiveActionRepository.class, yStr);
+        PrimitiveActionMetadata rp = YamlUtils.unmarshallYaml(PrimitiveActionMetadata.class, yStr);
         
         System.out.println("AAA: " +  rp.getListOfMonitoringActions().get(0).getAssociatedQoRMetric());
     }

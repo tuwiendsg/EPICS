@@ -5,7 +5,7 @@
  */
 package at.ac.tuwien.dsg.depic.primitiveactionrepository;
 
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionRepository;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.mela.test;
 import static at.ac.tuwien.dsg.mela.test.toYaml;

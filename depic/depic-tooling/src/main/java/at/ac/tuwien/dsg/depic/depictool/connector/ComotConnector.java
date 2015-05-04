@@ -7,7 +7,7 @@ package at.ac.tuwien.dsg.depic.depictool.connector;
 
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DeployAction;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ControlProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
@@ -123,9 +123,9 @@ public class ComotConnector {
 
         for (ControlProcess controlProcess : listOfControlProcesses) {
 
-            List<ControlAction> controlActions = controlProcess.getListOfControlActions();
+            List<AdjustmentAction> controlActions = controlProcess.getListOfControlActions();
 
-            for (ControlAction ca : controlActions) {
+            for (AdjustmentAction ca : controlActions) {
 
                 if (!isDeployActionExisting(controlServices, ca.getControlActionName())) {
                     DeployAction deployAction = epStore.getPrimitiveAction(ca.getControlActionName());

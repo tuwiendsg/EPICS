@@ -7,9 +7,11 @@ package at.ac.tuwien.dsg.depic.dataassetfunctionmanagement.util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  *
@@ -17,17 +19,37 @@ import java.io.IOException;
  */
 public class IOUtils {
   
-    private static String tomcatTempFolder;
+    private String tomcatTempFolder;
 
     public IOUtils() {
-        tomcatTempFolder="/Volumes/DATA/Temp";
-     //  tomcatTempFolder = System.getProperty("java.io.tmpdir");
+    
+        tomcatTempFolder = System.getProperty("java.io.tmpdir");
         
     }
+
+    public IOUtils(String tomcatTempFolder) {
+        this.tomcatTempFolder = tomcatTempFolder;
+    }
+
+    
   
     
 
     public void writeData(String data, String fileName) {
+
+        fileName =  tomcatTempFolder +"/" + fileName;
+        FileWriter fstream;
+        try {
+            fstream = new FileWriter(fileName, true);
+            BufferedWriter out = new BufferedWriter(fstream);
+            out.write(data);
+
+            out.close();
+        } catch (IOException ex) {
+        }
+    }
+    
+    public void overWriteData(String data, String fileName) {
 
         fileName =  tomcatTempFolder +"/" + fileName;
         FileWriter fstream;
@@ -47,6 +69,10 @@ public class IOUtils {
         String data = "";
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
+          //  BufferedReader br = new BufferedReader(new InputStreamReader(
+           //           new FileInputStream(fileName), "UTF8"));
+            
+            
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
 
