@@ -1,6 +1,8 @@
-!at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionRepository
-listOfControlActions: 
-- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction
+!at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata
+listOfAdjustmentActions: 
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+   actionID: LSR
+   actionName: LSR
    artifact: 
       name: LSR
       description: Linear Least Square Regression to fill missing values
@@ -8,35 +10,25 @@ listOfControlActions:
       restfulAPI: /LSR/rest/control
       type: sh
    associatedQoRMetric: columnCompletenessForVoltage
-   controlActionID: LSR
-   controlActionName: LSR
-   costPerHour: 0.45
-   listOfPrerequisiteActionIDs: []
-   listOfTransitions: 
-   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
-      finalCondition: &1
+   listOfAdjustmentCases: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: &1
          conditionID: c3
          lowerBound: 91.0
          metricName: columnCompletenessForVoltage
          upperBound: 100.0
-      initialCondition: 
-         conditionID: c1
-         metricName: columnCompletenessForVoltage
-         upperBound: 75.0
       listOfParameters: &2
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
          parameterName: attributeIndex
          type: int
          value: 
-   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
-      finalCondition: *1
-      initialCondition: 
-         conditionID: c2
-         lowerBound: 76.0
-         metricName: columnCompletenessForVoltage
-         upperBound: 90.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: *1
       listOfParameters: *2
-- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction
+   listOfPrerequisiteActionIDs: []
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+   actionID: DIR
+   actionName: DIR
    artifact: 
       name: DIR
       description: Distance-based Outlier Detection and Removal to improve data accuracy
@@ -44,21 +36,13 @@ listOfControlActions:
       restfulAPI: /DIR/rest/control
       type: sh
    associatedQoRMetric: dataAccuracyForVoltage
-   controlActionID: DIR
-   controlActionName: DIR
-   costPerHour: 0.45
-   listOfPrerequisiteActionIDs: []
-   listOfTransitions: 
-   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
-      finalCondition: &3
+   listOfAdjustmentCases: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: &3
          conditionID: c3
          lowerBound: 91.0
          metricName: dataAccuracyForVoltage
          upperBound: 100.0
-      initialCondition: 
-         conditionID: c1
-         metricName: dataAccuracyForVoltage
-         upperBound: 75.0
       listOfParameters: &4
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
          parameterName: attributeIndex
@@ -72,15 +56,13 @@ listOfControlActions:
          parameterName: upperThreshold
          type: int
          value: 240
-   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
-      finalCondition: *3
-      initialCondition: 
-         conditionID: c2
-         lowerBound: 76.0
-         metricName: dataAccuracyForVoltage
-         upperBound: 90.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: *3
       listOfParameters: *4
-- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction
+   listOfPrerequisiteActionIDs: []
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+   actionID: STC
+   actionName: STC
    artifact: 
       name: STC
       description: control throughput
@@ -88,39 +70,35 @@ listOfControlActions:
       restfulAPI: /STC/rest/control
       type: sh
    associatedQoRMetric: throughputOfDataItemPerSecond
-   controlActionID: STC
-   controlActionName: STC
-   costPerHour: 0.45
-   listOfPrerequisiteActionIDs: []
-   listOfTransitions: 
-   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
-      finalCondition: &5
+   listOfAdjustmentCases: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: 
          conditionID: c2
          lowerBound: 0.5
          metricName: throughputOfDataItemPerSecond
          upperBound: 1.19
-      initialCondition: &6
-         conditionID: c1
-         metricName: throughputOfDataItemPerSecond
-         upperBound: 0.49
-      listOfParameters: &7
+      listOfParameters: &5
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
          parameterName: unit
          type: String
          value: dataItems/second
-   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
-      finalCondition: &8
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: 
          conditionID: c3
          lowerBound: 1.2
          metricName: throughputOfDataItemPerSecond
          upperBound: 1.7976931348623157E308
-      initialCondition: *5
-      listOfParameters: *7
-   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
-      finalCondition: *6
-      initialCondition: *8
-      listOfParameters: *7
-- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction
+      listOfParameters: *5
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: 
+         conditionID: c1
+         metricName: throughputOfDataItemPerSecond
+         upperBound: 0.49
+      listOfParameters: *5
+   listOfPrerequisiteActionIDs: []
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+   actionID: AIC
+   actionName: AIC
    artifact: 
       name: AIC
       description: control Ads Impression Accuracy
@@ -128,35 +106,25 @@ listOfControlActions:
       restfulAPI: /AIC/rest/control
       type: sh
    associatedQoRMetric: adsImpressionAccuracy
-   controlActionID: AIC
-   controlActionName: AIC
-   costPerHour: 0.45
-   listOfPrerequisiteActionIDs: []
-   listOfTransitions: 
-   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
-      finalCondition: &9
+   listOfAdjustmentCases: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: &6
          conditionID: c3
          lowerBound: 91.0
          metricName: adsImpressionAccuracy
          upperBound: 100.0
-      initialCondition: 
-         conditionID: c1
-         metricName: adsImpressionAccuracy
-         upperBound: 75.0
-      listOfParameters: &10
+      listOfParameters: &7
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
          parameterName: attributeIndex
          type: int
          value: 
-   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
-      finalCondition: *9
-      initialCondition: 
-         conditionID: c2
-         lowerBound: 76.0
-         metricName: adsImpressionAccuracy
-         upperBound: 90.0
-      listOfParameters: *10
-- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: *6
+      listOfParameters: *7
+   listOfPrerequisiteActionIDs: []
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+   actionID: APC
+   actionName: APC
    artifact: 
       name: APC
       description: control Ads Position Accuracy
@@ -164,35 +132,25 @@ listOfControlActions:
       restfulAPI: /APC/rest/control
       type: sh
    associatedQoRMetric: adsPositionAccuracy
-   controlActionID: APC
-   controlActionName: APC
-   costPerHour: 0.45
-   listOfPrerequisiteActionIDs: []
-   listOfTransitions: 
-   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
-      finalCondition: &11
+   listOfAdjustmentCases: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: &8
          conditionID: c3
          lowerBound: 91.0
          metricName: adsPositionAccuracy
          upperBound: 100.0
-      initialCondition: 
-         conditionID: c1
-         metricName: adsPositionAccuracy
-         upperBound: 75.0
-      listOfParameters: &12
+      listOfParameters: &9
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
          parameterName: attributeIndex
          type: int
          value: 
-   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
-      finalCondition: *11
-      initialCondition: 
-         conditionID: c2
-         lowerBound: 76.0
-         metricName: adsPositionAccuracy
-         upperBound: 90.0
-      listOfParameters: *12
-- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: *8
+      listOfParameters: *9
+   listOfPrerequisiteActionIDs: []
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+   actionID: STC
+   actionName: STC
    artifact: 
       name: STC
       description: control throughput
@@ -200,38 +158,32 @@ listOfControlActions:
       restfulAPI: /STC/rest/control
       type: sh
    associatedQoRMetric: throughputOfDataAssetsPerHour
-   controlActionID: STC
-   controlActionName: STC
-   costPerHour: 0.45
-   listOfPrerequisiteActionIDs: []
-   listOfTransitions: 
-   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
-      finalCondition: &13
+   listOfAdjustmentCases: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: 
          conditionID: c2
          lowerBound: 0.5
          metricName: throughputOfDataAssetsPerHour
          upperBound: 1.19
-      initialCondition: &14
-         conditionID: c1
-         metricName: throughputOfDataAssetsPerHour
-         upperBound: 0.49
-      listOfParameters: &15
+      listOfParameters: &10
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
          parameterName: unit
          type: String
          value: dataAssets/hour
-   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
-      finalCondition: &16
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: 
          conditionID: c3
          lowerBound: 1.2
          metricName: throughputOfDataAssetsPerHour
          upperBound: 1.7976931348623157E308
-      initialCondition: *13
-      listOfParameters: *15
-   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Transition
-      finalCondition: *14
-      initialCondition: *16
-      listOfParameters: *15
+      listOfParameters: *10
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: 
+         conditionID: c1
+         metricName: throughputOfDataAssetsPerHour
+         upperBound: 0.49
+      listOfParameters: *10
+   listOfPrerequisiteActionIDs: []
 listOfMonitoringActions: 
 - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
    artifact: 
@@ -337,3 +289,18 @@ listOfMonitoringActions:
       value: dataAssets/hour
    monitorActionID: TPM
    monitoringActionName: TPM
+listOfResourceControls: 
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControl
+   controlMetric: throughput
+   listOfResourceControlStrategies: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      dataSize: 2500.0
+      scaleInCondition: 
+         conditionID: co_1
+         metricName: cpuUsage
+         upperBound: 15.0
+      scaleOutCondition: 
+         conditionID: co_2
+         lowerBound: 80.0
+         metricName: cpuUsage
+         upperBound: 100.0
