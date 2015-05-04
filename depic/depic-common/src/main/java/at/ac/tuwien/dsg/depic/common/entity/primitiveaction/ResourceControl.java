@@ -5,10 +5,52 @@
  */
 package at.ac.tuwien.dsg.depic.common.entity.primitiveaction;
 
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  * @author Jun
  */
-public class ResourceControl {
+
+@XmlRootElement(name = "ResourceControl")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class ResourceControl implements PrimitiveAction{
+    
+    @XmlElement(name = "controlMetric", required = true)
+    String controlMetric;
+    
+    @XmlElement(name = "listOfResourceControlStrategies", required = true)
+    List<ResourceControlStrategy> listOfResourceControlStrategies;
+
+    public ResourceControl() {
+    }
+
+    public ResourceControl(String controlMetric, List<ResourceControlStrategy> listOfResourceControlStrategies) {
+        this.controlMetric = controlMetric;
+        this.listOfResourceControlStrategies = listOfResourceControlStrategies;
+    }
+
+    public String getControlMetric() {
+        return controlMetric;
+    }
+
+    public void setControlMetric(String controlMetric) {
+        this.controlMetric = controlMetric;
+    }
+
+    public List<ResourceControlStrategy> getListOfResourceControlStrategies() {
+        return listOfResourceControlStrategies;
+    }
+
+    public void setListOfResourceControlStrategies(List<ResourceControlStrategy> listOfResourceControlStrategies) {
+        this.listOfResourceControlStrategies = listOfResourceControlStrategies;
+    }
+    
+    
+    
     
 }

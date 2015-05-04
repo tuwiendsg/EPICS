@@ -20,26 +20,31 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PrimitiveActionMetadata {
     
-    @XmlElement(name = "listOfControlActions", required = true)
-    List<AdjustmentAction> listOfControlActions;
+    @XmlElement(name = "listOfAdjustmentActions", required = true)
+    List<AdjustmentAction> listOfAdjustmentActions;
     
     @XmlElement(name = "listOfMonitoringActions", required = true)
     List<MonitoringAction> listOfMonitoringActions;
+    
+    @XmlElement(name = "listOfResourceControls", required = true)
+    List<ResourceControl> listOfResourceControls;
+     
 
     public PrimitiveActionMetadata() {
     }
 
-    public PrimitiveActionMetadata(List<AdjustmentAction> listOfControlActions, List<MonitoringAction> listOfMonitoringActions) {
-        this.listOfControlActions = listOfControlActions;
+    public PrimitiveActionMetadata(List<AdjustmentAction> listOfAdjustmentActions, List<MonitoringAction> listOfMonitoringActions, List<ResourceControl> listOfResourceControls) {
+        this.listOfAdjustmentActions = listOfAdjustmentActions;
         this.listOfMonitoringActions = listOfMonitoringActions;
+        this.listOfResourceControls = listOfResourceControls;
     }
 
-    public List<AdjustmentAction> getListOfControlActions() {
-        return listOfControlActions;
+    public List<AdjustmentAction> getListOfAdjustmentActions() {
+        return listOfAdjustmentActions;
     }
 
-    public void setListOfControlActions(List<AdjustmentAction> listOfControlActions) {
-        this.listOfControlActions = listOfControlActions;
+    public void setListOfAdjustmentActions(List<AdjustmentAction> listOfAdjustmentActions) {
+        this.listOfAdjustmentActions = listOfAdjustmentActions;
     }
 
     public List<MonitoringAction> getListOfMonitoringActions() {
@@ -49,7 +54,17 @@ public class PrimitiveActionMetadata {
     public void setListOfMonitoringActions(List<MonitoringAction> listOfMonitoringActions) {
         this.listOfMonitoringActions = listOfMonitoringActions;
     }
+
+    public List<ResourceControl> getListOfResourceControls() {
+        return listOfResourceControls;
+    }
+
+    public void setListOfResourceControls(List<ResourceControl> listOfResourceControls) {
+        this.listOfResourceControls = listOfResourceControls;
+    }
+
     
+
     
     
 }
