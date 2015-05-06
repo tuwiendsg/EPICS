@@ -8,10 +8,13 @@ package at.ac.tuwien.dsg.depic.depictool.generator;
 
 
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
+import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ControlProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DirectedAcyclicalGraph;
 
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
@@ -36,102 +39,160 @@ import java.util.UUID;
  *
  * @author Jun
  */
-public class ElasticityProcessesGenerator {
+public class ElasticProcessesGenerator {
 
     DataAnalyticsFunction daf;
     QoRModel qorModel;
     PrimitiveActionMetadata primitiveActionRepository;
     
     
-    public ElasticityProcessesGenerator() {
+    public ElasticProcessesGenerator() {
        // config();
     }
 
-    public ElasticityProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository) {
+    public ElasticProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository) {
         this.daf = daf;
         this.qorModel = qorModel;
         this.primitiveActionRepository = primitiveActionRepository;
        // config();
     }
-//
-//
-//    public MonitoringProcess generateMonitorProcess() {
-//
-//        List<MonitoringAction> listOfMonitorActions = new ArrayList<MonitoringAction>();
-//        List<MetricElasticityProcess> listOfMetricElasticityProcesses = metricProcess.getListOfMetricElasticityProcesses();
-//
-//        for (MetricElasticityProcess metric : listOfMetricElasticityProcesses) {
-//            MonitoringAction monitorAction = metric.getMonitorAction();
-//            listOfMonitorActions.add(monitorAction);
-//        }
-//
-//        MonitoringProcess monitorProcess = new MonitoringProcess(listOfMonitorActions);
-//
-//        return monitorProcess;
-//    }
-//    
-//    
-//    public List<ElasticState> generateSetOfInitialElasticState(){
-//        List<QoRMetric> listOfMetrics = qorModel.getListOfMetrics();
-//        List<MetricElasticityProcess> listOfProcessMetric = metricProcess.getListOfMetricElasticityProcesses();
-//        List<List> listOfConditionSet = new ArrayList<List>();
-//        List<ElasticState> listOfInitialElasticStates = new ArrayList<ElasticState>();
+    
+    public ElasticDataAsset generateElasticProcesses() {
+        Logger.logInfo("Start generate Elastic Processes ... ");
+      
+        MonitoringProcess monitorProcess = generateMonitoringProcess();
+        
+        
+        
+//   List<ElasticState> initialElasticStateSet = elasticityProcessGenerator.generateSetOfInitialElasticState();
 //        
+//        Logger logger = new Logger();
+//        Logger.logInfo("Inital eState Set");
+//        logger.logElasticState(initialElasticStateSet);
+//        
+//        
+//        List<ElasticState> finalElasticStateSet = elasticityProcessGenerator.generateSetOfFinalElasticState(initialElasticStateSet);
+//        Logger.logInfo("");
+//        Logger.logInfo("Final eState Set");
+//        logger.logElasticState(finalElasticStateSet);
+//        
+//        ElasticStateSet elasticStateSet = new ElasticStateSet(initialElasticStateSet, finalElasticStateSet);
+//        
+//        List<ControlProcess> listOfControlProcesses = elasticityProcessGenerator.generateControlProcesses(initialElasticStateSet, finalElasticStateSet);
+//        ElasticProcess elasticityProcesses = new ElasticProcess(monitorProcess, listOfControlProcesses);
+//
+//        ElasticDataAsset elasticDataAsset = new ElasticDataAsset(eDaaSName,dbType, elasticityProcesses, elasticStateSet);
+//        //log
 //       
 //        
-//        for (QoRMetric metric : listOfMetrics){
-//            
-//            String metricName = metric.getName();
-//            MetricElasticityProcess metricProcess = getMetricLElasticityProcessFromMetricName(metricName, listOfProcessMetric);
-//            List<MetricCondition> listOfConditions = metricProcess.getListOfConditions();
-//            listOfConditionSet.add(listOfConditions);
+//        logger.logMonitorProcesses(monitorProcess);
+//        logger.logControlProcesses(listOfControlProcesses);
 //
-//        }
-//
-//        int noOfMetric = listOfConditionSet.size();
-//        List<int[]> combinations = new ArrayList<int[]>();
-//
-//        for (int k = 0; k < 1000; k++) {
-//            int[] conditionIndice = new int[noOfMetric];
-//
-//            for (int i = 0; i < noOfMetric; i++) {
-//
-//                List<MetricCondition> conditionMetric_i = listOfConditionSet.get(i);
-//                int noOfConditions = conditionMetric_i.size();
-//                int conditionIndex = randomInt(0, noOfConditions);
-//                conditionIndice[i] = conditionIndex;
-//
-//            }
-//
-//            if (!isDuplicated(combinations, conditionIndice)) {
-//                combinations.add(conditionIndice);
-//            }
-//
-//        }
-//
-//        for (int[] conbination : combinations) {
-//
-//            List<MetricCondition> eStateConditions = new ArrayList<MetricCondition>();
-//            String eStateID = "";
-//
-//            for (int i = 0; i < conbination.length; i++) {
-//
-//                List<MetricCondition> conditionMetric_i = listOfConditionSet.get(i);
-//                MetricCondition metricCondition = conditionMetric_i.get(conbination[i]);
-//                MetricCondition newMetricCondition = new MetricCondition(metricCondition.getMetricName(), metricCondition.getConditionID(), metricCondition.getLowerBound(), metricCondition.getUpperBound());
-//                eStateConditions.add(newMetricCondition);
-//                eStateID = eStateID + metricCondition.getConditionID() + ";";
-//
-//            }
-//
-//            ElasticState elasticState = new ElasticState(eStateID, eStateConditions);
-//            listOfInitialElasticStates.add(elasticState);
-//        }
-//
-//        return listOfInitialElasticStates;
-//    }
-//
-//    public List<ElasticState> generateSetOfFinalElasticState(List<ElasticState> listOfInitialElasticStates) {
+//        return elasticDataAsset;
+        return null;
+    }
+    
+
+
+    
+    ///////////////////////////////////////
+    ///                                 ///
+    /// Monitoring Process              ///
+    ///                                 ///
+    ///////////////////////////////////////
+    
+    private MonitoringProcess generateMonitoringProcess() {
+
+        List<MonitoringAction> listOfMonitoringActions = new ArrayList<MonitoringAction>();
+        
+        List<QoRMetric> listOfQoRMetrics = qorModel.getListOfMetrics();
+        
+        for (QoRMetric metric : listOfQoRMetrics) {
+            String qorMetricName = metric.getName();
+            MonitoringAction monitoringAction = findCorrespondingMonitoringActionFromQoRMetric(qorMetricName);
+            listOfMonitoringActions.add(monitoringAction);
+        }
+        
+
+        MonitoringProcess monitorProcess = parallelizeMonitoringActions(listOfMonitoringActions);
+
+        return monitorProcess;
+    }
+    
+    private MonitoringAction findCorrespondingMonitoringActionFromQoRMetric(String qorMetricName){
+        List<MonitoringAction> listOfMonitoringActions = primitiveActionRepository.getListOfMonitoringActions();
+        
+        MonitoringAction foundMonitoringAction = null;
+        for (MonitoringAction ma : listOfMonitoringActions){
+            if (qorMetricName.equals(ma.getAssociatedQoRMetric())){
+                foundMonitoringAction = copyMonitoringActionInstance(ma);
+            }
+        }
+        
+        return foundMonitoringAction;
+    }
+    
+    private MonitoringAction copyMonitoringActionInstance(MonitoringAction ma){
+        
+        return ma;
+    }
+    
+    private MonitoringProcess parallelizeMonitoringActions(List<MonitoringAction> listOfMonitoringActions){
+        
+        List<Action> listOfAction = new ArrayList<Action>();       
+        
+        for (MonitoringAction ma : listOfMonitoringActions){
+            Action action = new Action();
+            String actionID = getUDID();
+            ma.setMonitorActionID(actionID);
+            action.setActionID(actionID);
+            listOfAction.add(action);
+        }
+        
+        String parallelGateway_in_id = getUDID();
+        String parallelGateway_out_id = getUDID();
+        List<String> listOfIncommings = new ArrayList<String>();
+        List<String> listOfOutgoings = new ArrayList<String>();
+        
+        for (Action action : listOfAction) {
+            action.setIncomming(parallelGateway_in_id);
+            action.setOutgoing(parallelGateway_out_id);
+        }
+        
+        ParallelGateway pg_in = new ParallelGateway(parallelGateway_in_id, null, listOfOutgoings);
+        ParallelGateway pg_out = new ParallelGateway(parallelGateway_out_id, listOfIncommings, null);
+        
+        List<ParallelGateway> listOfParallelGateways = new ArrayList<ParallelGateway>();
+        listOfParallelGateways.add(pg_in);
+        listOfParallelGateways.add(pg_out);
+        
+        DirectedAcyclicalGraph dag = new DirectedAcyclicalGraph();
+        dag.setListOfActions(listOfAction);
+        dag.setListOfParallelGateways(listOfParallelGateways);
+        
+        MonitoringProcess monitoringProcess = new MonitoringProcess(listOfMonitoringActions, dag);
+        
+        return monitoringProcess;
+    }
+    
+    private String getUDID(){
+        UUID actionID = UUID.randomUUID();
+        return actionID.toString();
+    }
+    
+    
+    
+    
+    
+    
+    ///////////////////////////////////////
+    ///                                 ///
+    /// Adjustment Process              ///
+    ///                                 ///
+    ///////////////////////////////////////
+    
+    
+//    public List<ElasticState> generateFinalElasticStateSet(List<ElasticState> listOfInitialElasticStates) {
 //
 //        List<ElasticState> listOfFinalElasticStates = new ArrayList<ElasticState>();
 //        List<QElement> listOfQElements = qorModel.getListOfQElements();
@@ -175,7 +236,7 @@ public class ElasticityProcessesGenerator {
 //        return listOfFinalElasticStates;
 //    }
 //
-//    public List<ControlProcess> generateControlProcesses(List<ElasticState> listOfInitialElasticStates, List<ElasticState> listOfFinalElasticStates) {
+//    public List<ControlProcess> generateAdjustmentProcesses(List<ElasticState> listOfInitialElasticStates, List<ElasticState> listOfFinalElasticStates) {
 //
 //       List<ControlProcess> listOfControlProcesses = new ArrayList<ControlProcess>();
 //        
@@ -202,6 +263,72 @@ public class ElasticityProcessesGenerator {
 ////        }
 //        return listOfControlProcesses;
 //    }
+//    
+//    
+//    public void generateResourceControlPlan(){
+//        
+//    }
+////    
+////    public List<ElasticState> generateSetOfInitialElasticState(){
+////        List<QoRMetric> listOfMetrics = qorModel.getListOfMetrics();
+////        List<MetricElasticityProcess> listOfProcessMetric = metricProcess.getListOfMetricElasticityProcesses();
+////        List<List> listOfConditionSet = new ArrayList<List>();
+////        List<ElasticState> listOfInitialElasticStates = new ArrayList<ElasticState>();
+////        
+////       
+////        
+////        for (QoRMetric metric : listOfMetrics){
+////            
+////            String metricName = metric.getName();
+////            MetricElasticityProcess metricProcess = getMetricLElasticityProcessFromMetricName(metricName, listOfProcessMetric);
+////            List<MetricCondition> listOfConditions = metricProcess.getListOfConditions();
+////            listOfConditionSet.add(listOfConditions);
+////
+////        }
+////
+////        int noOfMetric = listOfConditionSet.size();
+////        List<int[]> combinations = new ArrayList<int[]>();
+////
+////        for (int k = 0; k < 1000; k++) {
+////            int[] conditionIndice = new int[noOfMetric];
+////
+////            for (int i = 0; i < noOfMetric; i++) {
+////
+////                List<MetricCondition> conditionMetric_i = listOfConditionSet.get(i);
+////                int noOfConditions = conditionMetric_i.size();
+////                int conditionIndex = randomInt(0, noOfConditions);
+////                conditionIndice[i] = conditionIndex;
+////
+////            }
+////
+////            if (!isDuplicated(combinations, conditionIndice)) {
+////                combinations.add(conditionIndice);
+////            }
+////
+////        }
+////
+////        for (int[] conbination : combinations) {
+////
+////            List<MetricCondition> eStateConditions = new ArrayList<MetricCondition>();
+////            String eStateID = "";
+////
+////            for (int i = 0; i < conbination.length; i++) {
+////
+////                List<MetricCondition> conditionMetric_i = listOfConditionSet.get(i);
+////                MetricCondition metricCondition = conditionMetric_i.get(conbination[i]);
+////                MetricCondition newMetricCondition = new MetricCondition(metricCondition.getMetricName(), metricCondition.getConditionID(), metricCondition.getLowerBound(), metricCondition.getUpperBound());
+////                eStateConditions.add(newMetricCondition);
+////                eStateID = eStateID + metricCondition.getConditionID() + ";";
+////
+////            }
+////
+////            ElasticState elasticState = new ElasticState(eStateID, eStateConditions);
+////            listOfInitialElasticStates.add(elasticState);
+////        }
+////
+////        return listOfInitialElasticStates;
+////    }
+//
 //    
 //    
 //
@@ -872,7 +999,7 @@ public class ElasticityProcessesGenerator {
 //        
 //        return dependencyList;
 //    }
-//    
+    
     
     
 }

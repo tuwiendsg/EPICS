@@ -28,15 +28,15 @@ public class toFile {
         // TODO code application logic here
         
         
-//        PrimitiveActionRepositoryGenerator generator = new PrimitiveActionRepositoryGenerator();
-//        PrimitiveActionRepository primitiveActionRepository = generator.getData();
-//        
-//        toYaml(primitiveActionRepository, "/Volumes/DATA/Temp/primitiveActionRepository.yml");
+        PrimitiveActionRepositoryGenerator generator = new PrimitiveActionRepositoryGenerator();
+        PrimitiveActionMetadata primitiveActionRepository = generator.getData();
+        
+        toYaml(primitiveActionRepository, "/Volumes/DATA/Temp/primitiveActionRepository.yml");
         
         
-        QoR qoR = new QoR();
-        QoRModel qoRModel = qoR.sampleQoRModel();
-        toYaml(qoRModel, "/Volumes/DATA/Temp/qor_xml.yml");
+//        QoR qoR = new QoR();
+//        QoRModel qoRModel = qoR.sampleQoRModel();
+//        toYaml(qoRModel, "/Volumes/DATA/Temp/qor_xml.yml");
         
     }
     

@@ -12,6 +12,8 @@ import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControl;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
@@ -29,9 +31,9 @@ public class PrimitiveActionRepositoryGenerator {
 
         List<MonitoringAction> listOfMonitoringActions = getMonitoringActionData();
         List<AdjustmentAction> listOfControlActions = getControlActionData();
-
+        List<ResourceControl> listOfResourceControls = getResourceControlData();
         PrimitiveActionMetadata primitiveActionRepository
-                = new PrimitiveActionMetadata(listOfControlActions, listOfMonitoringActions);
+                = new PrimitiveActionMetadata(listOfControlActions, listOfMonitoringActions, listOfResourceControls);
 
         return primitiveActionRepository;
     }
@@ -87,6 +89,20 @@ public class PrimitiveActionRepositoryGenerator {
 
         return listOfControlActions;
     }
+    
+    private List<ResourceControl> getResourceControlData() {
+        
+        
+        List<ResourceControl> listResourceCotrols = new ArrayList<ResourceControl>();
+        
+        List<ResourceControlStrategy> listOfResourceControlStrategys = new ArrayList<ResourceControlStrategy>();
+        listOfResourceControlStrategys.add(resourceControlStrategy());
+        ResourceControl rc = new ResourceControl("throughput", listOfResourceControlStrategys);
+        
+        listResourceCotrols.add(rc);
+                
+         return listResourceCotrols;
+    } 
 
     /////////////////////////////
     //
@@ -336,19 +352,19 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c1 = new MetricCondition(associatedQoRMetric, "c1", 0, 75);
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 91, 100);
-
-        AdjustmentCase transition1 = new AdjustmentCase(c1, c3, listOfParameters);
-        AdjustmentCase transition2 = new AdjustmentCase(c2, c3, listOfParameters);
+    
+        AdjustmentCase transition1 = new AdjustmentCase( c3, listOfParameters);
+        AdjustmentCase transition2 = new AdjustmentCase( c3, listOfParameters);
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
         listOfTransitions.add(transition2);
-
+      
+        
         AdjustmentAction controlAction = new AdjustmentAction(
                 controlActionID,
                 controlActionName,
                 artifact,
-                costPerHour,
                 associatedQoRMetric,
                 listOfPrerequisiteActionIDs,
                 listOfTransitions);
@@ -386,8 +402,8 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 91, 100);
 
-        AdjustmentCase transition1 = new AdjustmentCase(c1, c3, listOfParameters);
-        AdjustmentCase transition2 = new AdjustmentCase(c2, c3, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase(c3, listOfParameters);
+        AdjustmentCase transition2 = new AdjustmentCase(c3, listOfParameters);
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
@@ -397,7 +413,6 @@ public class PrimitiveActionRepositoryGenerator {
                 controlActionID,
                 controlActionName,
                 artifact,
-                costPerHour,
                 associatedQoRMetric,
                 listOfPrerequisiteActionIDs,
                 listOfTransitions);
@@ -433,9 +448,9 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 0.5, 1.19);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 1.2, Double.MAX_VALUE);
 
-        AdjustmentCase transition1 = new AdjustmentCase(c1, c2, listOfParameters);
-        AdjustmentCase transition2 = new AdjustmentCase(c2, c3, listOfParameters);
-        AdjustmentCase transition3 = new AdjustmentCase(c3, c1, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase(c2, listOfParameters);
+        AdjustmentCase transition2 = new AdjustmentCase(c3, listOfParameters);
+        AdjustmentCase transition3 = new AdjustmentCase(c1, listOfParameters);
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
@@ -446,7 +461,6 @@ public class PrimitiveActionRepositoryGenerator {
                 controlActionID,
                 controlActionName,
                 artifact,
-                costPerHour,
                 associatedQoRMetric,
                 listOfPrerequisiteActionIDs,
                 listOfTransitions);
@@ -482,8 +496,8 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 91, 100);
 
-        AdjustmentCase transition1 = new AdjustmentCase(c1, c3, listOfParameters);
-        AdjustmentCase transition2 = new AdjustmentCase(c2, c3, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase( c3, listOfParameters);
+        AdjustmentCase transition2 = new AdjustmentCase(c3, listOfParameters);
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
@@ -493,7 +507,6 @@ public class PrimitiveActionRepositoryGenerator {
                 controlActionID,
                 controlActionName,
                 artifact,
-                costPerHour,
                 associatedQoRMetric,
                 listOfPrerequisiteActionIDs,
                 listOfTransitions);
@@ -528,8 +541,8 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 91, 100);
 
-        AdjustmentCase transition1 = new AdjustmentCase(c1, c3, listOfParameters);
-        AdjustmentCase transition2 = new AdjustmentCase(c2, c3, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase( c3, listOfParameters);
+        AdjustmentCase transition2 = new AdjustmentCase(c3, listOfParameters);
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
@@ -539,7 +552,7 @@ public class PrimitiveActionRepositoryGenerator {
                 controlActionID,
                 controlActionName,
                 artifact,
-                costPerHour,
+ 
                 associatedQoRMetric,
                 listOfPrerequisiteActionIDs,
                 listOfTransitions);
@@ -578,9 +591,9 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 0.5, 1.19);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 1.2, Double.MAX_VALUE);
 
-        AdjustmentCase transition1 = new AdjustmentCase(c1, c2, listOfParameters);
-        AdjustmentCase transition2 = new AdjustmentCase(c2, c3, listOfParameters);
-        AdjustmentCase transition3 = new AdjustmentCase(c3, c1, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase(c2, listOfParameters);
+        AdjustmentCase transition2 = new AdjustmentCase(c3, listOfParameters);
+        AdjustmentCase transition3 = new AdjustmentCase( c1, listOfParameters);
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
@@ -591,7 +604,6 @@ public class PrimitiveActionRepositoryGenerator {
                 controlActionID,
                 controlActionName,
                 artifact,
-                costPerHour,
                 associatedQoRMetric,
                 listOfPrerequisiteActionIDs,
                 listOfTransitions);
@@ -599,5 +611,25 @@ public class PrimitiveActionRepositoryGenerator {
         return controlAction;
 
     }
+    
+    
+    /////////////////////////////
+    //
+    //
+    //  Resource Controls 
+    //
+    //
+    /////////////////////////////
 
+    
+    private ResourceControlStrategy resourceControlStrategy() {
+       
+        MetricCondition condition_in = new MetricCondition("cpuUsage", "co_1", 0, 15);
+        MetricCondition condition_out = new MetricCondition("cpuUsage", "co_2", 80, 100);
+        
+        ResourceControlStrategy resourceControlStrategy = new ResourceControlStrategy(condition_in, condition_out, 2500);
+        return resourceControlStrategy;
+        
+        
+    }
 }

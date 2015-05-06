@@ -24,14 +24,18 @@ public class MonitoringProcess {
     
     @XmlElement(name = "listOfMonitoringActions", required = true)
     List<MonitoringAction> listOfMonitoringActions;
+    
+    @XmlElement(name = "directedAcyclicalGraph", required = true)
+    DirectedAcyclicalGraph directedAcyclicalGraph;
+    
 
     public MonitoringProcess() {
     }
 
-    public MonitoringProcess(List<MonitoringAction> listOfMonitoringActions) {
+    public MonitoringProcess(List<MonitoringAction> listOfMonitoringActions, DirectedAcyclicalGraph directedAcyclicalGraph) {
         this.listOfMonitoringActions = listOfMonitoringActions;
+        this.directedAcyclicalGraph = directedAcyclicalGraph;
     }
-    
 
     public List<MonitoringAction> getListOfMonitoringActions() {
         return listOfMonitoringActions;
@@ -40,6 +44,17 @@ public class MonitoringProcess {
     public void setListOfMonitoringActions(List<MonitoringAction> listOfMonitoringActions) {
         this.listOfMonitoringActions = listOfMonitoringActions;
     }
+
+    public DirectedAcyclicalGraph getDirectedAcyclicalGraph() {
+        return directedAcyclicalGraph;
+    }
+
+    public void setDirectedAcyclicalGraph(DirectedAcyclicalGraph directedAcyclicalGraph) {
+        this.directedAcyclicalGraph = directedAcyclicalGraph;
+    }
+
+    
+    
 
     
     

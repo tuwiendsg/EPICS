@@ -24,12 +24,12 @@ public class ElasticProcess {
     MonitoringProcess monitoringProcess;
     
     @XmlElement(name = "listOfControlProcesses", required = true)
-    List<ControlProcess> listOfControlProcesses;
+    List<AdjustmentProcess> listOfControlProcesses;
 
     public ElasticProcess() {
     }
 
-    public ElasticProcess(MonitoringProcess monitoringProcess, List<ControlProcess> listOfControlProcesses) {
+    public ElasticProcess(MonitoringProcess monitoringProcess, List<AdjustmentProcess> listOfControlProcesses) {
         this.monitoringProcess = monitoringProcess;
         this.listOfControlProcesses = listOfControlProcesses;
     }
@@ -42,11 +42,11 @@ public class ElasticProcess {
         this.monitoringProcess = monitoringProcess;
     }
 
-    public List<ControlProcess> getListOfControlProcesses() {
+    public List<AdjustmentProcess> getListOfControlProcesses() {
         return listOfControlProcesses;
     }
 
-    public void setListOfControlProcesses(List<ControlProcess> listOfControlProcesses) {
+    public void setListOfControlProcesses(List<AdjustmentProcess> listOfControlProcesses) {
         this.listOfControlProcesses = listOfControlProcesses;
     }
 

@@ -6,37 +6,19 @@
 package at.ac.tuwien.dsg.depic.depictool.generator;
 
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
-import at.ac.tuwien.dsg.depic.common.entity.runtime.DeployAction;
-import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
-import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticServices;
-import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ControlProcess;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
-import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
 
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
+import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
+
+import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
+
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
-import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
-import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
-import at.ac.tuwien.dsg.depic.depictool.connector.ComotConnector;
-import at.ac.tuwien.dsg.depic.depictool.connector.ElasticServiceMonitor;
 
 
-import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManager;
-import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 
 
-import at.ac.tuwien.dsg.depic.depictool.utils.ZipUtils;
 
-import java.util.List;
-
-import java.util.logging.Level;
-import javax.xml.bind.JAXBException;
 
 /**
  *
@@ -47,7 +29,6 @@ public class Generator {
     DataAnalyticsFunction daf;
     QoRModel qorModel;
     PrimitiveActionMetadata primitiveActionRepository;
-      
     ElasticDataAsset elasticDataAsset;
     String eDaaSName;
     DBType dbType;
@@ -66,7 +47,9 @@ public class Generator {
 
     public void startGenerator() {
         long t1 = System.currentTimeMillis();
-     //   ElasticDataAsset elasticDataAsset = generateElasticityProcesses();
+        ElasticProcessesGenerator elasticProcessesGenerator = new ElasticProcessesGenerator();
+        
+        ElasticDataAsset elasticDataAsset = elasticProcessesGenerator.generateElasticProcesses();
         long t2 = System.currentTimeMillis();
         //generateElasticDaaS();
         
@@ -86,6 +69,10 @@ public class Generator {
        
     
     }
+    
+    
+    
+    
 //
 //    public void prepareDeployment(ElasticDataAsset elasticDataAsset) {
 //
@@ -194,42 +181,8 @@ public class Generator {
 //
 //    }
 //
-//    private ElasticDataAsset generateElasticityProcesses() {
-//        Logger.logInfo("Start generate Elasticity Processes");
-//        Logger.logInfo("eDaaS: " + eDaaSName);
-//        Logger.logInfo("qor metrics: " + qorModel.getListOfMetrics().get(0).getName());
-//        Logger.logInfo("metric process: " + elasticityProcessConfiguration.getListOfMetricElasticityProcesses().get(0).getMetricName());
-//
-//        ElasticityProcessesGenerator elasticityProcessGenerator = new ElasticityProcessesGenerator(qorModel, elasticityProcessConfiguration);
-//        MonitoringProcess monitorProcess = elasticityProcessGenerator.generateMonitorProcess();
-//        List<ElasticState> initialElasticStateSet = elasticityProcessGenerator.generateSetOfInitialElasticState();
-//        
-//        Logger logger = new Logger();
-//        Logger.logInfo("Inital eState Set");
-//        logger.logElasticState(initialElasticStateSet);
-//        
-//        
-//        List<ElasticState> finalElasticStateSet = elasticityProcessGenerator.generateSetOfFinalElasticState(initialElasticStateSet);
-//        Logger.logInfo("");
-//        Logger.logInfo("Final eState Set");
-//        logger.logElasticState(finalElasticStateSet);
-//        
-//        ElasticStateSet elasticStateSet = new ElasticStateSet(initialElasticStateSet, finalElasticStateSet);
-//        
-//        List<ControlProcess> listOfControlProcesses = elasticityProcessGenerator.generateControlProcesses(initialElasticStateSet, finalElasticStateSet);
-//        ElasticProcess elasticityProcesses = new ElasticProcess(monitorProcess, listOfControlProcesses);
-//
-//        ElasticDataAsset elasticDataAsset = new ElasticDataAsset(eDaaSName,dbType, elasticityProcesses, elasticStateSet);
-//        //log
-//       
-//        
-//        logger.logMonitorProcesses(monitorProcess);
-//        logger.logControlProcesses(listOfControlProcesses);
-//
-//        return elasticDataAsset;
-//
-//    }
-//
+    
+
 
 
 }

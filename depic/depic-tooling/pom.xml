@@ -95,19 +95,19 @@
     
         <dependency>
             <groupId>at.ac.tuwien.dsg.comot</groupId>
-            <artifactId>comot-platform</artifactId>
+            <artifactId>comot-fluent-platform</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>at.ac.tuwien.dsg.comot</groupId>
-            <artifactId>comot-client</artifactId>
+            <artifactId>comot-fluent-client</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>at.ac.tuwien.dsg.comot</groupId>
-            <artifactId>comot-common</artifactId>
+            <artifactId>comot-fluent-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         
