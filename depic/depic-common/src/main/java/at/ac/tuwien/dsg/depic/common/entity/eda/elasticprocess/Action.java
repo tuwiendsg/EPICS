@@ -5,6 +5,7 @@
  */
 package at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess;
 
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -21,6 +22,9 @@ public class Action {
     @XmlElement(name = "actionID")
     String actionID;
     
+    @XmlElement(name = "actionName")
+    String actionName;
+    
     @XmlElement(name = "incomming")
     String incomming;
     
@@ -30,9 +34,11 @@ public class Action {
     public Action() {
     }
 
-    public Action(String actionID) {
+    public Action(String actionID, String actionName) {
         this.actionID = actionID;
+        this.actionName = actionName;
     }
+
     
     
 
@@ -58,6 +64,14 @@ public class Action {
 
     public void setOutgoing(String outgoing) {
         this.outgoing = outgoing;
+    }
+
+    public String getActionName() {
+        return actionName;
+    }
+
+    public void setActionName(String actionName) {
+        this.actionName = actionName;
     }
     
     

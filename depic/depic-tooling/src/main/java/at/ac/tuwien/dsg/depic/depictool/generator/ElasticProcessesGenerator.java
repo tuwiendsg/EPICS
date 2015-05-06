@@ -3,9 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package at.ac.tuwien.dsg.depic.depictool.generator;
-
 
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
@@ -19,6 +17,7 @@ import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DirectedAcyclical
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase;
 
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
@@ -44,26 +43,23 @@ public class ElasticProcessesGenerator {
     DataAnalyticsFunction daf;
     QoRModel qorModel;
     PrimitiveActionMetadata primitiveActionRepository;
-    
-    
+
     public ElasticProcessesGenerator() {
-       // config();
+        // config();
     }
 
     public ElasticProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository) {
         this.daf = daf;
         this.qorModel = qorModel;
         this.primitiveActionRepository = primitiveActionRepository;
-       // config();
+        // config();
     }
-    
+
     public ElasticDataAsset generateElasticProcesses() {
         Logger.logInfo("Start generate Elastic Processes ... ");
-      
+
         MonitoringProcess monitorProcess = generateMonitoringProcess();
-        
-        
-        
+
 //   List<ElasticState> initialElasticStateSet = elasticityProcessGenerator.generateSetOfInitialElasticState();
 //        
 //        Logger logger = new Logger();
@@ -91,314 +87,509 @@ public class ElasticProcessesGenerator {
 //        return elasticDataAsset;
         return null;
     }
-    
 
-
-    
     ///////////////////////////////////////
     ///                                 ///
     /// Monitoring Process              ///
     ///                                 ///
     ///////////////////////////////////////
-    
     private MonitoringProcess generateMonitoringProcess() {
 
         List<MonitoringAction> listOfMonitoringActions = new ArrayList<MonitoringAction>();
-        
+
         List<QoRMetric> listOfQoRMetrics = qorModel.getListOfMetrics();
-        
+
         for (QoRMetric metric : listOfQoRMetrics) {
             String qorMetricName = metric.getName();
             MonitoringAction monitoringAction = findCorrespondingMonitoringActionFromQoRMetric(qorMetricName);
             listOfMonitoringActions.add(monitoringAction);
         }
-        
 
         MonitoringProcess monitorProcess = parallelizeMonitoringActions(listOfMonitoringActions);
 
         return monitorProcess;
     }
-    
-    private MonitoringAction findCorrespondingMonitoringActionFromQoRMetric(String qorMetricName){
+
+    private MonitoringAction findCorrespondingMonitoringActionFromQoRMetric(String qorMetricName) {
         List<MonitoringAction> listOfMonitoringActions = primitiveActionRepository.getListOfMonitoringActions();
-        
+
         MonitoringAction foundMonitoringAction = null;
-        for (MonitoringAction ma : listOfMonitoringActions){
-            if (qorMetricName.equals(ma.getAssociatedQoRMetric())){
+        for (MonitoringAction ma : listOfMonitoringActions) {
+            if (qorMetricName.equals(ma.getAssociatedQoRMetric())) {
                 foundMonitoringAction = copyMonitoringActionInstance(ma);
             }
         }
-        
+
         return foundMonitoringAction;
     }
-    
-    private MonitoringAction copyMonitoringActionInstance(MonitoringAction ma){
-        
+
+    private MonitoringAction copyMonitoringActionInstance(MonitoringAction ma) {
+
         return ma;
     }
-    
-    private MonitoringProcess parallelizeMonitoringActions(List<MonitoringAction> listOfMonitoringActions){
-        
-        List<Action> listOfAction = new ArrayList<Action>();       
-        
-        for (MonitoringAction ma : listOfMonitoringActions){
-            Action action = new Action();
+
+    private MonitoringProcess parallelizeMonitoringActions(List<MonitoringAction> listOfMonitoringActions) {
+
+        List<Action> listOfAction = new ArrayList<Action>();
+
+        for (MonitoringAction ma : listOfMonitoringActions) {
+            
             String actionID = getUDID();
             ma.setMonitorActionID(actionID);
-            action.setActionID(actionID);
+          
+            Action action = new Action(actionID, ma.getMonitoringActionName());
             listOfAction.add(action);
         }
-        
+
         String parallelGateway_in_id = getUDID();
         String parallelGateway_out_id = getUDID();
         List<String> listOfIncommings = new ArrayList<String>();
         List<String> listOfOutgoings = new ArrayList<String>();
-        
+
         for (Action action : listOfAction) {
             action.setIncomming(parallelGateway_in_id);
             action.setOutgoing(parallelGateway_out_id);
         }
-        
+
         ParallelGateway pg_in = new ParallelGateway(parallelGateway_in_id, null, listOfOutgoings);
         ParallelGateway pg_out = new ParallelGateway(parallelGateway_out_id, listOfIncommings, null);
-        
+
         List<ParallelGateway> listOfParallelGateways = new ArrayList<ParallelGateway>();
         listOfParallelGateways.add(pg_in);
         listOfParallelGateways.add(pg_out);
-        
+
         DirectedAcyclicalGraph dag = new DirectedAcyclicalGraph();
         dag.setListOfActions(listOfAction);
         dag.setListOfParallelGateways(listOfParallelGateways);
-        
+
         MonitoringProcess monitoringProcess = new MonitoringProcess(listOfMonitoringActions, dag);
-        
+
         return monitoringProcess;
     }
-    
-    private String getUDID(){
+
+    private String getUDID() {
         UUID actionID = UUID.randomUUID();
         return actionID.toString();
     }
-    
-    
-    
-    
-    
-    
+
+    ///////////////////////////////////////
+    ///                                 ///
+    /// Final EState Set                ///
+    ///                                 ///
+    ///////////////////////////////////////
+    public List<ElasticState> generateFinalElasticStateSet(List<ElasticState> listOfInitialElasticStates) {
+
+        List<ElasticState> listOfFinalElasticStates = new ArrayList<ElasticState>();
+        List<QElement> listOfQElements = qorModel.getListOfQElements();
+
+        for (QElement qElement : listOfQElements) {
+            List<ElasticState> listOfFinalElasticState_qelement = decomposeQElement(qElement);
+            listOfFinalElasticStates.addAll(listOfFinalElasticState_qelement);
+        }
+        return listOfFinalElasticStates;
+    }
+
+    private List<ElasticState> decomposeQElement(QElement qElement) {
+
+        //List<String> listOfRangeID =  qElement.getListOfRanges();
+        List<QoRMetric> listOfQoRMetrics = qorModel.getListOfMetrics();
+
+        List<List> listOfConditionSet = new ArrayList<List>();
+
+        for (QoRMetric qorMetric : listOfQoRMetrics) {
+            List<MetricCondition> listOfConditions = findEstimatedResultForQoRMetric(qorMetric);
+            Range r = findMatchingRange(qElement, qorMetric);
+
+            List<MetricCondition> unitConditions = new ArrayList<MetricCondition>();
+
+            for (MetricCondition condition : listOfConditions) {
+                if (condition.getLowerBound() >= r.getFromValue() && condition.getUpperBound() <= r.getToValue()) {
+                    unitConditions.add(condition);
+                }
+            }
+
+            listOfConditionSet.add(unitConditions);
+        }
+
+        List<ElasticState> listOfFinalElasticStates = new ArrayList<ElasticState>();
+
+        int noOfMetric = listOfConditionSet.size();
+        List<int[]> combinations = new ArrayList<int[]>();
+
+        for (int k = 0; k < 1000; k++) {
+            int[] conditionIndice = new int[noOfMetric];
+
+            for (int i = 0; i < noOfMetric; i++) {
+
+                List<MetricCondition> conditionMetric_i = listOfConditionSet.get(i);
+                int noOfConditions = conditionMetric_i.size();
+                int conditionIndex = randomInt(0, noOfConditions);
+                conditionIndice[i] = conditionIndex;
+
+            }
+
+            if (!isDuplicated(combinations, conditionIndice)) {
+                combinations.add(conditionIndice);
+            }
+
+        }
+
+        for (int[] conbination : combinations) {
+
+            List<MetricCondition> eStateConditions = new ArrayList<MetricCondition>();
+            String eStateID = "";
+
+            for (int i = 0; i < conbination.length; i++) {
+
+                List<MetricCondition> conditionMetric_i = listOfConditionSet.get(i);
+                MetricCondition metricCondition = conditionMetric_i.get(conbination[i]);
+                MetricCondition newMetricCondition = new MetricCondition(metricCondition.getMetricName(), metricCondition.getConditionID(), metricCondition.getLowerBound(), metricCondition.getUpperBound());
+                eStateConditions.add(newMetricCondition);
+                eStateID = eStateID + metricCondition.getConditionID() + ";";
+
+            }
+
+            ElasticState elasticState = new ElasticState(eStateID, eStateConditions);
+            listOfFinalElasticStates.add(elasticState);
+        }
+
+        return listOfFinalElasticStates;
+
+    }
+
+    private List<MetricCondition> findEstimatedResultForQoRMetric(QoRMetric qorMetric) {
+        List<AdjustmentAction> listOfAdjustmentActions = primitiveActionRepository.getListOfAdjustmentActions();
+
+        List<AdjustmentCase> listOfAdjustmentCases = null;
+
+        for (AdjustmentAction adjustmentAction : listOfAdjustmentActions) {
+            if (qorMetric.getName().equals(adjustmentAction.getAssociatedQoRMetric())) {
+                listOfAdjustmentCases = adjustmentAction.getListOfAdjustmentCases();
+                break;
+            }
+        }
+
+        List<MetricCondition> listOfConditions = new ArrayList<MetricCondition>();
+
+        for (AdjustmentCase adjustmentCase : listOfAdjustmentCases) {
+            MetricCondition condition = adjustmentCase.getEstimatedResult();
+            listOfConditions.add(condition);
+        }
+
+        return listOfConditions;
+    }
+
+    private Range findMatchingRange(QElement qElement, QoRMetric qorMetric) {
+
+        Range foundRange = null;
+
+        List<String> listOfRangeIDs_qelement = qElement.getListOfRanges();
+
+        List<Range> listOfPreDefinedRange_qormetric = qorMetric.getListOfRanges();
+
+        for (Range range : listOfPreDefinedRange_qormetric) {
+            for (String rangeID : listOfRangeIDs_qelement) {
+                if (range.getRangeID().equals(rangeID)) {
+                    foundRange = new Range(rangeID, range.getFromValue(), range.getToValue());
+                }
+            }
+        }
+
+        return foundRange;
+
+    }
+
+    private boolean isDuplicated(List<int[]> combinations, int[] conditionIndice) {
+
+        boolean rs = false;
+
+        for (int i = 0; i < combinations.size(); i++) {
+            int[] condition_i = combinations.get(i);
+
+            String conditionString_i = "";
+            String comparedCondition = "";
+
+            for (int j = 0; j < condition_i.length; j++) {
+                conditionString_i = conditionString_i + String.valueOf(condition_i[j]) + ";";
+                comparedCondition = comparedCondition + String.valueOf(conditionIndice[j]) + ";";
+            }
+
+            if (conditionString_i.equals(comparedCondition)) {
+                rs = true;
+                break;
+            }
+        }
+
+        return rs;
+    }
+
+    private int randomInt(int min, int max) {
+        Random random = new Random();
+        int randomNumber = random.nextInt(max - min) + min;
+        return randomNumber;
+    }
+
     ///////////////////////////////////////
     ///                                 ///
     /// Adjustment Process              ///
     ///                                 ///
     ///////////////////////////////////////
+    public List<AdjustmentProcess> generateAdjustmentProcesses(List<ElasticState> listOfFinalElasticStates) {
+
+        List<AdjustmentProcess> listOfAdjustmentProcesses = new ArrayList<AdjustmentProcess>();
+
+        for (ElasticState elasticState : listOfFinalElasticStates) {
+            List<MetricCondition> listOfConditions = elasticState.getListOfConditions();
+
+            List<AdjustmentAction> listOfAdjustmentActions = new ArrayList<AdjustmentAction>();
+            for (MetricCondition metricCondition : listOfConditions) {
+                AdjustmentAction adjustmentAction = findAdjustmentAction(metricCondition);
+                listOfAdjustmentActions.add(adjustmentAction);
+            }
+
+            AdjustmentProcess adjustmentProcess = new AdjustmentProcess(elasticState, listOfAdjustmentActions, null);
+            buildWorkflowForAdjustmentProcess(adjustmentProcess);
+            listOfAdjustmentProcesses.add(adjustmentProcess);
+
+        }
+
+        return listOfAdjustmentProcesses;
+    }
+
+    private AdjustmentAction findAdjustmentAction(MetricCondition metricCondition) {
+        List<AdjustmentAction> listOfAdjustmentActions = primitiveActionRepository.getListOfAdjustmentActions();
+
+        AdjustmentAction foundAdjustmentAction = null;
+        for (AdjustmentAction adjustmentAction : listOfAdjustmentActions) {
+            if (metricCondition.getMetricName().equals(adjustmentAction.getAssociatedQoRMetric())) {
+                List<AdjustmentCase> listOfAdjustmentCases = adjustmentAction.getListOfAdjustmentCases();
+
+                for (AdjustmentCase adjustmentCase : listOfAdjustmentCases) {
+                    if (adjustmentCase.getEstimatedResult().getLowerBound() == metricCondition.getLowerBound()
+                            && adjustmentCase.getEstimatedResult().getUpperBound() == metricCondition.getUpperBound()) {
+
+                        AdjustmentCase foundAdjustmentCase = new AdjustmentCase(
+                                adjustmentCase.getEstimatedResult(),
+                                adjustmentCase.getListOfParameters());
+
+                        List<AdjustmentCase> listOfFoundAdjustmentCases = new ArrayList<AdjustmentCase>();
+                        listOfFoundAdjustmentCases.add(foundAdjustmentCase);
+
+                        foundAdjustmentAction = new AdjustmentAction(
+                                adjustmentAction.getActionID(),
+                                adjustmentAction.getActionName(),
+                                adjustmentAction.getArtifact(),
+                                adjustmentAction.getAssociatedQoRMetric(),
+                                adjustmentAction.getListOfPrerequisiteActionIDs(),
+                                listOfFoundAdjustmentCases);
+
+                       
+                    }
+
+                }
+
+                break;
+            }
+        }
+
+        return foundAdjustmentAction;
+
+    }
+
+    private void buildWorkflowForAdjustmentProcess(AdjustmentProcess adjustmentProcess) {
+
+        Logger.logInfo("BUILDING WORKFLOW FOR CONTROL PROCESS ................ ");
+
+        int numberOfActionConnection = 0;
+
+        
+        List<AdjustmentAction> listOfAdjustmentActions = adjustmentProcess.getListOfAdjustmentActions();
+        List<Action> listOfActions = new ArrayList<Action>();
+     
+        List<ParallelGateway> listOfParallelGateways = new ArrayList<ParallelGateway>();
+
+        for (AdjustmentAction adjustmentAction : listOfAdjustmentActions) {
+            String actionID = getUDID();
+            adjustmentAction.setActionID(actionID);
+            Action action = new Action(actionID, adjustmentAction.getActionName());
+            listOfActions.add(action);
+        }
+
+        for (Action action : listOfActions) {
+
+          
+            List<String> listOfActionDependencies = findDependencyActions(action);
+
+            Logger.logInfo("No of Dependency Actions: " + listOfActionDependencies.size());
+            if (listOfActionDependencies.size() > 1) {
+
+                ParallelGateway parallelGateway = new ParallelGateway();
+                List<String> incomingList = new ArrayList<String>();
+                List<String> outgoingList = new ArrayList<String>();
+
+                outgoingList.add(action.getActionID());
+
+                UUID parallelGatewayID = UUID.randomUUID();
+                parallelGateway.setGatewayID(parallelGatewayID.toString());
+                action.setIncomming(parallelGateway.getGatewayID());
+                numberOfActionConnection++;
+
+                Logger.logInfo("NEW Parallel Gateway ID: " + parallelGateway.getGatewayID());
+                Logger.logInfo("PG set outgoing ID : " + action.getActionID());
+
+                for (String actionDependency : listOfActionDependencies) {
+                    
+                    int prerequisiteActionIndex = findActionIndex(listOfActions, actionDependency);
+                    Action prerequisiteAction = listOfActions.get(prerequisiteActionIndex);
+
+                    Logger.logInfo("ActionDependency Name: " + prerequisiteAction.getActionName());
+                    Logger.logInfo("ActionDependency ID: " + prerequisiteAction.getActionID());
+
+                    prerequisiteAction.setOutgoing(parallelGateway.getGatewayID());
+                    incomingList.add(prerequisiteAction.getActionID());
+                    numberOfActionConnection++;
+
+                }
+
+                parallelGateway.setIncomming(incomingList);
+                parallelGateway.setOutgoing(outgoingList);
+                listOfParallelGateways.add(parallelGateway);
+
+            } else if (listOfActionDependencies.size() == 1) {
+                String actionDependency = listOfActionDependencies.get(0);
+                int prerequisiteActionIndex = findActionIndex(listOfActions, actionDependency);
+                Action prerequisiteAction = listOfActions.get(prerequisiteActionIndex);
+
+                action.setIncomming(prerequisiteAction.getActionID());
+                prerequisiteAction.setOutgoing(action.getActionID());
+                numberOfActionConnection++;
+
+            }
+
+        }
+
+        // MAKE START ACTIVITY
+        List<Action> nullIncommingAdjustmentActions = new ArrayList<Action>();
+        List<ParallelGateway> nullIncommingParallelGateways = new ArrayList<ParallelGateway>();
+
+        for (Action ca : listOfActions) {
+            if (ca.getIncomming() == null) {
+                nullIncommingAdjustmentActions.add(ca);
+            }
+
+        }
+
+        for (ParallelGateway pg: listOfParallelGateways){
+            if(pg.getIncomming().isEmpty()){
+                nullIncommingParallelGateways.add(pg);
+            }
+        }
+        
+        if (nullIncommingAdjustmentActions.size() >= 2) {
+            List<String> startPGIncomingList = new ArrayList<String>();
+            List<String> startPGOutgoingList = new ArrayList<String>();
+            ParallelGateway startPG = new ParallelGateway();
+
+            UUID startParallelGatewayID = UUID.randomUUID();
+            startPG.setGatewayID(startParallelGatewayID.toString());
+
+            for (Action ca : nullIncommingAdjustmentActions) {
+                startPGOutgoingList.add(ca.getActionID());
+                ca.setIncomming(startPG.getGatewayID());
+                numberOfActionConnection++;
+            }
+
+        for (ParallelGateway pg: nullIncommingParallelGateways){
+            startPGOutgoingList.add(pg.getGatewayID());
+            pg.getIncomming().add(startPG.getGatewayID());
+        }
+            startPG.setIncomming(startPGIncomingList);
+            startPG.setOutgoing(startPGOutgoingList);
+            listOfParallelGateways.add(startPG);
+        }
+
+        // MAKE END ACTIVITY
+        List<Action> nullOutgoingAdjustmentActions = new ArrayList<Action>();
+         List<ParallelGateway> nullOutgoingParallelGateways = new ArrayList<ParallelGateway>();
+        for (Action ca : listOfActions) {
+            if (ca.getOutgoing() == null) {
+                nullOutgoingAdjustmentActions.add(ca);
+            }
+
+        }
+
+        for (ParallelGateway pg : listOfParallelGateways) {
+            if (pg.getOutgoing().isEmpty()) {
+                nullOutgoingParallelGateways.add(pg);
+            }
+        }
+        if (nullOutgoingAdjustmentActions.size() >= 2) {
+
+            List<String> endPGIncomingList = new ArrayList<String>();
+            List<String> endPGOutgoingList = new ArrayList<String>();
+            ParallelGateway endPG = new ParallelGateway();
+
+            UUID endParallelGatewayID = UUID.randomUUID();
+            endPG.setGatewayID(endParallelGatewayID.toString());
+
+            for (Action ca : nullOutgoingAdjustmentActions) {
+                endPGIncomingList.add(ca.getActionID());
+                ca.setOutgoing(endPG.getGatewayID());
+                numberOfActionConnection++;
+            }
+
+        for (ParallelGateway pg: nullOutgoingParallelGateways){
+            endPGIncomingList.add(pg.getGatewayID());
+            pg.getOutgoing().add(endPG.getGatewayID());
+        }
+            endPG.setIncomming(endPGIncomingList);
+            endPG.setOutgoing(endPGOutgoingList);
+            listOfParallelGateways.add(endPG);
+        }
+
+        
+        DirectedAcyclicalGraph dag = new DirectedAcyclicalGraph();
+        dag.setListOfActions(listOfActions);
+        dag.setListOfParallelGateways(listOfParallelGateways);
+        numberOfActionConnection += 2;
+        int noOfActions = listOfActions.size();
+
+        Logger.logInfo("no_of_connection: " + numberOfActionConnection);
+        Logger.logInfo("no_of_action: " + noOfActions);
+   
+    }
+
     
+        private int findActionIndex(List<Action> listOfActions,String prerequisiteAction){
+        
+        int index=0;
+        
+        for (Action ca : listOfActions){
+            if (ca.getActionName().equals(prerequisiteAction)){
+                index = listOfActions.indexOf(ca);
+                break;
+            }
+            
+        }
+        
+        return index;
+    }
     
-//    public List<ElasticState> generateFinalElasticStateSet(List<ElasticState> listOfInitialElasticStates) {
-//
-//        List<ElasticState> listOfFinalElasticStates = new ArrayList<ElasticState>();
-//        List<QElement> listOfQElements = qorModel.getListOfQElements();
-//        for (QElement qElement : listOfQElements) {
-//
-//            for (ElasticState elasticState : listOfInitialElasticStates) {
-//
-//                List<MetricCondition> listOfMetricConditions = elasticState.getListOfConditions();
-//
-//                
-//                boolean isMatching = true;
-//
-//                Logger.logInfo("qElement: " + qElement.getqElementID());
-//                
-//                
-//                for (MetricCondition metricCondition : listOfMetricConditions) {
-//
-//                    String metricName = metricCondition.getMetricName();
-//                    Range range = findMatchingRange(qElement, metricName);
-//                    Logger.logInfo("    metric: " + metricName);
-//                    Logger.logInfo("    from range: " + range.getFromValue() + "    to range: " + range.getToValue()) ;
-//                    Logger.logInfo("    condition from: " + metricCondition.getLowerBound() + "    condition to: " + metricCondition.getUpperBound()) ;
-//                    
-//                    if (!((metricCondition.getLowerBound() >= range.getFromValue())
-//                            && (metricCondition.getUpperBound() <= range.getToValue()))) {
-//                        isMatching = false;
-//                        Logger.logInfo("FALSE CASE");
-//                        break;
-//                    }
-//
-//                }
-//
-//                if (isMatching) {
-//                    ElasticState newElasticState = initializeElasticState(elasticState, qElement);
-//                    listOfFinalElasticStates.add(newElasticState);
-//                }
-//
-//            }
-//
-//        }
-//        return listOfFinalElasticStates;
-//    }
-//
-//    public List<ControlProcess> generateAdjustmentProcesses(List<ElasticState> listOfInitialElasticStates, List<ElasticState> listOfFinalElasticStates) {
-//
-//       List<ControlProcess> listOfControlProcesses = new ArrayList<ControlProcess>();
-//        
-//        for (ElasticState elasticState_in : listOfInitialElasticStates) {
-//            for (ElasticState elasticState_fi : listOfFinalElasticStates){
-//                
-//                ControlProcess controlProcess = null;
-//                
-//                if (!elasticState_in.geteStateID().equals(elasticState_fi.geteStateID())){
-//                    controlProcess = findControlProcess(elasticState_in, elasticState_fi);
-//                }
-//
-//                if (controlProcess!=null) {
-//                    listOfControlProcesses.add(controlProcess);
-//                }
-//                
-//                
-//            }
-//            
-//        }
-//
-////        for (ControlProcess controlProcess : listOfControlProcesses) {
-////            sortControlActionOrder(controlProcess);
-////        }
-//        return listOfControlProcesses;
-//    }
-//    
-//    
-//    public void generateResourceControlPlan(){
-//        
-//    }
-////    
-////    public List<ElasticState> generateSetOfInitialElasticState(){
-////        List<QoRMetric> listOfMetrics = qorModel.getListOfMetrics();
-////        List<MetricElasticityProcess> listOfProcessMetric = metricProcess.getListOfMetricElasticityProcesses();
-////        List<List> listOfConditionSet = new ArrayList<List>();
-////        List<ElasticState> listOfInitialElasticStates = new ArrayList<ElasticState>();
-////        
-////       
-////        
-////        for (QoRMetric metric : listOfMetrics){
-////            
-////            String metricName = metric.getName();
-////            MetricElasticityProcess metricProcess = getMetricLElasticityProcessFromMetricName(metricName, listOfProcessMetric);
-////            List<MetricCondition> listOfConditions = metricProcess.getListOfConditions();
-////            listOfConditionSet.add(listOfConditions);
-////
-////        }
-////
-////        int noOfMetric = listOfConditionSet.size();
-////        List<int[]> combinations = new ArrayList<int[]>();
-////
-////        for (int k = 0; k < 1000; k++) {
-////            int[] conditionIndice = new int[noOfMetric];
-////
-////            for (int i = 0; i < noOfMetric; i++) {
-////
-////                List<MetricCondition> conditionMetric_i = listOfConditionSet.get(i);
-////                int noOfConditions = conditionMetric_i.size();
-////                int conditionIndex = randomInt(0, noOfConditions);
-////                conditionIndice[i] = conditionIndex;
-////
-////            }
-////
-////            if (!isDuplicated(combinations, conditionIndice)) {
-////                combinations.add(conditionIndice);
-////            }
-////
-////        }
-////
-////        for (int[] conbination : combinations) {
-////
-////            List<MetricCondition> eStateConditions = new ArrayList<MetricCondition>();
-////            String eStateID = "";
-////
-////            for (int i = 0; i < conbination.length; i++) {
-////
-////                List<MetricCondition> conditionMetric_i = listOfConditionSet.get(i);
-////                MetricCondition metricCondition = conditionMetric_i.get(conbination[i]);
-////                MetricCondition newMetricCondition = new MetricCondition(metricCondition.getMetricName(), metricCondition.getConditionID(), metricCondition.getLowerBound(), metricCondition.getUpperBound());
-////                eStateConditions.add(newMetricCondition);
-////                eStateID = eStateID + metricCondition.getConditionID() + ";";
-////
-////            }
-////
-////            ElasticState elasticState = new ElasticState(eStateID, eStateConditions);
-////            listOfInitialElasticStates.add(elasticState);
-////        }
-////
-////        return listOfInitialElasticStates;
-////    }
-//
-//    
-//    
-//
-//    private ControlProcess findControlProcess(ElasticState elasticState_in, ElasticState elasticState_fi) {
-//
-//        ControlProcess controlProcess = null;
-//        boolean isMovingEStatePossible = true;
-//  
-//        List<ControlAction> listOfControlActions = new ArrayList<ControlAction>(); 
-//        
-//        List<MetricCondition> listOfConditions_in = elasticState_in.getListOfConditions();
-//        List<MetricCondition> listOfConditions_fi = elasticState_fi.getListOfConditions();
-//   
-//        for (MetricCondition metricCondition_in : listOfConditions_in) {
-//
-//            String metricName_in = metricCondition_in.getMetricName();
-//            MetricCondition metricCondition_fi = findMetricConditionByMetricName(metricName_in, listOfConditions_fi);
-//
-//            if (!metricCondition_in.getConditionID().equals(metricCondition_fi.getConditionID())) {
-//
-//                List<ControlAction> controlActions = findControlAction(metricName_in, metricCondition_in, metricCondition_fi);
-//
-//                if (controlActions != null) {
-//                    listOfControlActions.addAll(controlActions);
-//                } else {
-//                    isMovingEStatePossible = false;
-//                }
-//            }
-//        }
-//
-////        
-////        List<MetricRange> listOfMetricRanges_i = qE_i.getListOfMetricRanges();
-////        List<MetricRange> listOfMetricRanges_j = qE_j.getListOfMetricRanges();
-////        
-////        for (MetricRange metricRange_i : listOfMetricRanges_i) {
-////            String metricName_i = metricRange_i.getMetricName();
-////            String rangeVal_i = metricRange_i.getRange();
-////            String rangeVal_j = findRangeValueFromMetricName(metricName_i, listOfMetricRanges_j);
-////            ControlAction controlAction = findControlAction(metricName_i, rangeVal_i, rangeVal_j);
-////
-////            if (controlAction == null && !rangeVal_i.equals(rangeVal_j)) {
-////                listOfControlActions.clear();
-////                break;
-////            }
-////
-////            if (controlAction != null) {
-////                listOfControlActions.add(controlAction);
-////            }
-////        }
-//
-//        if (isMovingEStatePossible) {
-//       
-//            controlProcess = new ControlProcess(elasticState_in, elasticState_fi, listOfControlActions);
-//            buildWorkflowForControlProcess(controlProcess);
-//          
-//        }
-//        
-//        ControlProcess returnCP = null;
-//        
-//        if (controlProcess!=null) {
-//        
-//        returnCP = new ControlProcess(copyElasticState(controlProcess.geteStateID_i()), 
-//                copyElasticState(controlProcess.geteStateID_j()), 
-//                copyListControlAction(controlProcess.getListOfControlActions()));
-//        
-//        returnCP.setListOfParallelGateways(copyParallelGateway(controlProcess.getListOfParallelGateways()));
-//        }
-//        return returnCP;
-//    }
-//    
+    private List<String> findDependencyActions(Action action){
+        
+        List<String> prerequisiteActionNames = new ArrayList<String>();
+        List<AdjustmentAction> listOfAdjustmentActions = primitiveActionRepository.getListOfAdjustmentActions();
+        
+        for (AdjustmentAction adjustmentAction : listOfAdjustmentActions){
+            if (adjustmentAction.getActionName().endsWith(action.getActionName())){
+                prerequisiteActionNames = adjustmentAction.getListOfPrerequisiteActionIDs();
+                break;
+            }
+        }
+        
+        return prerequisiteActionNames;
+    }
+    
 //    private ElasticState copyElasticState(ElasticState eState){
 //        
 //        String eStateID = eState.geteStateID();
@@ -469,344 +660,9 @@ public class ElasticProcessesGenerator {
 //        return nPGList;
 //    }
 //    
-//    private void buildWorkflowForControlProcess(ControlProcess controlProcess){
-//        
-//        Logger.logInfo("BUILDING WORKFLOW FOR CONTROL PROCESS ................ ");
-//        
-//        int numberOfActionConnection = 0;
-//        
-//        List<ControlAction> listOfControlActions =  controlProcess.getListOfControlActions();
-//        
-//        List<ParallelGateway> listOfParallelGateways = new ArrayList<ParallelGateway>();
-//        
-//        
-//        for (ControlAction controlAction : listOfControlActions) {
-//            UUID controlActionID = UUID.randomUUID();
-//            controlAction.setControlActionID(controlActionID.toString());
-//        }
-//        
-//        
-//        
-//        
-//        for (ControlAction controlAction : listOfControlActions) {
-//            
-//            Logger.logInfo("Control Action: " + controlAction.getControlActionName());
-//            Logger.logInfo("Control Action ID: " + controlAction.getControlActionID());
-//            
-//            List<ActionDependency> listOfActionDependencies = findDependencyActionFromName(controlAction.getControlActionName(),listOfControlActions);
-//            
-//            
-//            Logger.logInfo("No of Dependency Actions: " + listOfActionDependencies.size());
-//            if (listOfActionDependencies.size()>1) {
-//                
-//                ParallelGateway parallelGateway = new ParallelGateway();
-//                List<String> incomingList = new ArrayList<String>();
-//                List<String> outgoingList = new ArrayList<String>();
-//                
-//                outgoingList.add(controlAction.getControlActionID());
-//                
-//                UUID parallelGatewayID = UUID.randomUUID();
-//                parallelGateway.setId(parallelGatewayID.toString());
-//                controlAction.setIncomming(parallelGateway.getId());
-//                numberOfActionConnection++;
-//                
-//                Logger.logInfo("NEW Parallel Gateway ID: " + parallelGateway.getId());
-//                Logger.logInfo("PG set outgoing ID : " + controlAction.getControlActionID());
-//                
-//                for (ActionDependency actionDependency : listOfActionDependencies){
-//                    int prerequisiteControlActionIndex = findControlActionIndex(listOfControlActions, actionDependency.getPrerequisiteActionID());
-//                    ControlAction prerequisiteControlAction = listOfControlActions.get(prerequisiteControlActionIndex);
-//                     
-//                    Logger.logInfo("ActionDependency Name: " + prerequisiteControlAction.getControlActionName());
-//                    Logger.logInfo("ActionDependency ID: " + prerequisiteControlAction.getControlActionID());
-//                    
-//                    prerequisiteControlAction.setOutgoing(parallelGateway.getId());
-//                    incomingList.add(prerequisiteControlAction.getControlActionID());
-//                     numberOfActionConnection++;
-//                    
-//                }
-//                
-//                parallelGateway.setIncomming(incomingList);
-//                parallelGateway.setOutgoing(outgoingList);
-//                listOfParallelGateways.add(parallelGateway);
-//              
-//                
-//               
-//                
-//            } else if (listOfActionDependencies.size()==1) {
-//                ActionDependency actionDependency = listOfActionDependencies.get(0);
-//                int prerequisiteControlActionIndex = findControlActionIndex(listOfControlActions, actionDependency.getPrerequisiteActionID());
-//                ControlAction prerequisiteControlAction = listOfControlActions.get(prerequisiteControlActionIndex);
-//                
-//                controlAction.setIncomming(prerequisiteControlAction.getControlActionID());
-//                prerequisiteControlAction.setOutgoing(controlAction.getControlActionID());
-//                numberOfActionConnection++;
-//                
-//            } 
-//            
-//            
-//            
-//            
-//            
-//        }
-//        
-//        // MAKE START ACTIVITY
-//        
-//        List<ControlAction> nullIncommingControlActions = new ArrayList<ControlAction>();
-//       // List<ParallelGateway> nullIncommingParallelGateways = new ArrayList<ParallelGateway>();
-//        
-//        for (ControlAction ca: listOfControlActions){
-//            if (ca.getIncomming()==null){
-//                nullIncommingControlActions.add(ca);
-//            }
-//            
-//        }
-//        
-////        for (ParallelGateway pg: listOfParallelGateways){
-////            if(pg.getIncomming().isEmpty()){
-////                nullIncommingParallelGateways.add(pg);
-////            }
-////        }
-////        
-//        
-//        if (nullIncommingControlActions.size()>=2) {
-//            List<String> startPGIncomingList = new ArrayList<String>();
-//        List<String> startPGOutgoingList = new ArrayList<String>();
-//        ParallelGateway startPG = new ParallelGateway();
-//
-//        UUID startParallelGatewayID = UUID.randomUUID();
-//        startPG.setId(startParallelGatewayID.toString());
-//        
-//        for (ControlAction ca: nullIncommingControlActions){
-//            startPGOutgoingList.add(ca.getControlActionID());
-//            ca.setIncomming(startPG.getId());
-//             numberOfActionConnection++;
-//        }
-//        
-////        for (ParallelGateway pg: nullIncommingParallelGateways){
-////            startPGOutgoingList.add(pg.getId());
-////            pg.getIncomming().add(startPG.getId());
-////        }
-//        
-//        startPG.setIncomming(startPGIncomingList);
-//        startPG.setOutgoing(startPGOutgoingList);
-//        listOfParallelGateways.add(startPG);
-//        }
-//        
-//               // MAKE END ACTIVITY
-//        List<ControlAction> nullOutgoingControlActions = new ArrayList<ControlAction>();
-//       // List<ParallelGateway> nullOutgoingParallelGateways = new ArrayList<ParallelGateway>();
-//        for (ControlAction ca : listOfControlActions) {
-//            if (ca.getOutgoing() == null) {
-//                nullOutgoingControlActions.add(ca);
-//            }
-//
-//        }
-//
-////        for (ParallelGateway pg : listOfParallelGateways) {
-////            if (pg.getOutgoing().isEmpty()) {
-////                nullOutgoingParallelGateways.add(pg);
-////            }
-////        }
-//
-//        if (nullOutgoingControlActions.size()>= 2) {
-//
-//            List<String> endPGIncomingList = new ArrayList<String>();
-//            List<String> endPGOutgoingList = new ArrayList<String>();
-//            ParallelGateway endPG = new ParallelGateway();
-//
-//            UUID endParallelGatewayID = UUID.randomUUID();
-//            endPG.setId(endParallelGatewayID.toString());
-//
-//            for (ControlAction ca : nullOutgoingControlActions) {
-//                endPGIncomingList.add(ca.getControlActionID());
-//                ca.setOutgoing(endPG.getId());
-//                 numberOfActionConnection++;
-//            }
-//        
-////        for (ParallelGateway pg: nullOutgoingParallelGateways){
-////            endPGIncomingList.add(pg.getId());
-////            pg.getOutgoing().add(endPG.getId());
-////        }
-//        
-//        endPG.setIncomming(endPGIncomingList);
-//        endPG.setOutgoing(endPGOutgoingList);
-//        listOfParallelGateways.add(endPG);
-//        }
-//        
-//        
-//        
-//        
-//        
-//        
-//        
-//        
-//        controlProcess.setListOfParallelGateways(listOfParallelGateways);
-//        numberOfActionConnection +=2;
-//        int noOfActions = listOfControlActions.size();
-//        
-//        double designComplexity = (double)numberOfActionConnection/(double)noOfActions;
-//        
-//        Logger.logInfo("no_of_connection: " + numberOfActionConnection);
-//        Logger.logInfo("no_of_action: " + noOfActions);
-//        Logger.logInfo("design_complexity: " + designComplexity);
-//        Logger.logDesignComplexity(designComplexity);
-//    }
-//    
-//    private int findControlActionIndex(List<ControlAction> listOfControlActions,String prerequisiteActionID){
-//        
-//        int index=0;
-//        
-//        for (ControlAction ca : listOfControlActions){
-//            if (ca.getControlActionID().equals(prerequisiteActionID)){
-//                index = listOfControlActions.indexOf(ca);
-//                break;
-//            }
-//            
-//        }
-//        
-//        return index;
-//    }
-//    
-//    private MetricCondition findMetricConditionByMetricName(String metricName, List<MetricCondition> listOfConditions){
-//        MetricCondition rs = null;
-//        
-//        for (MetricCondition condition : listOfConditions){
-//            if (condition.getMetricName().equals(metricName)){
-//                rs = condition;
-//                break;
-//            }
-//            
-//        }
-//        return rs;
-//    }
-//
-//    private void sortControlActionOrder(ControlProcess controlProcess) {
-//
-//        List<ControlAction> listOfActions = controlProcess.getListOfControlActions();
-//        
-//        ElasticProcessRepositoryManager epRepo = new ElasticProcessRepositoryManager();
-//
-//        for (int i=0;i<listOfActions.size();i++) {
-//            ControlAction controlAction_i = listOfActions.get(i);
-//            List<ActionDependency> listOfActionDependencies = epRepo.getActionDependencyDB(controlAction_i.getControlActionName());
-//                    
-//            for (int j=i+1;j<listOfActions.size();j++) {
-//            
-//                    ControlAction controlAction_j = listOfActions.get(j);
-//            
-//                    for (ActionDependency actionDependency : listOfActionDependencies) {  
-//                        String rerequisiteActionID= actionDependency.getPrerequisiteActionID();
-//                        if (controlAction_j.getControlActionName().equals(rerequisiteActionID)){                
-//                            Collections.swap(listOfActions, i, j);               
-//                        }              
-//                    }
-//            }
-//        }
-//    }
-//
-//    private List<ControlAction> findControlAction(String metricName, MetricCondition condition_in, MetricCondition condition_fi) {
-//        List<ControlAction> returnControlActions=null;
-//        
-//        List<MetricElasticityProcess> listOfMetricElasticityProcesses = metricProcess.getListOfMetricElasticityProcesses();
-//      
-//        
-//        
-//        
-//        for (MetricElasticityProcess elasticityProcess : listOfMetricElasticityProcesses) {
-//        
-//            
-//            if (elasticityProcess.getMetricName().equals(metricName)) {
-//                List<MetricControlActions> metricControlActionList = elasticityProcess.getListOfMetricControlActions();
-//              //  String conditionID_in = findConditionID(condition_in, elasticityProcess);
-//              //  String conditionID_fi = findConditionID(condition_fi, elasticityProcess);
-//                String conditionID_in = condition_in.getConditionID();
-//                String conditionID_fi = condition_fi.getConditionID();
-//                
-//                
-//                for (MetricControlActions metricControlAction : metricControlActionList) {
-//                    
-//                   
-//                    if ((metricControlAction.getFromRange().equals(conditionID_in)) && 
-//                            (metricControlAction.getToRange().equals(conditionID_fi))) {
-//                        
-//                        returnControlActions = copyListControlAction(metricControlAction.getListOfControlActions());
-//                    
-//                    }
-//                }
-//            }
-//        }
-//
-//        return returnControlActions;
-//    }
-//    
-//    private String findConditionID(MetricCondition condition, MetricElasticityProcess elasticityProcess){
-//        String conditionID="";
-//        
-//        List<MetricCondition> listOfConditions = elasticityProcess.getListOfConditions();
-//        for (MetricCondition metricCondition : listOfConditions){
-//            if ((condition.getLowerBound()>=metricCondition.getLowerBound()) 
-//                    && (condition.getUpperBound()<=metricCondition.getUpperBound())){
-//                conditionID = metricCondition.getMetricName();
-//            }
-//        }
-//        return conditionID;
-//    }
-//
-//    private String findRangeValueFromMetricName(String metricName, List<MetricRange> listOfMetricRanges) {
-//
-//        String rangeVal = "";
-//
-//        for (MetricRange metricRange : listOfMetricRanges) {
-//            if (metricRange.getMetricName().equals(metricName)) {
-//                rangeVal = metricRange.getRange();
-//            }
-//        }
-//        return rangeVal;
-//    }
-//    
-////    private ElasticState eStateMap(QElement qElement) {
-////        
-////        List<QoRMetric> listOfMetrics = qorModel.getListOfMetrics();
-////        List<MetricRange> listOfMetricRanges =  qElement.getListOfMetricRanges();
-////        
-////        List<MetricCondition> listOfMetricConditions = new ArrayList<MetricCondition>();
-////        
-////        for (MetricRange metricRange : listOfMetricRanges) {
-////            String metricName = metricRange.getMetricName();
-////            String rangeID = metricRange.getRange();
-////            
-////            for (QoRMetric metric : listOfMetrics) {
-////                if (metric.equals(metricName)){
-////                   List<Range> listOfRanges =  metric.getListOfRanges();              
-////                   for (Range r : listOfRanges) {
-////                       if (r.getRangeID().equals(rangeID)){
-////                           double lowerBound = r.getFromValue();
-////                           double upperBound = r.getToValue();
-////                           MetricCondition metricCondition = new MetricCondition(metricName, upperBound, lowerBound);
-////                           listOfMetricConditions.add(metricCondition);
-////                           break;
-////                       }              
-////                   }        
-////                }           
-////            }           
-////        }
-////        
-////        String eStateID = qElement.getqElementID();
-////        ElasticState elasticState = new ElasticState(eStateID, listOfMetricConditions);
-////        return  elasticState;
-////    }
-//    
-//    private MetricElasticityProcess getMetricLElasticityProcessFromMetricName(String metricName, List<MetricElasticityProcess> listOfMetricElasticityProcesses){
-//        
-//        for (MetricElasticityProcess metricElasticityProcess : listOfMetricElasticityProcesses){
-//            if(metricElasticityProcess.getMetricName().equals(metricName)){
-//                return metricElasticityProcess;
-//            }
-//        }
-//        return null;
-//    }
-//    
+
+    
+    
 //     /*
 //    public void deployElasticityProcess(ElasticityProcess elasticityProcesses){
 //        
@@ -853,36 +709,6 @@ public class ElasticProcessesGenerator {
 //
 //    
 //    
-//    private boolean isDuplicated(List<int[]> combinations, int[] conditionIndice){
-//        
-//        boolean rs=false;
-//        
-//        for (int i=0;i<combinations.size();i++){
-//            int[] condition_i = combinations.get(i);
-//            
-//            String conditionString_i = "";
-//            String comparedCondition = "";
-//            
-//            for (int j=0;j<condition_i.length;j++){
-//                conditionString_i =conditionString_i + String.valueOf(condition_i[j]) + ";";
-//                comparedCondition = comparedCondition + String.valueOf(conditionIndice[j])+";" ;
-//            }
-//            
-//            if (conditionString_i.equals(comparedCondition)){
-//                rs=true;
-//                break;
-//            }
-//        }
-//        
-//        
-//        return rs;
-//    }
-//
-//    private int randomInt(int min, int max) {
-//        Random random = new Random();
-//        int randomNumber = random.nextInt(max - min) + min;
-//        return randomNumber;
-//    }
 //    
 //    private Range getMetricRangeFromID(String rangeID){
 //        Range rs = null;
@@ -938,26 +764,6 @@ public class ElasticProcessesGenerator {
 //        return newElasticState;
 //    }
 //    
-//    private Range findMatchingRange(QElement qElement, String metricName){
-//    
-//        Range range = null;
-//        List<MetricRange> listOfMetricRanges = qElement.getListOfMetricRanges();
-//       
-//        for (MetricRange metricRange : listOfMetricRanges){
-//            
-//           
-//            if (metricName.equals(metricRange.getMetricName())){
-//                String rangeID = metricRange.getRange();
-//            
-//                range = getMetricRangeFromID(rangeID);
-//                break;
-//            }
-//            
-//            
-//        }
-//        return range;
-//        
-//    }
 //    
 //    
 //    private void config(){
@@ -965,41 +771,7 @@ public class ElasticProcessesGenerator {
 //        ActionDependencySet = epRepo.getAllActionDependencies();
 //        
 //    }
-//    
-//    private List<ActionDependency> findDependencyActionFromName(String actionName, List<ControlAction> listOfControlActions) {
-//
-//        List<ActionDependency> dependencyList = new ArrayList<ActionDependency>();
-//        for (ActionDependency actionDependency : ActionDependencySet) {
-//            if (actionDependency.getActionID().equals(actionName)) {
-//
-//                dependencyList.addAll(containControlAction(actionDependency.getPrerequisiteActionID(), listOfControlActions)); 
-//                
-//            }
-//
-//        }
-//        
-//        return dependencyList;
-//    }
-//    
-//    private List<ActionDependency> containControlAction(String actionName, List<ControlAction> listOfControlActions){
-//        
-//        List<ActionDependency> dependencyList = new ArrayList<ActionDependency>();
-//        
-//        
-//        for (ControlAction ca: listOfControlActions){
-//            if(ca.getControlActionName().equals(actionName)){
-//                 ActionDependency ad = new ActionDependency(
-//                            actionName,
-//                            ca.getControlActionID());
-//
-//                    dependencyList.add(ad);
-//            }
-//            
-//        }
-//        
-//        return dependencyList;
-//    }
-    
+
     
     
 }
