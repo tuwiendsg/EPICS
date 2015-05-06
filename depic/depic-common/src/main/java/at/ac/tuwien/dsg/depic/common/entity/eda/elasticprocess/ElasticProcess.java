@@ -23,15 +23,19 @@ public class ElasticProcess {
     @XmlElement(name = "monitoringProcess", required = true)
     MonitoringProcess monitoringProcess;
     
-    @XmlElement(name = "listOfControlProcesses", required = true)
-    List<AdjustmentProcess> listOfControlProcesses;
+    @XmlElement(name = "listOfAdjustmentProcesses", required = true)
+    List<AdjustmentProcess> listOfAdjustmentProcesses;
+    
+    @XmlElement(name = "listOfResourceControlPlans", required = true)
+    List<ResourceControlPlan> listOfResourceControlPlans;
 
     public ElasticProcess() {
     }
 
-    public ElasticProcess(MonitoringProcess monitoringProcess, List<AdjustmentProcess> listOfControlProcesses) {
+    public ElasticProcess(MonitoringProcess monitoringProcess, List<AdjustmentProcess> listOfAdjustmentProcesses, List<ResourceControlPlan> listOfResourceControlPlans) {
         this.monitoringProcess = monitoringProcess;
-        this.listOfControlProcesses = listOfControlProcesses;
+        this.listOfAdjustmentProcesses = listOfAdjustmentProcesses;
+        this.listOfResourceControlPlans = listOfResourceControlPlans;
     }
 
     public MonitoringProcess getMonitoringProcess() {
@@ -42,17 +46,21 @@ public class ElasticProcess {
         this.monitoringProcess = monitoringProcess;
     }
 
-    public List<AdjustmentProcess> getListOfControlProcesses() {
-        return listOfControlProcesses;
+    public List<AdjustmentProcess> getListOfAdjustmentProcesses() {
+        return listOfAdjustmentProcesses;
     }
 
-    public void setListOfControlProcesses(List<AdjustmentProcess> listOfControlProcesses) {
-        this.listOfControlProcesses = listOfControlProcesses;
+    public void setListOfAdjustmentProcesses(List<AdjustmentProcess> listOfAdjustmentProcesses) {
+        this.listOfAdjustmentProcesses = listOfAdjustmentProcesses;
     }
 
-    
-    
-    
-    
+    public List<ResourceControlPlan> getListOfResourceControlPlans() {
+        return listOfResourceControlPlans;
+    }
+
+    public void setListOfResourceControlPlans(List<ResourceControlPlan> listOfResourceControlPlans) {
+        this.listOfResourceControlPlans = listOfResourceControlPlans;
+    }
+
     
 }

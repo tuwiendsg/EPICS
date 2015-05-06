@@ -18,8 +18,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ResourceControlStrategy {
     
-    @XmlElement(name = "estimatedResult", required = true)
-    MetricCondition estimatedResult;
     
     @XmlElement(name = "scaleInCondition", required = true)
     MetricCondition scaleInCondition;
@@ -27,16 +25,20 @@ public class ResourceControlStrategy {
     @XmlElement(name = "scaleOutCondition", required = true)
     MetricCondition scaleOutCondition;
     
-    @XmlElement(name = "dataSize", required = true)
-    double dataSize;
+    @XmlElement(name = "controlMetric", required = true)
+    String controlMetric;
+    
+    @XmlElement(name = "primitiveAction", required = true)
+    String primitiveAction;
 
     public ResourceControlStrategy() {
     }
 
-    public ResourceControlStrategy(MetricCondition scaleInCondition, MetricCondition scaleOutCondition, double dataSize) {
+    public ResourceControlStrategy(MetricCondition scaleInCondition, MetricCondition scaleOutCondition, String controlMetric, String primitiveAction) {
         this.scaleInCondition = scaleInCondition;
         this.scaleOutCondition = scaleOutCondition;
-        this.dataSize = dataSize;
+        this.controlMetric = controlMetric;
+        this.primitiveAction = primitiveAction;
     }
 
     public MetricCondition getScaleInCondition() {
@@ -55,21 +57,22 @@ public class ResourceControlStrategy {
         this.scaleOutCondition = scaleOutCondition;
     }
 
-    public double getDataSize() {
-        return dataSize;
+    public String getControlMetric() {
+        return controlMetric;
     }
 
-    public void setDataSize(double dataSize) {
-        this.dataSize = dataSize;
+    public void setControlMetric(String controlMetric) {
+        this.controlMetric = controlMetric;
     }
 
-    public MetricCondition getEstimatedResult() {
-        return estimatedResult;
+    public String getPrimitiveAction() {
+        return primitiveAction;
     }
 
-    public void setEstimatedResult(MetricCondition estimatedResult) {
-        this.estimatedResult = estimatedResult;
+    public void setPrimitiveAction(String primitiveAction) {
+        this.primitiveAction = primitiveAction;
     }
+
     
     
     

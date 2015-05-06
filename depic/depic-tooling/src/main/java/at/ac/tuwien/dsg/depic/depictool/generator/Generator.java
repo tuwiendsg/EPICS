@@ -10,6 +10,7 @@ import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsF
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 
 import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
 
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
@@ -49,7 +50,9 @@ public class Generator {
         long t1 = System.currentTimeMillis();
         ElasticProcessesGenerator elasticProcessesGenerator = new ElasticProcessesGenerator();
         
-        ElasticDataAsset elasticDataAsset = elasticProcessesGenerator.generateElasticProcesses();
+        //ElasticDataAsset elasticDataAsset = elasticProcessesGenerator.generateElasticProcesses();
+        ElasticProcess elasticProcess = elasticProcessesGenerator.generateElasticProcesses();
+        
         long t2 = System.currentTimeMillis();
         //generateElasticDaaS();
         

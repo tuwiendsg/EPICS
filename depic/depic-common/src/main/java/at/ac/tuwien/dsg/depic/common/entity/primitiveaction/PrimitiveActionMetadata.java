@@ -27,13 +27,13 @@ public class PrimitiveActionMetadata {
     List<MonitoringAction> listOfMonitoringActions;
     
     @XmlElement(name = "listOfResourceControls", required = true)
-    List<ResourceControl> listOfResourceControls;
+    List<ResourceControlAction> listOfResourceControls;
      
 
     public PrimitiveActionMetadata() {
     }
 
-    public PrimitiveActionMetadata(List<AdjustmentAction> listOfAdjustmentActions, List<MonitoringAction> listOfMonitoringActions, List<ResourceControl> listOfResourceControls) {
+    public PrimitiveActionMetadata(List<AdjustmentAction> listOfAdjustmentActions, List<MonitoringAction> listOfMonitoringActions, List<ResourceControlAction> listOfResourceControls) {
         this.listOfAdjustmentActions = listOfAdjustmentActions;
         this.listOfMonitoringActions = listOfMonitoringActions;
         this.listOfResourceControls = listOfResourceControls;
@@ -55,11 +55,11 @@ public class PrimitiveActionMetadata {
         this.listOfMonitoringActions = listOfMonitoringActions;
     }
 
-    public List<ResourceControl> getListOfResourceControls() {
+    public List<ResourceControlAction> getListOfResourceControls() {
         return listOfResourceControls;
     }
 
-    public void setListOfResourceControls(List<ResourceControl> listOfResourceControls) {
+    public void setListOfResourceControls(List<ResourceControlAction> listOfResourceControls) {
         this.listOfResourceControls = listOfResourceControls;
     }
 

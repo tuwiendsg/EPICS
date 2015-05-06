@@ -13,15 +13,18 @@ import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DirectedAcyclicalGraph;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
 
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ResourceControlPlan;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase;
 
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControl;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlAction;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlCase;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QElement;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRMetric;
@@ -57,11 +60,18 @@ public class ElasticProcessesGenerator {
         // config();
     }
 
-    public ElasticDataAsset generateElasticProcesses() {
+    public ElasticProcess generateElasticProcesses() {
         Logger.logInfo("Start generate Elastic Processes ... ");
 
         MonitoringProcess monitorProcess = generateMonitoringProcess();
-
+        List<ElasticState> finalElasticStates = new ArrayList<ElasticState>();
+        List<AdjustmentProcess> listOfAdjustmentProcesses = generateAdjustmentProcesses(finalElasticStates);
+        List<ResourceControlPlan> listOfResourceControlPlans = generateResourceControlPlan(finalElasticStates);
+            
+        ElasticProcess elasticProcess = new ElasticProcess(monitorProcess, listOfAdjustmentProcesses, listOfResourceControlPlans);
+        
+        
+        
 //   List<ElasticState> initialElasticStateSet = elasticityProcessGenerator.generateSetOfInitialElasticState();
 //        
 //        Logger logger = new Logger();
@@ -87,7 +97,7 @@ public class ElasticProcessesGenerator {
 //        logger.logControlProcesses(listOfControlProcesses);
 //
 //        return elasticDataAsset;
-        return null;
+        return elasticProcess;
     }
 
     ///////////////////////////////////////
@@ -603,42 +613,42 @@ public class ElasticProcessesGenerator {
     
     
     
-    private void generateResourceControlPlan(List<ElasticState> listOfFinalElasticStates){
+    private List<ResourceControlPlan> generateResourceControlPlan(List<ElasticState> listOfFinalElasticStates){
         
-       
+       List<ResourceControlPlan> listOfFoundResourceControlPlans = new ArrayList<ResourceControlPlan>();
 
         for (ElasticState elasticState : listOfFinalElasticStates) {
             List<MetricCondition> listOfConditions = elasticState.getListOfConditions();
 
-            List<ResourceControlStrategy> listOfFoundResourceControlStrategies = new ArrayList<ResourceControlStrategy>();
+            
             for (MetricCondition metricCondition : listOfConditions) {
-                ResourceControlStrategy foundResourceControlStrategy = findResourceControlStrategy(metricCondition);
-                if (foundResourceControlStrategy!=null) {
-                listOfFoundResourceControlStrategies.add(foundResourceControlStrategy);
+                List<ResourceControlStrategy> listOfFoundResourceControlStrategies = findResourceControlStrategy(metricCondition);
+                if (listOfFoundResourceControlStrategies.size()>0) {
+                    ResourceControlPlan resourceControlPlan = new ResourceControlPlan(elasticState, listOfFoundResourceControlStrategies);
+                    listOfFoundResourceControlPlans.add(resourceControlPlan);
                 }
             }
 
         }
+        
+        return listOfFoundResourceControlPlans;
     }
     
     
-    private ResourceControlStrategy findResourceControlStrategy(MetricCondition metricCondition) {
-        List<ResourceControl> listOfResourceControls = primitiveActionRepository.getListOfResourceControls();
+    private List<ResourceControlStrategy> findResourceControlStrategy(MetricCondition metricCondition) {
+        List<ResourceControlAction> listOfResourceControls = primitiveActionRepository.getListOfResourceControls();
 
-        ResourceControlStrategy foundResourceControlStrategy = null;
-        for (ResourceControl rc : listOfResourceControls) {
+        List<ResourceControlStrategy> foundListOfResourceControlStrategies = new ArrayList<ResourceControlStrategy>();
+        for (ResourceControlAction rc : listOfResourceControls) {
             if (metricCondition.getMetricName().equals(rc.getAssociatedQoRMetric())) {
                 
-                List<ResourceControlStrategy> listOfResourceControlStrategies = rc.getListOfResourceControlStrategies();
+                List<ResourceControlCase> listOfResourceControlCases = rc.getListOfResourceControlStrategies();
 
-                for (ResourceControlStrategy strategy : listOfResourceControlStrategies) {
-                    if (strategy.getEstimatedResult().getLowerBound() == metricCondition.getLowerBound()
-                            && strategy.getEstimatedResult().getUpperBound() == metricCondition.getUpperBound()) {
+                for (ResourceControlCase resourceControlCase : listOfResourceControlCases) {
+                    if (resourceControlCase.getEstimatedResult().getLowerBound() == metricCondition.getLowerBound()
+                            && resourceControlCase.getEstimatedResult().getUpperBound() == metricCondition.getUpperBound()) {
 
-                        foundResourceControlStrategy = new ResourceControlStrategy(
-                                strategy.getScaleInCondition(), 
-                                strategy.getScaleOutCondition(), 
-                                strategy.getDataSize());
+                        foundListOfResourceControlStrategies.addAll(resourceControlCase.getListOfResourceControlStrategies());
                
                         break;
                        
@@ -650,7 +660,7 @@ public class ElasticProcessesGenerator {
             }
         }
 
-        return foundResourceControlStrategy;
+        return foundListOfResourceControlStrategies;
 
     }
     

@@ -15,37 +15,44 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jun
  */
-
-@XmlRootElement(name = "ResourceControl")
+@XmlRootElement(name = "ResourceControlCase")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ResourceControl implements PrimitiveAction{
+public class ResourceControlCase {
     
-    @XmlElement(name = "associatedQoRMetric", required = true)
-    String associatedQoRMetric; 
+    @XmlElement(name = "estimatedResult", required = true)
+    MetricCondition estimatedResult;
     
-    @XmlElement(name = "controlMetric", required = true)
-    String controlMetric;
+    @XmlElement(name = "dataSize", required = true)
+    double dataSize;
     
-    @XmlElement(name = "listOfResourceControlStrategies", required = true)
+    @XmlElement(name = "listOfResourceControlStrategy", required = true)
     List<ResourceControlStrategy> listOfResourceControlStrategies;
+    
+    
 
-    public ResourceControl() {
+    public ResourceControlCase() {
     }
 
-    public ResourceControl(String associatedQoRMetric, String controlMetric, List<ResourceControlStrategy> listOfResourceControlStrategies) {
-        this.associatedQoRMetric = associatedQoRMetric;
-        this.controlMetric = controlMetric;
+    public ResourceControlCase(MetricCondition estimatedResult, double dataSize, List<ResourceControlStrategy> listOfResourceControlStrategies) {
+        this.estimatedResult = estimatedResult;
+        this.dataSize = dataSize;
         this.listOfResourceControlStrategies = listOfResourceControlStrategies;
     }
 
-    
-
-    public String getControlMetric() {
-        return controlMetric;
+    public MetricCondition getEstimatedResult() {
+        return estimatedResult;
     }
 
-    public void setControlMetric(String controlMetric) {
-        this.controlMetric = controlMetric;
+    public void setEstimatedResult(MetricCondition estimatedResult) {
+        this.estimatedResult = estimatedResult;
+    }
+
+    public double getDataSize() {
+        return dataSize;
+    }
+
+    public void setDataSize(double dataSize) {
+        this.dataSize = dataSize;
     }
 
     public List<ResourceControlStrategy> getListOfResourceControlStrategies() {
@@ -56,14 +63,6 @@ public class ResourceControl implements PrimitiveAction{
         this.listOfResourceControlStrategies = listOfResourceControlStrategies;
     }
 
-    public String getAssociatedQoRMetric() {
-        return associatedQoRMetric;
-    }
-
-    public void setAssociatedQoRMetric(String associatedQoRMetric) {
-        this.associatedQoRMetric = associatedQoRMetric;
-    }
-    
     
     
     

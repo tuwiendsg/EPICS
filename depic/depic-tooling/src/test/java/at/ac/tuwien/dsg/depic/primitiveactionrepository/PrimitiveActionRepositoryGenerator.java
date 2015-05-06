@@ -12,8 +12,8 @@ import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControl;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlAction;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlCase;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
@@ -31,7 +31,7 @@ public class PrimitiveActionRepositoryGenerator {
 
         List<MonitoringAction> listOfMonitoringActions = getMonitoringActionData();
         List<AdjustmentAction> listOfControlActions = getControlActionData();
-        List<ResourceControl> listOfResourceControls = getResourceControlData();
+        List<ResourceControlAction> listOfResourceControls = getResourceControlData();
         PrimitiveActionMetadata primitiveActionRepository
                 = new PrimitiveActionMetadata(listOfControlActions, listOfMonitoringActions, listOfResourceControls);
 
@@ -90,14 +90,14 @@ public class PrimitiveActionRepositoryGenerator {
         return listOfControlActions;
     }
     
-    private List<ResourceControl> getResourceControlData() {
+    private List<ResourceControlAction> getResourceControlData() {
         
         
-        List<ResourceControl> listResourceCotrols = new ArrayList<ResourceControl>();
+        List<ResourceControlAction> listResourceCotrols = new ArrayList<ResourceControlAction>();
         
-        List<ResourceControlStrategy> listOfResourceControlStrategys = new ArrayList<ResourceControlStrategy>();
+        List<ResourceControlCase> listOfResourceControlStrategys = new ArrayList<ResourceControlCase>();
         listOfResourceControlStrategys.add(resourceControlStrategy());
-        ResourceControl rc = new ResourceControl("throughput", listOfResourceControlStrategys);
+        ResourceControlAction rc = new ResourceControlAction("throughput", listOfResourceControlStrategys);
         
         listResourceCotrols.add(rc);
                 
@@ -304,7 +304,7 @@ public class PrimitiveActionRepositoryGenerator {
 
         String associatedQoRMetric = "throughputOfDataAssetsPerHour";
 
-        Parameter param1 = new Parameter("unit", "String", "dataAssets/hour");
+        Parameter param1 = new Parameter("unit", "String", "dataAsset/hour");
 
         List<Parameter> listOfParameters = new ArrayList<Parameter>();
         listOfParameters.add(param1);
@@ -622,12 +622,12 @@ public class PrimitiveActionRepositoryGenerator {
     /////////////////////////////
 
     
-    private ResourceControlStrategy resourceControlStrategy() {
+    private ResourceControlCase resourceControlStrategy() {
        
         MetricCondition condition_in = new MetricCondition("cpuUsage", "co_1", 0, 15);
         MetricCondition condition_out = new MetricCondition("cpuUsage", "co_2", 80, 100);
         
-        ResourceControlStrategy resourceControlStrategy = new ResourceControlStrategy(condition_in, condition_out, 2500);
+        ResourceControlCase resourceControlStrategy = new ResourceControlCase(condition_in, condition_out, 2500);
         return resourceControlStrategy;
         
         
