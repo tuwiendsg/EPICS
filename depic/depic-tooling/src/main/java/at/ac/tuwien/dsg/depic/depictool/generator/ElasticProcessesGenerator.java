@@ -21,6 +21,8 @@ import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase;
 
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControl;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QElement;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
@@ -589,6 +591,72 @@ public class ElasticProcessesGenerator {
         
         return prerequisiteActionNames;
     }
+    
+    
+    
+    
+    ///////////////////////////////////////
+    ///                                 ///
+    /// Resource Control PLan           ///
+    ///                                 ///
+    ///////////////////////////////////////
+    
+    
+    
+    private void generateResourceControlPlan(List<ElasticState> listOfFinalElasticStates){
+        
+       
+
+        for (ElasticState elasticState : listOfFinalElasticStates) {
+            List<MetricCondition> listOfConditions = elasticState.getListOfConditions();
+
+            List<ResourceControlStrategy> listOfFoundResourceControlStrategies = new ArrayList<ResourceControlStrategy>();
+            for (MetricCondition metricCondition : listOfConditions) {
+                ResourceControlStrategy foundResourceControlStrategy = findResourceControlStrategy(metricCondition);
+                if (foundResourceControlStrategy!=null) {
+                listOfFoundResourceControlStrategies.add(foundResourceControlStrategy);
+                }
+            }
+
+        }
+    }
+    
+    
+    private ResourceControlStrategy findResourceControlStrategy(MetricCondition metricCondition) {
+        List<ResourceControl> listOfResourceControls = primitiveActionRepository.getListOfResourceControls();
+
+        ResourceControlStrategy foundResourceControlStrategy = null;
+        for (ResourceControl rc : listOfResourceControls) {
+            if (metricCondition.getMetricName().equals(rc.getAssociatedQoRMetric())) {
+                
+                List<ResourceControlStrategy> listOfResourceControlStrategies = rc.getListOfResourceControlStrategies();
+
+                for (ResourceControlStrategy strategy : listOfResourceControlStrategies) {
+                    if (strategy.getEstimatedResult().getLowerBound() == metricCondition.getLowerBound()
+                            && strategy.getEstimatedResult().getUpperBound() == metricCondition.getUpperBound()) {
+
+                        foundResourceControlStrategy = new ResourceControlStrategy(
+                                strategy.getScaleInCondition(), 
+                                strategy.getScaleOutCondition(), 
+                                strategy.getDataSize());
+               
+                        break;
+                       
+                    }
+
+                }
+
+                
+            }
+        }
+
+        return foundResourceControlStrategy;
+
+    }
+    
+    
+    
+    
     
 //    private ElasticState copyElasticState(ElasticState eState){
 //        

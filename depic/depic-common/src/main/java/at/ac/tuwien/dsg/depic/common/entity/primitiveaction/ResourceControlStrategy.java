@@ -18,6 +18,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ResourceControlStrategy {
     
+    @XmlElement(name = "estimatedResult", required = true)
+    MetricCondition estimatedResult;
+    
     @XmlElement(name = "scaleInCondition", required = true)
     MetricCondition scaleInCondition;
     
@@ -58,6 +61,14 @@ public class ResourceControlStrategy {
 
     public void setDataSize(double dataSize) {
         this.dataSize = dataSize;
+    }
+
+    public MetricCondition getEstimatedResult() {
+        return estimatedResult;
+    }
+
+    public void setEstimatedResult(MetricCondition estimatedResult) {
+        this.estimatedResult = estimatedResult;
     }
     
     

@@ -20,6 +20,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ResourceControl implements PrimitiveAction{
     
+    @XmlElement(name = "associatedQoRMetric", required = true)
+    String associatedQoRMetric; 
+    
     @XmlElement(name = "controlMetric", required = true)
     String controlMetric;
     
@@ -29,10 +32,13 @@ public class ResourceControl implements PrimitiveAction{
     public ResourceControl() {
     }
 
-    public ResourceControl(String controlMetric, List<ResourceControlStrategy> listOfResourceControlStrategies) {
+    public ResourceControl(String associatedQoRMetric, String controlMetric, List<ResourceControlStrategy> listOfResourceControlStrategies) {
+        this.associatedQoRMetric = associatedQoRMetric;
         this.controlMetric = controlMetric;
         this.listOfResourceControlStrategies = listOfResourceControlStrategies;
     }
+
+    
 
     public String getControlMetric() {
         return controlMetric;
@@ -48,6 +54,14 @@ public class ResourceControl implements PrimitiveAction{
 
     public void setListOfResourceControlStrategies(List<ResourceControlStrategy> listOfResourceControlStrategies) {
         this.listOfResourceControlStrategies = listOfResourceControlStrategies;
+    }
+
+    public String getAssociatedQoRMetric() {
+        return associatedQoRMetric;
+    }
+
+    public void setAssociatedQoRMetric(String associatedQoRMetric) {
+        this.associatedQoRMetric = associatedQoRMetric;
     }
     
     
