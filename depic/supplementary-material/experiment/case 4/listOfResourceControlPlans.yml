@@ -1,0 +1,56 @@
+- !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ResourceControlPlan
+   finalEState: 
+      eStateID: speedArc_c1;locationArc_c1;deliveryTime_c1;
+      listOfConditions: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: speedArc_c1
+         lowerBound: 91.0
+         metricName: speedArc
+         upperBound: 100.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: locationArc_c1
+         lowerBound: 91.0
+         metricName: locationArc
+         upperBound: 100.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: deliveryTime_c1
+         metricName: deliveryTime
+         upperBound: 0.1
+   listOfResourceControlStrategies: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: SAM
+      scaleInCondition: &1
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: &2
+         conditionID: c_out
+         lowerBound: 75.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: LAM
+      scaleInCondition: *1
+      scaleOutCondition: *2
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: VAM
+      scaleInCondition: *1
+      scaleOutCondition: *2
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: SAA
+      scaleInCondition: *1
+      scaleOutCondition: *2
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: LAA
+      scaleInCondition: *1
+      scaleOutCondition: *2
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: VAA
+      scaleInCondition: *1
+      scaleOutCondition: *2

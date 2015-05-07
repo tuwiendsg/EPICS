@@ -23,36 +23,14 @@ public class ResourceControlAction implements PrimitiveAction{
     @XmlElement(name = "associatedQoRMetric", required = true)
     String associatedQoRMetric; 
     
-    @XmlElement(name = "controlMetric", required = true)
-    String controlMetric;
-    
     @XmlElement(name = "listOfResourceControlStrategies", required = true)
     List<ResourceControlCase> listOfResourceControlStrategies;
 
     public ResourceControlAction() {
     }
 
-    public ResourceControlAction(String associatedQoRMetric, String controlMetric, List<ResourceControlCase> listOfResourceControlStrategies) {
+    public ResourceControlAction(String associatedQoRMetric, List<ResourceControlCase> listOfResourceControlStrategies) {
         this.associatedQoRMetric = associatedQoRMetric;
-        this.controlMetric = controlMetric;
-        this.listOfResourceControlStrategies = listOfResourceControlStrategies;
-    }
-
-    
-
-    public String getControlMetric() {
-        return controlMetric;
-    }
-
-    public void setControlMetric(String controlMetric) {
-        this.controlMetric = controlMetric;
-    }
-
-    public List<ResourceControlCase> getListOfResourceControlStrategies() {
-        return listOfResourceControlStrategies;
-    }
-
-    public void setListOfResourceControlStrategies(List<ResourceControlCase> listOfResourceControlStrategies) {
         this.listOfResourceControlStrategies = listOfResourceControlStrategies;
     }
 
@@ -63,7 +41,15 @@ public class ResourceControlAction implements PrimitiveAction{
     public void setAssociatedQoRMetric(String associatedQoRMetric) {
         this.associatedQoRMetric = associatedQoRMetric;
     }
-    
+
+    public List<ResourceControlCase> getListOfResourceControlStrategies() {
+        return listOfResourceControlStrategies;
+    }
+
+    public void setListOfResourceControlStrategies(List<ResourceControlCase> listOfResourceControlStrategies) {
+        this.listOfResourceControlStrategies = listOfResourceControlStrategies;
+    }
+
     
     
     

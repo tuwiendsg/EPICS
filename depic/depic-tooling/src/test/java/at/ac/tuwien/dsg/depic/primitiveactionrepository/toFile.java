@@ -34,10 +34,13 @@ public class toFile {
         toYaml(primitiveActionRepository, "/Volumes/DATA/Temp/primitiveActionRepository.yml");
         
         
-//        QoR qoR = new QoR();
-//        QoRModel qoRModel = qoR.sampleQoRModel();
-//        toYaml(qoRModel, "/Volumes/DATA/Temp/qor_xml.yml");
+        QoR_GPS qoR = new QoR_GPS();
+        QoRModel qoRModel = qoR.sampleQoRModel();
+        toYaml(qoRModel, "/Volumes/DATA/Temp/qor_xml.yml");
         
+        
+        
+      
     }
     
     public static void toYaml(Object obj,String filePath) {

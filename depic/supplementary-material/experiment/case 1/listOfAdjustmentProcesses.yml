@@ -1,0 +1,82 @@
+- !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess
+   directedAcyclicalGraph: 
+      listOfActions: 
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
+         actionID: b5608d86-1f64-4a01-a5fe-3842a0e7acd0
+         actionName: SAA
+         incomming: 90413f38-4acf-4067-a338-d717ed869fd9
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
+         actionID: 90413f38-4acf-4067-a338-d717ed869fd9
+         actionName: LAA
+         outgoing: b5608d86-1f64-4a01-a5fe-3842a0e7acd0
+      listOfParallelGateways: []
+   finalEState: 
+      eStateID: speedArc_c1;locationArc_c1;deliveryTime_c1;
+      listOfConditions: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: speedArc_c1
+         lowerBound: 91.0
+         metricName: speedArc
+         upperBound: 100.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: locationArc_c1
+         lowerBound: 91.0
+         metricName: locationArc
+         upperBound: 100.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: deliveryTime_c1
+         metricName: deliveryTime
+         upperBound: 0.1
+   listOfAdjustmentActions: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+      actionID: b5608d86-1f64-4a01-a5fe-3842a0e7acd0
+      actionName: SAA
+      artifact: 
+         name: SAA
+         description: adjust speed accuracy
+         location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/SAA.sh
+         restfulAPI: /SAA/rest/control
+         type: sh
+      associatedQoRMetric: speedArc
+      listOfAdjustmentCases: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+         estimatedResult: 
+            conditionID: speedArc_c1
+            lowerBound: 91.0
+            metricName: speedArc
+            upperBound: 100.0
+         listOfParameters: 
+         - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+            parameterName: speedIndex
+            type: int
+            value: 2
+      listOfPrerequisiteActionIDs: 
+      - LAA
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+      actionID: 90413f38-4acf-4067-a338-d717ed869fd9
+      actionName: LAA
+      artifact: 
+         name: LAA
+         description: adjust location accuracy
+         location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/LAA.sh
+         restfulAPI: /LAA/rest/control
+         type: sh
+      associatedQoRMetric: locationArc
+      listOfAdjustmentCases: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+         estimatedResult: 
+            conditionID: locationArc_c1
+            lowerBound: 91.0
+            metricName: locationArc
+            upperBound: 100.0
+         listOfParameters: 
+         - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+            parameterName: longtitudeIndex
+            type: int
+            value: 0
+         - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+            parameterName: latitudeIndex
+            type: int
+            value: 1
+      listOfPrerequisiteActionIDs: 
+      - VAM

@@ -30,9 +30,6 @@ public class MonitoringAction implements PrimitiveAction{
     @XmlElement(name = "artifact", required = true)
     Artifact artifact;
     
-    @XmlElement(name = "costPerHour", required = true)
-    double costPerHour;
-    
     @XmlElement(name = "associatedQoRMetric", required = true)
     String associatedQoRMetric; 
 
@@ -42,16 +39,13 @@ public class MonitoringAction implements PrimitiveAction{
     public MonitoringAction() {
     }
 
-    public MonitoringAction(String monitorActionID, String monitoringActionName, Artifact artifact, double costPerHour, String associatedQoRMetric, List<Parameter> listOfParameters) {
+    public MonitoringAction(String monitorActionID, String monitoringActionName, Artifact artifact, String associatedQoRMetric, List<Parameter> listOfParameters) {
         this.monitorActionID = monitorActionID;
         this.monitoringActionName = monitoringActionName;
         this.artifact = artifact;
-        this.costPerHour = costPerHour;
         this.associatedQoRMetric = associatedQoRMetric;
         this.listOfParameters = listOfParameters;
     }
-    
-    
 
     public String getMonitorActionID() {
         return monitorActionID;
@@ -77,14 +71,6 @@ public class MonitoringAction implements PrimitiveAction{
         this.artifact = artifact;
     }
 
-    public double getCostPerHour() {
-        return costPerHour;
-    }
-
-    public void setCostPerHour(double costPerHour) {
-        this.costPerHour = costPerHour;
-    }
-
     public String getAssociatedQoRMetric() {
         return associatedQoRMetric;
     }
@@ -100,6 +86,7 @@ public class MonitoringAction implements PrimitiveAction{
     public void setListOfParameters(List<Parameter> listOfParameters) {
         this.listOfParameters = listOfParameters;
     }
- 
+
+    
     
 }

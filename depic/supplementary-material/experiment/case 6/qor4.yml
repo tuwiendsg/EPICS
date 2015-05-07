@@ -1,0 +1,62 @@
+!at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel
+dataAssetForm: XML
+listOfMetrics: 
+- !at.ac.tuwien.dsg.depic.common.entity.qor.QoRMetric
+   name: speedArc
+   listOfRanges: 
+   - !at.ac.tuwien.dsg.depic.common.entity.qor.Range
+      fromValue: 81.0
+      rangeID: speedArc_co1
+      toValue: 90.0
+   - !at.ac.tuwien.dsg.depic.common.entity.qor.Range
+      fromValue: 91.0
+      rangeID: speedArc_co2
+      toValue: 100.0
+   unit: '%'
+- !at.ac.tuwien.dsg.depic.common.entity.qor.QoRMetric
+   name: locationArc
+   listOfRanges: 
+   - !at.ac.tuwien.dsg.depic.common.entity.qor.Range
+      rangeID: locationArc_co1
+      toValue: 90.0
+   - !at.ac.tuwien.dsg.depic.common.entity.qor.Range
+      fromValue: 91.0
+      rangeID: locationArc_co2
+      toValue: 100.0
+   unit: '%'
+- !at.ac.tuwien.dsg.depic.common.entity.qor.QoRMetric
+   name: vehicleArc
+   listOfRanges: 
+   - !at.ac.tuwien.dsg.depic.common.entity.qor.Range
+      rangeID: vehicleArc_co1
+      toValue: 90.0
+   - !at.ac.tuwien.dsg.depic.common.entity.qor.Range
+      fromValue: 91.0
+      rangeID: vehicleArc_co2
+      toValue: 100.0
+   unit: '%'
+- !at.ac.tuwien.dsg.depic.common.entity.qor.QoRMetric
+   name: throughput
+   listOfRanges: 
+   - !at.ac.tuwien.dsg.depic.common.entity.qor.Range
+      fromValue: 301.0
+      rangeID: throughput_c1
+      toValue: 1.7976931348623157E308
+   unit: dataAsset/s
+- !at.ac.tuwien.dsg.depic.common.entity.qor.QoRMetric
+   name: deliveryTime
+   listOfRanges: 
+   - !at.ac.tuwien.dsg.depic.common.entity.qor.Range
+      rangeID: deliveryTime_co1
+      toValue: 0.1
+   unit: s
+listOfQElements: 
+- !at.ac.tuwien.dsg.depic.common.entity.qor.QElement
+   listOfRanges: 
+   - speedArc_co2
+   - locationArc_co2
+   - vehicleArc_co2
+   - deliveryTime_co1
+   - throughput_c1
+   price: 10.0
+   qElementID: qElement1

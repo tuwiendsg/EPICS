@@ -1,0 +1,186 @@
+!at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess
+listOfAdjustmentProcesses: 
+- !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess
+   directedAcyclicalGraph: 
+      listOfActions: 
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
+         actionID: b5608d86-1f64-4a01-a5fe-3842a0e7acd0
+         actionName: SAA
+         incomming: 90413f38-4acf-4067-a338-d717ed869fd9
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
+         actionID: 90413f38-4acf-4067-a338-d717ed869fd9
+         actionName: LAA
+         outgoing: b5608d86-1f64-4a01-a5fe-3842a0e7acd0
+      listOfParallelGateways: []
+   finalEState: &1
+      eStateID: speedArc_c1;locationArc_c1;deliveryTime_c1;
+      listOfConditions: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: speedArc_c1
+         lowerBound: 91.0
+         metricName: speedArc
+         upperBound: 100.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: locationArc_c1
+         lowerBound: 91.0
+         metricName: locationArc
+         upperBound: 100.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: deliveryTime_c1
+         metricName: deliveryTime
+         upperBound: 0.1
+   listOfAdjustmentActions: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+      actionID: b5608d86-1f64-4a01-a5fe-3842a0e7acd0
+      actionName: SAA
+      artifact: 
+         name: SAA
+         description: adjust speed accuracy
+         location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/SAA.sh
+         restfulAPI: /SAA/rest/control
+         type: sh
+      associatedQoRMetric: speedArc
+      listOfAdjustmentCases: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+         estimatedResult: 
+            conditionID: speedArc_c1
+            lowerBound: 91.0
+            metricName: speedArc
+            upperBound: 100.0
+         listOfParameters: 
+         - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+            parameterName: speedIndex
+            type: int
+            value: 2
+      listOfPrerequisiteActionIDs: 
+      - LAA
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+      actionID: 90413f38-4acf-4067-a338-d717ed869fd9
+      actionName: LAA
+      artifact: 
+         name: LAA
+         description: adjust location accuracy
+         location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/LAA.sh
+         restfulAPI: /LAA/rest/control
+         type: sh
+      associatedQoRMetric: locationArc
+      listOfAdjustmentCases: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+         estimatedResult: 
+            conditionID: locationArc_c1
+            lowerBound: 91.0
+            metricName: locationArc
+            upperBound: 100.0
+         listOfParameters: 
+         - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+            parameterName: longtitudeIndex
+            type: int
+            value: 0
+         - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+            parameterName: latitudeIndex
+            type: int
+            value: 1
+      listOfPrerequisiteActionIDs: 
+      - VAM
+listOfResourceControlPlans: 
+- !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ResourceControlPlan
+   finalEState: *1
+   listOfResourceControlStrategies: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: SAM
+      scaleInCondition: &2
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: &3
+         conditionID: c_out
+         lowerBound: 75.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: LAM
+      scaleInCondition: *2
+      scaleOutCondition: *3
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: VAM
+      scaleInCondition: *2
+      scaleOutCondition: *3
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: SAA
+      scaleInCondition: *2
+      scaleOutCondition: *3
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: LAA
+      scaleInCondition: *2
+      scaleOutCondition: *3
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: VAA
+      scaleInCondition: *2
+      scaleOutCondition: *3
+monitoringProcess: 
+   directedAcyclicalGraph: 
+      listOfActions: 
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
+         actionID: 06a0d0f7-5afd-4880-a8b6-1c3706fe197b
+         actionName: SAM
+         incomming: d5e97666-c924-4e92-b7d0-14dc79dd32a7
+         outgoing: 140c67f5-4c8a-423d-979f-45b398d600e0
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
+         actionID: 9c889a32-4f31-4590-ba58-4391c77b5268
+         actionName: LAM
+         incomming: d5e97666-c924-4e92-b7d0-14dc79dd32a7
+         outgoing: 140c67f5-4c8a-423d-979f-45b398d600e0
+      listOfParallelGateways: 
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway
+         gatewayID: d5e97666-c924-4e92-b7d0-14dc79dd32a7
+         incomming: []
+         outgoing: 
+         - 06a0d0f7-5afd-4880-a8b6-1c3706fe197b
+         - 9c889a32-4f31-4590-ba58-4391c77b5268
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway
+         gatewayID: 140c67f5-4c8a-423d-979f-45b398d600e0
+         incomming: 
+         - 06a0d0f7-5afd-4880-a8b6-1c3706fe197b
+         - 9c889a32-4f31-4590-ba58-4391c77b5268
+         outgoing: []
+   listOfMonitoringActions: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+      artifact: 
+         name: SAM
+         description: measure speed accuracy
+         location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/SAM.sh
+         restfulAPI: /SAM/rest/monitor
+         type: sh
+      associatedQoRMetric: speedArc
+      listOfParameters: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: speedIndex
+         type: int
+         value: 2
+      monitorActionID: 06a0d0f7-5afd-4880-a8b6-1c3706fe197b
+      monitoringActionName: SAM
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+      artifact: 
+         name: LAM
+         description: monitor location accuracy
+         location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/LAM.sh
+         restfulAPI: /LAM/rest/monitor
+         type: sh
+      associatedQoRMetric: locationArc
+      listOfParameters: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: longtitudeIndex
+         type: int
+         value: 0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: latitudeIndex
+         type: int
+         value: 1
+      monitorActionID: 9c889a32-4f31-4590-ba58-4391c77b5268
+      monitoringActionName: LAM

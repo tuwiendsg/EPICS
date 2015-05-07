@@ -23,7 +23,7 @@ public class ResourceControlCase {
     MetricCondition estimatedResult;
     
     @XmlElement(name = "dataSize", required = true)
-    double dataSize;
+    MetricCondition dataSize;
     
     @XmlElement(name = "listOfResourceControlStrategy", required = true)
     List<ResourceControlStrategy> listOfResourceControlStrategies;
@@ -33,7 +33,7 @@ public class ResourceControlCase {
     public ResourceControlCase() {
     }
 
-    public ResourceControlCase(MetricCondition estimatedResult, double dataSize, List<ResourceControlStrategy> listOfResourceControlStrategies) {
+    public ResourceControlCase(MetricCondition estimatedResult, MetricCondition dataSize, List<ResourceControlStrategy> listOfResourceControlStrategies) {
         this.estimatedResult = estimatedResult;
         this.dataSize = dataSize;
         this.listOfResourceControlStrategies = listOfResourceControlStrategies;
@@ -47,11 +47,11 @@ public class ResourceControlCase {
         this.estimatedResult = estimatedResult;
     }
 
-    public double getDataSize() {
+    public MetricCondition getDataSize() {
         return dataSize;
     }
 
-    public void setDataSize(double dataSize) {
+    public void setDataSize(MetricCondition dataSize) {
         this.dataSize = dataSize;
     }
 
@@ -63,7 +63,6 @@ public class ResourceControlCase {
         this.listOfResourceControlStrategies = listOfResourceControlStrategies;
     }
 
-    
     
     
 }

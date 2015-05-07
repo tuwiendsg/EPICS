@@ -39,11 +39,6 @@ public class AdjustmentAction implements PrimitiveAction{
     @XmlElement(name = "listOfAdjustmentCases", required = true)
     List<AdjustmentCase> listOfAdjustmentCases;
     
-    @XmlElement(name = "incomming")
-    String incomming;
-    
-    @XmlElement(name = "outgoing")
-    String outgoing;
     
     public AdjustmentAction() {
     }
@@ -104,24 +99,5 @@ public class AdjustmentAction implements PrimitiveAction{
     public void setListOfAdjustmentCases(List<AdjustmentCase> listOfAdjustmentCases) {
         this.listOfAdjustmentCases = listOfAdjustmentCases;
     }
-
-    public String getIncomming() {
-        return incomming;
-    }
-
-    public void setIncomming(String incomming) {
-        this.incomming = incomming;
-    }
-
-    public String getOutgoing() {
-        return outgoing;
-    }
-
-    public void setOutgoing(String outgoing) {
-        this.outgoing = outgoing;
-    }
-
-    
-    
     
 }

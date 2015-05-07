@@ -14,6 +14,7 @@ import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetad
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlAction;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlCase;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
@@ -48,17 +49,14 @@ public class PrimitiveActionRepositoryGenerator {
         MonitoringAction ma2 = monitoringActionDataAccuracyForVotageMeasurement();
         listOfMonitoringActions.add(ma2);
         
-        MonitoringAction ma3 = monitoringActionThroughputDataItemMeasurement();
+        MonitoringAction ma3 = monitoringActionSpeedAcuracy();
         listOfMonitoringActions.add(ma3);
         
-        MonitoringAction ma4 = monitoringActionDataAccuracyForImpressionMeasurement();
+        MonitoringAction ma4 = monitoringActionLocationAccuracy();
         listOfMonitoringActions.add(ma4);
         
-        MonitoringAction ma5 = monitoringActionDataAccuracyForPositionMeasurement();
+        MonitoringAction ma5 = monitoringActionVehicleAcuracy();
         listOfMonitoringActions.add(ma5);
-        
-        MonitoringAction ma6 = monitoringActionThroughputForDataAssetPerHour();
-        listOfMonitoringActions.add(ma6);
         
 
         return listOfMonitoringActions;
@@ -74,17 +72,15 @@ public class PrimitiveActionRepositoryGenerator {
         AdjustmentAction ca2 = controlActionDIR();
         listOfControlActions.add(ca2);
         
-        AdjustmentAction ca3 = controlActionThroughputDataItemsPerSecond();
+        AdjustmentAction ca3 = controlActionAdjustSpeedAcuracy();
         listOfControlActions.add(ca3);
         
-        AdjustmentAction ca4 = controlActionAIC();
+        AdjustmentAction ca4 = controlActionLocationAccuracy();
         listOfControlActions.add(ca4);
         
-        AdjustmentAction ca5 = controlActionAPC();
+        AdjustmentAction ca5 = controlActionVehicleAccuracy();
         listOfControlActions.add(ca5);
-        
-        AdjustmentAction ca6 = controlActionSTC();
-        listOfControlActions.add(ca6);
+
         
 
         return listOfControlActions;
@@ -94,12 +90,12 @@ public class PrimitiveActionRepositoryGenerator {
         
         
         List<ResourceControlAction> listResourceCotrols = new ArrayList<ResourceControlAction>();
+      
+        ResourceControlAction throughputControl = resourceControlForThroughput();
+        ResourceControlAction diliveryTimeControl = resourceControlForDeliveryTime();
         
-        List<ResourceControlCase> listOfResourceControlStrategys = new ArrayList<ResourceControlCase>();
-        listOfResourceControlStrategys.add(resourceControlStrategy());
-        ResourceControlAction rc = new ResourceControlAction("throughput", listOfResourceControlStrategys);
-        
-        listResourceCotrols.add(rc);
+        listResourceCotrols.add(throughputControl);
+        listResourceCotrols.add(diliveryTimeControl);
                 
          return listResourceCotrols;
     } 
@@ -125,8 +121,6 @@ public class PrimitiveActionRepositoryGenerator {
                 "sh",
                 "/datacompletenessMeasurement/rest/completeness");
 
-        double costPerHour = 0.35;
-
         String associatedQoRMetric = "columnCompleteness";
 
         Parameter param1 = new Parameter("attributeIndex", "int", "");
@@ -137,7 +131,6 @@ public class PrimitiveActionRepositoryGenerator {
                 monitorActionID,
                 monitoringActionName,
                 artifact,
-                costPerHour,
                 associatedQoRMetric,
                 listOfParameters);
 
@@ -158,7 +151,6 @@ public class PrimitiveActionRepositoryGenerator {
                 "sh",
                 "/dataaccuracyMeasurement/rest/dataaccuracy");
 
-        double costPerHour = 0.35;
 
         String associatedQoRMetric = "dataAccuracyForVotage";
 
@@ -175,33 +167,34 @@ public class PrimitiveActionRepositoryGenerator {
                 monitorActionID,
                 monitoringActionName,
                 artifact,
-                costPerHour,
                 associatedQoRMetric,
                 listOfParameters);
 
         return monitoringAction;
 
     }
+    
+    
+    
 
-    private MonitoringAction monitoringActionThroughputDataItemMeasurement() {
+    private MonitoringAction monitoringActionSpeedAcuracy() {
 
         // power consumption - throughput
-        String monitorActionID = "TPM";
-        String monitoringActionName = "TPM";
+        String monitorActionID = "SAM";
+        String monitoringActionName = "SAM";
 
         Artifact artifact = new Artifact(
                 monitorActionID,
-                "measure throughput - data items per second",
-                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/TPM.sh",
+                "measure speed accuracy",
+                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/SAM.sh",
                 "sh",
-                "/TPM/rest/monitor");
+                "/SAM/rest/monitor");
 
-        double costPerHour = 0.35;
+        String associatedQoRMetric = "speedArc";
 
-        String associatedQoRMetric = "throughputOfDataItemPerSecond";
+        Parameter param1 = new Parameter("speedIndex", "int", "2");
 
-        Parameter param1 = new Parameter("unit", "String", "dataItems/second");
-
+      
         List<Parameter> listOfParameters = new ArrayList<Parameter>();
         listOfParameters.add(param1);
 
@@ -209,7 +202,6 @@ public class PrimitiveActionRepositoryGenerator {
                 monitorActionID,
                 monitoringActionName,
                 artifact,
-                costPerHour,
                 associatedQoRMetric,
                 listOfParameters);
 
@@ -217,34 +209,34 @@ public class PrimitiveActionRepositoryGenerator {
 
     }
 
-    private MonitoringAction monitoringActionDataAccuracyForImpressionMeasurement() {
+    private MonitoringAction monitoringActionLocationAccuracy() {
 
         // kdd - Ads impression accuracy
-        String monitorActionID = "AIM";
+        String monitorActionID = "LAM";
 
-        String monitoringActionName = "AIM";
+        String monitoringActionName = "LAM";
 
         Artifact artifact = new Artifact(
                 monitorActionID,
-                "monitor impression accuracy",
-                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/AIM.sh",
+                "monitor location accuracy",
+                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/LAM.sh",
                 "sh",
-                "/AIM/rest/monitor");
+                "/LAM/rest/monitor");
 
-        double costPerHour = 0.35;
+    
+        String associatedQoRMetric = "locationArc";
 
-        String associatedQoRMetric = "adsImpressionAccuracy";
-
-        Parameter param1 = new Parameter("attributeIndex", "int", "");
+        Parameter param1 = new Parameter("longtitudeIndex", "int", "0");
+        Parameter param2 = new Parameter("latitudeIndex", "int", "1");
 
         List<Parameter> listOfParameters = new ArrayList<Parameter>();
         listOfParameters.add(param1);
+        listOfParameters.add(param2);
 
         MonitoringAction monitoringAction = new MonitoringAction(
                 monitorActionID,
                 monitoringActionName,
                 artifact,
-                costPerHour,
                 associatedQoRMetric,
                 listOfParameters);
 
@@ -252,34 +244,35 @@ public class PrimitiveActionRepositoryGenerator {
 
     }
 
-    private MonitoringAction monitoringActionDataAccuracyForPositionMeasurement() {
+    private MonitoringAction monitoringActionVehicleAcuracy() {
 
         // kdd - Ads position accuracy
-        String monitorActionID = "APM";
+        String monitorActionID = "VAM";
 
-        String monitoringActionName = "APM";
+        String monitoringActionName = "VAM";
 
         Artifact artifact = new Artifact(
                 monitorActionID,
-                "monitor Ads position accuracy",
-                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/APM.sh",
+                "monitor vehicle accuracy",
+                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/VAM.sh",
                 "sh",
-                "/APM/rest/monitor");
+                "/VAM/rest/monitor");
 
-        double costPerHour = 0.35;
+        String associatedQoRMetric = "vehicleArc";
 
-        String associatedQoRMetric = "adsPositionAccuracy";
-
-        Parameter param1 = new Parameter("attributeIndex", "int", "");
+        Parameter param1 = new Parameter("longtitudeIndex", "int", "0");
+        Parameter param2 = new Parameter("latitudeIndex", "int", "1");
+        Parameter param3 = new Parameter("speedIndex", "int", "2");
 
         List<Parameter> listOfParameters = new ArrayList<Parameter>();
         listOfParameters.add(param1);
+        listOfParameters.add(param2);
+        listOfParameters.add(param3);
 
         MonitoringAction monitoringAction = new MonitoringAction(
                 monitorActionID,
                 monitoringActionName,
                 artifact,
-                costPerHour,
                 associatedQoRMetric,
                 listOfParameters);
 
@@ -287,39 +280,6 @@ public class PrimitiveActionRepositoryGenerator {
 
     }
 
-    private MonitoringAction monitoringActionThroughputForDataAssetPerHour() {
-
-        // kdd - throughput
-        String monitorActionID = "TPM";
-        String monitoringActionName = "TPM";
-
-        Artifact artifact = new Artifact(
-                monitorActionID,
-                "measure throughput - data assets per hour",
-                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/TPM.sh",
-                "sh",
-                "/TPM/rest/monitor");
-
-        double costPerHour = 0.35;
-
-        String associatedQoRMetric = "throughputOfDataAssetsPerHour";
-
-        Parameter param1 = new Parameter("unit", "String", "dataAsset/hour");
-
-        List<Parameter> listOfParameters = new ArrayList<Parameter>();
-        listOfParameters.add(param1);
-
-        MonitoringAction monitoringAction = new MonitoringAction(
-                monitorActionID,
-                monitoringActionName,
-                artifact,
-                costPerHour,
-                associatedQoRMetric,
-                listOfParameters);
-
-        return monitoringAction;
-
-    }
 
     /////////////////////////////
     //
@@ -340,7 +300,7 @@ public class PrimitiveActionRepositoryGenerator {
                 "sh",
                 "/LSR/rest/control");
 
-        double costPerHour = 0.45;
+    
         String associatedQoRMetric = "columnCompletenessForVoltage";
         List<String> listOfPrerequisiteActionIDs = new ArrayList<String>();
     //listOfPrerequisiteActionIDs.add("");
@@ -385,7 +345,7 @@ public class PrimitiveActionRepositoryGenerator {
                 "sh",
                 "/DIR/rest/control");
 
-        double costPerHour = 0.45;
+     
         String associatedQoRMetric = "dataAccuracyForVoltage";
         List<String> listOfPrerequisiteActionIDs = new ArrayList<String>();
         //listOfPrerequisiteActionIDs.add("");
@@ -403,11 +363,11 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 91, 100);
 
         AdjustmentCase transition1 = new AdjustmentCase(c3, listOfParameters);
-        AdjustmentCase transition2 = new AdjustmentCase(c3, listOfParameters);
+      
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
-        listOfTransitions.add(transition2);
+
 
         AdjustmentAction controlAction = new AdjustmentAction(
                 controlActionID,
@@ -421,41 +381,38 @@ public class PrimitiveActionRepositoryGenerator {
 
     }
 
-    private AdjustmentAction controlActionThroughputDataItemsPerSecond() {
+    private AdjustmentAction controlActionAdjustSpeedAcuracy() {
 
         // power - throughput  
-        String controlActionID = "STC";
-        String controlActionName = "STC";
+        String controlActionID = "SAA";
+        String controlActionName = "SAA";
         Artifact artifact = new Artifact(
                 controlActionName,
-                "control throughput",
-                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/STC.sh",
+                "adjust speed accuracy",
+                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/SAA.sh",
                 "sh",
-                "/STC/rest/control");
+                "/SAA/rest/control");
 
-        double costPerHour = 0.45;
-        String associatedQoRMetric = "throughputOfDataItemPerSecond";
+        String associatedQoRMetric = "speedArc";
 
         List<String> listOfPrerequisiteActionIDs = new ArrayList<String>();
-        //listOfPrerequisiteActionIDs.add("");
+        listOfPrerequisiteActionIDs.add("LAA");
 
         List<Parameter> listOfParameters = new ArrayList<Parameter>();
-        Parameter param1 = new Parameter("unit", "String", "dataItems/second");
+        Parameter param1 = new Parameter("speedIndex", "int", "2");
 
         listOfParameters.add(param1);
 
-        MetricCondition c1 = new MetricCondition(associatedQoRMetric, "c1", 0, 0.49);
-        MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 0.5, 1.19);
-        MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 1.2, Double.MAX_VALUE);
+     //   MetricCondition c1 = new MetricCondition(associatedQoRMetric, "speedArc_c1", 0, 80);
+     //   MetricCondition c2 = new MetricCondition(associatedQoRMetric, "speedArc_c2", 81, 90);
+        MetricCondition c3 = new MetricCondition(associatedQoRMetric, "speedArc_c1", 91, 100);
 
-        AdjustmentCase transition1 = new AdjustmentCase(c2, listOfParameters);
-        AdjustmentCase transition2 = new AdjustmentCase(c3, listOfParameters);
-        AdjustmentCase transition3 = new AdjustmentCase(c1, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase(c3, listOfParameters);
+     
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
-        listOfTransitions.add(transition2);
-        listOfTransitions.add(transition3);
+   
 
         AdjustmentAction controlAction = new AdjustmentAction(
                 controlActionID,
@@ -469,39 +426,40 @@ public class PrimitiveActionRepositoryGenerator {
 
     }
 
-    private AdjustmentAction controlActionAIC() {
+    private AdjustmentAction controlActionLocationAccuracy() {
 
         // kdd - impression accuracy  
         
         
-        String controlActionID = "AIC";
-        String controlActionName = "AIC";
+        String controlActionID = "LAA";
+        String controlActionName = "LAA";
         Artifact artifact = new Artifact(
                 controlActionName,
-                "control Ads Impression Accuracy",
-                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/AIC.sh",
+                "adjust location accuracy",
+                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/LAA.sh",
                 "sh",
-                "/AIC/rest/control");
+                "/LAA/rest/control");
 
-        double costPerHour = 0.45;
-        String associatedQoRMetric = "adsImpressionAccuracy";
+        String associatedQoRMetric = "locationArc";
         List<String> listOfPrerequisiteActionIDs = new ArrayList<String>();
-    //listOfPrerequisiteActionIDs.add("");
+        listOfPrerequisiteActionIDs.add("VAM");
 
         List<Parameter> listOfParameters = new ArrayList<Parameter>();
-        Parameter param1 = new Parameter("attributeIndex", "int", "");
+        Parameter param1 = new Parameter("longtitudeIndex", "int", "0");
+        Parameter param2 = new Parameter("latitudeIndex", "int", "1");
         listOfParameters.add(param1);
+        listOfParameters.add(param2);
 
-        MetricCondition c1 = new MetricCondition(associatedQoRMetric, "c1", 0, 75);
-        MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
-        MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 91, 100);
+     //   MetricCondition c1 = new MetricCondition(associatedQoRMetric, "c1", 0, 75);
+    //    MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
+        MetricCondition c3 = new MetricCondition(associatedQoRMetric, "locationArc_c1", 91, 100);
 
         AdjustmentCase transition1 = new AdjustmentCase( c3, listOfParameters);
-        AdjustmentCase transition2 = new AdjustmentCase(c3, listOfParameters);
+
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
-        listOfTransitions.add(transition2);
+
 
         AdjustmentAction controlAction = new AdjustmentAction(
                 controlActionID,
@@ -515,38 +473,41 @@ public class PrimitiveActionRepositoryGenerator {
 
     }
 
-    private AdjustmentAction controlActionAPC() {
+    private AdjustmentAction controlActionVehicleAccuracy() {
 
     // kdd - position accuracy  
         
-        String controlActionID = "APC";
-        String controlActionName = "APC";
+        String controlActionID = "VAM";
+        String controlActionName = "VAM";
         Artifact artifact = new Artifact(
                 controlActionName,
                 "control Ads Position Accuracy",
-                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/APC.sh",
+                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/VAM.sh",
                 "sh",
-                "/APC/rest/control");
+                "/VAM/rest/control");
 
-        double costPerHour = 0.45;
-        String associatedQoRMetric = "adsPositionAccuracy";
+        String associatedQoRMetric = "vehicleArc";
         List<String> listOfPrerequisiteActionIDs = new ArrayList<String>();
     //listOfPrerequisiteActionIDs.add("");
 
         List<Parameter> listOfParameters = new ArrayList<Parameter>();
-        Parameter param1 = new Parameter("attributeIndex", "int", "");
+        Parameter param1 = new Parameter("longtitudeIndex", "int", "0");
+        Parameter param2 = new Parameter("latitudeIndex", "int", "1");
+        Parameter param3 = new Parameter("speedIndex", "int", "2");
         listOfParameters.add(param1);
+        listOfParameters.add(param2);
+        listOfParameters.add(param3);
 
-        MetricCondition c1 = new MetricCondition(associatedQoRMetric, "c1", 0, 75);
-        MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
-        MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 91, 100);
+  //      MetricCondition c1 = new MetricCondition(associatedQoRMetric, "c1", 0, 75);
+ //       MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
+        MetricCondition c3 = new MetricCondition(associatedQoRMetric, "vehicleArc_c1", 91, 100);
 
         AdjustmentCase transition1 = new AdjustmentCase( c3, listOfParameters);
-        AdjustmentCase transition2 = new AdjustmentCase(c3, listOfParameters);
+
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
-        listOfTransitions.add(transition2);
+    
 
         AdjustmentAction controlAction = new AdjustmentAction(
                 controlActionID,
@@ -563,54 +524,6 @@ public class PrimitiveActionRepositoryGenerator {
 
     }
 
-    private AdjustmentAction controlActionSTC() {
-
-    // kdd - throughput
-         
-        String controlActionID = "STC";
-        String controlActionName = "STC";
-        Artifact artifact = new Artifact(
-                controlActionName,
-                "control throughput",
-                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/STC.sh",
-                "sh",
-                "/STC/rest/control");
-
-        double costPerHour = 0.45;
-        String associatedQoRMetric = "throughputOfDataAssetsPerHour";
-
-        List<String> listOfPrerequisiteActionIDs = new ArrayList<String>();
-        //listOfPrerequisiteActionIDs.add("");
-
-        List<Parameter> listOfParameters = new ArrayList<Parameter>();
-        Parameter param1 = new Parameter("unit", "String", "dataAssets/hour");
-
-        listOfParameters.add(param1);
-
-        MetricCondition c1 = new MetricCondition(associatedQoRMetric, "c1", 0, 0.49);
-        MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 0.5, 1.19);
-        MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 1.2, Double.MAX_VALUE);
-
-        AdjustmentCase transition1 = new AdjustmentCase(c2, listOfParameters);
-        AdjustmentCase transition2 = new AdjustmentCase(c3, listOfParameters);
-        AdjustmentCase transition3 = new AdjustmentCase( c1, listOfParameters);
-
-        List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
-        listOfTransitions.add(transition1);
-        listOfTransitions.add(transition2);
-        listOfTransitions.add(transition3);
-
-        AdjustmentAction controlAction = new AdjustmentAction(
-                controlActionID,
-                controlActionName,
-                artifact,
-                associatedQoRMetric,
-                listOfPrerequisiteActionIDs,
-                listOfTransitions);
-        
-        return controlAction;
-
-    }
     
     
     /////////////////////////////
@@ -622,13 +535,87 @@ public class PrimitiveActionRepositoryGenerator {
     /////////////////////////////
 
     
-    private ResourceControlCase resourceControlStrategy() {
-       
-        MetricCondition condition_in = new MetricCondition("cpuUsage", "co_1", 0, 15);
-        MetricCondition condition_out = new MetricCondition("cpuUsage", "co_2", 80, 100);
+    private ResourceControlAction resourceControlForThroughput() {
         
-        ResourceControlCase resourceControlStrategy = new ResourceControlCase(condition_in, condition_out, 2500);
-        return resourceControlStrategy;
+        String associatedQoRMetric = "throughput";
+        
+       
+        
+        
+        // case
+        
+        
+      
+        MetricCondition c1 = new MetricCondition(associatedQoRMetric, "throughput_c1", 301, Double.MAX_VALUE);
+  
+        MetricCondition dataSize = new MetricCondition("dataSize", "c", 30, 80);
+        
+        MetricCondition scaleIn_co = new MetricCondition("cpuUsage", "c_in", 0, 15);
+         MetricCondition scaleOut_co = new MetricCondition("cpuUsage", "c_out", 85, 100);
+        ResourceControlStrategy resourceControlStrategy1 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "SAM");
+        ResourceControlStrategy resourceControlStrategy2 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "LAM");
+        ResourceControlStrategy resourceControlStrategy3 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "VAM");
+        ResourceControlStrategy resourceControlStrategy4 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "SAA");
+        ResourceControlStrategy resourceControlStrategy5 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "LAA");
+        ResourceControlStrategy resourceControlStrategy6 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "VAA");
+        
+        List<ResourceControlStrategy> listOfResourceControlStrategys = new ArrayList<ResourceControlStrategy>();
+        listOfResourceControlStrategys.add(resourceControlStrategy1);
+        listOfResourceControlStrategys.add(resourceControlStrategy2);
+        listOfResourceControlStrategys.add(resourceControlStrategy3);
+        listOfResourceControlStrategys.add(resourceControlStrategy4);
+        listOfResourceControlStrategys.add(resourceControlStrategy5);
+        listOfResourceControlStrategys.add(resourceControlStrategy6);
+        
+        ResourceControlCase resourceControlCase = new ResourceControlCase(c1, dataSize , listOfResourceControlStrategys);
+         List<ResourceControlCase> listOfResourceControlCases = new ArrayList<ResourceControlCase>();
+         listOfResourceControlCases.add(resourceControlCase);
+        
+        ResourceControlAction resourceControlAction = new ResourceControlAction(
+                associatedQoRMetric,listOfResourceControlCases);
+
+        return resourceControlAction;
+        
+        
+    }
+    
+     private ResourceControlAction resourceControlForDeliveryTime() {
+        
+        String associatedQoRMetric = "deliveryTime";
+        
+        
+        // case
+        
+      
+        MetricCondition c1 = new MetricCondition(associatedQoRMetric, "deliveryTime_c1", 0, 0.1);
+  
+        MetricCondition dataSize = new MetricCondition("dataSize", "c", 30, 80);
+        
+        MetricCondition scaleIn_co = new MetricCondition("cpuUsage", "c_in", 0, 20);
+         MetricCondition scaleOut_co = new MetricCondition("cpuUsage", "c_out", 75, 100);
+        ResourceControlStrategy resourceControlStrategy1 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "SAM");
+        ResourceControlStrategy resourceControlStrategy2 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "LAM");
+        ResourceControlStrategy resourceControlStrategy3 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "VAM");
+        ResourceControlStrategy resourceControlStrategy4 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "SAA");
+        ResourceControlStrategy resourceControlStrategy5 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "LAA");
+        ResourceControlStrategy resourceControlStrategy6 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "VAA");
+        
+        List<ResourceControlStrategy> listOfResourceControlStrategys = new ArrayList<ResourceControlStrategy>();
+        listOfResourceControlStrategys.add(resourceControlStrategy1);
+        listOfResourceControlStrategys.add(resourceControlStrategy2);
+        listOfResourceControlStrategys.add(resourceControlStrategy3);
+        listOfResourceControlStrategys.add(resourceControlStrategy4);
+        listOfResourceControlStrategys.add(resourceControlStrategy5);
+        listOfResourceControlStrategys.add(resourceControlStrategy6);
+        
+        ResourceControlCase resourceControlCase = new ResourceControlCase(c1, dataSize , listOfResourceControlStrategys);
+         List<ResourceControlCase> listOfResourceControlCases = new ArrayList<ResourceControlCase>();
+         listOfResourceControlCases.add(resourceControlCase);
+        
+        ResourceControlAction resourceControlAction = new ResourceControlAction(
+                associatedQoRMetric,listOfResourceControlCases);
+
+        return resourceControlAction;
         
         
     }
