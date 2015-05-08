@@ -10,6 +10,7 @@ package at.ac.tuwien.dsg.depic.common.entity.eda;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,10 +33,16 @@ public class ElasticDataAsset {
     @XmlElement(name = "elasticProcess", required = true)
     ElasticProcess elasticProcess;
     
-    @XmlElement(name = "elasticStateSet", required = true)
-    ElasticStateSet elasticStateSet;
+    @XmlElement(name = "listOfFinalElasticState", required = true)
+    List<ElasticState> listOfFinalElasticState;
     
     public ElasticDataAsset() {
+    }
+
+    public ElasticDataAsset(String dataAssetID, ElasticProcess elasticProcess, List<ElasticState> listOfFinalElasticState) {
+        this.dataAssetID = dataAssetID;
+        this.elasticProcess = elasticProcess;
+        this.listOfFinalElasticState = listOfFinalElasticState;
     }
 
     public String getDataAssetID() {
@@ -54,12 +61,12 @@ public class ElasticDataAsset {
         this.elasticProcess = elasticProcess;
     }
 
-    public ElasticStateSet getElasticStateSet() {
-        return elasticStateSet;
+    public List<ElasticState> getListOfFinalElasticState() {
+        return listOfFinalElasticState;
     }
 
-    public void setElasticStateSet(ElasticStateSet elasticStateSet) {
-        this.elasticStateSet = elasticStateSet;
+    public void setListOfFinalElasticState(List<ElasticState> listOfFinalElasticState) {
+        this.listOfFinalElasticState = listOfFinalElasticState;
     }
 
     

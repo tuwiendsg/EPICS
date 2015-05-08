@@ -13,7 +13,7 @@ import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DataPartitionRequest;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ControlProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
@@ -48,7 +48,7 @@ public class DataElasticityMonitor{
     List<ElasticState> listOfExpectedElasticStates;
     MonitoringSession monitoringSession;
     MonitoringProcess monitorProcess;
-    List<ControlProcess> listOfControlProcesses;
+    List<AdjustmentProcess> listOfControlProcesses;
     DBType eDaaSType;
  
 

@@ -1,0 +1,342 @@
+!at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata
+listOfAdjustmentActions: 
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+   actionID: LSR
+   actionName: LSR
+   artifact: 
+      name: LSR
+      description: Linear Least Square Regression to fill missing values
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/LSR.sh
+      restfulAPI: /LSR/rest/control
+      type: sh
+   associatedQoRMetric: columnCompletenessForVoltage
+   listOfAdjustmentCases: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: &1
+         conditionID: c3
+         lowerBound: 91.0
+         metricName: columnCompletenessForVoltage
+         upperBound: 100.0
+      listOfParameters: &2
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: attributeIndex
+         type: int
+         value: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: *1
+      listOfParameters: *2
+   listOfPrerequisiteActionIDs: []
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+   actionID: DIR
+   actionName: DIR
+   artifact: 
+      name: DIR
+      description: Distance-based Outlier Detection and Removal to improve data accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/DIR.sh
+      restfulAPI: /DIR/rest/control
+      type: sh
+   associatedQoRMetric: dataAccuracyForVoltage
+   listOfAdjustmentCases: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: 
+         conditionID: c3
+         lowerBound: 91.0
+         metricName: dataAccuracyForVoltage
+         upperBound: 100.0
+      listOfParameters: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: attributeIndex
+         type: int
+         value: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: lowerThreshold
+         type: int
+         value: 220
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: upperThreshold
+         type: int
+         value: 240
+   listOfPrerequisiteActionIDs: []
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+   actionID: SAA
+   actionName: SAA
+   artifact: 
+      name: SAA
+      description: adjust speed accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/SAA.sh
+      restfulAPI: /SAA/rest/control
+      type: sh
+   associatedQoRMetric: speedArc
+   listOfAdjustmentCases: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: 
+         conditionID: speedArc_c1
+         lowerBound: 91.0
+         metricName: speedArc
+         upperBound: 100.0
+      listOfParameters: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: speedIndex
+         type: int
+         value: 2
+   listOfPrerequisiteActionIDs: 
+   - LAA
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+   actionID: LAA
+   actionName: LAA
+   artifact: 
+      name: LAA
+      description: adjust location accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/LAA.sh
+      restfulAPI: /LAA/rest/control
+      type: sh
+   associatedQoRMetric: locationArc
+   listOfAdjustmentCases: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: 
+         conditionID: locationArc_c1
+         lowerBound: 91.0
+         metricName: locationArc
+         upperBound: 100.0
+      listOfParameters: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: longtitudeIndex
+         type: int
+         value: 0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: latitudeIndex
+         type: int
+         value: 1
+   listOfPrerequisiteActionIDs: 
+   - VAM
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+   actionID: VAA
+   actionName: VAA
+   artifact: 
+      name: VAA
+      description: adjust vehicle Accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/VAA.sh
+      restfulAPI: /VAA/rest/control
+      type: sh
+   associatedQoRMetric: vehicleArc
+   listOfAdjustmentCases: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+      estimatedResult: 
+         conditionID: vehicleArc_c1
+         lowerBound: 91.0
+         metricName: vehicleArc
+         upperBound: 100.0
+      listOfParameters: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: longtitudeIndex
+         type: int
+         value: 0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: latitudeIndex
+         type: int
+         value: 1
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: speedIndex
+         type: int
+         value: 2
+   listOfPrerequisiteActionIDs: []
+listOfMonitoringActions: 
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+   artifact: 
+      name: columnCompletenessMeasurement
+      description: artifact to monitor column completeness
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/datacompletenessMeasurement.sh
+      restfulAPI: /datacompletenessMeasurement/rest/completeness
+      type: sh
+   associatedQoRMetric: columnCompleteness
+   listOfParameters: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: attributeIndex
+      type: int
+      value: 
+   monitorActionID: columnCompletenessMeasurement
+   monitoringActionName: columnCompletenessMeasurement
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+   artifact: 
+      name: distanceBasedOutlierMeasurement
+      description: measure outliers to determine data accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/dataaccuracyMeasurement.sh
+      restfulAPI: /dataaccuracyMeasurement/rest/dataaccuracy
+      type: sh
+   associatedQoRMetric: dataAccuracyForVotage
+   listOfParameters: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: attributeIndex
+      type: int
+      value: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: lowerThreshold
+      type: int
+      value: 220
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: upperThreshold
+      type: int
+      value: 240
+   monitorActionID: distanceBasedOutlierMeasurement
+   monitoringActionName: distanceBasedOutlierMeasurement
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+   artifact: 
+      name: SAM
+      description: measure speed accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/SAM.sh
+      restfulAPI: /SAM/rest/monitor
+      type: sh
+   associatedQoRMetric: speedArc
+   listOfParameters: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: speedIndex
+      type: int
+      value: 2
+   monitorActionID: SAM
+   monitoringActionName: SAM
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+   artifact: 
+      name: LAM
+      description: monitor location accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/LAM.sh
+      restfulAPI: /LAM/rest/monitor
+      type: sh
+   associatedQoRMetric: locationArc
+   listOfParameters: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: longtitudeIndex
+      type: int
+      value: 0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: latitudeIndex
+      type: int
+      value: 1
+   monitorActionID: LAM
+   monitoringActionName: LAM
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+   artifact: 
+      name: VAM
+      description: monitor vehicle accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/VAM.sh
+      restfulAPI: /VAM/rest/monitor
+      type: sh
+   associatedQoRMetric: vehicleArc
+   listOfParameters: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: longtitudeIndex
+      type: int
+      value: 0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: latitudeIndex
+      type: int
+      value: 1
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: speedIndex
+      type: int
+      value: 2
+   monitorActionID: VAM
+   monitoringActionName: VAM
+listOfResourceControls: 
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlAction
+   associatedQoRMetric: throughput
+   listOfResourceControlStrategies: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlCase
+      dataSize: 
+         conditionID: c
+         lowerBound: 30.0
+         metricName: dataSize
+         upperBound: 80.0
+      estimatedResult: 
+         conditionID: throughput_c1
+         lowerBound: 301.0
+         metricName: throughput
+         upperBound: 1.7976931348623157E308
+      listOfResourceControlStrategies: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+         controlMetric: cpuUsage
+         primitiveAction: SAM
+         scaleInCondition: &3
+            conditionID: c_in
+            metricName: cpuUsage
+            upperBound: 15.0
+         scaleOutCondition: &4
+            conditionID: c_out
+            lowerBound: 85.0
+            metricName: cpuUsage
+            upperBound: 100.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+         controlMetric: cpuUsage
+         primitiveAction: LAM
+         scaleInCondition: *3
+         scaleOutCondition: *4
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+         controlMetric: cpuUsage
+         primitiveAction: VAM
+         scaleInCondition: *3
+         scaleOutCondition: *4
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+         controlMetric: cpuUsage
+         primitiveAction: SAA
+         scaleInCondition: *3
+         scaleOutCondition: *4
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+         controlMetric: cpuUsage
+         primitiveAction: LAA
+         scaleInCondition: *3
+         scaleOutCondition: *4
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+         controlMetric: cpuUsage
+         primitiveAction: VAA
+         scaleInCondition: *3
+         scaleOutCondition: *4
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlAction
+   associatedQoRMetric: deliveryTime
+   listOfResourceControlStrategies: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlCase
+      dataSize: 
+         conditionID: c
+         lowerBound: 30.0
+         metricName: dataSize
+         upperBound: 80.0
+      estimatedResult: 
+         conditionID: deliveryTime_c1
+         metricName: deliveryTime
+         upperBound: 0.1
+      listOfResourceControlStrategies: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+         controlMetric: cpuUsage
+         primitiveAction: SAM
+         scaleInCondition: &5
+            conditionID: c_in
+            metricName: cpuUsage
+            upperBound: 20.0
+         scaleOutCondition: &6
+            conditionID: c_out
+            lowerBound: 75.0
+            metricName: cpuUsage
+            upperBound: 100.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+         controlMetric: cpuUsage
+         primitiveAction: LAM
+         scaleInCondition: *5
+         scaleOutCondition: *6
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+         controlMetric: cpuUsage
+         primitiveAction: VAM
+         scaleInCondition: *5
+         scaleOutCondition: *6
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+         controlMetric: cpuUsage
+         primitiveAction: SAA
+         scaleInCondition: *5
+         scaleOutCondition: *6
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+         controlMetric: cpuUsage
+         primitiveAction: LAA
+         scaleInCondition: *5
+         scaleOutCondition: *6
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+         controlMetric: cpuUsage
+         primitiveAction: VAA
+         scaleInCondition: *5
+         scaleOutCondition: *6

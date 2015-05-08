@@ -19,8 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ElasticStateSet {
     
-    @XmlElement(name = "initialElasticStateSet", required = true)
-    List<ElasticState> initialElasticStateSet;
+  
     
     @XmlElement(name = "finalElasticStateSet", required = true)
     List<ElasticState> finalElasticStateSet;
@@ -28,17 +27,8 @@ public class ElasticStateSet {
     public ElasticStateSet() {
     }
 
-    public ElasticStateSet(List<ElasticState> initialElasticStateSet, List<ElasticState> finalElasticStateSet) {
-        this.initialElasticStateSet = initialElasticStateSet;
+    public ElasticStateSet(List<ElasticState> finalElasticStateSet) {
         this.finalElasticStateSet = finalElasticStateSet;
-    }
-
-    public List<ElasticState> getInitialElasticStateSet() {
-        return initialElasticStateSet;
-    }
-
-    public void setInitialElasticStateSet(List<ElasticState> initialElasticStateSet) {
-        this.initialElasticStateSet = initialElasticStateSet;
     }
 
     public List<ElasticState> getFinalElasticStateSet() {
@@ -48,7 +38,7 @@ public class ElasticStateSet {
     public void setFinalElasticStateSet(List<ElasticState> finalElasticStateSet) {
         this.finalElasticStateSet = finalElasticStateSet;
     }
-    
+
     
     
     

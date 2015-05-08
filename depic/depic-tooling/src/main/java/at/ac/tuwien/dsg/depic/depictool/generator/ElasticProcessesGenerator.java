@@ -50,6 +50,7 @@ public class ElasticProcessesGenerator {
     DataAnalyticsFunction daf;
     QoRModel qorModel;
     PrimitiveActionMetadata primitiveActionRepository;
+    List<ElasticState> finalElasticStates;
 
     public ElasticProcessesGenerator() {
         // config();
@@ -68,7 +69,7 @@ public class ElasticProcessesGenerator {
         MonitoringProcess monitorProcess = generateMonitoringProcess();
         toYaml(monitorProcess, "/Volumes/DATA/Temp/monitorProcess.yml");
         
-        List<ElasticState> finalElasticStates = generateFinalElasticStateSet();
+        finalElasticStates = generateFinalElasticStateSet();
         toYaml(finalElasticStates, "/Volumes/DATA/Temp/finalElasticStates.yml");
         
         List<AdjustmentProcess> listOfAdjustmentProcesses = generateAdjustmentProcesses(finalElasticStates);
@@ -107,6 +108,12 @@ public class ElasticProcessesGenerator {
 //        return elasticDataAsset;
         return elasticProcess;
     }
+
+    public List<ElasticState> getFinalElasticStates() {
+        return finalElasticStates;
+    }
+    
+    
 
     ///////////////////////////////////////
     ///                                 ///
@@ -255,7 +262,10 @@ public class ElasticProcessesGenerator {
 
             if (listOfConditions.size() > 0) {
                 Range r = findMatchingRange(qElement, qorMetric);
-
+                
+                if (r!=null){
+                   
+                
                 List<MetricCondition> unitConditions = new ArrayList<MetricCondition>();
          
                 for (MetricCondition condition : listOfConditions) {
@@ -311,6 +321,8 @@ public class ElasticProcessesGenerator {
                 
                 if (unitConditions.size()>0) {
                     listOfConditionSet.add(unitConditions);
+                }
+                
                 }
             }
         }

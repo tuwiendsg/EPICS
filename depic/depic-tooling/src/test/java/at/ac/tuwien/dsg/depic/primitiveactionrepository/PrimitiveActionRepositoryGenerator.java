@@ -477,14 +477,14 @@ public class PrimitiveActionRepositoryGenerator {
 
     // kdd - position accuracy  
         
-        String controlActionID = "VAM";
-        String controlActionName = "VAM";
+        String controlActionID = "VAA";
+        String controlActionName = "VAA";
         Artifact artifact = new Artifact(
                 controlActionName,
-                "control Ads Position Accuracy",
-                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/VAM.sh",
+                "adjust vehicle Accuracy",
+                "http://128.130.172.215/salsa/upload/files/jun/artifact_sh/VAA.sh",
                 "sh",
-                "/VAM/rest/control");
+                "/VAA/rest/control");
 
         String associatedQoRMetric = "vehicleArc";
         List<String> listOfPrerequisiteActionIDs = new ArrayList<String>();

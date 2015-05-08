@@ -5,6 +5,7 @@
  */
 package at.ac.tuwien.dsg.depic.depictool.utils;
 
+import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -48,6 +49,14 @@ public class Configuration {
         }
 
         return configString;
+    }
+    
+    public String getPrimitiveActionMetadata(){
+        String path = getConfigPath();
+        IOUtils iou = new IOUtils(path);
+  
+        String primitiveAction_str = iou.readData("primitiveActionRepository.yml");
+        return primitiveAction_str;
     }
     
     public String getCurrentPath(){

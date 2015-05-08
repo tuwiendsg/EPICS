@@ -7,11 +7,14 @@ package at.ac.tuwien.dsg.depic.depictool.uploader;
 
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAssetForm;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
+import at.ac.tuwien.dsg.depic.depictool.generator.Generator;
 import at.ac.tuwien.dsg.depic.depictool.repository.DataAssetRepositoryManager;
 import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManager;
+import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
 
 import java.io.File;
 import java.io.IOException;
@@ -177,25 +180,26 @@ public class InputSpecificationUploader extends HttpServlet {
         Logger.getLogger(InputSpecificationUploader.class.getName()).log(Level.INFO, log);
         
         QoRModel qoRModel = YamlUtils.unmarshallYaml(QoRModel.class, qor);
-        DataAnalyticsFunction dataAnalyticsFunction = new DataAnalyticsFunction("", qoRModel.getDataAssetForm(), dbType, daw);
+        DataAnalyticsFunction dataAnalyticsFunction = new DataAnalyticsFunction("daf-gps", qoRModel.getDataAssetForm(), dbType, daw);
         
         DataAssetRepositoryManager das = new DataAssetRepositoryManager();
         das.requestToGetDataAsset(dataAnalyticsFunction);
         
+        Configuration configuration = new Configuration();
+        String primitiveAction = configuration.getPrimitiveActionMetadata();
         
         
+        ElasticProcessRepositoryManager elasticityProcessStore = new ElasticProcessRepositoryManager();
+        elasticityProcessStore.storeQoRAndElasticityProcesses(eDaaSName, qor, primitiveAction, dbType);
+  
         
-//        ElasticProcessRepository elasticityProcessStore = new ElasticProcessRepository();
-//        elasticityProcessStore.storeQoRAndElasticityProcesses(eDaaSName, qor, elasticityProcesses, dbType);
-//  
-//        
-//        ElasticityProcessesParser elasticityProcessesParser = new ElasticityProcessesParser();
-//        
-//        QoRModel qorModel = elasticityProcessesParser.parseQoRModel(qor);
-//        MetricProcess metricProcess = elasticityProcessesParser.parseElasticityProcesses(elasticityProcesses);
-//        
-//        Generator generator = new Generator(eDaaSName, qorModel, metricProcess, dbType);
-//        generator.startGenerator();
+        QoRModel qorModel = YamlUtils.unmarshallYaml(QoRModel.class, qor);       
+        PrimitiveActionMetadata pam = YamlUtils.unmarshallYaml(PrimitiveActionMetadata.class, primitiveAction);
+ 
+        
+        
+        Generator generator = new Generator(dataAnalyticsFunction, qorModel, pam, eDaaSName, dbType);
+        generator.startGenerator();
        
 
         request.getRequestDispatcher("/index.jsp").forward(request, response);

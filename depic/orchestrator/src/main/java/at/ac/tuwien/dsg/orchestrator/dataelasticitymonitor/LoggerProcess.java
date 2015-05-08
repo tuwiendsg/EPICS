@@ -9,8 +9,8 @@ import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ControlProcess;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringSession;
@@ -31,27 +31,25 @@ public class LoggerProcess {
     List<ElasticState> listOfInitialState;
     List<ElasticState> listOfFinalState;
     MonitoringProcess monitorProcess;
-    List<ControlProcess> listOfControlProcesses;
+    List<AdjustmentProcess> listOfControlProcesses;
 
     
     public void config(){
         ElasticityProcessesStore elasticityProcessesStore = new ElasticityProcessesStore(); 
         ElasticDataAsset eda = elasticityProcessesStore.getElasticDataAsset("daf2");
    //     ElasticProcess elasticityProcess= eda.getElasticityProcess();
-        ElasticStateSet elasticStateSet = eda.getElasticStateSet();
-        
-        listOfInitialState = elasticStateSet.getInitialElasticStateSet();
-       listOfFinalState = elasticStateSet.getFinalElasticStateSet();
+     
+       listOfFinalState = eda.getListOfFinalElasticState();
       //  monitorProcess = elasticityProcess.getMonitorProcess(); 
       //  listOfControlProcesses = elasticityProcess.getListOfControlProcesses();
-    
-        
-        Logger.logInfo("INITIAL ESTATE SET ------- \n");
-        for (ElasticState  estate : listOfInitialState){
-           
-            logElasticState(estate);
-        }
-        
+//    
+//        
+//        Logger.logInfo("INITIAL ESTATE SET ------- \n");
+//        for (ElasticState  estate : listOfInitialState){
+//           
+//            logElasticState(estate);
+//        }
+//        
         
         Logger.logInfo("FINAL ESTATE SET ------- \n");
         for (ElasticState  estate : listOfFinalState){
@@ -62,7 +60,7 @@ public class LoggerProcess {
         
         
         Logger.logInfo("CONTROL PROCESSES LIST ------ \n");
-        for (ControlProcess cp : listOfControlProcesses){
+        for (AdjustmentProcess cp : listOfControlProcesses){
             logControlProcesses(cp);
         }
         
@@ -90,23 +88,23 @@ public class LoggerProcess {
     }
     
      
-     public void logControlProcesses(ControlProcess controlProcess) {
+     public void logControlProcesses(AdjustmentProcess controlProcess) {
 
         Logger.logInfo("\nLOG CONTROL PROCESS");
 
         Logger.logInfo("\n***");
-        List<ControlAction> listOfControlActions = controlProcess.getListOfControlActions();
+        List<AdjustmentAction> listOfControlActions = controlProcess.getListOfAdjustmentActions();
 
         Logger.logInfo("PROCESS ----------- ");
-        Logger.logInfo("eState in: " + controlProcess.geteStateID_i().geteStateID());
-        Logger.logInfo("eState fi: " + controlProcess.geteStateID_j().geteStateID());
-        for (ControlAction controlAction : listOfControlActions) {
-            Logger.logInfo("control action: " + controlAction.getControlActionName());
+   
+        Logger.logInfo("eState fi: " + controlProcess.getFinalEState().geteStateID());
+        for (AdjustmentAction controlAction : listOfControlActions) {
+            Logger.logInfo("control action: " + controlAction.getActionName());
         }
 
         Logger.logInfo(".............");
 
-        List<MetricCondition> conditions_in = controlProcess.geteStateID_i().getListOfConditions();
+        List<MetricCondition> conditions_in = controlProcess.getFinalEState().getListOfConditions();
         for (MetricCondition c : conditions_in) {
             Logger.logInfo("   id: " + c.getConditionID());
             Logger.logInfo("   metric: " + c.getMetricName());
@@ -115,8 +113,8 @@ public class LoggerProcess {
 
         }
 
-        Logger.logInfo("eState fi: " + controlProcess.geteStateID_j().geteStateID());
-        List<MetricCondition> conditions_fi = controlProcess.geteStateID_j().getListOfConditions();
+        Logger.logInfo("eState fi: " + controlProcess.getFinalEState().geteStateID());
+        List<MetricCondition> conditions_fi = controlProcess.getFinalEState().getListOfConditions();
         for (MetricCondition c : conditions_fi) {
             Logger.logInfo("   id: " + c.getConditionID());
             Logger.logInfo("   metric: " + c.getMetricName());
@@ -125,29 +123,29 @@ public class LoggerProcess {
 
         }
 
-        for (ControlAction controlAction : listOfControlActions) {
-            Logger.logInfo("control action: " + controlAction.getControlActionID());
-            Logger.logInfo("control action: " + controlAction.getControlActionName());
-            Logger.logInfo("  incomming: " + controlAction.getIncomming());
-            Logger.logInfo("  outgoing: " + controlAction.getOutgoing());
-            List<Parameter> listOfParams = controlAction.getListOfTransitions().get(0).getListOfParameters();
-
-            for (Parameter param : listOfParams) {
-                Logger.logInfo("    parameter: " + param.getParameterName());
-                Logger.logInfo("    value: " + param.getValue());
-            }
+        for (AdjustmentAction controlAction : listOfControlActions) {
+            Logger.logInfo("control action: " + controlAction.getActionID());
+            Logger.logInfo("control action: " + controlAction.getActionName());
+//            Logger.logInfo("  incomming: " + controlAction.ge());
+//            Logger.logInfo("  outgoing: " + controlAction.getOutgoing());
+//            List<Parameter> listOfParams = controlAction.getListOfTransitions().get(0).getListOfParameters();
+//
+//            for (Parameter param : listOfParams) {
+//                Logger.logInfo("    parameter: " + param.getParameterName());
+//                Logger.logInfo("    value: " + param.getValue());
+//            }
 
         }
-
-        List<ParallelGateway> listOfParallelGateways = controlProcess.getListOfParallelGateways();
-
-        if (listOfParallelGateways!=null){
-        for (ParallelGateway parallelGateway : listOfParallelGateways) {
-            Logger.logInfo("parallel gateway: " + parallelGateway.getGatewayID());
-            Logger.logInfo("  incoming: " + parallelGateway.getIncomming());
-            Logger.logInfo("  outgoing: " + parallelGateway.getOutgoing());
-        }
-        }
+//
+//        List<ParallelGateway> listOfParallelGateways = controlProcess.getListOfParallelGateways();
+//
+//        if (listOfParallelGateways!=null){
+//        for (ParallelGateway parallelGateway : listOfParallelGateways) {
+//            Logger.logInfo("parallel gateway: " + parallelGateway.getGatewayID());
+//            Logger.logInfo("  incoming: " + parallelGateway.getIncomming());
+//            Logger.logInfo("  outgoing: " + parallelGateway.getOutgoing());
+//        }
+//        }
     }
     
 }

@@ -5,14 +5,15 @@
  */
 package at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller;
 
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ExternalServiceRequest;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ControlAction;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ControlProcess;
+
 import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringSession;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter;
 import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
@@ -35,14 +36,14 @@ import org.eclipse.persistence.internal.core.helper.CoreClassConstants;
 public class DataElasticityController {
 
     List<ElasticState> listOfExpectedElasticStates;
-    List<ControlProcess> listOfControlProcesses;
+    List<AdjustmentProcess> listOfAdjustmentProcesses;
     List<String> traversedGatewayList;
     DBType eDaaSType;
     MonitoringSession monitoringSession;
 
-    public DataElasticityController(List<ElasticState> listOfExpectedElasticStates, List<ControlProcess> listOfControlProcesses, MonitoringSession monitoringSession, DBType eDaaSType) {
+    public DataElasticityController(List<ElasticState> listOfExpectedElasticStates, List<AdjustmentProcess> listOfAdjustmentProcesses, MonitoringSession monitoringSession, DBType eDaaSType) {
         this.listOfExpectedElasticStates = listOfExpectedElasticStates;
-        this.listOfControlProcesses = listOfControlProcesses;
+        this.listOfAdjustmentProcesses = listOfAdjustmentProcesses;
         traversedGatewayList = new ArrayList<String>();
         this.monitoringSession = monitoringSession;
         this.eDaaSType = eDaaSType;
@@ -50,11 +51,11 @@ public class DataElasticityController {
 
     public void startControlElasticState(ElasticState currentElasticState) {
 
-        List<ControlProcess> listOfPotentialControlProcesses = new ArrayList<ControlProcess>();
+        List<AdjustmentProcess> listOfPotentialControlProcesses = new ArrayList<AdjustmentProcess>();
 
         for (ElasticState expectedElasticState : listOfExpectedElasticStates) {
 
-            ControlProcess cp = determineAppropriateControlProcess(currentElasticState.geteStateID(), expectedElasticState.geteStateID());
+            AdjustmentProcess cp = determineAppropriateControlProcess(expectedElasticState.geteStateID());
             if (cp != null) {
                // Logger.logInfo("Potential Next eState FOUND");
                // logElasticState(cp.geteStateID_j());
@@ -64,7 +65,7 @@ public class DataElasticityController {
 
         }
 
-        ControlProcess controlProcess = determineTheBestControlProcess(listOfPotentialControlProcesses);
+        AdjustmentProcess controlProcess = determineTheBestControlProcess(listOfPotentialControlProcesses);
         Logger.logInfo("BEST CONTROL PROCESS FOUND");
       //  logControlProcesses(controlProcess);
         Logger.logInfo("FINAL Elastic STATE");
@@ -73,7 +74,7 @@ public class DataElasticityController {
         log += "FINAL Elastic STATE: " + currentElasticState.geteStateID();
         
         
-        logElasticState(controlProcess.geteStateID_j());
+        logElasticState(controlProcess.getFinalEState());
 
           long t1 = System.currentTimeMillis();
         
@@ -101,12 +102,11 @@ public class DataElasticityController {
 
     }
 
-    private ControlProcess determineAppropriateControlProcess(String elasticStateID_i, String elasticStateID_j) {
+    private AdjustmentProcess determineAppropriateControlProcess(String elasticStateID_j) {
 
-        ControlProcess cp = null;
-        for (ControlProcess controlProcess : listOfControlProcesses) {
-            if (controlProcess.geteStateID_i().geteStateID().equals(elasticStateID_i)
-                    && controlProcess.geteStateID_j().geteStateID().equals(elasticStateID_j)) {
+        AdjustmentProcess cp = null;
+        for (AdjustmentProcess controlProcess : listOfAdjustmentProcesses) {
+            if (controlProcess.getFinalEState().geteStateID().equals(elasticStateID_j)) {
                 cp = controlProcess;
             }
         }
@@ -114,13 +114,13 @@ public class DataElasticityController {
         return cp;
     }
 
-    private ControlProcess determineTheBestControlProcess(List<ControlProcess> potentialControlProcesses) {
+    private AdjustmentProcess determineTheBestControlProcess(List<AdjustmentProcess> potentialControlProcesses) {
 
         int minControlActions = Integer.MAX_VALUE;
         int cpIndex = 0;
-        for (ControlProcess cp : potentialControlProcesses) {
-            if (cp.getListOfControlActions().size() < minControlActions) {
-                minControlActions = cp.getListOfControlActions().size();
+        for (AdjustmentProcess cp : potentialControlProcesses) {
+            if (cp.getListOfAdjustmentActions().size() < minControlActions) {
+                minControlActions = cp.getListOfAdjustmentActions().size();
                 cpIndex = potentialControlProcesses.indexOf(cp);
             }
 
@@ -129,7 +129,7 @@ public class DataElasticityController {
         return potentialControlProcesses.get(cpIndex);
     }
 
-    private void startControlProcess(ControlProcess cp) {
+    private void startControlProcess(AdjustmentProcess cp) {
 
         Logger.logInfo("PLANNING Control Process ...");
 
@@ -196,11 +196,11 @@ public class DataElasticityController {
 //        setPriority(listOfControlActions);
 //    }
     
-    private void executeControlProcess(ControlProcess cp){
+    private void executeControlProcess(AdjustmentProcess cp){
    
-        List<ControlAction> listOfControlActions = cp.getListOfControlActions();
+        List<AdjustmentAction> listOfControlActions = cp.getListOfAdjustmentActions();
 
-        for (ControlAction controlAction : listOfControlActions) {
+        for (AdjustmentAction controlAction : listOfControlActions) {
 
            // List<Parameter> listOfParams = controlAction.getListOfParameters();
             List<Parameter> listOfParams = null;
@@ -213,16 +213,16 @@ public class DataElasticityController {
 
             }
 
-            if (!controlAction.getControlActionName().equals("STC")) {
+            if (!controlAction.getActionName().equals("STC")) {
 
                 String uri = "";
                 
                 
                 do {
 
-                    uri = ElasticServiceRegistry.getElasticServiceURI(controlAction.getControlActionName(), eDaaSType);
+                    uri = ElasticServiceRegistry.getElasticServiceURI(controlAction.getActionName(), eDaaSType);
                     if (uri.equals("")) {
-                        Logger.logInfo("Waiting_for_Active_Elastic_Serivce ... " + monitoringSession.getSessionID() +" - " +controlAction.getControlActionName());
+                        Logger.logInfo("Waiting_for_Active_Elastic_Serivce ... " + monitoringSession.getSessionID() +" - " +controlAction.getActionName());
                     } else {
                         Logger.logInfo("Ready_Service: " + monitoringSession.getSessionID() +" - " + uri);
                         ElasticServiceRegistry.occupyElasticService(uri);
