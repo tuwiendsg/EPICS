@@ -52,12 +52,12 @@ public class YamlUtils {
     
     public static <T> T unmarshallYaml(Class<T> className, String yml){
         
-        IOUtils iou = new IOUtils("/Volumes/DATA/Temp");
+        IOUtils iou = new IOUtils("/home/ubuntu/log");
         iou.overWriteData(yml, "tmp.yaml");
         
         T obj = null;
         try {
-            YamlReader reader = new YamlReader(new FileReader("/Volumes/DATA/Temp/tmp.yaml"));
+            YamlReader reader = new YamlReader(new FileReader("/home/ubuntu/log/tmp.yaml"));
             obj = reader.read(className);
  
         } catch (Exception ex) {
@@ -71,14 +71,14 @@ public class YamlUtils {
     public static <T> String marshallYaml(Class<T> className, Object obj){
        
         try {
-            YamlWriter writer = new YamlWriter(new FileWriter("/Volumes/DATA/Temp/tmp.yaml"));
+            YamlWriter writer = new YamlWriter(new FileWriter("//home/ubuntu/log/tmp.yaml"));
             writer.write(obj);
             writer.close();
         } catch (IOException ex) {
             Logger.getLogger(YamlUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        IOUtils iou = new IOUtils("/Volumes/DATA/Temp");
+        IOUtils iou = new IOUtils("/home/ubuntu/log");
         String yml =iou.readData("tmp.yaml");
         
         return yml;

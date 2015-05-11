@@ -10,6 +10,7 @@ import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticServices;
 import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
+import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 
 import java.util.List;
@@ -70,8 +71,12 @@ public class ElasticServiceMonitor implements Runnable {
     private List<ElasticService>  getUpdatedElasticService(){
         
         List<ElasticService> listOfElasticServices = null;
+        Configuration cfg = new Configuration();
         
-        IOUtils iou = new IOUtils("/home/ubuntu/log");
+        String elasticServiceUpdatePath = cfg.getConfig("DB.ELASTIC.SERVICES.UPDATE");
+        
+        
+        IOUtils iou = new IOUtils(elasticServiceUpdatePath);
         
         String xml = iou.readData("depic_elasticservice.xml");
         

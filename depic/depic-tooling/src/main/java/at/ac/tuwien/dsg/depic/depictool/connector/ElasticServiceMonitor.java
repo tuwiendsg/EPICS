@@ -114,15 +114,19 @@ public class ElasticServiceMonitor implements Runnable {
                 
                 if (es.getRequest()!=-1){
                     updateList.add(es);
+                    System.out.println("PASS CASE: " + es.getUri());
+                } else {
+                    System.out.println("FAILED CASE: " + es.getUri());
                 }
             }
             
             
             ElasticServices elasticServices = new ElasticServices(updateList);
             String xml = JAXBUtils.marshal(elasticServices, ElasticServices.class);
+            Configuration cfg = new Configuration();
+            String elasticServiceConfigPath = cfg.getConfig("DB.ELASTIC.SERVICES.UPDATE");
             
-            
-            IOUtils iou = new IOUtils("/home/ubuntu/log");
+            IOUtils iou = new IOUtils(elasticServiceConfigPath);
             iou.overWriteData(xml, "depic_elasticservice.xml");
             
             System.out.println("\n" + xml);
@@ -147,7 +151,10 @@ public class ElasticServiceMonitor implements Runnable {
             Configuration cfg = new Configuration();
             String daLoaderIp = cfg.getConfig("DATA.ASSET.LOADER.IP.LOCAL");
             String orchestratorIp = cfg.getConfig("ORCHESTRATOR.IP.LOCAL");
-
+            
+            
+            System.out.println("DATA LOADER IP : " + daLoaderIp);
+            System.out.println("ORCHESTRATOR IP : " + orchestratorIp);
             
             if (elasticService.getActionID().equals(threadName)) {
                 String configureDataAssetLoaderUri = elasticService.getUri() + "/eDaaS/rest/dataasset/dataassetloaderip";
@@ -164,9 +171,15 @@ public class ElasticServiceMonitor implements Runnable {
             } else {
 
                 String configureUri = elasticService.getUri() + "/conf";
-
+                
+                
+                
                 RestfulWSClient ws = new RestfulWSClient(configureUri);
                 int responseCode =  ws.callPutMethodRC(daLoaderIp);
+                
+                System.out.println("CONFIGURE URI: " + configureUri);
+                System.out.println("RESPONSE CODE: " + responseCode);
+                
                 
                 if (responseCode!=204){
                     elasticService.setRequest(-1);

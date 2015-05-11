@@ -67,17 +67,17 @@ public class ElasticProcessesGenerator {
         Logger.logInfo("Start generate Elastic Processes ... ");
 
         MonitoringProcess monitorProcess = generateMonitoringProcess();
-        toYaml(monitorProcess, "/Volumes/DATA/Temp/monitorProcess.yml");
+       // toYaml(monitorProcess, "/Volumes/DATA/Temp/monitorProcess.yml");
         
         finalElasticStates = generateFinalElasticStateSet();
-        toYaml(finalElasticStates, "/Volumes/DATA/Temp/finalElasticStates.yml");
+       // toYaml(finalElasticStates, "/Volumes/DATA/Temp/finalElasticStates.yml");
         
         List<AdjustmentProcess> listOfAdjustmentProcesses = generateAdjustmentProcesses(finalElasticStates);
-        toYaml(listOfAdjustmentProcesses, "/Volumes/DATA/Temp/listOfAdjustmentProcesses.yml");
+       // toYaml(listOfAdjustmentProcesses, "/Volumes/DATA/Temp/listOfAdjustmentProcesses.yml");
         
         
         List<ResourceControlPlan> listOfResourceControlPlans = generateResourceControlPlan(finalElasticStates);
-        toYaml(listOfResourceControlPlans, "/Volumes/DATA/Temp/listOfResourceControlPlans.yml");
+       // toYaml(listOfResourceControlPlans, "/Volumes/DATA/Temp/listOfResourceControlPlans.yml");
         
         ElasticProcess elasticProcess = new ElasticProcess(monitorProcess, listOfAdjustmentProcesses, listOfResourceControlPlans);
 

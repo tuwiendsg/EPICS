@@ -108,7 +108,12 @@ public class ComotConnector {
 
             if (!isDeployActionExisting(monitoringServices, ma.getMonitoringActionName())) {
                 DeployAction deployAction = epStore.getPrimitiveAction(ma.getMonitoringActionName());
-                monitoringServices.add(deployAction);
+                
+                if (deployAction != null) {
+                        monitoringServices.add(deployAction);
+                    } else {
+                        Logger.logInfo("COMOT CONNECTOR - Missing Artifact for Service: " + ma.getMonitoringActionName());
+                    }
             }
 
         }
@@ -148,6 +153,9 @@ public class ComotConnector {
     private boolean isDeployActionExisting(List<DeployAction> listOfDeployActions, String deployActionID) {
 
         System.out.println("CHECK: " + deployActionID);
+        
+        
+        
         for (int i = 0; i < listOfDeployActions.size(); i++) {
             DeployAction da = listOfDeployActions.get(i);
 
@@ -440,6 +448,7 @@ public class ComotConnector {
             // add VM + monitoring service units
             OperatingSystemUnit monitoringVM = OperatingSystemUnit(dpa.getActionID() + "_VM")
                     .providedBy(OpenstackSmall()
+                            .withBaseImage("a82e054f-4f01-49f9-bc4c-77a98045739c")
                             .addSoftwarePackage("tomcat7")
                             .addSoftwarePackage("ganglia-monitor")
                             .addSoftwarePackage("gmetad")
@@ -462,7 +471,7 @@ public class ComotConnector {
                             .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric("cpuUsage", "%")).lessThan("30"))
                             .enforce(eventProcessingUnitScaleIn),
                             Strategy("EP_ST2_" + (i++))
-                            .when(Constraint.MetricConstraint("EP_ST1_CO2_" + (i++), new Metric("cpuUsage", "%")).greaterThan("60"))
+                            .when(Constraint.MetricConstraint("EP_ST1_CO2_" + (i++), new Metric("cpuUsage", "%")).greaterThan("90"))
                             .enforce(eventProcessingUnitScaleOut));
 
             monitoringServicesTopology.addServiceUnit(serviceUnit);
@@ -474,11 +483,12 @@ public class ComotConnector {
 
         for (DeployAction dpa : controlServices) {
 
-            if (!dpa.getActionID().equals("STC") && !dpa.getActionID().equals("AIC")){
+
             
             // add VM + control service units
             OperatingSystemUnit controlVM = OperatingSystemUnit(dpa.getActionID() + "_VM")
                     .providedBy(OpenstackSmall()
+                            .withBaseImage("a82e054f-4f01-49f9-bc4c-77a98045739c")
                             .addSoftwarePackage("tomcat7")
                             .addSoftwarePackage("ganglia-monitor")
                             .addSoftwarePackage("gmetad")
@@ -493,7 +503,7 @@ public class ComotConnector {
                     .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"))
                     .provides(eventProcessingUnitScaleIn, eventProcessingUnitScaleOut)
                     .controlledBy(Strategy("EP_ST1_" + (i++))
-                            .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric("cpuUsage", "%")).lessThan("75"))
+                            .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric("cpuUsage", "%")).lessThan("30"))
                             .enforce(eventProcessingUnitScaleIn),
                             Strategy("EP_ST2_" + (i++))
                             .when(Constraint.MetricConstraint("EP_ST1_CO2_" + (i++), new Metric("cpuUsage", "%")).greaterThan("90"))
@@ -504,7 +514,7 @@ public class ComotConnector {
             cloudService.andRelationships(HostedOnRelation(serviceUnit.getId() + "To" + controlVM.getId())
                     .from(serviceUnit)
                     .to(controlVM));
-        }
+        
         }
 
         // add VM + eDaaS
