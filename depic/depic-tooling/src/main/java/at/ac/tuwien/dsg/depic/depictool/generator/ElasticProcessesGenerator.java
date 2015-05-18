@@ -514,7 +514,8 @@ public class ElasticProcessesGenerator {
 
                         AdjustmentCase foundAdjustmentCase = new AdjustmentCase(
                                 adjustmentCase.getEstimatedResult(),
-                                adjustmentCase.getListOfParameters());
+                                adjustmentCase.getListOfParameters(),
+                                adjustmentCase.getListOfAnalyticTasks());
 
                         List<AdjustmentCase> listOfFoundAdjustmentCases = new ArrayList<AdjustmentCase>();
                         listOfFoundAdjustmentCases.add(foundAdjustmentCase);

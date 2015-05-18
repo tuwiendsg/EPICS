@@ -12,6 +12,7 @@ import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AnalyticTask;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlAction;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlCase;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy;
@@ -313,8 +314,16 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 91, 100);
     
-        AdjustmentCase transition1 = new AdjustmentCase( c3, listOfParameters);
-        AdjustmentCase transition2 = new AdjustmentCase( c3, listOfParameters);
+        List<AnalyticTask> listOfAnalyticTasks = new ArrayList<AnalyticTask>();
+        List<Parameter> listOfTaskParameters = new ArrayList<Parameter>();
+        Parameter tParam = new Parameter("stopCondition", "Integer", "5");
+        listOfTaskParameters.add(tParam);
+        AnalyticTask kmeansTask = new AnalyticTask("kmeans", listOfTaskParameters);
+        listOfAnalyticTasks.add(kmeansTask);
+        
+        
+        AdjustmentCase transition1 = new AdjustmentCase( c3, listOfParameters,listOfAnalyticTasks);
+        AdjustmentCase transition2 = new AdjustmentCase( c3, listOfParameters, null);
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
@@ -362,7 +371,7 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 91, 100);
 
-        AdjustmentCase transition1 = new AdjustmentCase(c3, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase(c3, listOfParameters,null);
       
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
@@ -407,7 +416,7 @@ public class PrimitiveActionRepositoryGenerator {
      //   MetricCondition c2 = new MetricCondition(associatedQoRMetric, "speedArc_c2", 81, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "speedArc_c1", 91, 100);
 
-        AdjustmentCase transition1 = new AdjustmentCase(c3, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase(c3, listOfParameters,null);
      
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
@@ -454,7 +463,7 @@ public class PrimitiveActionRepositoryGenerator {
     //    MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "locationArc_c1", 91, 100);
 
-        AdjustmentCase transition1 = new AdjustmentCase( c3, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase( c3, listOfParameters,null);
 
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
@@ -502,7 +511,7 @@ public class PrimitiveActionRepositoryGenerator {
  //       MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "vehicleArc_c1", 91, 100);
 
-        AdjustmentCase transition1 = new AdjustmentCase( c3, listOfParameters);
+        AdjustmentCase transition1 = new AdjustmentCase( c3, listOfParameters,null);
 
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
