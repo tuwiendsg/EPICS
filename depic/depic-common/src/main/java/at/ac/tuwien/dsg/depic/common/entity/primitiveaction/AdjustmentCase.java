@@ -20,18 +20,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AdjustmentCase {
     
-    @XmlElement(name = "estimatedResult", required = true)
+    @XmlElement(name = "estimatedResult")
     MetricCondition estimatedResult;
     
-    @XmlElement(name = "listOfParameters", required = true)
+    @XmlElement(name = "listOfParameters")
     List<Parameter> listOfParameters;
+    
+    @XmlElement(name = "listOfAnalyticTasks")
+    List<AnalyticTask> listOfAnalyticTasks;
+    
 
     public AdjustmentCase() {
     }
 
-    public AdjustmentCase(MetricCondition estimatedResult, List<Parameter> listOfParameters) {
+    public AdjustmentCase(MetricCondition estimatedResult, List<Parameter> listOfParameters, List<AnalyticTask> listOfAnalyticTasks) {
         this.estimatedResult = estimatedResult;
         this.listOfParameters = listOfParameters;
+        this.listOfAnalyticTasks = listOfAnalyticTasks;
     }
 
     public MetricCondition getEstimatedResult() {
@@ -49,6 +54,16 @@ public class AdjustmentCase {
     public void setListOfParameters(List<Parameter> listOfParameters) {
         this.listOfParameters = listOfParameters;
     }
+
+    public List<AnalyticTask> getListOfAnalyticTasks() {
+        return listOfAnalyticTasks;
+    }
+
+    public void setListOfAnalyticTasks(List<AnalyticTask> listOfAnalyticTasks) {
+        this.listOfAnalyticTasks = listOfAnalyticTasks;
+    }
+
+    
 
     
     

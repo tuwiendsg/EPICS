@@ -11,11 +11,16 @@ package at.ac.tuwien.dsg.depic.dataassetfunctionmanagement.engine;
  */
 
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
+import at.ac.tuwien.dsg.depic.dataassetfunctionmanagement.util.IOUtils;
+import br.ufjf.taverna.core.TavernaClient;
+import br.ufjf.taverna.model.output.TavernaOutput;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 //import org.kie.internal.KnowledgeBase;
 //import org.kie.internal.builder.KnowledgeBuilder;
@@ -60,6 +65,54 @@ public class WorkflowEngine {
     
 
     public void startWFEngine() {
+        
+        
+        TavernaClient client = new TavernaClient();
+        
+        //client.setBaseUri("http://localhost:8080/TavernaServer-2.5.4/rest");
+        client.setBaseUri("http://128.130.172.214:8080/TavernaServer-2.5.4/rest");
+        client.setAuthorization("taverna", "taverna");
+
+        try {
+            String tmpFilePath = "/Volumes/DATA/Temp";
+            String uuid = UUID.randomUUID().toString();
+            String status = "";
+            
+            IOUtils iou = new IOUtils(tmpFilePath);
+            iou.writeData(daf.getDaw(), uuid+".t2flow");
+   
+            uuid = client.create(tmpFilePath + "/" + uuid+".t2flow");
+            //String uuid = client.create("/Users/Jun/Desktop/DEPIC Demo/gps_edaas/daf_gps_1.t2flow");
+            
+            System.out.println(uuid);           
+            
+           client.start(uuid);
+
+            do {
+                 status = client.getStatus(uuid);
+                System.out.println(status);
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                }
+            } while (!"Finished".equals(status));
+            
+            
+            
+            ArrayList<TavernaOutput> tavernaOutput = client.getOutput(uuid);
+            for (TavernaOutput output : tavernaOutput) {
+                System.out.println(output.getName());
+            }
+            
+            
+            client.destroy(uuid);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+    }
+        
 //
 //        try {
 //            // load up the knowledge base
@@ -81,7 +134,7 @@ public class WorkflowEngine {
 //            t.printStackTrace();
 //        }
 
-    }
+    
 
 //    private KnowledgeBase readKnowledgeBase() throws Exception {
 //        KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();

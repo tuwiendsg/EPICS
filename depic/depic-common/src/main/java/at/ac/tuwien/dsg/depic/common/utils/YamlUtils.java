@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,12 +53,14 @@ public class YamlUtils {
     
     public static <T> T unmarshallYaml(Class<T> className, String yml){
         
+        UUID tempID = UUID.randomUUID(); 
+        
         IOUtils iou = new IOUtils("/home/ubuntu/log");
-        iou.overWriteData(yml, "tmp.yaml");
+        iou.overWriteData(yml, tempID.toString()+".yaml");
         
         T obj = null;
         try {
-            YamlReader reader = new YamlReader(new FileReader("/home/ubuntu/log/tmp.yaml"));
+            YamlReader reader = new YamlReader(new FileReader("/home/ubuntu/log/"+tempID.toString()+".yaml"));
             obj = reader.read(className);
  
         } catch (Exception ex) {
@@ -70,8 +73,12 @@ public class YamlUtils {
     
     public static <T> String marshallYaml(Class<T> className, Object obj){
        
+        UUID tempID = UUID.randomUUID();
+        
         try {
-            YamlWriter writer = new YamlWriter(new FileWriter("//home/ubuntu/log/tmp.yaml"));
+            YamlWriter writer = new YamlWriter(new FileWriter("/home/ubuntu/log/"+tempID.toString()+".yaml"));
+    
+            
             writer.write(obj);
             writer.close();
         } catch (IOException ex) {
@@ -79,7 +86,8 @@ public class YamlUtils {
         }
         
         IOUtils iou = new IOUtils("/home/ubuntu/log");
-        String yml =iou.readData("tmp.yaml");
+
+        String yml =iou.readData(tempID.toString()+".yaml");
         
         return yml;
     }

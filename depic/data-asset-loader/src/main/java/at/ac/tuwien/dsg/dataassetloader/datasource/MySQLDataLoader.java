@@ -40,7 +40,10 @@ public class MySQLDataLoader implements DataLoader{
             String returnStr = requestToGetDataAsset(dafYaml);
             
             String[] strs = returnStr.split(";");
-            String dataAssetID = strs[0];
+            String dataAssetID = "0"; //strs[0];
+            
+            for (int k=0; k<100;k++) {
+            dataAssetID = String.valueOf(k);
             int numberOfPartitions = Integer.parseInt(strs[1]);
             partitionNo = String.valueOf(numberOfPartitions);
             
@@ -49,14 +52,21 @@ public class MySQLDataLoader implements DataLoader{
                 
                 System.out.println("DATA ASSET: " + dataAssetXml);
                 DataAsset da = JAXBUtils.unmarshal(dataAssetXml, DataAsset.class);
-                da.setDataAssetID(daf.getName());
+                
+                
+                da.setDataAssetID(daf.getName()+"-"+dataAssetID);
                 dataAssetXml = JAXBUtils.marshal(da, DataAsset.class);   
                 
                 MySqlDataAssetStore das = new MySqlDataAssetStore();
-                das.saveDataAsset(dataAssetXml, daf.getName(), String.valueOf(i));
+                das.saveDataAsset(dataAssetXml, daf.getName()+"-"+dataAssetID, String.valueOf(i));
                 
             }
             
+            
+            
+            
+            
+            }
             
         } catch (JAXBException ex) {
             Logger.getLogger(MySQLDataLoader.class.getName()).log(Level.SEVERE, null, ex);

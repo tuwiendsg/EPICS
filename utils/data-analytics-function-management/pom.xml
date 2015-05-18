@@ -164,6 +164,42 @@
             <artifactId>depic-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+         
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.0.1</version>
+            <type>jar</type>
+        </dependency>
+        
+        
+            
+        <dependency>
+            <groupId>com.taverna</groupId>
+            <artifactId>TavernaClient</artifactId>
+            <version>1.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.taverna</groupId>
+            <artifactId>commons-codec-1.10</artifactId>
+            <version>1.1</version>
+        </dependency>
+    <!--    
+        <dependency>
+            <groupId>com.taverna</groupId>
+            <artifactId>commons-io-2.4</artifactId>
+            <version>2.4</version>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>com.taverna</groupId>
+            <artifactId>gson-2.2.4</artifactId>
+            <version>2.2.4</version>
+        </dependency>
+        
+        
     </dependencies>
 
     <build>

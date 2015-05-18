@@ -10,6 +10,7 @@ import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
@@ -85,7 +86,7 @@ public class ElasticityProcessesStore {
     }
     
     
-    public ElasticDataAsset getElasticDataAsset(String dataAssetID){
+    public ElasticDataAsset getElasticDataAsset(String edaasName){
         
                  
             String elasticityProcessesXML="";
@@ -98,9 +99,13 @@ public class ElasticityProcessesStore {
             InputStream typeStream = null;
             
             
-            String sql = "SELECT * FROM ElasticDaaS, DataAssetFunction "
-                    + "WHERE ElasticDaaS.name = DataAssetFunction.edaas "
-                    + "AND DataAssetFunction.dataAssetID='"+dataAssetID+"'";
+//            String sql = "SELECT * FROM ElasticDaaS, DataAssetFunction "
+//                    + "WHERE ElasticDaaS.name = DataAssetFunction.edaas "
+//                    + "AND DataAssetFunction.dataAssetID='"+dataAssetID+"'";
+            
+            
+            String sql = "SELECT * FROM ElasticDaaS "
+                    + "WHERE ElasticDaaS.name='"+edaasName+"' ";
             
             ResultSet rs = connectionManager.ExecuteQuery(sql);
             
@@ -154,7 +159,7 @@ public class ElasticityProcessesStore {
             Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        ElasticDataAsset eda = null; // new ElasticDataAsset(dataAssetID, eDaaSType, elasticityProcess, elasticStateSet);
+        ElasticDataAsset eda = new ElasticDataAsset(edaasName, elasticityProcess, elasticStateSet.getFinalElasticStateSet());
         
         
         return  eda;
@@ -236,32 +241,32 @@ public class ElasticityProcessesStore {
         return listOfElasticServices;
     }
     
-//       public MetricProcess getMetricProcess(String eDaaSName) {
-//           
-//        
-//        String sql = "SELECT * FROM InputSpecification WHERE name ='" + eDaaSName + "'";
-//        InputStream inputStream = null;
-//        String metricProcessXML = "";
-//        ResultSet rs = connectionManager.ExecuteQuery(sql);
-//
-//        try {
-//            while (rs.next()) {
-//                inputStream = rs.getBinaryStream("elasticity_process_config");
-//            }
-//
-//            StringWriter writer = new StringWriter();
-//            String encoding = StandardCharsets.UTF_8.name();
-//
-//            IOUtils.copy(inputStream, writer, encoding);
-//            metricProcessXML = writer.toString();
-//        } catch (Exception ex) {
-//
-//        }
-//
-//        MetricProcess metricProcess = YamlUtils.unmarshallYaml(MetricProcess.class, metricProcessXML);
-//
-//        return metricProcess;
-//    }
+       public PrimitiveActionMetadata getPrimitiveActionMetadata(String eDaaSName) {
+           
+        
+        String sql = "SELECT * FROM InputSpecification WHERE name ='" + eDaaSName + "'";
+        InputStream inputStream = null;
+        String primitiveXML = "";
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        try {
+            while (rs.next()) {
+                inputStream = rs.getBinaryStream("elasticity_process_config");
+            }
+
+            StringWriter writer = new StringWriter();
+            String encoding = StandardCharsets.UTF_8.name();
+
+            IOUtils.copy(inputStream, writer, encoding);
+            primitiveXML = writer.toString();
+        } catch (Exception ex) {
+
+        }
+
+        PrimitiveActionMetadata primitiveActionMetadata = YamlUtils.unmarshallYaml(PrimitiveActionMetadata.class, primitiveXML);
+
+        return primitiveActionMetadata;
+    }
        
        public String getElasticityProcesses(String eDaaSName){
      

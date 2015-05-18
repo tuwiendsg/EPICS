@@ -56,17 +56,17 @@ public class ElasticProcessRepositoryManager {
     
     
     
-    public void storeQoRAndElasticityProcesses(String edaas, String qor, String elasticityProcesses, DBType type){
+    public void storeQoRAndPrimitiveActionMeatadata(String edaas, String qor, String primitiveActionMetadata, DBType type){
         InputStream qorStream = new ByteArrayInputStream(qor.getBytes(StandardCharsets.UTF_8));
-        InputStream elasticityProcessesStream = new ByteArrayInputStream(elasticityProcesses.getBytes(StandardCharsets.UTF_8));
+        InputStream elasticityProcessesStream = new ByteArrayInputStream(primitiveActionMetadata.getBytes(StandardCharsets.UTF_8));
         
         
         List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
         listOfInputStreams.add(qorStream);
         listOfInputStreams.add(elasticityProcessesStream);
         
-     //   String sql = "INSERT INTO InputSpecification (name, qor, elasticity_process_config, type) VALUES ('"+edaas+"',?,?,'"+type.geteDaaSType()+"')";
-     //   connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
+        String sql = "INSERT INTO InputSpecification (name, qor, elasticity_process_config, type) VALUES ('"+edaas+"',?,?,'"+type.getDBType()+"')";
+        connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
         
         
         

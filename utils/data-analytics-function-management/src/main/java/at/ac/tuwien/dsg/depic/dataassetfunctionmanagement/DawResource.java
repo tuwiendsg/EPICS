@@ -75,18 +75,20 @@ public class DawResource {
         UUID dafID = UUID.randomUUID();
 
         MySqlDataAssetStore das = new MySqlDataAssetStore();
-        das.cleanTempStore();
-
-        DataAnalyticsFunction daf = YamlUtils.unmarshallYaml(DataAnalyticsFunction.class, dafYaml);
-      
-        WorkflowEngine wf = new WorkflowEngine(daf, dafID.toString());
-
-        wf.startWFEngine();
+//        das.cleanTempStore();
+//
+//        DataAnalyticsFunction daf = YamlUtils.unmarshallYaml(DataAnalyticsFunction.class, dafYaml);
+//      
+//        WorkflowEngine wf = new WorkflowEngine(daf, dafID.toString());
+//
+//        wf.startWFEngine();
 
         int noOfPartitions = das.getNumberOfPartitionsByDataAssetID(dafID.toString());
 
         String returnString = dafID.toString() + ";" + String.valueOf(noOfPartitions);
         return returnString;
+        
+        
     }
 
     @PUT

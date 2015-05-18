@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.io.IOUtils;
 
 /**
  *
@@ -77,23 +78,69 @@ public class MySqlDataAssetStore implements DataAssetStore{
         return rs;
     }
     
-    public int getNumberOfPartitionsByDataAssetID(String dataAssetID){
-        
-        String sql ="Select COUNT(dataPartitionID) as counter FROM DataAsset WHERE dataAssetID='"+dataAssetID+"'";
-        ResultSet rs = connectionManager.ExecuteQuery(sql);
-        int counter=0;
-        
-        try {
-            while (rs.next()){
-                counter = rs.getInt("counter");
-            }
-            rs.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(MySqlDataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return counter;
+    
+    public int getNumberOfPartitionsByDataAssetID(String dataAssetID) {
+//
+//        String sql = "Select COUNT(dataPartitionID) as counter FROM DataAsset WHERE dataAssetID='" + dataAssetID + "'";
+//        ResultSet rs = connectionManager.ExecuteQuery(sql);
+//        int counter = 0;
+//
+//        try {
+//            while (rs.next()) {
+//                counter = rs.getInt("counter");
+//            }
+//            rs.close();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(MySqlDataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+
+        return 1;
     }
+
+    
+//    public int getNumberOfPartitionsByDataAssetID(String dataAssetID){
+//        
+//        String sql ="Select COUNT(dataPartitionID) as counter FROM DataAsset WHERE dataAssetID='"+dataAssetID+"'";
+//        ResultSet rs = connectionManager.ExecuteQuery(sql);
+//        int counter=0;
+//        
+//        try {
+//            while (rs.next()){
+//                counter = rs.getInt("counter");
+//            }
+//            rs.close();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(MySqlDataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        return counter;
+//    }
+    
+//    public String getDataPartition(String dataAssetID, String dataPartitionID){
+//        
+//        String daXML="";
+//        String sql ="SELECT * FROM DataAsset WHERE dataAssetID='"+dataAssetID+"' AND dataPartitionID='"+dataPartitionID+"'";
+//        ResultSet rs = connectionManager.ExecuteQuery(sql);
+//        
+//        try {
+//            while (rs.next()){
+//                
+//                InputStream inputStream = rs.getBinaryStream("data");
+//
+//                StringWriter writer = new StringWriter();
+//                String encoding = StandardCharsets.UTF_8.name();
+//       //         org.apache.commons.io.IOUtils.copy(inputStream, writer, encoding);
+//                daXML = writer.toString();
+//            }
+//            
+//            rs.close();
+//        } catch (Exception ex) {
+//            Logger.getLogger(MySqlDataAssetStore.class.getName()).log(Level.SEVERE, ex.toString());
+//        }
+//        
+//        return daXML;
+//    }
+    
     
     public String getDataPartition(String dataAssetID, String dataPartitionID){
         
@@ -108,7 +155,7 @@ public class MySqlDataAssetStore implements DataAssetStore{
 
                 StringWriter writer = new StringWriter();
                 String encoding = StandardCharsets.UTF_8.name();
-       //         org.apache.commons.io.IOUtils.copy(inputStream, writer, encoding);
+                IOUtils.copy(inputStream, writer, encoding);
                 daXML = writer.toString();
             }
             
@@ -119,6 +166,7 @@ public class MySqlDataAssetStore implements DataAssetStore{
         
         return daXML;
     }
+    
     
     public void cleanTempStore(){
         

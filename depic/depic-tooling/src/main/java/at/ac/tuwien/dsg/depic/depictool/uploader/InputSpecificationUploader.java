@@ -182,15 +182,15 @@ public class InputSpecificationUploader extends HttpServlet {
         QoRModel qoRModel = YamlUtils.unmarshallYaml(QoRModel.class, qor);
         DataAnalyticsFunction dataAnalyticsFunction = new DataAnalyticsFunction("daf-gps", qoRModel.getDataAssetForm(), dbType, daw);
         
-        DataAssetRepositoryManager das = new DataAssetRepositoryManager();
-        das.requestToGetDataAsset(dataAnalyticsFunction);
+        //DataAssetRepositoryManager das = new DataAssetRepositoryManager();
+        //das.requestToGetDataAsset(dataAnalyticsFunction);
         
         Configuration configuration = new Configuration();
         String primitiveAction = configuration.getPrimitiveActionMetadata();
         log = log + "primitive actions: " + primitiveAction + "\n";
         
         ElasticProcessRepositoryManager elasticityProcessStore = new ElasticProcessRepositoryManager();
-        elasticityProcessStore.storeQoRAndElasticityProcesses(eDaaSName, qor, primitiveAction, dbType);
+        elasticityProcessStore.storeQoRAndPrimitiveActionMeatadata(eDaaSName, qor, primitiveAction, dbType);
   
         
         QoRModel qorModel = YamlUtils.unmarshallYaml(QoRModel.class, qor);       
@@ -199,11 +199,12 @@ public class InputSpecificationUploader extends HttpServlet {
         
         log = log + "CHECK CHECK CHECK: " + pam.getListOfAdjustmentActions().get(0).getActionName() + "\n";
         
-         Logger.getLogger(InputSpecificationUploader.class.getName()).log(Level.INFO, log);
+        Logger.getLogger(InputSpecificationUploader.class.getName()).log(Level.INFO, log);
         
         Generator generator = new Generator(dataAnalyticsFunction, qorModel, pam, eDaaSName, dbType);
         generator.startGenerator();
        
+        //  
         
 
         request.getRequestDispatcher("/index.jsp").forward(request, response);

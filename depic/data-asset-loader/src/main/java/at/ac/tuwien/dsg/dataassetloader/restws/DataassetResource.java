@@ -99,7 +99,7 @@ public class DataassetResource {
         }
         
         DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
-        DBType eDaaSType = dafStore.gEDaaSTypeFromEDaaSName(request.getEdaas());
+        DBType eDaaSType = DBType.MYSQL ; //dafStore.gEDaaSTypeFromEDaaSName(request.getEdaas());
         GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
         String noOfPartitions = dataLoader.copyDataAssetRepo(request);
         

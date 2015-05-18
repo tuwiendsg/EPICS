@@ -17,6 +17,8 @@ import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlAction;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringSession;
 
 import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringMetric;
@@ -48,8 +50,9 @@ public class DataElasticityMonitor{
     List<ElasticState> listOfExpectedElasticStates;
     MonitoringSession monitoringSession;
     MonitoringProcess monitorProcess;
-    List<AdjustmentProcess> listOfControlProcesses;
+    List<AdjustmentProcess> listOfAdjustmentProcess;
     DBType eDaaSType;
+    PrimitiveActionMetadata primitiveActionMetadata;
  
 
     public DataElasticityMonitor(MonitoringSession monitoringSession) {
@@ -60,25 +63,25 @@ public class DataElasticityMonitor{
      
 
     public void startMonitoringService() {
-        List<MonitoringAction> listOfMonitoringActions = null; // monitorProcess.getListOfMonitorActions();
+        List<MonitoringAction> listOfMonitoringActions =  monitorProcess.getListOfMonitoringActions();
         
             Logger.logInfo("Execute Monitoring Process ...");
             
               long t1 = System.currentTimeMillis();
-            
+
             for (MonitoringAction monitorAction : listOfMonitoringActions) {
                 
-                String monitoringServiceID = monitorAction.getMonitorActionID();
+                String monitoringServiceName = monitorAction.getMonitoringActionName();
       
-                Logger.logInfo("Get monitoring service info: " + monitoringServiceID);
+                Logger.logInfo("Get monitoring service info: " + monitoringServiceName);
 
                 String uri = "";
 
                 do {
 
-                    uri = ElasticServiceRegistry.getElasticServiceURI(monitoringServiceID, eDaaSType);
+                    uri = ElasticServiceRegistry.getElasticServiceURI(monitoringServiceName, eDaaSType);
                     if (uri.equals("")) {
-                        Logger.logInfo("Waiting_for_Active_Elastic_Serivce ... " + monitoringSession.getSessionID() +" - " +monitoringServiceID);
+                        Logger.logInfo("Waiting_for_Active_Elastic_Serivce ... " + monitoringSession.getSessionID() +" - " +monitoringServiceName);
                     } else {
                         Logger.logInfo("Ready_Service: " + monitoringSession.getSessionID() +" - " + uri);
                         ElasticServiceRegistry.occupyElasticService(uri);
@@ -101,7 +104,7 @@ public class DataElasticityMonitor{
 
                 
 
-                Logger.logInfo("Run Monitoring Service ID: " + monitoringServiceID);
+                Logger.logInfo("Run Monitoring Service ID: " + monitoringServiceName);
                 Logger.logInfo("URI: " + uri);
 
                 DataPartitionRequest request = new DataPartitionRequest(monitoringSession.getEdaasName(), monitoringSession.getSessionID(), monitoringSession.getDataAssetID(), "");
@@ -116,7 +119,7 @@ public class DataElasticityMonitor{
 
             double monitoringValue = 0;
 
-            String metricName = getMonitoringMetricName(monitoringServiceID);
+            String metricName = getMonitoringMetricName(monitoringServiceName);
 
             RestfulWSClient ws = new RestfulWSClient(uri);
             monitoringValue = Double.parseDouble(ws.callPutMethod(requestXML));
@@ -128,75 +131,81 @@ public class DataElasticityMonitor{
 
         }
 
-        long t2 = System.currentTimeMillis();
+       
         Logger.logInfo("MONITORING RESULT: "+monitoringSession.getSessionID()+" \n");
-        String log = "MONITORING RESULT: "+monitoringSession.getSessionID()+" \n";
+        String log = System.currentTimeMillis() +"\t"+monitoringSession.getSessionID() + "\t"+ monitoringSession.getDataAssetID()+"\t";
         
         for (MonitoringMetric monitoringMetric : listOfMonitoringMetrics) {
 
             Logger.logInfo("Metric: " + monitoringMetric.getMetricName() + " - Value: " + monitoringMetric.getMetricValue());
-            log = log + "Metric: " + monitoringMetric.getMetricName() + " - Value: " + monitoringMetric.getMetricValue() + "\n";
+            log = log + monitoringMetric.getMetricValue() + "\t";
             
         }
 
         ElasticState currentElasticState = determineCurrentElasticState();
-        Logger.logInfo("Current Elastic State ...");
-        log = log + "Current Elastic State ..." + currentElasticState.geteStateID() +"\n";
-        
-        
-        logElasticState(currentElasticState);
-        Logger.logInfo("");
-        if (!isExpectedElasticState(currentElasticState)) {
-            Logger.logInfo("FAIL VALIDATION");
-            log = log + "FAIL VALIDATION" + "\n";
+
+        if (currentElasticState == null) {
             
+         
+                Logger.logInfo("FAIL VALIDATION");
+                //log = log + "FAIL VALIDATION" + "\n";
+                log  = log + "FAIL" + "\t";
+                DataElasticityController controller = new DataElasticityController(listOfElasticStates, listOfAdjustmentProcess, monitoringSession, eDaaSType);
+                controller.startControlElasticState(currentElasticState);
             
-            DataElasticityController controller = new DataElasticityController(listOfExpectedElasticStates, listOfControlProcesses, monitoringSession, eDaaSType);
-            controller.startControlElasticState(currentElasticState);
+                
+            
+           
+
         } else {
             Logger.logInfo("PASS VALIDATION");
-            log = log + "PASS VALIDATION" + "\n";
+                log = log + "PASS" + "\t";
+            Logger.logInfo("Current Elastic State ...");
+          //  log = log + "Current Elastic State ..." + currentElasticState.geteStateID() + "\n";
+
+            logElasticState(currentElasticState);
+            
         }
-        Logger.logInfo("MONITORING_RUNTIME: " + (t2 - t1));
-        log =  log +"MONITORING_RUNTIME: " + (t2 - t1) + "\n";
-        
+         long t2 = System.currentTimeMillis();
+         Logger.logInfo("MONITORING_RUNTIME: " + (t2 - t1));
+            log = log +(t2 - t1) + "\n";
         
         try {
-           
-            
+
             IOUtils iou = new IOUtils("/home/ubuntu/log");
             iou.writeData(log, "depic_monitor.xml");
-            
+
             System.out.println("\n" + log);
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(DataElasticityMonitor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
-    
-    
-    private ElasticState determineCurrentElasticState(){
+    private ElasticState determineCurrentElasticState() {
         ElasticState currentElasticState = null;
         Logger.logInfo("Determine Current ElasticState");
         Logger.logInfo("NoOf EStates: " + listOfElasticStates.size());
-        
+
         for (ElasticState elasticState : listOfElasticStates) {
-            
+
             List<MetricCondition> conditions = elasticState.getListOfConditions();
             boolean rs = true;
-            for (MetricCondition condition: conditions) {
-                String metricName  =condition.getMetricName();
-                double metricValue = findMetricValue(metricName);
-                
-                Logger.logInfo("Metric: " + metricName +" - Value: " + metricValue);
-                Logger.logInfo("Lower Bound: " + condition.getLowerBound() + " - upper bound: " + condition.getUpperBound() );
-                
-                if (!(metricValue>=condition.getLowerBound() && metricValue<=condition.getUpperBound())){
-                    rs = false;
+            for (MetricCondition condition : conditions) {
+                String metricName = condition.getMetricName();
+
+                if (!associateWithResourceControlAction(metricName)) {
+
+                    double metricValue = findMetricValue(metricName);
+
+                    Logger.logInfo("Metric: " + metricName + " - Value: " + metricValue);
+                    Logger.logInfo("Lower Bound: " + condition.getLowerBound() + " - upper bound: " + condition.getUpperBound());
+
+                    if (!(metricValue >= condition.getLowerBound() && metricValue <= condition.getUpperBound())) {
+                        rs = false;
+                    }
                 }
-    
-            }   
+            }
             
             if (rs){
                 currentElasticState = elasticState;
@@ -223,7 +232,7 @@ public class DataElasticityMonitor{
         
         boolean rs= false;
         
-        for (ElasticState finalEState: listOfExpectedElasticStates){
+        for (ElasticState finalEState: listOfElasticStates){
             if (elasticState.geteStateID().equals(finalEState.geteStateID())){
                 rs=true;
                 break;
@@ -232,26 +241,43 @@ public class DataElasticityMonitor{
         
         return rs;
     }
+    
+    private boolean associateWithResourceControlAction(String metricName){
+        boolean rs = false;
+        List<ResourceControlAction> listOfResourceControlActions = primitiveActionMetadata.getListOfResourceControls();
+       
+        for (ResourceControlAction rca: listOfResourceControlActions){
+            if (rca.getAssociatedQoRMetric().equals(metricName)){
+                rs=true;
+            }
+        }
+        
+        return rs;
+    }
   
     private void config(){
         
-//        ElasticityProcessesStore elasticityProcessesStore = new ElasticityProcessesStore(); 
-//        ElasticDataAsset eda = elasticityProcessesStore.getElasticDataAsset(monitoringSession.getDataAssetID());
-//        ElasticProcess elasticityProcess= eda.getElasticityProcess();
-//        ElasticStateSet elasticStateSet = eda.getElasticStateSet();
-//        eDaaSType = eda.getType();
-//        
-//        listOfElasticStates = elasticStateSet.getInitialElasticStateSet();
-//       
-//        monitorProcess = elasticityProcess.getMonitorProcess(); 
-//        listOfControlProcesses = elasticityProcess.getListOfControlProcesses();
-// 
-//        List<String> expectElasticStateIDs = monitoringSession.getListOfExpectedElasticStates();
-//        mappingExpectedEStateIDs(expectElasticStateIDs);
-//        
-//        metricProcess = elasticityProcessesStore.getMetricProcess(monitoringSession.getEdaasName());
-//        
-//      
+        ElasticityProcessesStore elasticityProcessesStore = new ElasticityProcessesStore(); 
+        ElasticDataAsset eda = elasticityProcessesStore.getElasticDataAsset(monitoringSession.getEdaasName());
+        
+        ElasticProcess elasticityProcess= eda.getElasticProcess();
+   
+        eDaaSType = DBType.MYSQL;
+        
+        listOfElasticStates = eda.getListOfFinalElasticState();
+       
+        monitorProcess = elasticityProcess.getMonitoringProcess();
+        listOfAdjustmentProcess = elasticityProcess.getListOfAdjustmentProcesses();
+ 
+        
+        
+        
+        //List<String> expectElasticStateIDs = monitoringSession.getListOfExpectedElasticStates();
+        //mappingExpectedEStateIDs(expectElasticStateIDs);
+        
+        primitiveActionMetadata = elasticityProcessesStore.getPrimitiveActionMetadata(monitoringSession.getEdaasName());
+        
+      
 
         
         

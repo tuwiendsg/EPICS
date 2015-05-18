@@ -65,39 +65,39 @@ public class DataElasticityController {
 
         }
 
-        AdjustmentProcess controlProcess = determineTheBestControlProcess(listOfPotentialControlProcesses);
-        Logger.logInfo("BEST CONTROL PROCESS FOUND");
+        AdjustmentProcess adjustmentProcess = determineTheBestControlProcess(listOfPotentialControlProcesses);
+        Logger.logInfo("BEST ADJUSTMENT PROCESS FOUND");
       //  logControlProcesses(controlProcess);
         Logger.logInfo("FINAL Elastic STATE");
         
         String log = "";
-        log += "FINAL Elastic STATE: " + currentElasticState.geteStateID();
+        log += "FINAL Elastic STATE: " + adjustmentProcess.getFinalEState().geteStateID();
         
         
-        logElasticState(controlProcess.getFinalEState());
+        logElasticState(adjustmentProcess.getFinalEState());
 
           long t1 = System.currentTimeMillis();
         
         
-        startControlProcess(controlProcess);
+        startControlProcess(adjustmentProcess);
         
           long t2 = System.currentTimeMillis();
         
-        System.out.println("CONTROL_PROCESS_RUNTIME: " +monitoringSession.getSessionID() + "  -  " + (t2-t1));
-        log = log + "CONTROL_PROCESS_RUNTIME: " +monitoringSession.getSessionID() + "  -  " + (t2-t1);
+        System.out.println("ADJUSTMENT_PROCESS_RUNTIME: " +monitoringSession.getSessionID() + "  -  " + (t2-t1));
+        log = log + "ADJUSTMENT_PROCESS_RUNTIME: " +monitoringSession.getSessionID() + "  -  " + (t2-t1);
         
-        
-        try {
-           
-            
-            IOUtils iou = new IOUtils("/home/ubuntu/log");
-            iou.writeData(log, "depic_controller.xml");
-            
-            System.out.println("\n" + log);
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(DataElasticityController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+//        
+//        try {
+//           
+//            
+//            IOUtils iou = new IOUtils("/home/ubuntu/log");
+//            iou.writeData(log, "depic_controller.xml");
+//            
+//            System.out.println("\n" + log);
+//        } catch (Exception ex) {
+//            java.util.logging.Logger.getLogger(DataElasticityController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
         
 
     }
@@ -203,7 +203,9 @@ public class DataElasticityController {
         for (AdjustmentAction controlAction : listOfControlActions) {
 
            // List<Parameter> listOfParams = controlAction.getListOfParameters();
-            List<Parameter> listOfParams = null;
+            List<Parameter> listOfParams = new ArrayList<Parameter>();
+            Parameter p = new Parameter("attributeIndex", "int", "3");
+            listOfParams.add(p);
             ExternalServiceRequest controlRequest = new ExternalServiceRequest(monitoringSession.getEdaasName(), monitoringSession.getSessionID(), monitoringSession.getDataAssetID(), listOfParams);
 
             String requestXML = "";
@@ -213,7 +215,6 @@ public class DataElasticityController {
 
             }
 
-            if (!controlAction.getActionName().equals("STC")) {
 
                 String uri = "";
                 
@@ -246,7 +247,7 @@ public class DataElasticityController {
                 
                 ElasticServiceRegistry.releaseElasticService(uri);
                 
-            }
+            
         }
 
         

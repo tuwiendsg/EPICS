@@ -14,6 +14,7 @@ import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcesse
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 
 
@@ -31,7 +32,7 @@ public class ElasticServiceRegistry {
         
         String uri = "";
         
-        
+        List<String> potentialList = new ArrayList<String>();
         if(customerPerService == 0){
             Configuration cfg = new Configuration();
             customerPerService = Integer.parseInt(cfg.getConfig("CUSTOMER.PER.SERVICE"));
@@ -54,11 +55,19 @@ public class ElasticServiceRegistry {
             for (ElasticService elasticService : listOfElasticServices) {
 
                 if (elasticService.getActionID().equals(serviceID) && !isServiceBlock(elasticService.getUri())) {
-                    uri = elasticService.getUri();
-                    break;
+                 
+                   potentialList.add(elasticService.getUri());
                 }
             }
 
+           if (!potentialList.isEmpty()){
+               Random random = new Random();
+               int min = 0;
+               int max = potentialList.size();
+               int randomIndex = random.nextInt(max - min) + min;
+               uri = potentialList.get(randomIndex);
+           } 
+            
 //        
 //        
 //        ElasticService selectedElasticService = listOfElasticServices.get(elasticServiceIndex);
@@ -69,6 +78,8 @@ public class ElasticServiceRegistry {
         return uri;
         
     }
+    
+   
     
     public static void occupyElasticService(String uri){
        listOfActiveServices.add(uri);

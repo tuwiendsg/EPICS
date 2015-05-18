@@ -465,13 +465,14 @@ public class ComotConnector {
             Logger.logInfo("DEPLOY: Monitoring Action: " + dpa.getActionID());
             ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
                     .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"))
+                    .withMinInstances(0)
                     .provides(eventProcessingUnitScaleIn, eventProcessingUnitScaleOut)
                     .controlledBy(
                             Strategy("EP_ST1_" + (i++))
-                            .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric("cpuUsage", "%")).lessThan("30"))
+                            .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric("cpuUsage", "%")).lessThan("20"))
                             .enforce(eventProcessingUnitScaleIn),
                             Strategy("EP_ST2_" + (i++))
-                            .when(Constraint.MetricConstraint("EP_ST1_CO2_" + (i++), new Metric("cpuUsage", "%")).greaterThan("90"))
+                            .when(Constraint.MetricConstraint("EP_ST1_CO2_" + (i++), new Metric("cpuUsage", "%")).greaterThan("50"))
                             .enforce(eventProcessingUnitScaleOut));
 
             monitoringServicesTopology.addServiceUnit(serviceUnit);
@@ -501,12 +502,13 @@ public class ComotConnector {
             Logger.logInfo("DEPLOY: Control Action: " + dpa.getActionID());
             ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
                     .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"))
+                    .withMinInstances(0)
                     .provides(eventProcessingUnitScaleIn, eventProcessingUnitScaleOut)
                     .controlledBy(Strategy("EP_ST1_" + (i++))
-                            .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric("cpuUsage", "%")).lessThan("30"))
+                            .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric("cpuUsage", "%")).lessThan("20"))
                             .enforce(eventProcessingUnitScaleIn),
                             Strategy("EP_ST2_" + (i++))
-                            .when(Constraint.MetricConstraint("EP_ST1_CO2_" + (i++), new Metric("cpuUsage", "%")).greaterThan("90"))
+                            .when(Constraint.MetricConstraint("EP_ST1_CO2_" + (i++), new Metric("cpuUsage", "%")).greaterThan("50"))
                             .enforce(eventProcessingUnitScaleOut));
             ;
 
