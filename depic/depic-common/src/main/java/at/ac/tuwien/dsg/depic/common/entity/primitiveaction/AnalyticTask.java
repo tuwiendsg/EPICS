@@ -26,6 +26,10 @@ public class AnalyticTask {
     @XmlElement(name = "parameters", required = true)
     List<Parameter> parameters;
 
+    public AnalyticTask() {
+    }
+
+    
     public AnalyticTask(String taskName, List<Parameter> parameters) {
         this.taskName = taskName;
         this.parameters = parameters;

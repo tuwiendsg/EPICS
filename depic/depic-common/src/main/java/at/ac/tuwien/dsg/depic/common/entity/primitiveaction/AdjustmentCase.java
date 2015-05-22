@@ -23,20 +23,19 @@ public class AdjustmentCase {
     @XmlElement(name = "estimatedResult")
     MetricCondition estimatedResult;
     
+    @XmlElement(name = "analyticTask")
+    AnalyticTask analyticTask;
+    
     @XmlElement(name = "listOfParameters")
     List<Parameter> listOfParameters;
     
-    @XmlElement(name = "listOfAnalyticTasks")
-    List<AnalyticTask> listOfAnalyticTasks;
-    
-
     public AdjustmentCase() {
     }
 
-    public AdjustmentCase(MetricCondition estimatedResult, List<Parameter> listOfParameters, List<AnalyticTask> listOfAnalyticTasks) {
+    public AdjustmentCase(MetricCondition estimatedResult, AnalyticTask analyticTask, List<Parameter> listOfParameters) {
         this.estimatedResult = estimatedResult;
+        this.analyticTask = analyticTask;
         this.listOfParameters = listOfParameters;
-        this.listOfAnalyticTasks = listOfAnalyticTasks;
     }
 
     public MetricCondition getEstimatedResult() {
@@ -47,6 +46,14 @@ public class AdjustmentCase {
         this.estimatedResult = estimatedResult;
     }
 
+    public AnalyticTask getAnalyticTask() {
+        return analyticTask;
+    }
+
+    public void setAnalyticTask(AnalyticTask analyticTask) {
+        this.analyticTask = analyticTask;
+    }
+
     public List<Parameter> getListOfParameters() {
         return listOfParameters;
     }
@@ -54,16 +61,6 @@ public class AdjustmentCase {
     public void setListOfParameters(List<Parameter> listOfParameters) {
         this.listOfParameters = listOfParameters;
     }
-
-    public List<AnalyticTask> getListOfAnalyticTasks() {
-        return listOfAnalyticTasks;
-    }
-
-    public void setListOfAnalyticTasks(List<AnalyticTask> listOfAnalyticTasks) {
-        this.listOfAnalyticTasks = listOfAnalyticTasks;
-    }
-
-    
 
     
     

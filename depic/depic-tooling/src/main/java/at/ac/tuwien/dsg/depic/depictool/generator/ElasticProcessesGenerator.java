@@ -20,6 +20,7 @@ import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ResourceControlPlan;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AnalyticTask;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Artifact;
 
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter;
@@ -31,15 +32,19 @@ import at.ac.tuwien.dsg.depic.common.entity.qor.QElement;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.depic.common.entity.qor.Range;
+import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManager;
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import static at.ac.tuwien.dsg.depic.common.utils.YamlUtils.toYaml;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.logging.Level;
+import javax.xml.bind.JAXBException;
 
 /**
  *
@@ -67,45 +72,21 @@ public class ElasticProcessesGenerator {
         Logger.logInfo("Start generate Elastic Processes ... ");
 
         MonitoringProcess monitorProcess = generateMonitoringProcess();
-       // toYaml(monitorProcess, "/Volumes/DATA/Temp/monitorProcess.yml");
+        toYaml(monitorProcess, "/Volumes/DATA/Temp/monitorProcess.yml");
         
         finalElasticStates = generateFinalElasticStateSet();
-       // toYaml(finalElasticStates, "/Volumes/DATA/Temp/finalElasticStates.yml");
+        toYaml(finalElasticStates, "/Volumes/DATA/Temp/finalElasticStates.yml");
         
         List<AdjustmentProcess> listOfAdjustmentProcesses = generateAdjustmentProcesses(finalElasticStates);
-       // toYaml(listOfAdjustmentProcesses, "/Volumes/DATA/Temp/listOfAdjustmentProcesses.yml");
+        toYaml(listOfAdjustmentProcesses, "/Volumes/DATA/Temp/listOfAdjustmentProcesses.yml");
         
         
         List<ResourceControlPlan> listOfResourceControlPlans = generateResourceControlPlan(finalElasticStates);
-       // toYaml(listOfResourceControlPlans, "/Volumes/DATA/Temp/listOfResourceControlPlans.yml");
+        toYaml(listOfResourceControlPlans, "/Volumes/DATA/Temp/listOfResourceControlPlans.yml");
         
         ElasticProcess elasticProcess = new ElasticProcess(monitorProcess, listOfAdjustmentProcesses, listOfResourceControlPlans);
 
-//   List<ElasticState> initialElasticStateSet = elasticityProcessGenerator.generateSetOfInitialElasticState();
-//        
-//        Logger logger = new Logger();
-//        Logger.logInfo("Inital eState Set");
-//        logger.logElasticState(initialElasticStateSet);
-//        
-//        
-//        List<ElasticState> finalElasticStateSet = elasticityProcessGenerator.generateSetOfFinalElasticState(initialElasticStateSet);
-//        Logger.logInfo("");
-//        Logger.logInfo("Final eState Set");
-//        logger.logElasticState(finalElasticStateSet);
-//        
-//        ElasticStateSet elasticStateSet = new ElasticStateSet(initialElasticStateSet, finalElasticStateSet);
-//        
-//        List<ControlProcess> listOfControlProcesses = elasticityProcessGenerator.generateControlProcesses(initialElasticStateSet, finalElasticStateSet);
-//        ElasticProcess elasticityProcesses = new ElasticProcess(monitorProcess, listOfControlProcesses);
-//
-//        ElasticDataAsset elasticDataAsset = new ElasticDataAsset(eDaaSName,dbType, elasticityProcesses, elasticStateSet);
-//        //log
-//       
-//        
-//        logger.logMonitorProcesses(monitorProcess);
-//        logger.logControlProcesses(listOfControlProcesses);
-//
-//        return elasticDataAsset;
+
         return elasticProcess;
     }
 
@@ -133,7 +114,7 @@ public class ElasticProcessesGenerator {
                 listOfMonitoringActions.add(monitoringAction);
             }
         }
-        //System.out.println("No of monitoring actions: " + listOfMonitoringActions.size());
+        System.out.println("No of monitoring actions: " + listOfMonitoringActions.size());
         MonitoringProcess monitorProcess = parallelizeMonitoringActions(listOfMonitoringActions);
 
         return monitorProcess;
@@ -258,7 +239,13 @@ public class ElasticProcessesGenerator {
 
         int counter=0;
         for (QoRMetric qorMetric : listOfQoRMetrics) {
+            
+            System.out.println("Metric: " + qorMetric.getName());
+            
             List<MetricCondition> listOfConditions = findEstimatedResultForQoRMetric(qorMetric);
+            
+            System.out.println("no of conditions: " + listOfConditions.size());
+            
 
             if (listOfConditions.size() > 0) {
                 Range r = findMatchingRange(qElement, qorMetric);
@@ -320,6 +307,14 @@ public class ElasticProcessesGenerator {
                 
                 
                 if (unitConditions.size()>0) {
+                    
+                    for (MetricCondition mc : unitConditions){
+                        System.out.println("mc id: " + mc.getConditionID());
+                        System.out.println("mc name: " + mc.getMetricName());
+                        System.out.println("mc l: " + mc.getLowerBound());
+                        System.out.println("mc u: " + mc.getUpperBound());
+                    }
+                    
                     listOfConditionSet.add(unitConditions);
                 }
                 
@@ -376,11 +371,19 @@ public class ElasticProcessesGenerator {
 
     private List<MetricCondition> findEstimatedResultForQoRMetric(QoRMetric qorMetric) {
         List<AdjustmentAction> listOfAdjustmentActions = primitiveActionRepository.getListOfAdjustmentActions();
+        
+       
 
         List<AdjustmentCase> listOfAdjustmentCases = null;
 
         for (AdjustmentAction adjustmentAction : listOfAdjustmentActions) {
+            System.out.println("aa1: "  +adjustmentAction.getAssociatedQoRMetric());
+            
+            
             if (qorMetric.getName().equals(adjustmentAction.getAssociatedQoRMetric())) {
+                 System.out.println("aa2: "  +adjustmentAction.getAssociatedQoRMetric());
+                 System.out.println("aa3: "  +adjustmentAction.getListOfAdjustmentCases().size());
+                 //System.out.println("aa2: "  +adjustmentAction.getAssociatedQoRMetric());
                 listOfAdjustmentCases = adjustmentAction.getListOfAdjustmentCases();
                 break;
             }
@@ -392,16 +395,21 @@ public class ElasticProcessesGenerator {
 
             for (AdjustmentCase adjustmentCase : listOfAdjustmentCases) {
                 MetricCondition condition = adjustmentCase.getEstimatedResult();
+                System.out.println("a a1: " + condition.getLowerBound());
+                System.out.println("a a2: " + condition.getUpperBound());
                 if (condition!=null) {
                 listOfConditions.add(condition);
                 }
             }
         }
         
+        System.out.println("No of conditions: " + listOfConditions.size());
         
         /////////////
         
         List<ResourceControlAction> listOfResourceControlActions = primitiveActionRepository.getListOfResourceControls();
+       
+        
         List<ResourceControlCase> listOfResourceControlCases = null;
         
         for (ResourceControlAction resourceControlAction : listOfResourceControlActions){
@@ -477,7 +485,7 @@ public class ElasticProcessesGenerator {
     ///                                 ///
     ///////////////////////////////////////
     public List<AdjustmentProcess> generateAdjustmentProcesses(List<ElasticState> listOfFinalElasticStates) {
-
+       
         List<AdjustmentProcess> listOfAdjustmentProcesses = new ArrayList<AdjustmentProcess>();
 
         for (ElasticState elasticState : listOfFinalElasticStates) {
@@ -512,10 +520,19 @@ public class ElasticProcessesGenerator {
                     if (adjustmentCase.getEstimatedResult().getLowerBound() == metricCondition.getLowerBound()
                             && adjustmentCase.getEstimatedResult().getUpperBound() == metricCondition.getUpperBound()) {
 
+                        MetricCondition estimatedResult = adjustmentCase.getEstimatedResult();
+                        MetricCondition estimatedResult_c = new MetricCondition(estimatedResult.getMetricName(),estimatedResult.getConditionID(),estimatedResult.getLowerBound(),estimatedResult.getUpperBound());
+                        List<Parameter> listOfParams = adjustmentCase.getListOfParameters();
+                        List<Parameter> listOfParams_c = new ArrayList<Parameter>();
+                        for (Parameter param : listOfParams){
+                            Parameter param_c = new Parameter(param.getParameterName(), param.getType(), param.getValue());
+                            listOfParams_c.add(param_c);
+                        }
+                        
                         AdjustmentCase foundAdjustmentCase = new AdjustmentCase(
-                                adjustmentCase.getEstimatedResult(),
-                                adjustmentCase.getListOfParameters(),
-                                adjustmentCase.getListOfAnalyticTasks());
+                                estimatedResult_c,
+                                adjustmentCase.getAnalyticTask(),
+                                listOfParams_c);
 
                         List<AdjustmentCase> listOfFoundAdjustmentCases = new ArrayList<AdjustmentCase>();
                         listOfFoundAdjustmentCases.add(foundAdjustmentCase);
@@ -528,7 +545,39 @@ public class ElasticProcessesGenerator {
                                 adjustmentAction.getListOfPrerequisiteActionIDs(),
                                 listOfFoundAdjustmentCases);
 
+                    } else if (matchingAnalyticTaskFromDAF(adjustmentCase.getAnalyticTask())){
+                        MetricCondition estimatedResult = adjustmentCase.getEstimatedResult();
+                        MetricCondition estimatedResult_c = new MetricCondition(estimatedResult.getMetricName(),estimatedResult.getConditionID(),estimatedResult.getLowerBound(),estimatedResult.getUpperBound());
+                        List<Parameter> listOfParams = adjustmentCase.getListOfParameters();
+                        List<Parameter> listOfParams_c = new ArrayList<Parameter>();
+                        for (Parameter param : listOfParams){
+                            Parameter param_c = new Parameter(param.getParameterName(), param.getType(), param.getValue());
+                            listOfParams_c.add(param_c);
+                        }
+                        
+                        AdjustmentCase foundAdjustmentCase = new AdjustmentCase(
+                                estimatedResult_c,
+                                adjustmentCase.getAnalyticTask(),
+                                listOfParams_c);
+
+                        List<AdjustmentCase> listOfFoundAdjustmentCases = new ArrayList<AdjustmentCase>();
+                        listOfFoundAdjustmentCases.add(foundAdjustmentCase);
+
+                        foundAdjustmentAction = new AdjustmentAction(
+                                adjustmentAction.getActionID(),
+                                adjustmentAction.getActionName(),
+                                adjustmentAction.getArtifact(),
+                                adjustmentAction.getAssociatedQoRMetric(),
+                                adjustmentAction.getListOfPrerequisiteActionIDs(),
+                                listOfFoundAdjustmentCases);
+                        
+                        
                     }
+                    
+                    
+                    
+                    
+                    
 
                 }
 
@@ -731,6 +780,56 @@ public class ElasticProcessesGenerator {
 
         return prerequisiteActionNames;
     }
+    
+    private boolean matchingAnalyticTaskFromDAF(AnalyticTask pamAnalyticTask){
+        AnalyticTask analyticTask = null;
+        try {
+            String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>";
+            
+            String daw= daf.getDaw();
+            
+            int beginIndex = daw.indexOf("<depic>");
+            int endIndex = daw.indexOf("</depic>");
+            String analyticTasksStr =header + daw.substring(beginIndex+7, endIndex);
+            analyticTask = JAXBUtils.unmarshal(analyticTasksStr, AnalyticTask.class);
+
+        } catch (JAXBException ex) {
+            java.util.logging.Logger.getLogger(ElasticProcessesGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        boolean rs = true;
+        if (pamAnalyticTask!=null && analyticTask!=null){
+            
+            
+            if (pamAnalyticTask.getTaskName().equals(analyticTask.getTaskName())){
+                
+                List<Parameter> listOfParameters1 = analyticTask.getParameters();
+                List<Parameter> listOfParameters2 = pamAnalyticTask.getParameters();
+                
+                for (Parameter pam1 : listOfParameters1){
+                    for (Parameter pam2 : listOfParameters2){
+                        if (pam1.getParameterName().equals(pam2.getParameterName()) ){
+                            if (!pam1.getValue().equals(pam2.getValue())){
+                                rs = false; 
+                            }   
+                        }
+                        
+                    }
+                    
+                    
+                }
+                
+            } else {
+                rs = false;
+            }
+            
+            
+        }
+        
+        
+        return rs;
+        
+    }
 
     ///////////////////////////////////////
     ///                                 ///
@@ -770,7 +869,7 @@ public class ElasticProcessesGenerator {
                     if (resourceControlCase.getEstimatedResult().getLowerBound() == metricCondition.getLowerBound()
                             && resourceControlCase.getEstimatedResult().getUpperBound() == metricCondition.getUpperBound()) {
 
-                        foundListOfResourceControlStrategies.addAll(resourceControlCase.getListOfResourceControlStrategies());
+                        foundListOfResourceControlStrategies.addAll(copyListOfResourceControlStrategy(resourceControlCase.getListOfResourceControlStrategies()));
 
                         break;
 
@@ -784,6 +883,26 @@ public class ElasticProcessesGenerator {
         return foundListOfResourceControlStrategies;
 
     }
+    
+    private List<ResourceControlStrategy> copyListOfResourceControlStrategy(List<ResourceControlStrategy> originalList){
+        
+        List<ResourceControlStrategy> copyList = new ArrayList<ResourceControlStrategy>();
+        
+        
+        for (ResourceControlStrategy rca : originalList){
+            MetricCondition scaleOutCo = rca.getScaleOutCondition();
+            MetricCondition scaleOutCo_c = new MetricCondition(scaleOutCo.getMetricName(), scaleOutCo.getConditionID(), scaleOutCo.getLowerBound(), scaleOutCo.getUpperBound());
+            MetricCondition scaleInCo = rca.getScaleInCondition();
+            MetricCondition scaleInCo_c =  new MetricCondition(scaleInCo.getMetricName(), scaleInCo.getConditionID(), scaleInCo.getLowerBound(), scaleInCo.getUpperBound());
+            String controlMetric = rca.getControlMetric();
+            String primitiveAction = rca.getPrimitiveAction();
+            ResourceControlStrategy rca_copy = new ResourceControlStrategy(scaleInCo_c, scaleOutCo_c, controlMetric, primitiveAction);
+            copyList.add(rca_copy);
+        }
+        
+        return copyList;
+    }
+    
 
 //    private ElasticState copyElasticState(ElasticState eState){
 //        

@@ -314,16 +314,16 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 91, 100);
     
-        List<AnalyticTask> listOfAnalyticTasks = new ArrayList<AnalyticTask>();
-        List<Parameter> listOfTaskParameters = new ArrayList<Parameter>();
-        Parameter tParam = new Parameter("stopCondition", "Integer", "5");
-        listOfTaskParameters.add(tParam);
-        AnalyticTask kmeansTask = new AnalyticTask("kmeans", listOfTaskParameters);
-        listOfAnalyticTasks.add(kmeansTask);
+//        List<AnalyticTask> listOfAnalyticTasks = new ArrayList<AnalyticTask>();
+//        List<Parameter> listOfTaskParameters = new ArrayList<Parameter>();
+//        Parameter tParam = new Parameter("stopCondition", "Integer", "5");
+//        listOfTaskParameters.add(tParam);
+//        AnalyticTask kmeansTask = new AnalyticTask("kmeans", listOfTaskParameters);
+//        listOfAnalyticTasks.add(kmeansTask);
         
         
-        AdjustmentCase transition1 = new AdjustmentCase( c3, listOfParameters,listOfAnalyticTasks);
-        AdjustmentCase transition2 = new AdjustmentCase( c3, listOfParameters, null);
+        AdjustmentCase transition1 = new AdjustmentCase( c3,null, listOfParameters);
+        AdjustmentCase transition2 = new AdjustmentCase( c3,null, listOfParameters);
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
         listOfTransitions.add(transition1);
@@ -371,7 +371,7 @@ public class PrimitiveActionRepositoryGenerator {
         MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "c3", 91, 100);
 
-        AdjustmentCase transition1 = new AdjustmentCase(c3, listOfParameters,null);
+        AdjustmentCase transition1 = new AdjustmentCase(c3,null, listOfParameters);
       
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
@@ -412,11 +412,17 @@ public class PrimitiveActionRepositoryGenerator {
 
         listOfParameters.add(param1);
 
-     //   MetricCondition c1 = new MetricCondition(associatedQoRMetric, "speedArc_c1", 0, 80);
-     //   MetricCondition c2 = new MetricCondition(associatedQoRMetric, "speedArc_c2", 81, 90);
+        //MetricCondition c1 = new MetricCondition(associatedQoRMetric, "speedArc_c1", 0, 90);
+       // MetricCondition c2 = new MetricCondition(associatedQoRMetric, "speedArc_c2", 91, 100);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "speedArc_c1", 91, 100);
 
-        AdjustmentCase transition1 = new AdjustmentCase(c3, listOfParameters,null);
+        List<Parameter> analyticTaskParameters = new ArrayList<Parameter>();
+        Parameter analayticParameter = new Parameter("stopCondition", "int", "5");
+        analyticTaskParameters.add(analayticParameter);
+        
+        AnalyticTask analyticTask = new AnalyticTask("kmeans", analyticTaskParameters);
+        
+        AdjustmentCase transition1 = new AdjustmentCase(c3, analyticTask, listOfParameters);
      
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
@@ -463,7 +469,7 @@ public class PrimitiveActionRepositoryGenerator {
     //    MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
         MetricCondition c3 = new MetricCondition(associatedQoRMetric, "locationArc_c1", 91, 100);
 
-        AdjustmentCase transition1 = new AdjustmentCase( c3, listOfParameters,null);
+        AdjustmentCase transition1 = new AdjustmentCase( c3,null, listOfParameters);
 
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
@@ -509,9 +515,9 @@ public class PrimitiveActionRepositoryGenerator {
 
   //      MetricCondition c1 = new MetricCondition(associatedQoRMetric, "c1", 0, 75);
  //       MetricCondition c2 = new MetricCondition(associatedQoRMetric, "c2", 76, 90);
-        MetricCondition c3 = new MetricCondition(associatedQoRMetric, "vehicleArc_c1", 91, 100);
+        MetricCondition c3 = new MetricCondition(associatedQoRMetric, "vehicleArc_c1", 81, 100);
 
-        AdjustmentCase transition1 = new AdjustmentCase( c3, listOfParameters,null);
+        AdjustmentCase transition1 = new AdjustmentCase( c3, null, listOfParameters);
 
 
         List<AdjustmentCase> listOfTransitions = new ArrayList<AdjustmentCase>();
@@ -557,16 +563,26 @@ public class PrimitiveActionRepositoryGenerator {
       
         MetricCondition c1 = new MetricCondition(associatedQoRMetric, "throughput_c1", 301, Double.MAX_VALUE);
   
-        MetricCondition dataSize = new MetricCondition("dataSize", "c", 30, 80);
+     
         
-        MetricCondition scaleIn_co = new MetricCondition("cpuUsage", "c_in", 0, 15);
-         MetricCondition scaleOut_co = new MetricCondition("cpuUsage", "c_out", 85, 100);
-        ResourceControlStrategy resourceControlStrategy1 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "SAM");
-        ResourceControlStrategy resourceControlStrategy2 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "LAM");
-        ResourceControlStrategy resourceControlStrategy3 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "VAM");
-        ResourceControlStrategy resourceControlStrategy4 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "SAA");
-        ResourceControlStrategy resourceControlStrategy5 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "LAA");
-        ResourceControlStrategy resourceControlStrategy6 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "VAA");
+        MetricCondition scaleIn_co1 = new MetricCondition("cpuUsage", "c_in", 0, 15);
+         MetricCondition scaleOut_co1 = new MetricCondition("cpuUsage", "c_out", 85, 100);
+         MetricCondition scaleIn_co2 = new MetricCondition("cpuUsage", "c_in", 0, 15);
+         MetricCondition scaleOut_co2 = new MetricCondition("cpuUsage", "c_out", 85, 100);
+         MetricCondition scaleIn_co3 = new MetricCondition("cpuUsage", "c_in", 0, 15);
+         MetricCondition scaleOut_co3 = new MetricCondition("cpuUsage", "c_out", 85, 100);
+         MetricCondition scaleIn_co4 = new MetricCondition("cpuUsage", "c_in", 0, 15);
+         MetricCondition scaleOut_co4 = new MetricCondition("cpuUsage", "c_out", 85, 100);
+         MetricCondition scaleIn_co5 = new MetricCondition("cpuUsage", "c_in", 0, 15);
+         MetricCondition scaleOut_co5 = new MetricCondition("cpuUsage", "c_out", 85, 100);
+         MetricCondition scaleIn_co6 = new MetricCondition("cpuUsage", "c_in", 0, 15);
+         MetricCondition scaleOut_co6 = new MetricCondition("cpuUsage", "c_out", 85, 100);
+        ResourceControlStrategy resourceControlStrategy1 = new ResourceControlStrategy(scaleIn_co1, scaleOut_co1, "cpuUsage", "SAM");
+        ResourceControlStrategy resourceControlStrategy2 = new ResourceControlStrategy(scaleIn_co2, scaleOut_co2, "cpuUsage", "LAM");
+        ResourceControlStrategy resourceControlStrategy3 = new ResourceControlStrategy(scaleIn_co3, scaleOut_co3, "cpuUsage", "VAM");
+        ResourceControlStrategy resourceControlStrategy4 = new ResourceControlStrategy(scaleIn_co4, scaleOut_co4, "cpuUsage", "SAA");
+        ResourceControlStrategy resourceControlStrategy5 = new ResourceControlStrategy(scaleIn_co5, scaleOut_co5, "cpuUsage", "LAA");
+        ResourceControlStrategy resourceControlStrategy6 = new ResourceControlStrategy(scaleIn_co6, scaleOut_co6, "cpuUsage", "VAA");
         
         List<ResourceControlStrategy> listOfResourceControlStrategys = new ArrayList<ResourceControlStrategy>();
         listOfResourceControlStrategys.add(resourceControlStrategy1);
@@ -576,7 +592,7 @@ public class PrimitiveActionRepositoryGenerator {
         listOfResourceControlStrategys.add(resourceControlStrategy5);
         listOfResourceControlStrategys.add(resourceControlStrategy6);
         
-        ResourceControlCase resourceControlCase = new ResourceControlCase(c1, dataSize , listOfResourceControlStrategys);
+        ResourceControlCase resourceControlCase = new ResourceControlCase(c1, null , listOfResourceControlStrategys);
          List<ResourceControlCase> listOfResourceControlCases = new ArrayList<ResourceControlCase>();
          listOfResourceControlCases.add(resourceControlCase);
         
@@ -596,18 +612,36 @@ public class PrimitiveActionRepositoryGenerator {
         // case
         
       
-        MetricCondition c1 = new MetricCondition(associatedQoRMetric, "deliveryTime_c1", 0, 0.1);
+        MetricCondition c1 = new MetricCondition(associatedQoRMetric, "deliveryTime_c1", 0, 53);
   
-        MetricCondition dataSize = new MetricCondition("dataSize", "c", 30, 80);
+   
         
-        MetricCondition scaleIn_co = new MetricCondition("cpuUsage", "c_in", 0, 20);
-         MetricCondition scaleOut_co = new MetricCondition("cpuUsage", "c_out", 75, 100);
-        ResourceControlStrategy resourceControlStrategy1 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "SAM");
-        ResourceControlStrategy resourceControlStrategy2 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "LAM");
-        ResourceControlStrategy resourceControlStrategy3 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "VAM");
-        ResourceControlStrategy resourceControlStrategy4 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "SAA");
-        ResourceControlStrategy resourceControlStrategy5 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "LAA");
-        ResourceControlStrategy resourceControlStrategy6 = new ResourceControlStrategy(scaleIn_co, scaleOut_co, "cpuUsage", "VAA");
+        MetricCondition scaleIn_co1 = new MetricCondition("cpuUsage", "c_in", 0, 20);
+        MetricCondition scaleOut_co1 = new MetricCondition("cpuUsage", "c_out", 50, 100);
+        
+        MetricCondition scaleIn_co2 = new MetricCondition("cpuUsage", "c_in", 0, 20);
+        MetricCondition scaleOut_co2 = new MetricCondition("cpuUsage", "c_out", 50, 100);
+        
+        MetricCondition scaleIn_co3 = new MetricCondition("cpuUsage", "c_in", 0, 20);
+        MetricCondition scaleOut_co3 = new MetricCondition("cpuUsage", "c_out", 50, 100);
+        
+        MetricCondition scaleIn_co4 = new MetricCondition("cpuUsage", "c_in", 0, 20);
+        MetricCondition scaleOut_co4 = new MetricCondition("cpuUsage", "c_out", 50, 100);
+        
+        MetricCondition scaleIn_co5 = new MetricCondition("cpuUsage", "c_in", 0, 20);
+        MetricCondition scaleOut_co5 = new MetricCondition("cpuUsage", "c_out", 50, 100);
+        
+        MetricCondition scaleIn_co6 = new MetricCondition("cpuUsage", "c_in", 0, 20);
+        MetricCondition scaleOut_co6 = new MetricCondition("cpuUsage", "c_out", 50, 100);
+        
+        
+        
+        ResourceControlStrategy resourceControlStrategy1 = new ResourceControlStrategy(scaleIn_co1, scaleOut_co1, "cpuUsage", "SAM");
+        ResourceControlStrategy resourceControlStrategy2 = new ResourceControlStrategy(scaleIn_co2, scaleOut_co2, "cpuUsage", "LAM");
+        ResourceControlStrategy resourceControlStrategy3 = new ResourceControlStrategy(scaleIn_co3, scaleOut_co3, "cpuUsage", "VAM");
+        ResourceControlStrategy resourceControlStrategy4 = new ResourceControlStrategy(scaleIn_co4, scaleOut_co4, "cpuUsage", "SAA");
+        ResourceControlStrategy resourceControlStrategy5 = new ResourceControlStrategy(scaleIn_co5, scaleOut_co5, "cpuUsage", "LAA");
+        ResourceControlStrategy resourceControlStrategy6 = new ResourceControlStrategy(scaleIn_co6, scaleOut_co6, "cpuUsage", "VAA");
         
         List<ResourceControlStrategy> listOfResourceControlStrategys = new ArrayList<ResourceControlStrategy>();
         listOfResourceControlStrategys.add(resourceControlStrategy1);
@@ -617,7 +651,7 @@ public class PrimitiveActionRepositoryGenerator {
         listOfResourceControlStrategys.add(resourceControlStrategy5);
         listOfResourceControlStrategys.add(resourceControlStrategy6);
         
-        ResourceControlCase resourceControlCase = new ResourceControlCase(c1, dataSize , listOfResourceControlStrategys);
+        ResourceControlCase resourceControlCase = new ResourceControlCase(c1, null , listOfResourceControlStrategys);
          List<ResourceControlCase> listOfResourceControlCases = new ArrayList<ResourceControlCase>();
          listOfResourceControlCases.add(resourceControlCase);
         

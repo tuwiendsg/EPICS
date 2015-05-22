@@ -100,6 +100,7 @@ public class CassandraDataAssetStore  {
 
         String sql = "CREATE TABLE " + keyspace + ".DataAsset ("
                 + " dataAssetID varchar,"
+                + " customerID varchar,"
                 + " dataPartitionID int,"
                 + " data text,"
                 + " PRIMARY KEY ( dataAssetID, dataPartitionID));";
@@ -111,8 +112,9 @@ public class CassandraDataAssetStore  {
     public void createTableProcessingDataAsset() {
 
         String sql = "CREATE TABLE " + keyspace + ".ProcessingDataAsset ("
-                + " id varchar,"
-    //            + " dataPartitionID int,"
+                + " dataAssetID varchar,"
+                + " customerID varchar,"
+                + " dataPartitionID int,"
                 + " data text,"
                 + " PRIMARY KEY (id));";
 

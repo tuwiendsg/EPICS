@@ -25,6 +25,9 @@ import java.util.logging.Logger;
  */
 public class YamlUtils {
     
+    //static String filePath = "/home/ubuntu/log";
+    static String filePath = "/Volumes/DATA/Temp";
+    
     
     public static void toYaml(Object obj,String filePath) {
         try {
@@ -55,12 +58,12 @@ public class YamlUtils {
         
         UUID tempID = UUID.randomUUID(); 
         
-        IOUtils iou = new IOUtils("/home/ubuntu/log");
+        IOUtils iou = new IOUtils(filePath);
         iou.overWriteData(yml, tempID.toString()+".yaml");
         
         T obj = null;
         try {
-            YamlReader reader = new YamlReader(new FileReader("/home/ubuntu/log/"+tempID.toString()+".yaml"));
+            YamlReader reader = new YamlReader(new FileReader(filePath+"/"+tempID.toString()+".yaml"));
             obj = reader.read(className);
  
         } catch (Exception ex) {
@@ -76,7 +79,7 @@ public class YamlUtils {
         UUID tempID = UUID.randomUUID();
         
         try {
-            YamlWriter writer = new YamlWriter(new FileWriter("/home/ubuntu/log/"+tempID.toString()+".yaml"));
+            YamlWriter writer = new YamlWriter(new FileWriter(filePath+"/"+tempID.toString()+".yaml"));
     
             
             writer.write(obj);
@@ -85,7 +88,7 @@ public class YamlUtils {
             Logger.getLogger(YamlUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        IOUtils iou = new IOUtils("/home/ubuntu/log");
+        IOUtils iou = new IOUtils(filePath);
 
         String yml =iou.readData(tempID.toString()+".yaml");
         

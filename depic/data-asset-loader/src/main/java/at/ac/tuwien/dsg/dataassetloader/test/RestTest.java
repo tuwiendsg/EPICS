@@ -122,56 +122,56 @@ public class RestTest {
     
     
 
-//    
-//    @PUT
-//    @Path("repo/dataasset/insert")
-//    @Consumes("application/xml")
-//    @Produces("application/xml")
-//    public String insertDataTableDataAsset(String xml) {
-//        
-//        DataAsset da=null;
-//        try {
-//            da = JAXBUtils.unmarshal(xml, DataAsset.class);
-//        } catch (JAXBException ex) {
-//            Logger.getLogger(RestTest.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        CassandraDataLoader cdl = new CassandraDataLoader();
-//        //cdl.in
-//        return "";
-//    }
-//    
-//    @PUT
-//    @Path("repo/dataasset/get")
-//    @Consumes("application/xml")
-//    @Produces("application/xml")
-//    public String getDataTableDataAsset(String xml) {
-//        
-//        DataPartitionRequest request = null;
-//        
-//        try {
-//            request = at.ac.tuwien.dsg.common.utils.JAXBUtils.unmarshal(xml, DataPartitionRequest.class);
-//        } catch (JAXBException ex) {
-//            Logger.getLogger(RestTest.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        
-//        
-//        String data = CassandraDataAssetStore.getDataAssetXML(request.getDataAssetID(), request.getPartitionID());
-//        
-//        
-//        return data;
-//    }
-//
-//    @PUT
-//    @Path("repo/dataasset/nopar")
-//    @Consumes("application/xml")
-//    @Produces("application/xml")
-//    public String getNoParTableDataAsset(String xml) {
-//
-//        String noOfPartitions = CassandraDataAssetStore.getNoOfPartitionDataAssetTable();
-//
-//        return noOfPartitions;
-//    }
-//
+    
+    @PUT
+    @Path("repo/dataasset/insert")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String insertDataTableDataAsset(String xml) {
+        
+        DataAsset da=null;
+        try {
+            da = JAXBUtils.unmarshal(xml, DataAsset.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(RestTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        CassandraDataLoader cdl = new CassandraDataLoader();
+        //cdl.in
+        return "";
+    }
+    
+    @PUT
+    @Path("repo/dataasset/get")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String getDataTableDataAsset(String xml) {
+        
+        DataPartitionRequest request = null;
+        
+        try {
+            request = JAXBUtils.unmarshal(xml, DataPartitionRequest.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(RestTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
+        String data = cdas.getDataAssetXML(request.getDataAssetID(), request.getPartitionID());
+        
+        
+        return data;
+    }
+
+    @PUT
+    @Path("repo/dataasset/nopar")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String getNoParTableDataAsset(String xml) {
+        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
+        String noOfPartitions = cdas.getNoOfPartitionDataAssetTable();
+
+        return noOfPartitions;
+    }
+
     @PUT
     @Path("repo/dataasset/clear")
     @Consumes("application/xml")
@@ -191,85 +191,89 @@ public class RestTest {
         return "";
 
     }
-//
-// 
-//    
-//    @PUT
-//    @Path("repo/processingdataasset/insert")
-//    @Consumes("application/xml")
-//    @Produces("application/xml")
-//    public String insertDataTableProcessingDataAsset(String dataAssetRequestXML) {
-//        
-//        DataAsset da=null;
-//        try {
-//            da = JAXBUtils.unmarshal(dataAssetRequestXML, DataAsset.class);
-//        } catch (JAXBException ex) {
-//            Logger.getLogger(RestTest.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        CassandraDataAssetStore.insertDataPartitionRepo(da);
-//        
-//
-//        return "";
-//    }
-//    
-//    @PUT
-//    @Path("repo/processingdataasset/nopar")
-//    @Consumes("application/xml")
-//    @Produces("application/xml")
-//    public String getNoPartitionTableProcessingDataAsset(String xml) {
-//        
-//        DataPartitionRequest da=null;
-//        try {
-//            da = JAXBUtils.unmarshal(xml, DataPartitionRequest.class);
-//        } catch (JAXBException ex) {
-//            Logger.getLogger(RestTest.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        String noOfPartitions = CassandraDataAssetStore.getNoOfPartitionRepo(da);
-//        
-//        
-//
-//        return noOfPartitions;
-//    }
-//    
-//    @PUT
-//    @Path("repo/processingdataasset/get")
-//    @Consumes("application/xml")
-//    @Produces("application/xml")
-//    public String getDataTableProcessingDataAsset(String xml) {
-//        
-//        DataPartitionRequest da=null;
-//        try {
-//            da = JAXBUtils.unmarshal(xml, DataPartitionRequest.class);
-//        } catch (JAXBException ex) {
-//            Logger.getLogger(RestTest.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        String data = CassandraDataAssetStore.getDataPartitionRepo(da);
-//        
-//        
-//
-//        return data;
-//    }
-//    
-//    @PUT
-//    @Path("repo/processingdataasset/update")
-//    @Consumes("application/xml")
-//    @Produces("application/xml")
-//    public String updateDataTableProcessingDataAsset(String xml) {
-//        
-//        DataAsset da=null;
-//        try {
-//            da = JAXBUtils.unmarshal(xml, DataAsset.class);
-//        } catch (JAXBException ex) {
-//            Logger.getLogger(RestTest.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        CassandraDataAssetStore.saveDataPartitionRepo(da);
-//        
-//        
-//
-//        return "";
-//    }
-//    
-//    
+
+ 
+    
+    @PUT
+    @Path("repo/processingdataasset/insert")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String insertDataTableProcessingDataAsset(String dataAssetRequestXML) {
+        
+        DataAsset da=null;
+        try {
+            da = JAXBUtils.unmarshal(dataAssetRequestXML, DataAsset.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(RestTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
+        cdas.insertDataPartitionRepo(da);
+        
+
+        return "";
+    }
+    
+    @PUT
+    @Path("repo/processingdataasset/nopar")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String getNoPartitionTableProcessingDataAsset(String xml) {
+        
+        DataPartitionRequest da=null;
+        try {
+            da = JAXBUtils.unmarshal(xml, DataPartitionRequest.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(RestTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         CassandraDataAssetStore cdas = new CassandraDataAssetStore();
+        String noOfPartitions = cdas.getNoOfPartitionRepo(da);
+        
+        
+
+        return noOfPartitions;
+    }
+    
+    @PUT
+    @Path("repo/processingdataasset/get")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String getDataTableProcessingDataAsset(String xml) {
+        
+        DataPartitionRequest da=null;
+        try {
+            da = JAXBUtils.unmarshal(xml, DataPartitionRequest.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(RestTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
+        String data = cdas.getDataPartitionRepo(da);
+        
+        
+
+        return data;
+    }
+    
+    @PUT
+    @Path("repo/processingdataasset/update")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String updateDataTableProcessingDataAsset(String xml) {
+        
+        DataAsset da=null;
+        try {
+            da = JAXBUtils.unmarshal(xml, DataAsset.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(RestTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        CassandraDataAssetStore cdas = new CassandraDataAssetStore();
+        cdas.saveDataPartitionRepo(da);
+        
+        
+
+        return "";
+    }
+    
+    
     @PUT
     @Path("repo/processingdataasset/clear")
     @Consumes("application/xml")
