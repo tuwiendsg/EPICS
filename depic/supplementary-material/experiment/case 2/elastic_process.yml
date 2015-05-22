@@ -4,12 +4,12 @@ listOfAdjustmentProcesses:
    directedAcyclicalGraph: 
       listOfActions: 
       - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
-         actionID: 089ba0e5-88a7-46d6-855e-e167ebad3567
+         actionID: e8bdcb20-e207-40cc-9362-dca3f45ce84b
          actionName: SAA
-         incomming: 089ba0e5-88a7-46d6-855e-e167ebad3567
-         outgoing: 089ba0e5-88a7-46d6-855e-e167ebad3567
+         incomming: e8bdcb20-e207-40cc-9362-dca3f45ce84b
+         outgoing: e8bdcb20-e207-40cc-9362-dca3f45ce84b
       - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
-         actionID: b98c6dd7-7f9b-4408-954b-c86a3da02be6
+         actionID: f8f358af-6576-4e79-872d-14f76c2951c9
          actionName: VAA
       listOfParallelGateways: []
    finalEState: &1
@@ -31,7 +31,7 @@ listOfAdjustmentProcesses:
          upperBound: 53.0
    listOfAdjustmentActions: 
    - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
-      actionID: 089ba0e5-88a7-46d6-855e-e167ebad3567
+      actionID: e8bdcb20-e207-40cc-9362-dca3f45ce84b
       actionName: SAA
       artifact: &2
          name: SAA
@@ -62,7 +62,7 @@ listOfAdjustmentProcesses:
       listOfPrerequisiteActionIDs: &4
       - LAA
    - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
-      actionID: b98c6dd7-7f9b-4408-954b-c86a3da02be6
+      actionID: f8f358af-6576-4e79-872d-14f76c2951c9
       actionName: VAA
       artifact: &5
          name: VAA
@@ -97,18 +97,14 @@ listOfAdjustmentProcesses:
       listOfActions: &6 []
       listOfParallelGateways: &6 []
    finalEState: 
-      eStateID: speedArc_c1_1;vehicleArc_c1_2;deliveryTime_c1_3;
+      eStateID: speedArc_c1_1;deliveryTime_c1_2;
       listOfConditions: 
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
          conditionID: speedArc_c1_1
          metricName: speedArc
          upperBound: 90.0
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
-         conditionID: vehicleArc_c1_2
-         metricName: vehicleArc
-         upperBound: 80.0
-      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
-         conditionID: deliveryTime_c1_3
+         conditionID: deliveryTime_c1_2
          lowerBound: 54.0
          metricName: deliveryTime
          upperBound: 1.7976931348623157E308
@@ -117,13 +113,13 @@ listOfAdjustmentProcesses:
    directedAcyclicalGraph: 
       listOfActions: 
       - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
-         actionID: 683c7790-ba51-4dbd-8110-2354f1d6332a
+         actionID: 0912173d-6b6d-4bc9-aa21-c0368d1d2053
          actionName: SAA
-         incomming: 683c7790-ba51-4dbd-8110-2354f1d6332a
-         outgoing: 683c7790-ba51-4dbd-8110-2354f1d6332a
+         incomming: 0912173d-6b6d-4bc9-aa21-c0368d1d2053
+         outgoing: 0912173d-6b6d-4bc9-aa21-c0368d1d2053
       listOfParallelGateways: &6 []
    finalEState: &7
-      eStateID: speedArc_c1;vehicleArc_c1_1;deliveryTime_c1;
+      eStateID: speedArc_c1;deliveryTime_c1;
       listOfConditions: 
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
          conditionID: speedArc_c1
@@ -131,16 +127,12 @@ listOfAdjustmentProcesses:
          metricName: speedArc
          upperBound: 100.0
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
-         conditionID: vehicleArc_c1_1
-         metricName: vehicleArc
-         upperBound: 80.0
-      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
          conditionID: deliveryTime_c1
          metricName: deliveryTime
          upperBound: 53.0
    listOfAdjustmentActions: 
    - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
-      actionID: 683c7790-ba51-4dbd-8110-2354f1d6332a
+      actionID: 0912173d-6b6d-4bc9-aa21-c0368d1d2053
       actionName: SAA
       artifact: *2
       associatedQoRMetric: speedArc
@@ -162,7 +154,7 @@ listOfAdjustmentProcesses:
    directedAcyclicalGraph: 
       listOfActions: 
       - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
-         actionID: 9e3b0423-cb23-428b-a2bf-982fd276ed7b
+         actionID: a4b97358-7508-4bd4-9ec2-6ef03842b387
          actionName: VAA
       listOfParallelGateways: &6 []
    finalEState: &8
@@ -183,7 +175,7 @@ listOfAdjustmentProcesses:
          upperBound: 53.0
    listOfAdjustmentActions: 
    - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
-      actionID: 9e3b0423-cb23-428b-a2bf-982fd276ed7b
+      actionID: a4b97358-7508-4bd4-9ec2-6ef03842b387
       actionName: VAA
       artifact: *5
       associatedQoRMetric: vehicleArc
@@ -213,16 +205,12 @@ listOfAdjustmentProcesses:
       listOfActions: &6 []
       listOfParallelGateways: &6 []
    finalEState: &9
-      eStateID: speedArc_c1_1;vehicleArc_c1_2;deliveryTime_c1;
+      eStateID: speedArc_c1_1;deliveryTime_c1;
       listOfConditions: 
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
          conditionID: speedArc_c1_1
          metricName: speedArc
          upperBound: 90.0
-      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
-         conditionID: vehicleArc_c1_2
-         metricName: vehicleArc
-         upperBound: 80.0
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
          conditionID: deliveryTime_c1
          metricName: deliveryTime
@@ -533,27 +521,27 @@ monitoringProcess:
    directedAcyclicalGraph: 
       listOfActions: 
       - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
-         actionID: a3dbb6fc-67c1-4455-a9a7-85d44d0d294c
+         actionID: 639453d4-9a6d-42ce-b6f5-17099e4c90c2
          actionName: SAM
-         incomming: c8dae0b3-988c-4c3b-ae00-4a66e05fbf2b
-         outgoing: 34805b81-d7ae-413e-8c7d-51835e7f5ba3
+         incomming: 3c246b15-925f-4ab7-89f5-34e47332706b
+         outgoing: 90958d2c-479d-40d9-8d08-bcc7d2878de0
       - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
-         actionID: af022c41-647c-4f64-ac99-f102e5cb1593
+         actionID: e1a52598-19ac-4c56-9a28-ea0d44a56ef5
          actionName: VAM
-         incomming: c8dae0b3-988c-4c3b-ae00-4a66e05fbf2b
-         outgoing: 34805b81-d7ae-413e-8c7d-51835e7f5ba3
+         incomming: 3c246b15-925f-4ab7-89f5-34e47332706b
+         outgoing: 90958d2c-479d-40d9-8d08-bcc7d2878de0
       listOfParallelGateways: 
       - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway
-         gatewayID: c8dae0b3-988c-4c3b-ae00-4a66e05fbf2b
+         gatewayID: 3c246b15-925f-4ab7-89f5-34e47332706b
          incomming: &6 []
          outgoing: 
-         - a3dbb6fc-67c1-4455-a9a7-85d44d0d294c
-         - af022c41-647c-4f64-ac99-f102e5cb1593
+         - 639453d4-9a6d-42ce-b6f5-17099e4c90c2
+         - e1a52598-19ac-4c56-9a28-ea0d44a56ef5
       - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway
-         gatewayID: 34805b81-d7ae-413e-8c7d-51835e7f5ba3
+         gatewayID: 90958d2c-479d-40d9-8d08-bcc7d2878de0
          incomming: 
-         - a3dbb6fc-67c1-4455-a9a7-85d44d0d294c
-         - af022c41-647c-4f64-ac99-f102e5cb1593
+         - 639453d4-9a6d-42ce-b6f5-17099e4c90c2
+         - e1a52598-19ac-4c56-9a28-ea0d44a56ef5
          outgoing: &6 []
    listOfMonitoringActions: 
    - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
@@ -569,7 +557,7 @@ monitoringProcess:
          parameterName: speedIndex
          type: int
          value: 2
-      monitorActionID: a3dbb6fc-67c1-4455-a9a7-85d44d0d294c
+      monitorActionID: 639453d4-9a6d-42ce-b6f5-17099e4c90c2
       monitoringActionName: SAM
    - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
       artifact: 
@@ -592,5 +580,5 @@ monitoringProcess:
          parameterName: speedIndex
          type: int
          value: 2
-      monitorActionID: af022c41-647c-4f64-ac99-f102e5cb1593
+      monitorActionID: e1a52598-19ac-4c56-9a28-ea0d44a56ef5
       monitoringActionName: VAM

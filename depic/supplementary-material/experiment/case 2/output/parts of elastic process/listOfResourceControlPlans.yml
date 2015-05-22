@@ -91,17 +91,13 @@
          upperBound: 100.0
 - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ResourceControlPlan
    finalEState: 
-      eStateID: speedArc_c1;vehicleArc_c1_1;deliveryTime_c1;
+      eStateID: speedArc_c1;deliveryTime_c1;
       listOfConditions: 
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
          conditionID: speedArc_c1
          lowerBound: 91.0
          metricName: speedArc
          upperBound: 100.0
-      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
-         conditionID: vehicleArc_c1_1
-         metricName: vehicleArc
-         upperBound: 80.0
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
          conditionID: deliveryTime_c1
          metricName: deliveryTime
@@ -271,16 +267,12 @@
          upperBound: 100.0
 - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ResourceControlPlan
    finalEState: 
-      eStateID: speedArc_c1_1;vehicleArc_c1_2;deliveryTime_c1;
+      eStateID: speedArc_c1_1;deliveryTime_c1;
       listOfConditions: 
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
          conditionID: speedArc_c1_1
          metricName: speedArc
          upperBound: 90.0
-      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
-         conditionID: vehicleArc_c1_2
-         metricName: vehicleArc
-         upperBound: 80.0
       - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
          conditionID: deliveryTime_c1
          metricName: deliveryTime

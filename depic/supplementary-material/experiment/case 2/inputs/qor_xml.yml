@@ -16,8 +16,9 @@ listOfMetrics:
    name: vehicleArc
    listOfRanges: 
    - !at.ac.tuwien.dsg.depic.common.entity.qor.Range
+      fromValue: 91.0
       rangeID: vehicleArc_co1
-      toValue: 80.0
+      toValue: 95.0
    - !at.ac.tuwien.dsg.depic.common.entity.qor.Range
       fromValue: 81.0
       rangeID: vehicleArc_co2
