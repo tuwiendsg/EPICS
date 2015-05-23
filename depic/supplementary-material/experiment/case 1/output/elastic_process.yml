@@ -1,0 +1,596 @@
+!at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess
+listOfAdjustmentProcesses: 
+- !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess
+   directedAcyclicalGraph: 
+      listOfActions: 
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
+         actionID: 1731fb2e-557f-45c9-98f9-be500e427329
+         actionName: SAA
+         incomming: 1731fb2e-557f-45c9-98f9-be500e427329
+         outgoing: 1731fb2e-557f-45c9-98f9-be500e427329
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
+         actionID: b38f1cc5-c8b9-4599-8f70-2682e7a74a7e
+         actionName: VAA
+      listOfParallelGateways: []
+   finalEState: &1
+      eStateID: speedArc_c1;vehicleArc_c1;deliveryTime_c1;
+      listOfConditions: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: speedArc_c1
+         lowerBound: 91.0
+         metricName: speedArc
+         upperBound: 100.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: vehicleArc_c1
+         lowerBound: 81.0
+         metricName: vehicleArc
+         upperBound: 100.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: deliveryTime_c1
+         metricName: deliveryTime
+         upperBound: 53.0
+   listOfAdjustmentActions: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+      actionID: 1731fb2e-557f-45c9-98f9-be500e427329
+      actionName: SAA
+      artifact: &2
+         name: SAA
+         description: adjust speed accuracy
+         location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/SAA.sh
+         restfulAPI: /SAA/rest/control
+         type: sh
+      associatedQoRMetric: speedArc
+      listOfAdjustmentCases: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+         analyticTask: &3
+            parameters: 
+            - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+               parameterName: stopCondition
+               type: int
+               value: 5
+            taskName: kmeans
+         estimatedResult: 
+            conditionID: speedArc_c1
+            lowerBound: 91.0
+            metricName: speedArc
+            upperBound: 100.0
+         listOfParameters: 
+         - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+            parameterName: speedIndex
+            type: int
+            value: 2
+      listOfPrerequisiteActionIDs: &4
+      - LAA
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+      actionID: b38f1cc5-c8b9-4599-8f70-2682e7a74a7e
+      actionName: VAA
+      artifact: &5
+         name: VAA
+         description: adjust vehicle Accuracy
+         location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/VAA.sh
+         restfulAPI: /VAA/rest/control
+         type: sh
+      associatedQoRMetric: vehicleArc
+      listOfAdjustmentCases: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+         estimatedResult: 
+            conditionID: vehicleArc_c1
+            lowerBound: 81.0
+            metricName: vehicleArc
+            upperBound: 100.0
+         listOfParameters: 
+         - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+            parameterName: longtitudeIndex
+            type: int
+            value: 0
+         - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+            parameterName: latitudeIndex
+            type: int
+            value: 1
+         - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+            parameterName: speedIndex
+            type: int
+            value: 2
+      listOfPrerequisiteActionIDs: &6 []
+- !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess
+   directedAcyclicalGraph: 
+      listOfActions: &6 []
+      listOfParallelGateways: &6 []
+   finalEState: 
+      eStateID: speedArc_c1_1;vehicleArc_c1_2;deliveryTime_c1_3;
+      listOfConditions: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: speedArc_c1_1
+         metricName: speedArc
+         upperBound: 90.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: vehicleArc_c1_2
+         metricName: vehicleArc
+         upperBound: 80.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: deliveryTime_c1_3
+         lowerBound: 54.0
+         metricName: deliveryTime
+         upperBound: 1.7976931348623157E308
+   listOfAdjustmentActions: &6 []
+- !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess
+   directedAcyclicalGraph: 
+      listOfActions: 
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
+         actionID: d7eedc58-136d-4d66-a0c9-6092f6d10d02
+         actionName: SAA
+         incomming: d7eedc58-136d-4d66-a0c9-6092f6d10d02
+         outgoing: d7eedc58-136d-4d66-a0c9-6092f6d10d02
+      listOfParallelGateways: &6 []
+   finalEState: &7
+      eStateID: speedArc_c1;vehicleArc_c1_1;deliveryTime_c1;
+      listOfConditions: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: speedArc_c1
+         lowerBound: 91.0
+         metricName: speedArc
+         upperBound: 100.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: vehicleArc_c1_1
+         metricName: vehicleArc
+         upperBound: 80.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: deliveryTime_c1
+         metricName: deliveryTime
+         upperBound: 53.0
+   listOfAdjustmentActions: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+      actionID: d7eedc58-136d-4d66-a0c9-6092f6d10d02
+      actionName: SAA
+      artifact: *2
+      associatedQoRMetric: speedArc
+      listOfAdjustmentCases: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+         analyticTask: *3
+         estimatedResult: 
+            conditionID: speedArc_c1
+            lowerBound: 91.0
+            metricName: speedArc
+            upperBound: 100.0
+         listOfParameters: 
+         - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+            parameterName: speedIndex
+            type: int
+            value: 2
+      listOfPrerequisiteActionIDs: *4
+- !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess
+   directedAcyclicalGraph: 
+      listOfActions: 
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
+         actionID: 28e2c2fe-ae50-4014-8bbb-a36695dd4694
+         actionName: VAA
+      listOfParallelGateways: &6 []
+   finalEState: &8
+      eStateID: speedArc_c1_1;vehicleArc_c1;deliveryTime_c1;
+      listOfConditions: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: speedArc_c1_1
+         metricName: speedArc
+         upperBound: 90.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: vehicleArc_c1
+         lowerBound: 81.0
+         metricName: vehicleArc
+         upperBound: 100.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: deliveryTime_c1
+         metricName: deliveryTime
+         upperBound: 53.0
+   listOfAdjustmentActions: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction
+      actionID: 28e2c2fe-ae50-4014-8bbb-a36695dd4694
+      actionName: VAA
+      artifact: *5
+      associatedQoRMetric: vehicleArc
+      listOfAdjustmentCases: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentCase
+         estimatedResult: 
+            conditionID: vehicleArc_c1
+            lowerBound: 81.0
+            metricName: vehicleArc
+            upperBound: 100.0
+         listOfParameters: 
+         - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+            parameterName: longtitudeIndex
+            type: int
+            value: 0
+         - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+            parameterName: latitudeIndex
+            type: int
+            value: 1
+         - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+            parameterName: speedIndex
+            type: int
+            value: 2
+      listOfPrerequisiteActionIDs: *6
+- !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess
+   directedAcyclicalGraph: 
+      listOfActions: &6 []
+      listOfParallelGateways: &6 []
+   finalEState: &9
+      eStateID: speedArc_c1_1;vehicleArc_c1_2;deliveryTime_c1;
+      listOfConditions: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: speedArc_c1_1
+         metricName: speedArc
+         upperBound: 90.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: vehicleArc_c1_2
+         metricName: vehicleArc
+         upperBound: 80.0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition
+         conditionID: deliveryTime_c1
+         metricName: deliveryTime
+         upperBound: 53.0
+   listOfAdjustmentActions: &6 []
+listOfResourceControlPlans: 
+- !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ResourceControlPlan
+   finalEState: *1
+   listOfResourceControlStrategies: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: SAM
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: LAM
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: VAM
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: SAA
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: LAA
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: VAA
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+- !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ResourceControlPlan
+   finalEState: *7
+   listOfResourceControlStrategies: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: SAM
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: LAM
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: VAM
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: SAA
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: LAA
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: VAA
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+- !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ResourceControlPlan
+   finalEState: *8
+   listOfResourceControlStrategies: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: SAM
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: LAM
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: VAM
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: SAA
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: LAA
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: VAA
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+- !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ResourceControlPlan
+   finalEState: *9
+   listOfResourceControlStrategies: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: SAM
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: LAM
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: VAM
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: SAA
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: LAA
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy
+      controlMetric: cpuUsage
+      primitiveAction: VAA
+      scaleInCondition: 
+         conditionID: c_in
+         metricName: cpuUsage
+         upperBound: 20.0
+      scaleOutCondition: 
+         conditionID: c_out
+         lowerBound: 50.0
+         metricName: cpuUsage
+         upperBound: 100.0
+monitoringProcess: 
+   directedAcyclicalGraph: 
+      listOfActions: 
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
+         actionID: 252747ec-fd5b-4579-a438-c30e510ed04a
+         actionName: SAM
+         incomming: 2a77ffd9-d6b7-4287-9d85-e65fce0ab3a6
+         outgoing: e59fbcbc-da74-4fa4-9285-b46486a623c1
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
+         actionID: d67e2d2c-4655-4909-bc30-c1b210f0fa1d
+         actionName: VAM
+         incomming: 2a77ffd9-d6b7-4287-9d85-e65fce0ab3a6
+         outgoing: e59fbcbc-da74-4fa4-9285-b46486a623c1
+      listOfParallelGateways: 
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway
+         gatewayID: 2a77ffd9-d6b7-4287-9d85-e65fce0ab3a6
+         incomming: &6 []
+         outgoing: 
+         - 252747ec-fd5b-4579-a438-c30e510ed04a
+         - d67e2d2c-4655-4909-bc30-c1b210f0fa1d
+      - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway
+         gatewayID: e59fbcbc-da74-4fa4-9285-b46486a623c1
+         incomming: 
+         - 252747ec-fd5b-4579-a438-c30e510ed04a
+         - d67e2d2c-4655-4909-bc30-c1b210f0fa1d
+         outgoing: &6 []
+   listOfMonitoringActions: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+      artifact: 
+         name: SAM
+         description: measure speed accuracy
+         location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/SAM.sh
+         restfulAPI: /SAM/rest/monitor
+         type: sh
+      associatedQoRMetric: speedArc
+      listOfParameters: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: speedIndex
+         type: int
+         value: 2
+      monitorActionID: 252747ec-fd5b-4579-a438-c30e510ed04a
+      monitoringActionName: SAM
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+      artifact: 
+         name: VAM
+         description: monitor vehicle accuracy
+         location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/VAM.sh
+         restfulAPI: /VAM/rest/monitor
+         type: sh
+      associatedQoRMetric: vehicleArc
+      listOfParameters: 
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: longtitudeIndex
+         type: int
+         value: 0
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: latitudeIndex
+         type: int
+         value: 1
+      - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+         parameterName: speedIndex
+         type: int
+         value: 2
+      monitorActionID: d67e2d2c-4655-4909-bc30-c1b210f0fa1d
+      monitoringActionName: VAM

@@ -1,0 +1,4 @@
+
+ Can not decompose conditions of metric vehicleArc in qElement2.
+ Can not decompose conditions of metric vehicleArc in qElement3.
+ Can not decompose conditions of metric vehicleArc in qElement5.
