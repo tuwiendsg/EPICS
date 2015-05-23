@@ -38,7 +38,6 @@ import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManag
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import static at.ac.tuwien.dsg.depic.common.utils.YamlUtils.toYaml;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -68,7 +67,7 @@ public class ElasticProcessesGenerator {
         this.qorModel = qorModel;
         this.primitiveActionRepository = primitiveActionRepository;
         // config();
-        errorLog="";
+        errorLog = "";
     }
 
     public ElasticProcess generateElasticProcesses() {
@@ -76,23 +75,20 @@ public class ElasticProcessesGenerator {
 
         MonitoringProcess monitorProcess = generateMonitoringProcess();
         toYaml(monitorProcess, "/Volumes/DATA/Temp/monitorProcess.yml");
-        
+
         finalElasticStates = generateFinalElasticStateSet();
         toYaml(finalElasticStates, "/Volumes/DATA/Temp/finalElasticStates.yml");
-        
+
         List<AdjustmentProcess> listOfAdjustmentProcesses = generateAdjustmentProcesses(finalElasticStates);
         toYaml(listOfAdjustmentProcesses, "/Volumes/DATA/Temp/listOfAdjustmentProcesses.yml");
-        
-        
+
         List<ResourceControlPlan> listOfResourceControlPlans = generateResourceControlPlan(finalElasticStates);
         toYaml(listOfResourceControlPlans, "/Volumes/DATA/Temp/listOfResourceControlPlans.yml");
-        
+
         ElasticProcess elasticProcess = new ElasticProcess(monitorProcess, listOfAdjustmentProcesses, listOfResourceControlPlans);
-        
-        
+
         IOUtils iou = new IOUtils("/Volumes/DATA/Temp");
         iou.writeData(errorLog, "errorLog.txt");
-        
 
         return elasticProcess;
     }
@@ -100,8 +96,6 @@ public class ElasticProcessesGenerator {
     public List<ElasticState> getFinalElasticStates() {
         return finalElasticStates;
     }
-    
-    
 
     ///////////////////////////////////////
     ///                                 ///
@@ -232,11 +226,11 @@ public class ElasticProcessesGenerator {
 
         for (QElement qElement : listOfQElements) {
             List<ElasticState> listOfFinalElasticState_qelement = decomposeQElement(qElement);
-            
-            if (listOfFinalElasticState_qelement!=null) {
+
+            if (listOfFinalElasticState_qelement != null) {
                 listOfFinalElasticStates.addAll(listOfFinalElasticState_qelement);
             } else {
-               
+
             }
         }
         return listOfFinalElasticStates;
@@ -249,111 +243,101 @@ public class ElasticProcessesGenerator {
 
         List<List> listOfConditionSet = new ArrayList<List>();
 
-        int counter=0;
+        int counter = 0;
         for (QoRMetric qorMetric : listOfQoRMetrics) {
-            
+
             System.out.println("Metric: " + qorMetric.getName());
-            
+
             List<MetricCondition> listOfConditions = findEstimatedResultForQoRMetric(qorMetric);
-            
+
             System.out.println("no of conditions: " + listOfConditions.size());
-            
 
             if (listOfConditions.size() > 0) {
                 Range r = findMatchingRange(qElement, qorMetric);
-                
-                if (r!=null){
-                   
-                
-                List<MetricCondition> unitConditions = new ArrayList<MetricCondition>();
-         
-                for (MetricCondition condition : listOfConditions) {
-                    System.out.println("condition: " + condition.getLowerBound() + " - " + condition.getUpperBound());
-                    System.out.println("qor: " + r.getFromValue() + " - " + r.getToValue());
-                    
-                    
-                    
-                    if (condition.getLowerBound() == r.getFromValue() && condition.getUpperBound() == r.getToValue()) {
-                        unitConditions.add(condition);
-                    } else if (condition.getLowerBound() > r.getFromValue() && condition.getUpperBound() < r.getToValue()) {
-                        
-                        MetricCondition condition_pre = new MetricCondition(
-                                condition.getMetricName(), 
-                                condition.getConditionID()+"_"+String.valueOf(++counter), 
-                                r.getFromValue(), 
-                                condition.getLowerBound());
-                        
-                        MetricCondition condition_post = new MetricCondition(
-                                condition.getMetricName(), 
-                                condition.getConditionID()+"_"+String.valueOf(++counter), 
-                                condition.getUpperBound(), 
-                                r.getToValue());
-                        
-                        unitConditions.add(condition);
-                        unitConditions.add(condition_pre);
-                        unitConditions.add(condition_post);
-                        
-                    } else if (condition.getLowerBound() > r.getFromValue() && condition.getUpperBound() == r.getToValue()) {
-                        
-                        MetricCondition condition_pre = new MetricCondition(
-                                condition.getMetricName(), 
-                                condition.getConditionID()+"_"+String.valueOf(++counter), 
-                                r.getFromValue(), 
-                                condition.getLowerBound());
-                        unitConditions.add(condition);
-                        unitConditions.add(condition_pre);
-                        
-                    } else if (condition.getLowerBound() == r.getFromValue() && condition.getUpperBound() < r.getToValue()) {
-                        MetricCondition condition_post = new MetricCondition(
-                                condition.getMetricName(), 
-                                condition.getConditionID()+"_"+String.valueOf(++counter), 
-                                condition.getUpperBound(), 
-                                r.getToValue());
-                        
-                        unitConditions.add(condition);
-                        unitConditions.add(condition_post);
-                    } else if (condition.getLowerBound() < r.getFromValue() && condition.getUpperBound() >= r.getToValue()) {
-                          errorLog = errorLog+ "\n Can not decompose conditions of metric " +qorMetric.getName()+" in " +  qElement.getqElementID() +".";
-                         
-                         System.out.println(errorLog);
-                        
-                    } else if (condition.getLowerBound() <= r.getFromValue() && condition.getUpperBound() > r.getToValue()) {
-                        errorLog = errorLog+ "\n Can not decompose conditions of metric " +qorMetric.getName()+" in " +  qElement.getqElementID() +".";
-                         
-                         System.out.println(errorLog);
-                        
-                    } 
-                    
-                    else {
-                         MetricCondition condition_u = new MetricCondition(
-                                condition.getMetricName(), 
-                                condition.getConditionID()+"_"+String.valueOf(++counter), 
-                                r.getFromValue(), 
-                                r.getToValue());
-                         unitConditions.add(condition_u);
-                        
-                        
-                    }
-                    
-                    
+
+                if (r != null) {
+
+                    List<MetricCondition> unitConditions = new ArrayList<MetricCondition>();
+
+                    for (MetricCondition condition : listOfConditions) {
+                        System.out.println("condition: " + condition.getLowerBound() + " - " + condition.getUpperBound());
+                        System.out.println("qor: " + r.getFromValue() + " - " + r.getToValue());
+
+                        if (condition.getLowerBound() == r.getFromValue() && condition.getUpperBound() == r.getToValue()) {
+                            unitConditions.add(condition);
+                        } else if (condition.getLowerBound() > r.getFromValue() && condition.getUpperBound() < r.getToValue()) {
+
+                            MetricCondition condition_pre = new MetricCondition(
+                                    condition.getMetricName(),
+                                    condition.getConditionID() + "_" + String.valueOf(++counter),
+                                    r.getFromValue(),
+                                    condition.getLowerBound());
+
+                            MetricCondition condition_post = new MetricCondition(
+                                    condition.getMetricName(),
+                                    condition.getConditionID() + "_" + String.valueOf(++counter),
+                                    condition.getUpperBound(),
+                                    r.getToValue());
+
+                            unitConditions.add(condition);
+                            unitConditions.add(condition_pre);
+                            unitConditions.add(condition_post);
+
+                        } else if (condition.getLowerBound() > r.getFromValue() && condition.getUpperBound() == r.getToValue()) {
+
+                            MetricCondition condition_pre = new MetricCondition(
+                                    condition.getMetricName(),
+                                    condition.getConditionID() + "_" + String.valueOf(++counter),
+                                    r.getFromValue(),
+                                    condition.getLowerBound());
+                            unitConditions.add(condition);
+                            unitConditions.add(condition_pre);
+
+                        } else if (condition.getLowerBound() == r.getFromValue() && condition.getUpperBound() < r.getToValue()) {
+                            MetricCondition condition_post = new MetricCondition(
+                                    condition.getMetricName(),
+                                    condition.getConditionID() + "_" + String.valueOf(++counter),
+                                    condition.getUpperBound(),
+                                    r.getToValue());
+
+                            unitConditions.add(condition);
+                            unitConditions.add(condition_post);
+                        } else if (condition.getLowerBound() < r.getFromValue() && condition.getUpperBound() >= r.getToValue()) {
+                            errorLog = errorLog + "\n Can not decompose conditions of metric " + qorMetric.getName() + " in " + qElement.getqElementID() + ".";
+
+                            System.out.println(errorLog);
+
+                        } else if (condition.getLowerBound() <= r.getFromValue() && condition.getUpperBound() > r.getToValue()) {
+                            errorLog = errorLog + "\n Can not decompose conditions of metric " + qorMetric.getName() + " in " + qElement.getqElementID() + ".";
+
+                            System.out.println(errorLog);
+
+                        } else {
+                            MetricCondition condition_u = new MetricCondition(
+                                    condition.getMetricName(),
+                                    condition.getConditionID() + "_" + String.valueOf(++counter),
+                                    r.getFromValue(),
+                                    r.getToValue());
+                            unitConditions.add(condition_u);
+
+                        }
+
                //     errorLog = errorLog+ "\n Can not decompose conditions of metric " +qorMetric.getName()+" in " +  qElement.getqElementID() +".";
-                         
-                 //        System.out.println(errorLog);
-                }
-                
-                
-                if (unitConditions.size()>0) {
-                    
-                    for (MetricCondition mc : unitConditions){
-                        System.out.println("mc id: " + mc.getConditionID());
-                        System.out.println("mc name: " + mc.getMetricName());
-                        System.out.println("mc l: " + mc.getLowerBound());
-                        System.out.println("mc u: " + mc.getUpperBound());
+                        //        System.out.println(errorLog);
                     }
-                    
-                    listOfConditionSet.add(unitConditions);
-                }
-                
+
+                    if (unitConditions.size() > 0) {
+
+                        for (MetricCondition mc : unitConditions) {
+                            System.out.println("mc id: " + mc.getConditionID());
+                            System.out.println("mc name: " + mc.getMetricName());
+                            System.out.println("mc l: " + mc.getLowerBound());
+                            System.out.println("mc u: " + mc.getUpperBound());
+                        }
+
+                        listOfConditionSet.add(unitConditions);
+                    }
+
                 }
             }
         }
@@ -370,7 +354,7 @@ public class ElasticProcessesGenerator {
 
                 List<MetricCondition> conditionMetric_i = listOfConditionSet.get(i);
                 int noOfConditions = conditionMetric_i.size();
-               // System.out.println("No of conditions " + noOfConditions);
+                // System.out.println("No of conditions " + noOfConditions);
                 int conditionIndex = randomInt(0, noOfConditions);
                 conditionIndice[i] = conditionIndex;
 
@@ -407,61 +391,77 @@ public class ElasticProcessesGenerator {
 
     private List<MetricCondition> findEstimatedResultForQoRMetric(QoRMetric qorMetric) {
         List<AdjustmentAction> listOfAdjustmentActions = primitiveActionRepository.getListOfAdjustmentActions();
-        
-       
 
         List<AdjustmentCase> listOfAdjustmentCases = null;
 
         for (AdjustmentAction adjustmentAction : listOfAdjustmentActions) {
-            System.out.println("aa1: "  +adjustmentAction.getAssociatedQoRMetric());
-            
-            
+            System.out.println("aa1: " + adjustmentAction.getAssociatedQoRMetric());
+
             if (qorMetric.getName().equals(adjustmentAction.getAssociatedQoRMetric())) {
-                 System.out.println("aa2: "  +adjustmentAction.getAssociatedQoRMetric());
-                 System.out.println("aa3: "  +adjustmentAction.getListOfAdjustmentCases().size());
-                 //System.out.println("aa2: "  +adjustmentAction.getAssociatedQoRMetric());
+                System.out.println("aa2: " + adjustmentAction.getAssociatedQoRMetric());
+                System.out.println("aa3: " + adjustmentAction.getListOfAdjustmentCases().size());
+                //System.out.println("aa2: "  +adjustmentAction.getAssociatedQoRMetric());
                 listOfAdjustmentCases = adjustmentAction.getListOfAdjustmentCases();
                 break;
             }
         }
+        
+        
+        if (listOfAdjustmentCases==null && !isAssociatedWithResourceControlAction(qorMetric.getName())) {
+           
+            errorLog = errorLog + "\n No adjustment action found for metric " + qorMetric.getName() + ". Conditions of this metric are not added to eState.";
+                                      
+                                    System.out.println(errorLog);
+            
+        
+        
+        }
+        
+        
 
         List<MetricCondition> listOfConditions = new ArrayList<MetricCondition>();
 
         if (listOfAdjustmentCases != null) {
 
             for (AdjustmentCase adjustmentCase : listOfAdjustmentCases) {
-                MetricCondition condition = adjustmentCase.getEstimatedResult();
-                System.out.println("a a1: " + condition.getLowerBound());
-                System.out.println("a a2: " + condition.getUpperBound());
-                if (condition!=null) {
-                listOfConditions.add(condition);
+
+                if (adjustmentCase.getEstimatedResult() != null) {
+
+                    MetricCondition condition = adjustmentCase.getEstimatedResult();
+                    System.out.println("a a1: " + condition.getLowerBound());
+                    System.out.println("a a2: " + condition.getUpperBound());
+                    if (condition != null) {
+                        listOfConditions.add(condition);
+                    }
+                } else {
+                    errorLog = errorLog + "\n No estimated results for metric " + qorMetric.getName() + ". Need to customize elasticity actions for this metric in monitoring/adjustment process.";
+
+                    System.out.println(errorLog);
                 }
+
             }
         }
-        
+
         System.out.println("No of conditions: " + listOfConditions.size());
-        
+
         /////////////
-        
         List<ResourceControlAction> listOfResourceControlActions = primitiveActionRepository.getListOfResourceControls();
-       
-        
+
         List<ResourceControlCase> listOfResourceControlCases = null;
-        
-        for (ResourceControlAction resourceControlAction : listOfResourceControlActions){
-            if (qorMetric.getName().equals(resourceControlAction.getAssociatedQoRMetric())){
+
+        for (ResourceControlAction resourceControlAction : listOfResourceControlActions) {
+            if (qorMetric.getName().equals(resourceControlAction.getAssociatedQoRMetric())) {
                 listOfResourceControlCases = resourceControlAction.getListOfResourceControlStrategies();
             }
         }
-        
-        if (listOfResourceControlCases !=null){
-            for (ResourceControlCase resourceControlCase : listOfResourceControlCases){
+
+        if (listOfResourceControlCases != null) {
+            for (ResourceControlCase resourceControlCase : listOfResourceControlCases) {
                 MetricCondition condition = resourceControlCase.getEstimatedResult();
                 listOfConditions.add(condition);
             }
         }
-        
-        
+
         return listOfConditions;
     }
 
@@ -521,7 +521,7 @@ public class ElasticProcessesGenerator {
     ///                                 ///
     ///////////////////////////////////////
     public List<AdjustmentProcess> generateAdjustmentProcesses(List<ElasticState> listOfFinalElasticStates) {
-       
+
         List<AdjustmentProcess> listOfAdjustmentProcesses = new ArrayList<AdjustmentProcess>();
 
         for (ElasticState elasticState : listOfFinalElasticStates) {
@@ -532,7 +532,7 @@ public class ElasticProcessesGenerator {
                 AdjustmentAction adjustmentAction = findAdjustmentAction(metricCondition);
                 if (adjustmentAction != null) {
                     listOfAdjustmentActions.add(adjustmentAction);
-                } 
+                }
             }
 
             AdjustmentProcess adjustmentProcess = new AdjustmentProcess(elasticState, listOfAdjustmentActions, null);
@@ -543,36 +543,34 @@ public class ElasticProcessesGenerator {
 
         return listOfAdjustmentProcesses;
     }
-    
-    private boolean  isAssociatedWithResourceControlAction(String metricName){
+
+    private boolean isAssociatedWithResourceControlAction(String metricName) {
         boolean rs = false;
         List<ResourceControlAction> listOfResourceControlActions = primitiveActionRepository.getListOfResourceControls();
 
         for (ResourceControlAction rc : listOfResourceControlActions) {
             if (metricName.equals(rc.getAssociatedQoRMetric())) {
-                rs=true;
+                rs = true;
                 break;
             }
         }
-        
+
         return rs;
     }
-    
-    private boolean  isAssociatedWithAdjustmentAction(String metricName){
+
+    private boolean isAssociatedWithAdjustmentAction(String metricName) {
         boolean rs = false;
         List<AdjustmentAction> listOfAdjustmentActions = primitiveActionRepository.getListOfAdjustmentActions();
 
         for (AdjustmentAction adjustmentAction : listOfAdjustmentActions) {
             if (metricName.equals(adjustmentAction.getAssociatedQoRMetric())) {
-                rs=true;
+                rs = true;
                 break;
             }
         }
-        
+
         return rs;
     }
-    
-    
 
     private AdjustmentAction findAdjustmentAction(MetricCondition metricCondition) {
         List<AdjustmentAction> listOfAdjustmentActions = primitiveActionRepository.getListOfAdjustmentActions();
@@ -583,80 +581,88 @@ public class ElasticProcessesGenerator {
                 List<AdjustmentCase> listOfAdjustmentCases = adjustmentAction.getListOfAdjustmentCases();
 
                 for (AdjustmentCase adjustmentCase : listOfAdjustmentCases) {
-                    if (adjustmentCase.getEstimatedResult().getLowerBound() >= metricCondition.getLowerBound()
-                            && adjustmentCase.getEstimatedResult().getUpperBound() <= metricCondition.getUpperBound()) {
 
-                        MetricCondition estimatedResult = adjustmentCase.getEstimatedResult();
-                        MetricCondition estimatedResult_c = new MetricCondition(estimatedResult.getMetricName(),estimatedResult.getConditionID(),estimatedResult.getLowerBound(),estimatedResult.getUpperBound());
-                        List<Parameter> listOfParams = adjustmentCase.getListOfParameters();
-                        List<Parameter> listOfParams_c = new ArrayList<Parameter>();
-                        for (Parameter param : listOfParams){
-                            Parameter param_c = new Parameter(param.getParameterName(), param.getType(), param.getValue());
-                            listOfParams_c.add(param_c);
+                    if (adjustmentCase.getEstimatedResult() == null) {
+                        
+
+                    } else {
+
+                        if (adjustmentCase.getEstimatedResult().getLowerBound() >= metricCondition.getLowerBound()
+                                && adjustmentCase.getEstimatedResult().getUpperBound() <= metricCondition.getUpperBound()) {
+
+                            if (adjustmentCase.getAnalyticTask() == null) {
+                                MetricCondition estimatedResult = adjustmentCase.getEstimatedResult();
+                                MetricCondition estimatedResult_c = new MetricCondition(estimatedResult.getMetricName(), estimatedResult.getConditionID(), estimatedResult.getLowerBound(), estimatedResult.getUpperBound());
+                                List<Parameter> listOfParams = adjustmentCase.getListOfParameters();
+                                List<Parameter> listOfParams_c = new ArrayList<Parameter>();
+                                for (Parameter param : listOfParams) {
+                                    Parameter param_c = new Parameter(param.getParameterName(), param.getType(), param.getValue());
+                                    listOfParams_c.add(param_c);
+                                }
+
+                                AdjustmentCase foundAdjustmentCase = new AdjustmentCase(
+                                        estimatedResult_c,
+                                        adjustmentCase.getAnalyticTask(),
+                                        listOfParams_c);
+
+                                List<AdjustmentCase> listOfFoundAdjustmentCases = new ArrayList<AdjustmentCase>();
+                                listOfFoundAdjustmentCases.add(foundAdjustmentCase);
+
+                                foundAdjustmentAction = new AdjustmentAction(
+                                        adjustmentAction.getActionID(),
+                                        adjustmentAction.getActionName(),
+                                        adjustmentAction.getArtifact(),
+                                        adjustmentAction.getAssociatedQoRMetric(),
+                                        adjustmentAction.getListOfPrerequisiteActionIDs(),
+                                        listOfFoundAdjustmentCases);
+
+                                System.out.println("Found Action: " + adjustmentAction.getActionName());
+                                System.out.println("Metric Condtidion: " + metricCondition.getMetricName() + " - " + metricCondition.getLowerBound() + " - " + metricCondition.getUpperBound());
+                                System.out.println("Estimated Result: " + estimatedResult.getLowerBound() + " - " + estimatedResult.getUpperBound());
+                            } else {
+                                if (matchingAnalyticTaskFromDAF(adjustmentCase.getAnalyticTask())) {
+                                    MetricCondition estimatedResult = adjustmentCase.getEstimatedResult();
+                                    MetricCondition estimatedResult_c = new MetricCondition(estimatedResult.getMetricName(), estimatedResult.getConditionID(), estimatedResult.getLowerBound(), estimatedResult.getUpperBound());
+                                    List<Parameter> listOfParams = adjustmentCase.getListOfParameters();
+                                    List<Parameter> listOfParams_c = new ArrayList<Parameter>();
+                                    for (Parameter param : listOfParams) {
+                                        Parameter param_c = new Parameter(param.getParameterName(), param.getType(), param.getValue());
+                                        listOfParams_c.add(param_c);
+                                    }
+
+                                    AdjustmentCase foundAdjustmentCase = new AdjustmentCase(
+                                            estimatedResult_c,
+                                            adjustmentCase.getAnalyticTask(),
+                                            listOfParams_c);
+
+                                    List<AdjustmentCase> listOfFoundAdjustmentCases = new ArrayList<AdjustmentCase>();
+                                    listOfFoundAdjustmentCases.add(foundAdjustmentCase);
+
+                                    foundAdjustmentAction = new AdjustmentAction(
+                                            adjustmentAction.getActionID(),
+                                            adjustmentAction.getActionName(),
+                                            adjustmentAction.getArtifact(),
+                                            adjustmentAction.getAssociatedQoRMetric(),
+                                            adjustmentAction.getListOfPrerequisiteActionIDs(),
+                                            listOfFoundAdjustmentCases);
+                                } else {
+                                    errorLog = errorLog + "\n Analytic Task " + adjustmentCase.getAnalyticTask().getTaskName() 
+                                            + " in daf does not match. Please customize elasticity actions for metric "+metricCondition.getMetricName();
+                                    System.out.println(errorLog);
+                                }
+                            }
+
                         }
-                        
-                        AdjustmentCase foundAdjustmentCase = new AdjustmentCase(
-                                estimatedResult_c,
-                                adjustmentCase.getAnalyticTask(),
-                                listOfParams_c);
-
-                        List<AdjustmentCase> listOfFoundAdjustmentCases = new ArrayList<AdjustmentCase>();
-                        listOfFoundAdjustmentCases.add(foundAdjustmentCase);
-
-                        foundAdjustmentAction = new AdjustmentAction(
-                                adjustmentAction.getActionID(),
-                                adjustmentAction.getActionName(),
-                                adjustmentAction.getArtifact(),
-                                adjustmentAction.getAssociatedQoRMetric(),
-                                adjustmentAction.getListOfPrerequisiteActionIDs(),
-                                listOfFoundAdjustmentCases);
-                        
-                        
-                        System.out.println("Found Action: " + adjustmentAction.getActionName());
-                        System.out.println("Metric Condtidion: " + metricCondition.getMetricName() + " - " +metricCondition.getLowerBound() + " - " + metricCondition.getUpperBound());
-                        System.out.println("Estimated Result: " + estimatedResult.getLowerBound() + " - " + estimatedResult.getUpperBound());
-                    } 
-                    
-                    
-                    if (adjustmentCase.getEstimatedResult()==null && matchingAnalyticTaskFromDAF(adjustmentCase.getAnalyticTask())){
-                        MetricCondition estimatedResult = adjustmentCase.getEstimatedResult();
-                        MetricCondition estimatedResult_c = new MetricCondition(estimatedResult.getMetricName(),estimatedResult.getConditionID(),estimatedResult.getLowerBound(),estimatedResult.getUpperBound());
-                        List<Parameter> listOfParams = adjustmentCase.getListOfParameters();
-                        List<Parameter> listOfParams_c = new ArrayList<Parameter>();
-                        for (Parameter param : listOfParams){
-                            Parameter param_c = new Parameter(param.getParameterName(), param.getType(), param.getValue());
-                            listOfParams_c.add(param_c);
-                        }
-                        
-                        AdjustmentCase foundAdjustmentCase = new AdjustmentCase(
-                                estimatedResult_c,
-                                adjustmentCase.getAnalyticTask(),
-                                listOfParams_c);
-
-                        List<AdjustmentCase> listOfFoundAdjustmentCases = new ArrayList<AdjustmentCase>();
-                        listOfFoundAdjustmentCases.add(foundAdjustmentCase);
-
-                        foundAdjustmentAction = new AdjustmentAction(
-                                adjustmentAction.getActionID(),
-                                adjustmentAction.getActionName(),
-                                adjustmentAction.getArtifact(),
-                                adjustmentAction.getAssociatedQoRMetric(),
-                                adjustmentAction.getListOfPrerequisiteActionIDs(),
-                                listOfFoundAdjustmentCases);
-                        
-                        
-                    } 
-                    
-                    
-                    
-                    
-                    
+                    }
 
                 }
 
-                break;
+                // break;
             }
         }
+        
+        
+        
 
         return foundAdjustmentAction;
 
@@ -853,57 +859,53 @@ public class ElasticProcessesGenerator {
 
         return prerequisiteActionNames;
     }
-    
-    private boolean matchingAnalyticTaskFromDAF(AnalyticTask pamAnalyticTask){
+
+    private boolean matchingAnalyticTaskFromDAF(AnalyticTask pamAnalyticTask) {
         AnalyticTask analyticTask = null;
         try {
             String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>";
-            
-            String daw= daf.getDaw();
-            
+
+            String daw = daf.getDaw();
+
             int beginIndex = daw.indexOf("<depic>");
             int endIndex = daw.indexOf("</depic>");
-            String analyticTasksStr =header + daw.substring(beginIndex+7, endIndex);
+            String analyticTasksStr = header + daw.substring(beginIndex + 7, endIndex);
             analyticTask = JAXBUtils.unmarshal(analyticTasksStr, AnalyticTask.class);
 
         } catch (JAXBException ex) {
             java.util.logging.Logger.getLogger(ElasticProcessesGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         boolean rs = true;
-        if (pamAnalyticTask!=null && analyticTask!=null){
-            
-            
-            if (pamAnalyticTask.getTaskName().equals(analyticTask.getTaskName())){
-                
+        if (pamAnalyticTask != null && analyticTask != null) {
+
+            if (pamAnalyticTask.getTaskName().equals(analyticTask.getTaskName())) {
+
                 List<Parameter> listOfParameters1 = analyticTask.getParameters();
                 List<Parameter> listOfParameters2 = pamAnalyticTask.getParameters();
-                
-                for (Parameter pam1 : listOfParameters1){
-                    for (Parameter pam2 : listOfParameters2){
-                        if (pam1.getParameterName().equals(pam2.getParameterName()) ){
-                            if (!pam1.getValue().equals(pam2.getValue())){
-                                rs = false; 
-                            }   
+
+                for (Parameter pam1 : listOfParameters1) {
+                    for (Parameter pam2 : listOfParameters2) {
+                        if (pam1.getParameterName().equals(pam2.getParameterName())) {
+                            if (!pam1.getValue().equals(pam2.getValue())) {
+                                rs = false;
+                            }
                         }
-                        
+
                     }
-                    
-                    
+
                 }
-                
+
             } else {
                 rs = false;
             }
-            
-            
+
         } else {
             rs = false;
         }
-        
-        
+
         return rs;
-        
+
     }
 
     ///////////////////////////////////////
@@ -917,14 +919,36 @@ public class ElasticProcessesGenerator {
 
         for (ElasticState elasticState : listOfFinalElasticStates) {
             List<MetricCondition> listOfConditions = elasticState.getListOfConditions();
-
+            
+            List<ResourceControlStrategy> resourceControlStrategiesForEState = new ArrayList<ResourceControlStrategy>();
+            
             for (MetricCondition metricCondition : listOfConditions) {
                 List<ResourceControlStrategy> listOfFoundResourceControlStrategies = findResourceControlStrategy(metricCondition);
                 if (listOfFoundResourceControlStrategies.size() > 0) {
-                    ResourceControlPlan resourceControlPlan = new ResourceControlPlan(elasticState, listOfFoundResourceControlStrategies);
-                    listOfFoundResourceControlPlans.add(resourceControlPlan);
+                    resourceControlStrategiesForEState.addAll(listOfFoundResourceControlStrategies);
+                } 
+            }
+            
+            for (int i=0; i<resourceControlStrategiesForEState.size();i++){
+                for (int j=0; j<resourceControlStrategiesForEState.size();j++) {
+                    if (i!=j) {
+                        if (resourceControlStrategiesForEState.get(i).getPrimitiveAction().equals(resourceControlStrategiesForEState.get(j).getPrimitiveAction())){
+                            errorLog = errorLog + "\n Duplicate resource strategy for primitive action " + resourceControlStrategiesForEState.get(i).getPrimitiveAction();
+                                    System.out.println(errorLog);
+                        }
+                        
+                        
+                        
+                    }
+                    
+                    
                 }
             }
+            
+            
+            
+            ResourceControlPlan resourceControlPlan = new ResourceControlPlan(elasticState, resourceControlStrategiesForEState);
+                    listOfFoundResourceControlPlans.add(resourceControlPlan);
 
         }
 
@@ -958,26 +982,24 @@ public class ElasticProcessesGenerator {
         return foundListOfResourceControlStrategies;
 
     }
-    
-    private List<ResourceControlStrategy> copyListOfResourceControlStrategy(List<ResourceControlStrategy> originalList){
-        
+
+    private List<ResourceControlStrategy> copyListOfResourceControlStrategy(List<ResourceControlStrategy> originalList) {
+
         List<ResourceControlStrategy> copyList = new ArrayList<ResourceControlStrategy>();
-        
-        
-        for (ResourceControlStrategy rca : originalList){
+
+        for (ResourceControlStrategy rca : originalList) {
             MetricCondition scaleOutCo = rca.getScaleOutCondition();
             MetricCondition scaleOutCo_c = new MetricCondition(scaleOutCo.getMetricName(), scaleOutCo.getConditionID(), scaleOutCo.getLowerBound(), scaleOutCo.getUpperBound());
             MetricCondition scaleInCo = rca.getScaleInCondition();
-            MetricCondition scaleInCo_c =  new MetricCondition(scaleInCo.getMetricName(), scaleInCo.getConditionID(), scaleInCo.getLowerBound(), scaleInCo.getUpperBound());
+            MetricCondition scaleInCo_c = new MetricCondition(scaleInCo.getMetricName(), scaleInCo.getConditionID(), scaleInCo.getLowerBound(), scaleInCo.getUpperBound());
             String controlMetric = rca.getControlMetric();
             String primitiveAction = rca.getPrimitiveAction();
             ResourceControlStrategy rca_copy = new ResourceControlStrategy(scaleInCo_c, scaleOutCo_c, controlMetric, primitiveAction);
             copyList.add(rca_copy);
         }
-        
+
         return copyList;
     }
-    
 
 //    private ElasticState copyElasticState(ElasticState eState){
 //        

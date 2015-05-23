@@ -30,15 +30,21 @@ public class toFile {
         
         PrimitiveActionRepositoryGenerator generator = new PrimitiveActionRepositoryGenerator();
         
-       // PrimitiveActionRepositoryGenerator_1 generator = new PrimitiveActionRepositoryGenerator_1();
+        //PrimitiveActionRepositoryGenerator_1 generator = new PrimitiveActionRepositoryGenerator_1();
+        
+        //PrimitiveActionRepositoryGenerator_2 generator = new PrimitiveActionRepositoryGenerator_2();
+        
+        //PrimitiveActionRepositoryGenerator_3 generator = new PrimitiveActionRepositoryGenerator_3();
+        
+        
         PrimitiveActionMetadata primitiveActionRepository = generator.getData();
         
         toYaml(primitiveActionRepository, "/Volumes/DATA/Temp/primitiveActionRepository.yml");
         
         
-        QoR_GPS qoR = new QoR_GPS();
+        //QoR_GPS qoR = new QoR_GPS();
         //QoR_GPS2 qoR = new QoR_GPS2();
-        
+        QoR_GPS3 qoR = new QoR_GPS3();
         QoRModel qoRModel = qoR.sampleQoRModel();
         toYaml(qoRModel, "/Volumes/DATA/Temp/qor_xml.yml");
         
