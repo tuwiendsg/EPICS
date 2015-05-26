@@ -14,7 +14,8 @@ import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
 import static at.ac.tuwien.dsg.depic.common.utils.YamlUtils.toYaml;
-import at.ac.tuwien.dsg.depic.depictool.generator.ElasticProcessesGenerator;
+import at.ac.tuwien.dsg.depic.elastic.process.generator.ElasticProcessesGenerator;
+
 
 /**
  *

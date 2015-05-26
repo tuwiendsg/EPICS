@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.depic.depictool.generator;
+package at.ac.tuwien.dsg.depic.elastic.process.generator;
 
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
@@ -34,12 +34,12 @@ import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.depic.common.entity.qor.Range;
 import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManager;
+
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import static at.ac.tuwien.dsg.depic.common.utils.YamlUtils.toYaml;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;

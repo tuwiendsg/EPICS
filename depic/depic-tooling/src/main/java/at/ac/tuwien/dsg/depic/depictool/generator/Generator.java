@@ -29,6 +29,7 @@ import at.ac.tuwien.dsg.depic.depictool.connector.ElasticServiceMonitor;
 import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManager;
 import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
 import at.ac.tuwien.dsg.depic.depictool.utils.ZipUtils;
+import at.ac.tuwien.dsg.depic.elastic.process.generator.ElasticProcessesGenerator;
 import java.util.List;
 import java.util.logging.Level;
 import javax.xml.bind.JAXBException;
