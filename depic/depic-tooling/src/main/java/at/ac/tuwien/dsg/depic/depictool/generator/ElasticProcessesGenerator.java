@@ -57,6 +57,7 @@ public class ElasticProcessesGenerator {
     PrimitiveActionMetadata primitiveActionRepository;
     List<ElasticState> finalElasticStates;
     String errorLog;
+    String rootPath;
 
     public ElasticProcessesGenerator() {
         // config();
@@ -69,25 +70,34 @@ public class ElasticProcessesGenerator {
         // config();
         errorLog = "";
     }
+    
+    public ElasticProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository, String rooPath) {
+        this.daf = daf;
+        this.qorModel = qorModel;
+        this.primitiveActionRepository = primitiveActionRepository;
+        // config();
+        errorLog = "";
+        this.rootPath = rooPath;
+    }
 
     public ElasticProcess generateElasticProcesses() {
         Logger.logInfo("Start generate Elastic Processes ... ");
 
         MonitoringProcess monitorProcess = generateMonitoringProcess();
-        toYaml(monitorProcess, "/Volumes/DATA/Temp/monitorProcess.yml");
+        toYaml(monitorProcess, "monitorProcess.yml");
 
         finalElasticStates = generateFinalElasticStateSet();
-        toYaml(finalElasticStates, "/Volumes/DATA/Temp/finalElasticStates.yml");
+        toYaml(finalElasticStates, "finalElasticStates.yml");
 
         List<AdjustmentProcess> listOfAdjustmentProcesses = generateAdjustmentProcesses(finalElasticStates);
-        toYaml(listOfAdjustmentProcesses, "/Volumes/DATA/Temp/listOfAdjustmentProcesses.yml");
+        toYaml(listOfAdjustmentProcesses, "listOfAdjustmentProcesses.yml");
 
         List<ResourceControlPlan> listOfResourceControlPlans = generateResourceControlPlan(finalElasticStates);
-        toYaml(listOfResourceControlPlans, "/Volumes/DATA/Temp/listOfResourceControlPlans.yml");
+        toYaml(listOfResourceControlPlans, "listOfResourceControlPlans.yml");
 
         ElasticProcess elasticProcess = new ElasticProcess(monitorProcess, listOfAdjustmentProcesses, listOfResourceControlPlans);
 
-        IOUtils iou = new IOUtils("/Volumes/DATA/Temp");
+        IOUtils iou = new IOUtils(rootPath);
         iou.writeData(errorLog, "errorLog.txt");
 
         return elasticProcess;

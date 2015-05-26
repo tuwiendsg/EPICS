@@ -25,8 +25,16 @@ import java.util.logging.Logger;
  */
 public class YamlUtils {
     
-    //static String filePath = "/home/ubuntu/log";
-    static String filePath = "/Volumes/DATA/Temp";
+    static String filePath;
+
+    public static String getFilePath() {
+        return filePath;
+    }
+
+    public static void setFilePath(String filePath) {
+        YamlUtils.filePath = filePath;
+    }
+    
     
     
     public static void toYaml(Object obj,String filePath) {

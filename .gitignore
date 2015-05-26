@@ -10,7 +10,7 @@
 /depic/depic-common/src/test
 /depic/depic-common/target
 
-/depic/depic-tooling/src/test
+/depic/depic-tooling/src/test/at
 /depic/depic-tooling/target
 
 /depic/orchestrator/src/test
