@@ -25,4 +25,33 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
+    
+    <build>  
+        <plugins>  
+            <plugin>  
+                <groupId>org.codehaus.mojo</groupId>  
+                <artifactId>exec-maven-plugin</artifactId>  
+                <version>1.1.1</version>  
+                <executions>  
+                    <execution>  
+                        <phase>test</phase>  
+                        <goals>  
+                            <goal>java</goal>  
+                        </goals>  
+                        <configuration>  
+                            <mainClass>at.ac.tuwien.dsg.depic.test.ElasticProcessesGeneratorTester</mainClass>  
+                            <arguments>  
+                                <argument>/home/ubuntu/depic/EPICS/depic/examples/experiment/case1/inputs</argument>  
+                                <argument>qor_xml.yml</argument>
+                                <argument>daf_gps_1.t2flow</argument>
+                                <argument>primitiveActionRepository.yml</argument>  
+                            </arguments>  
+                        </configuration>  
+                    </execution>  
+                </executions>  
+            </plugin>  
+        </plugins>  
+    </build>
+
+    
 </project>
