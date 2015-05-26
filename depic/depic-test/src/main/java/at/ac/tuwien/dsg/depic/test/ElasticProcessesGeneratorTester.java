@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mytest;
+package at.ac.tuwien.dsg.depic.test;
 
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAssetForm;
@@ -26,16 +26,16 @@ public class ElasticProcessesGeneratorTester {
     
     public static void main(String[] args) {
         // folder where files are put
-        String rootPath = "/home/ubuntu/temp";
+        String rootPath = args[0];
         
         // qor file
-        String qorFile = "qor_xml.yml";
+        String qorFile = args[1];
         
         // daf file
-        String dafFile = "daf_gps_1.t2flow";
+        String dafFile = args[2];
         
         // primitive action metadata file
-        String primitiveActionMetadataFile = "primitiveActionRepository.yml";
+        String primitiveActionMetadataFile = args[3];
         
         startGenerating(rootPath, qorFile, dafFile, primitiveActionMetadataFile);
         

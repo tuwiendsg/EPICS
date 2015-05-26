@@ -11,5 +11,6 @@
     <module>data-asset-loader</module>
     <module>orchestrator</module>
     <module>depic-common</module>
+    <module>depic-test</module>
   </modules>
 </project>
