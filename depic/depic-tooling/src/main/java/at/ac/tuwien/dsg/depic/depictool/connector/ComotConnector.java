@@ -12,37 +12,30 @@ import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
-import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
-import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
-import at.ac.tuwien.dsg.comot.common.model.ArtifactTemplate;
+
 import static at.ac.tuwien.dsg.comot.common.model.ArtifactTemplate.SingleScriptArtifact;
-import static at.ac.tuwien.dsg.comot.common.model.ArtifactTemplate.WarArtifact;
-import static at.ac.tuwien.dsg.comot.common.model.BASHAction.BASHAction;
+
 import static at.ac.tuwien.dsg.comot.common.model.CloudService.ServiceTemplate;
-import static at.ac.tuwien.dsg.comot.common.model.CommonOperatingSystemSpecification.DockerDefault;
-import static at.ac.tuwien.dsg.comot.common.model.DockerUnit.DockerUnit;
-import static at.ac.tuwien.dsg.comot.common.model.EntityRelationship.ConnectToRelation;
+
 import static at.ac.tuwien.dsg.comot.common.model.EntityRelationship.HostedOnRelation;
 import static at.ac.tuwien.dsg.comot.common.model.ServiceTopology.ServiceTopology;
 import static at.ac.tuwien.dsg.comot.common.model.SoftwareNode.SingleSoftwareUnit;
 import static at.ac.tuwien.dsg.comot.common.model.Strategy.Strategy;
-import at.ac.tuwien.dsg.comot.common.model.Capability;
+
 import at.ac.tuwien.dsg.comot.common.model.CloudService;
-import static at.ac.tuwien.dsg.comot.common.model.CommonOperatingSystemSpecification.LocalDocker;
+
 import static at.ac.tuwien.dsg.comot.common.model.CommonOperatingSystemSpecification.OpenstackSmall;
 import at.ac.tuwien.dsg.comot.common.model.Constraint;
 import at.ac.tuwien.dsg.comot.common.model.Constraint.Metric;
-import at.ac.tuwien.dsg.comot.common.model.DockerUnit;
+
 import at.ac.tuwien.dsg.comot.common.model.ElasticityCapability;
-import at.ac.tuwien.dsg.comot.common.model.EntityRelationship;
+
 import at.ac.tuwien.dsg.comot.common.model.OperatingSystemUnit;
 import static at.ac.tuwien.dsg.comot.common.model.OperatingSystemUnit.OperatingSystemUnit;
-import at.ac.tuwien.dsg.comot.common.model.LifecyclePhase;
-import at.ac.tuwien.dsg.comot.common.model.Requirement;
+
 import at.ac.tuwien.dsg.comot.common.model.ServiceTopology;
 import at.ac.tuwien.dsg.comot.common.model.ServiceUnit;
-import at.ac.tuwien.dsg.comot.common.model.SoftwareNode;
+
 import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManager;
 import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
 import at.ac.tuwien.dsg.comot.orchestrator.interraction.COMOTOrchestrator;
@@ -51,9 +44,7 @@ import at.ac.tuwien.dsg.depic.common.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
-import javax.xml.bind.JAXBException;
 
 /**
  *
