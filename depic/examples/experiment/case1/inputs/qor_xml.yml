@@ -1,5 +1,5 @@
 !at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel
-dataAssetForm: XML
+dataAssetForm: CSV
 listOfMetrics: 
 - !at.ac.tuwien.dsg.depic.common.entity.qor.QoRMetric
    name: speedArc
