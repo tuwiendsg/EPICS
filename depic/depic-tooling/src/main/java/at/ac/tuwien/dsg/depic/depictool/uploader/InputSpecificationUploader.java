@@ -6,13 +6,11 @@
 package at.ac.tuwien.dsg.depic.depictool.uploader;
 
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
-import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAssetForm;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
 import at.ac.tuwien.dsg.depic.depictool.generator.Generator;
-import at.ac.tuwien.dsg.depic.depictool.repository.DataAssetRepositoryManager;
 import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManager;
 import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
 

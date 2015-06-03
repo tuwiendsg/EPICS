@@ -67,7 +67,7 @@ public class Generator {
     public void startGenerator() {
         long t1 = System.currentTimeMillis();
         
-        ElasticProcessesGenerator elasticProcessesGenerator = new ElasticProcessesGenerator(daf, qorModel, primitiveActionRepository);
+        ElasticProcessesGenerator elasticProcessesGenerator = new ElasticProcessesGenerator(daf, qorModel, primitiveActionRepository,"/home/ubuntu/log");
         
         ElasticProcess elasticProcess = elasticProcessesGenerator.generateElasticProcesses();
         
