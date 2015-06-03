@@ -6,7 +6,6 @@
 package at.ac.tuwien.dsg.depic.elastic.process.generator;
 
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
-import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
@@ -60,14 +59,12 @@ public class ElasticProcessesGenerator {
     String rootPath;
 
     public ElasticProcessesGenerator() {
-        // config();
     }
 
     public ElasticProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository) {
         this.daf = daf;
         this.qorModel = qorModel;
         this.primitiveActionRepository = primitiveActionRepository;
-        // config();
         errorLog = "";
     }
     
@@ -75,7 +72,6 @@ public class ElasticProcessesGenerator {
         this.daf = daf;
         this.qorModel = qorModel;
         this.primitiveActionRepository = primitiveActionRepository;
-        // config();
         errorLog = "";
         this.rootPath = rooPath;
     }
@@ -125,7 +121,7 @@ public class ElasticProcessesGenerator {
                 listOfMonitoringActions.add(monitoringAction);
             }
         }
-        System.out.println("No of monitoring actions: " + listOfMonitoringActions.size());
+        System.err.println("No of monitoring actions: " + listOfMonitoringActions.size());
         MonitoringProcess monitorProcess = parallelizeMonitoringActions(listOfMonitoringActions);
 
         return monitorProcess;
@@ -157,12 +153,12 @@ public class ElasticProcessesGenerator {
 
         for (Parameter param : ma.getListOfParameters()) {
 
-            Parameter param_i = new Parameter(
+            Parameter paramI = new Parameter(
                     param.getParameterName(),
                     param.getType(),
                     param.getValue());
 
-            listOfParameters.add(param_i);
+            listOfParameters.add(paramI);
 
         }
 
@@ -189,22 +185,22 @@ public class ElasticProcessesGenerator {
             listOfAction.add(action);
         }
 
-        String parallelGateway_in_id = getUDID();
-        String parallelGateway_out_id = getUDID();
-        List<String> in_listOfIncommings = new ArrayList<String>();
-        List<String> in_listOfOutgoings = new ArrayList<String>();
-        List<String> out_listOfIncommings = new ArrayList<String>();
-        List<String> out_listOfOutgoings = new ArrayList<String>();
+        String parallelGatewayInId = getUDID();
+        String parallelGatewayOutId = getUDID();
+        List<String> inputListOfIncommings = new ArrayList<String>();
+        List<String> inputlistOfOutgoings = new ArrayList<String>();
+        List<String> outputListOfIncommings = new ArrayList<String>();
+        List<String> outListOfOutgoings = new ArrayList<String>();
 
         for (Action action : listOfAction) {
-            action.setIncomming(parallelGateway_in_id);
-            action.setOutgoing(parallelGateway_out_id);
-            in_listOfOutgoings.add(action.getActionID());
-            out_listOfIncommings.add(action.getActionID());
+            action.setIncomming(parallelGatewayInId);
+            action.setOutgoing(parallelGatewayOutId);
+            inputlistOfOutgoings.add(action.getActionID());
+            outputListOfIncommings.add(action.getActionID());
         }
 
-        ParallelGateway pg_in = new ParallelGateway(parallelGateway_in_id, in_listOfIncommings, in_listOfOutgoings);
-        ParallelGateway pg_out = new ParallelGateway(parallelGateway_out_id, out_listOfIncommings, out_listOfOutgoings);
+        ParallelGateway pg_in = new ParallelGateway(parallelGatewayInId, inputListOfIncommings, inputlistOfOutgoings);
+        ParallelGateway pg_out = new ParallelGateway(parallelGatewayOutId, outputListOfIncommings, outListOfOutgoings);
 
         List<ParallelGateway> listOfParallelGateways = new ArrayList<ParallelGateway>();
         listOfParallelGateways.add(pg_in);
@@ -256,11 +252,11 @@ public class ElasticProcessesGenerator {
         int counter = 0;
         for (QoRMetric qorMetric : listOfQoRMetrics) {
 
-            System.out.println("Metric: " + qorMetric.getName());
+            System.err.println("Metric: " + qorMetric.getName());
 
             List<MetricCondition> listOfConditions = findEstimatedResultForQoRMetric(qorMetric);
 
-            System.out.println("no of conditions: " + listOfConditions.size());
+            System.err.println("no of conditions: " + listOfConditions.size());
 
             if (listOfConditions.size() > 0) {
                 Range r = findMatchingRange(qElement, qorMetric);
@@ -270,8 +266,8 @@ public class ElasticProcessesGenerator {
                     List<MetricCondition> unitConditions = new ArrayList<MetricCondition>();
 
                     for (MetricCondition condition : listOfConditions) {
-                        System.out.println("condition: " + condition.getLowerBound() + " - " + condition.getUpperBound());
-                        System.out.println("qor: " + r.getFromValue() + " - " + r.getToValue());
+                        System.err.println("condition: " + condition.getLowerBound() + " - " + condition.getUpperBound());
+                        System.err.println("qor: " + r.getFromValue() + " - " + r.getToValue());
 
                         if (condition.getLowerBound() == r.getFromValue() && condition.getUpperBound() == r.getToValue()) {
                             unitConditions.add(condition);
@@ -315,12 +311,12 @@ public class ElasticProcessesGenerator {
                         } else if (condition.getLowerBound() < r.getFromValue() && condition.getUpperBound() >= r.getToValue()) {
                             errorLog = errorLog + "\n Can not decompose conditions of metric " + qorMetric.getName() + " in " + qElement.getqElementID() + ".";
 
-                            System.out.println(errorLog);
+                            System.err.println(errorLog);
 
                         } else if (condition.getLowerBound() <= r.getFromValue() && condition.getUpperBound() > r.getToValue()) {
                             errorLog = errorLog + "\n Can not decompose conditions of metric " + qorMetric.getName() + " in " + qElement.getqElementID() + ".";
 
-                            System.out.println(errorLog);
+                            System.err.println(errorLog);
 
                         } else {
                             MetricCondition condition_u = new MetricCondition(
@@ -331,18 +327,15 @@ public class ElasticProcessesGenerator {
                             unitConditions.add(condition_u);
 
                         }
-
-               //     errorLog = errorLog+ "\n Can not decompose conditions of metric " +qorMetric.getName()+" in " +  qElement.getqElementID() +".";
-                        //        System.out.println(errorLog);
                     }
 
                     if (unitConditions.size() > 0) {
 
                         for (MetricCondition mc : unitConditions) {
-                            System.out.println("mc id: " + mc.getConditionID());
-                            System.out.println("mc name: " + mc.getMetricName());
-                            System.out.println("mc l: " + mc.getLowerBound());
-                            System.out.println("mc u: " + mc.getUpperBound());
+                            System.err.println("mc id: " + mc.getConditionID());
+                            System.err.println("mc name: " + mc.getMetricName());
+                            System.err.println("mc l: " + mc.getLowerBound());
+                            System.err.println("mc u: " + mc.getUpperBound());
                         }
 
                         listOfConditionSet.add(unitConditions);
@@ -364,10 +357,8 @@ public class ElasticProcessesGenerator {
 
                 List<MetricCondition> conditionMetric_i = listOfConditionSet.get(i);
                 int noOfConditions = conditionMetric_i.size();
-                // System.out.println("No of conditions " + noOfConditions);
                 int conditionIndex = randomInt(0, noOfConditions);
                 conditionIndice[i] = conditionIndex;
-
             }
 
             if (!isDuplicated(combinations, conditionIndice)) {
@@ -405,26 +396,20 @@ public class ElasticProcessesGenerator {
         List<AdjustmentCase> listOfAdjustmentCases = null;
 
         for (AdjustmentAction adjustmentAction : listOfAdjustmentActions) {
-            System.out.println("aa1: " + adjustmentAction.getAssociatedQoRMetric());
+            System.err.println("aa1: " + adjustmentAction.getAssociatedQoRMetric());
 
             if (qorMetric.getName().equals(adjustmentAction.getAssociatedQoRMetric())) {
-                System.out.println("aa2: " + adjustmentAction.getAssociatedQoRMetric());
-                System.out.println("aa3: " + adjustmentAction.getListOfAdjustmentCases().size());
-                //System.out.println("aa2: "  +adjustmentAction.getAssociatedQoRMetric());
+                System.err.println("aa2: " + adjustmentAction.getAssociatedQoRMetric());
+                System.err.println("aa3: " + adjustmentAction.getListOfAdjustmentCases().size());
                 listOfAdjustmentCases = adjustmentAction.getListOfAdjustmentCases();
                 break;
             }
         }
         
         
-        if (listOfAdjustmentCases==null && !isAssociatedWithResourceControlAction(qorMetric.getName())) {
-           
-            errorLog = errorLog + "\n No adjustment action found for metric " + qorMetric.getName() + ". Conditions of this metric are not added to eState.";
-                                      
-                                    System.out.println(errorLog);
-            
-        
-        
+        if (listOfAdjustmentCases==null && !isAssociatedWithResourceControlAction(qorMetric.getName())) {      
+            errorLog = errorLog + "\n No adjustment action found for metric " + qorMetric.getName() + ". Conditions of this metric are not added to eState.";                        
+            System.err.println(errorLog);
         }
         
         
@@ -438,21 +423,21 @@ public class ElasticProcessesGenerator {
                 if (adjustmentCase.getEstimatedResult() != null) {
 
                     MetricCondition condition = adjustmentCase.getEstimatedResult();
-                    System.out.println("a a1: " + condition.getLowerBound());
-                    System.out.println("a a2: " + condition.getUpperBound());
+                    System.err.println("a a1: " + condition.getLowerBound());
+                    System.err.println("a a2: " + condition.getUpperBound());
                     if (condition != null) {
                         listOfConditions.add(condition);
                     }
                 } else {
                     errorLog = errorLog + "\n No estimated results for metric " + qorMetric.getName() + ". Need to customize elasticity actions for this metric in monitoring/adjustment process.";
 
-                    System.out.println(errorLog);
+                    System.err.println(errorLog);
                 }
 
             }
         }
 
-        System.out.println("No of conditions: " + listOfConditions.size());
+        System.err.println("No of conditions: " + listOfConditions.size());
 
         /////////////
         List<ResourceControlAction> listOfResourceControlActions = primitiveActionRepository.getListOfResourceControls();
@@ -626,9 +611,9 @@ public class ElasticProcessesGenerator {
                                         adjustmentAction.getListOfPrerequisiteActionIDs(),
                                         listOfFoundAdjustmentCases);
 
-                                System.out.println("Found Action: " + adjustmentAction.getActionName());
-                                System.out.println("Metric Condtidion: " + metricCondition.getMetricName() + " - " + metricCondition.getLowerBound() + " - " + metricCondition.getUpperBound());
-                                System.out.println("Estimated Result: " + estimatedResult.getLowerBound() + " - " + estimatedResult.getUpperBound());
+                                System.err.println("Found Action: " + adjustmentAction.getActionName());
+                                System.err.println("Metric Condtidion: " + metricCondition.getMetricName() + " - " + metricCondition.getLowerBound() + " - " + metricCondition.getUpperBound());
+                                System.err.println("Estimated Result: " + estimatedResult.getLowerBound() + " - " + estimatedResult.getUpperBound());
                             } else {
                                 if (matchingAnalyticTaskFromDAF(adjustmentCase.getAnalyticTask())) {
                                     MetricCondition estimatedResult = adjustmentCase.getEstimatedResult();
@@ -658,7 +643,7 @@ public class ElasticProcessesGenerator {
                                 } else {
                                     errorLog = errorLog + "\n Analytic Task " + adjustmentCase.getAnalyticTask().getTaskName() 
                                             + " in daf does not match. Please customize elasticity actions for metric "+metricCondition.getMetricName();
-                                    System.out.println(errorLog);
+                                    System.err.println(errorLog);
                                 }
                             }
 
@@ -667,7 +652,6 @@ public class ElasticProcessesGenerator {
 
                 }
 
-                // break;
             }
         }
         
@@ -944,14 +928,9 @@ public class ElasticProcessesGenerator {
                     if (i!=j) {
                         if (resourceControlStrategiesForEState.get(i).getPrimitiveAction().equals(resourceControlStrategiesForEState.get(j).getPrimitiveAction())){
                             errorLog = errorLog + "\n Duplicate resource strategy for primitive action " + resourceControlStrategiesForEState.get(i).getPrimitiveAction();
-                                    System.out.println(errorLog);
+                            System.err.println(errorLog);
                         }
-                        
-                        
-                        
-                    }
-                    
-                    
+                    }  
                 }
             }
             
@@ -1011,182 +990,4 @@ public class ElasticProcessesGenerator {
         return copyList;
     }
 
-//    private ElasticState copyElasticState(ElasticState eState){
-//        
-//        String eStateID = eState.geteStateID();
-//        List<MetricCondition> conditions = eState.getListOfConditions();
-//        List<MetricCondition> newConditions = new ArrayList<MetricCondition>();
-//        
-//        for (MetricCondition c : conditions){
-//            MetricCondition newC = new MetricCondition(c.getMetricName(), c.getConditionID(), c.getLowerBound(), c.getUpperBound());
-//            newConditions.add(newC);
-//        }
-//        
-//        ElasticState newElasticState = new ElasticState(eStateID, newConditions);
-//        return newElasticState;
-//    }
-//    
-//    private List<ControlAction> copyListControlAction(List<ControlAction> listOfControlActions){
-//        
-//        List<ControlAction> nListCas =new ArrayList<ControlAction>();
-//        
-//        for (ControlAction ca: listOfControlActions){
-//            
-//            String caID = ca.getControlActionID();
-//            String caName = ca.getControlActionName();
-//            String incomming = ca.getIncomming();
-//            String outgoing = ca.getOutgoing();
-//            List<Parameter> listOfParameters = ca.getListOfParameters();
-//            List<Parameter> nList = new ArrayList<Parameter>();
-//            for (Parameter p: listOfParameters){
-//                
-//                Parameter nP = new Parameter(p.getParaName(), p.getType(), p.getValue());
-//                nList.add(nP);
-//                
-//            }
-//            ControlAction nCA = new ControlAction(caName, nList);
-//            nCA.setControlActionID(caID);
-//            nCA.setIncomming(incomming);
-//            nCA.setOutgoing(outgoing);
-//            nListCas.add(nCA);
-//            
-//        }
-//        return nListCas;
-//    }
-//    
-//    private List<ParallelGateway> copyParallelGateway(List<ParallelGateway> parallelGatewayList){
-//        
-//        List<ParallelGateway> nPGList = new ArrayList<ParallelGateway>();
-//        
-//        for (ParallelGateway pg: parallelGatewayList){
-//            
-//            List<String> inList = pg.getIncomming();
-//            List<String> outList = pg.getOutgoing();
-//            
-//            List<String> nInList = new ArrayList<String>();
-//            List<String> nOutList = new ArrayList<String>();
-//            
-//            for (String link : inList){
-//                nInList.add(link);
-//            }
-//            
-//            for (String link : outList){
-//                nOutList.add(link);
-//            }
-//            
-//            ParallelGateway nPG = new ParallelGateway(pg.getId(), nInList, nOutList);
-//            nPGList.add(nPG);
-//        }
-//        
-//        return nPGList;
-//    }
-//    
-//     /*
-//    public void deployElasticityProcess(ElasticityProcess elasticityProcesses){
-//        
-//        MonitorProcess monitorProcess = elasticityProcesses.getMonitorProcess();
-//        
-//        // deploy monitor actions
-//        deployMonitorActions(monitorProcess);
-//        List<ControlProcess> listOfControlProcesses = elasticityProcesses.getListOfControlProcesses();
-//        //deploy control actions
-//        deployControlActions(listOfControlProcesses);
-//        
-//        
-//        
-//        
-//    }
-//    
-//   
-//    private void deployMonitorActions(MonitorProcess monitorProcess){
-//        List<MonitorAction> listOfMonitorActions = monitorProcess.getListOfMonitorActions();
-//        List<DeployAction> listOfDeployActions = new ArrayList<>();
-//        
-//        for (MonitorAction monitorAction : listOfMonitorActions) {
-//            
-//            String actionID = monitorAction.getMonitorActionID();
-//            ElasticityProcessRepositorty elasticityProcessRepositorty = new ElasticityProcessRepositorty();
-//        
-//            DeployAction deployAction = elasticityProcessRepositorty.getPrimitiveAction(actionID);
-//            listOfDeployActions.add(deployAction);
-//            
-//        }
-//        
-//        DeploymentDescription deploymentDescription = new DeploymentDescription(listOfDeployActions);
-//        
-//        DeploymentDescriptionJAXB descriptionJAXB = new DeploymentDescriptionJAXB();
-//        String xmlDescription = descriptionJAXB.marshallingObject(deploymentDescription);
-//        
-//        RestfulWSClient restfulWSClient = new RestfulWSClient("localhost", "8080", "/Orchestrator/webresources/DeploymentDescription");
-//        restfulWSClient.callRestfulWebService(xmlDescription);
-//
-//    }
-//    
-//    */
-//
-//
-//    
-//    
-//    
-//    private Range getMetricRangeFromID(String rangeID){
-//        Range rs = null;
-//        
-//        List<QoRMetric> listOfMetrics = qorModel.getListOfMetrics();
-//        
-//        for (QoRMetric qoRMetric : listOfMetrics){
-//            
-//            List<Range> listOfRanges = qoRMetric.getListOfRanges();
-//            
-//            for (Range range: listOfRanges){
-//               // Logger.logInfo("range ID ith: " + range.getRangeID());
-//                if (rangeID.equals(range.getRangeID())){
-//                    rs = new Range(rangeID, range.getFromValue(), range.getToValue());
-//                    //Logger.logInfo("RANGE CHECK: from value " + range.getFromValue() + " - to value: " + range.getToValue());
-//                    
-//                    break;
-//                }
-//                
-//            }
-//        }
-//                
-//        return rs;
-//    }
-//    
-//  
-//    
-//    private ElasticState initializeElasticState(ElasticState elasticState, QElement qElement){
-//        
-//        
-//        
-//        List<MetricCondition> listOfMetricConditions = elasticState.getListOfConditions();
-//        
-//        List<MetricCondition> newlistOfMetricConditions = new ArrayList<MetricCondition>();
-//        for (MetricCondition condition : listOfMetricConditions){
-//
-//            MetricCondition newMetricCondition = 
-//                    new MetricCondition(
-//                            condition.getMetricName(), 
-//                            condition.getConditionID(),
-//                            condition.getLowerBound(), 
-//                            condition.getUpperBound());
-//           newlistOfMetricConditions.add(newMetricCondition);
-//        }
-//
-//        
-//        
-//        MetricCondition costCondition = new MetricCondition("cost",qElement.getqElementID(), qElement.getPrice(), qElement.getPrice());
-//        newlistOfMetricConditions.add(costCondition);
-//        
-//        ElasticState newElasticState = new ElasticState(elasticState.geteStateID(), newlistOfMetricConditions);
-//        
-//        return newElasticState;
-//    }
-//    
-//    
-//    
-//    private void config(){
-//        ElasticProcessRepositoryManager epRepo = new ElasticProcessRepositoryManager();
-//        ActionDependencySet = epRepo.getAllActionDependencies();
-//        
-//    }
 }
