@@ -10,7 +10,6 @@ package at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DataPartitionRequest;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
@@ -86,18 +85,12 @@ public class DataElasticityMonitor{
                         ElasticServiceRegistry.occupyElasticService(uri);
                     }
                     
-                    
-                    
-                    
                     try {
                         Thread.sleep(10000);
 
                     } catch (InterruptedException ex) {
                         System.err.println(ex);
                     }
-                    
-                    
-                    
 
                 } while (uri.equals(""));
 
@@ -145,22 +138,15 @@ public class DataElasticityMonitor{
 
         if (currentElasticState == null) {
             
-         
                 Logger.logInfo("FAIL VALIDATION");
-                //log = log + "FAIL VALIDATION" + "\n";
                 log  = log + "FAIL" + "\t";
                 DataElasticityController controller = new DataElasticityController(listOfElasticStates, listOfAdjustmentProcess, monitoringSession, eDaaSType);
                 controller.startControlElasticState(currentElasticState);
             
-                
-            
-           
-
         } else {
             Logger.logInfo("PASS VALIDATION");
                 log = log + "PASS" + "\t";
             Logger.logInfo("Current Elastic State ...");
-          //  log = log + "Current Elastic State ..." + currentElasticState.geteStateID() + "\n";
 
             logElasticState(currentElasticState);
             
@@ -267,21 +253,12 @@ public class DataElasticityMonitor{
        
         monitorProcess = elasticityProcess.getMonitoringProcess();
         listOfAdjustmentProcess = elasticityProcess.getListOfAdjustmentProcesses();
- 
-        
-        
-        
+
         //List<String> expectElasticStateIDs = monitoringSession.getListOfExpectedElasticStates();
         //mappingExpectedEStateIDs(expectElasticStateIDs);
         
         primitiveActionMetadata = elasticityProcessesStore.getPrimitiveActionMetadata(monitoringSession.getEdaasName());
-        
-      
 
-        
-        
-                
-       
     }
     
     private void mappingExpectedEStateIDs(List<String> expectElasticStateIDs){

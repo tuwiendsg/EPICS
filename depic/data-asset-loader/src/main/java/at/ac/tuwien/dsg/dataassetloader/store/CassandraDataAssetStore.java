@@ -6,25 +6,20 @@
 package at.ac.tuwien.dsg.dataassetloader.store;
 
 import at.ac.tuwien.dsg.depic.common.entity.eda.dataasset.DataAsset;
-import at.ac.tuwien.dsg.depic.common.entity.eda.dataasset.DataAttribute;
-import at.ac.tuwien.dsg.depic.common.entity.eda.dataasset.DataItem;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DataPartitionRequest;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetloader.util.ThroughputMonitor;
 
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.ColumnDefinitions;
 import com.datastax.driver.core.ExecutionInfo;
 import com.datastax.driver.core.Host;
 import com.datastax.driver.core.Metadata;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import java.util.ArrayList;
+
 import java.util.List;
-
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
@@ -160,9 +155,6 @@ public class CassandraDataAssetStore  {
 
         String sql = "SELECT * FROM " + keyspace + ".DataAsset "
                 + "WHERE dataAssetID='" + dafName + "' AND dataPartitionID=" + partitionID + " ALLOW FILTERING;";
-//
-//        String sql = "SELECT * FROM " + keyspace + ".SENSOR "
-//                + "WHERE sensor_name='" + dataAssetID + "' ALLOW FILTERING;";
 
         ResultSet resultSet = null;
         try {
@@ -213,9 +205,7 @@ public class CassandraDataAssetStore  {
 
    
     public String copyDataAssetRepo(DataPartitionRequest request) {
-
-       // truncateProcessingDataAssetTable();
-        
+   
         System.out.println("Staring Copying Data ...");
 
         

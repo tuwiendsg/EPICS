@@ -35,16 +35,6 @@ public class CassandraDataLoader implements DataLoader {
 
         if (listOfCassandraObj == null) {
             listOfCassandraObj = new ArrayList<CassandraSession>();
-//            String customer1 = "c01";
-//            CassandraDataAssetStore cassandraDataAssetStore1 = new CassandraDataAssetStore();
-//            CassandraSession cassandraSession1 = new CassandraSession(customer1, cassandraDataAssetStore1);
-//            listOfCassandraObj.add(cassandraSession1);
-//                     
-//            String customer2 = "c02";
-//            CassandraDataAssetStore cassandraDataAssetStore2 = new CassandraDataAssetStore();
-//            CassandraSession cassandraSession2 = new CassandraSession(customer2, cassandraDataAssetStore2);
-//            listOfCassandraObj.add(cassandraSession2);
-
         }
 
     }

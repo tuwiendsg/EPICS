@@ -22,6 +22,9 @@ import at.ac.tuwien.dsg.depic.elastic.process.generator.ElasticProcessesGenerato
  * @author Jun
  */
 public class ElasticProcessesGeneratorTester {
+
+    private ElasticProcessesGeneratorTester() {
+    }
     
     
     
@@ -51,12 +54,12 @@ public class ElasticProcessesGeneratorTester {
         
        IOUtils iou = new IOUtils(rootFolder);
        YamlUtils.setFilePath(rootFolder);
-       String daf_str = iou.readData(dafFile);
-       String qor_str = iou.readData(qorFile);;
-       String primitiveAction_str = iou.readData(primitiveActionMetadataFile);;
+       String dafStr = iou.readData(dafFile);
+       String qorStr = iou.readData(qorFile);
+       String primitiveAction_str = iou.readData(primitiveActionMetadataFile);
 
-       DataAnalyticsFunction daf = new DataAnalyticsFunction("daf-gps", DataAssetForm.CSV, DBType.CASSANDRA_NEAR_REAL_TIME, daf_str);
-       QoRModel qor = YamlUtils.unmarshallYaml(QoRModel.class, qor_str);
+       DataAnalyticsFunction daf = new DataAnalyticsFunction("daf-gps", DataAssetForm.CSV, DBType.CASSANDRA_NEAR_REAL_TIME, dafStr);
+       QoRModel qor = YamlUtils.unmarshallYaml(QoRModel.class, qorStr);
        PrimitiveActionMetadata pam = YamlUtils.unmarshallYaml(PrimitiveActionMetadata.class, primitiveAction_str);
 
 

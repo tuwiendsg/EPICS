@@ -40,7 +40,7 @@ public class MySQLDataLoader implements DataLoader{
             String returnStr = requestToGetDataAsset(dafYaml);
             
             String[] strs = returnStr.split(";");
-            String dataAssetID = "0"; //strs[0];
+            String dataAssetID = "0"; 
             
             for (int k=0; k<100;k++) {
             dataAssetID = String.valueOf(k);

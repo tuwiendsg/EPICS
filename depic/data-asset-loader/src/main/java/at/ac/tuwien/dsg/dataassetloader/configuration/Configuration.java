@@ -27,7 +27,6 @@ public class Configuration {
         String path = Configuration.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 
         int index = path.indexOf("/classes/at/ac");
-        //int index = path.indexOf("/classes/");
         path = path.substring(0, index);
         try {
             path = URLDecoder.decode(path, "UTF-8");
@@ -40,7 +39,6 @@ public class Configuration {
         InputStream input = null;
 
         try {
-           // input = new FileInputStream(path + "/DataAssetLoader/WEB-INF/config.properties");
             input = new FileInputStream(path + "/config.properties");
             prop.load(input);
             configString = prop.getProperty(configureName);

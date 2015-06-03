@@ -91,19 +91,13 @@ public class ElasticityProcessesStore {
                  
             String elasticityProcessesXML="";
             String elasticStateSetXML="";
-            DBType eDaaSType = null;
+
         try {
 
             InputStream elProcessStream = null;
             InputStream eStateSetStream = null;
             InputStream typeStream = null;
-            
-            
-//            String sql = "SELECT * FROM ElasticDaaS, DataAssetFunction "
-//                    + "WHERE ElasticDaaS.name = DataAssetFunction.edaas "
-//                    + "AND DataAssetFunction.dataAssetID='"+dataAssetID+"'";
-            
-            
+                    
             String sql = "SELECT * FROM ElasticDaaS "
                     + "WHERE ElasticDaaS.name='"+edaasName+"' ";
             
@@ -134,7 +128,7 @@ public class ElasticityProcessesStore {
             StringWriter writer3 = new StringWriter();
             IOUtils.copy(typeStream, writer3, encoding);
             String typeStr = writer3.toString();
-            eDaaSType = DBType.valueOf(typeStr);
+           
             
             
             
@@ -305,53 +299,7 @@ public class ElasticityProcessesStore {
         }
     }
     
-    
-//    public ElasticDataAsset getEDAModel(String eDaaSName){
-//        
-//        ElasticDataAsset eda=null;
-//        
-//        try {
-//            
-//            String sql ="SELECT * from ElasticDaaS WHERE name='"+eDaaSName+"'";
-//            
-//            ResultSet rs = connectionManager.ExecuteQuery(sql);
-//            InputStream eStateSetInputStream = null;
-//            InputStream elasticProcessesInputStream= null;
-//            
-//            
-//            try {
-//                while (rs.next()) {
-//                    eStateSetInputStream = rs.getBinaryStream("elasticStateSet");
-//                    elasticProcessesInputStream = rs.getBinaryStream("elasticity_processes");
-//                    typeStream = rs.getBinaryStream("type");
-//                }
-//            } catch (SQLException ex) {
-//                Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//
-//            
-//            
-//            StringWriter writer1 = new StringWriter();
-//            String encoding = StandardCharsets.UTF_8.name();
-//            
-//            IOUtils.copy(eStateSetInputStream, writer1, encoding);
-//            String eStateSetStr = writer1.toString();
-//            ElasticStateSet elasticStateSet = JAXBUtils.unmarshal(eStateSetStr, ElasticStateSet.class);
-//            
-//            StringWriter writer2 = new StringWriter();
-//            IOUtils.copy(elasticProcessesInputStream, writer2, encoding);
-//            String elasticProcessesStr = writer2.toString();
-//            ElasticityProcess elasticityProcesses = JAXBUtils.unmarshal(elasticProcessesStr, ElasticityProcess.class);
-//            
-//            eda = new ElasticDataAsset(eDaaSName, elasticityProcesses, elasticStateSet);
-//                     
-//        } catch (Exception ex) {
-//            Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//     
-//             
-//         return eda;
-//    }
+  
 
     public void cleanElasticServices() {
 

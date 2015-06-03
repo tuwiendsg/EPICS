@@ -30,9 +30,6 @@ public class DataAssetRepositoryManager {
         Logger.logInfo("PORT: " + port);
         Logger.logInfo("RESOURSE: " + resource);
         
-      //  IOUtils iou = new IOUtils();
-      //  String dafXML = iou.readData(dataAssetID);
-        
         String dafYaml = YamlUtils.marshallYaml(DataAnalyticsFunction.class, daf);
         
         RestfulWSClient ws = new RestfulWSClient(ip, port, resource);

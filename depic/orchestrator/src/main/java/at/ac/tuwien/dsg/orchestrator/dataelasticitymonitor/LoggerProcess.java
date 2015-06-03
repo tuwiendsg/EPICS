@@ -7,19 +7,14 @@ package at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor;
 
 import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
+
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
+
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
-import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringSession;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway;
-import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringMetric;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter;
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
-import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
 import java.util.List;
 
 /**
@@ -37,19 +32,7 @@ public class LoggerProcess {
     public void config(){
         ElasticityProcessesStore elasticityProcessesStore = new ElasticityProcessesStore(); 
         ElasticDataAsset eda = elasticityProcessesStore.getElasticDataAsset("daf2");
-   //     ElasticProcess elasticityProcess= eda.getElasticityProcess();
-     
        listOfFinalState = eda.getListOfFinalElasticState();
-      //  monitorProcess = elasticityProcess.getMonitorProcess(); 
-      //  listOfControlProcesses = elasticityProcess.getListOfControlProcesses();
-//    
-//        
-//        Logger.logInfo("INITIAL ESTATE SET ------- \n");
-//        for (ElasticState  estate : listOfInitialState){
-//           
-//            logElasticState(estate);
-//        }
-//        
         
         Logger.logInfo("FINAL ESTATE SET ------- \n");
         for (ElasticState  estate : listOfFinalState){
@@ -126,26 +109,7 @@ public class LoggerProcess {
         for (AdjustmentAction controlAction : listOfControlActions) {
             Logger.logInfo("control action: " + controlAction.getActionID());
             Logger.logInfo("control action: " + controlAction.getActionName());
-//            Logger.logInfo("  incomming: " + controlAction.ge());
-//            Logger.logInfo("  outgoing: " + controlAction.getOutgoing());
-//            List<Parameter> listOfParams = controlAction.getListOfTransitions().get(0).getListOfParameters();
-//
-//            for (Parameter param : listOfParams) {
-//                Logger.logInfo("    parameter: " + param.getParameterName());
-//                Logger.logInfo("    value: " + param.getValue());
-//            }
-
         }
-//
-//        List<ParallelGateway> listOfParallelGateways = controlProcess.getListOfParallelGateways();
-//
-//        if (listOfParallelGateways!=null){
-//        for (ParallelGateway parallelGateway : listOfParallelGateways) {
-//            Logger.logInfo("parallel gateway: " + parallelGateway.getGatewayID());
-//            Logger.logInfo("  incoming: " + parallelGateway.getIncomming());
-//            Logger.logInfo("  outgoing: " + parallelGateway.getOutgoing());
-//        }
-//        }
     }
     
 }

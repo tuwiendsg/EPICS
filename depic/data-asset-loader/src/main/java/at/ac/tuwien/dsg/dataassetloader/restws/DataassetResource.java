@@ -14,12 +14,10 @@ import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetloader.datasource.CassandraDataLoader;
 
 import at.ac.tuwien.dsg.dataassetloader.datasource.GenericDataLoader;
-import at.ac.tuwien.dsg.dataassetloader.store.CassandraDataAssetStore;
 
 import at.ac.tuwien.dsg.dataassetloader.store.DataAssetFunctionStore;
 import at.ac.tuwien.dsg.dataassetloader.util.ThroughputMonitor;
 import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
@@ -167,9 +165,6 @@ public class DataassetResource {
     @Consumes("application/xml")
     @Produces("application/xml")
     public String saveDataPartition(String dataAssetXML) {
-
-        // String log ="RECEIVED: " + dataAssetXML;
-       // Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO,log);
         
         DataAsset dataAsset=null;
         try {
@@ -236,8 +231,7 @@ public class DataassetResource {
         
         CassandraDataLoader cdl = new CassandraDataLoader();
         cdl.openConnectionEDARepo(request);
-     
-        
+
         return "";
         
     }
