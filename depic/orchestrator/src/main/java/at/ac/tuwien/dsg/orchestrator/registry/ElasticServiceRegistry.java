@@ -27,6 +27,10 @@ public class ElasticServiceRegistry {
     private static List<ElasticService> listOfElasticServices;
     private static List<String> listOfActiveServices;
     private static int customerPerService=0;
+
+    private ElasticServiceRegistry() {
+    }
+
     
     public static String getElasticServiceURI(String serviceID, DBType eDaaSType) {
         
@@ -67,13 +71,6 @@ public class ElasticServiceRegistry {
                int randomIndex = random.nextInt(max - min) + min;
                uri = potentialList.get(randomIndex);
            } 
-            
-//        
-//        
-//        ElasticService selectedElasticService = listOfElasticServices.get(elasticServiceIndex);
-//        int currentRequest = selectedElasticService.getRequest();
-//        selectedElasticService.setRequest(++currentRequest);
-//        uri = selectedElasticService.getUri();// + "/" + eDaaSType.geteDaaSType();
         
         return uri;
         
@@ -87,9 +84,7 @@ public class ElasticServiceRegistry {
     
     public static void releaseElasticService(String uri){
         
-        for (String s : listOfActiveServices){
-            
-            
+        for (String s : listOfActiveServices){   
             if (s.equals(uri)){
                 listOfActiveServices.remove(s);
                 break;
@@ -130,8 +125,6 @@ public class ElasticServiceRegistry {
             rs=true;
         }
         
-        
-        
         return rs;
     }
 
@@ -143,100 +136,18 @@ public class ElasticServiceRegistry {
         String log = "\n" +String.valueOf(listOfElasticServices.size());
          try {
            
-            
             IOUtils iou = new IOUtils("/home/ubuntu/log");
             iou.writeData(log, "vm_log.xml");
             
-            System.out.println("\n" + log);
+            System.err.println("\n" + log);
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(ElasticServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
-        
-//        System.out.println("On updateing new services");
-//        
-//        if (listOfElasticServices == null) {
-//            listOfElasticServices = new ArrayList<ElasticService>();
-//        }
-//        
-//        for (ElasticService es : updatedElasticServices) {
-//            
-//            String uri = es.getUri();
-//            if (!isServiceExist(uri)) {
-//                System.out.println("Adding_new_serice: " + es.getActionID());
-//                ElasticService newElasticService = new ElasticService(es.getActionID(), es.getServiceID(), es.getUri());
-//                
-//                newElasticService.setRequest(getDefaultRequest(newElasticService.getActionID()));
-//                
-//                listOfElasticServices.add(newElasticService);
-//            }
-//            
-//        }
-//        
-//        for (ElasticService es : listOfElasticServices) {
-//            
-//            String uri = es.getUri();
-//            if (isServiceRemoved(uri, updatedElasticServices)) {
-//                listOfElasticServices.remove(es);
-//            }
-//            
-//        }
-//        
-//        for (ElasticService es : listOfElasticServices) {
-//            System.out.println("service: " + es.getServiceID()
-//                    + " - request: " + es.getRequest()
-//                    + " - uri: " + es.getUri());
-//            
-//        }
-
       
     }
     
-    private static int getDefaultRequest(String actionID) {
-        
-        int noOfRequest = Integer.MAX_VALUE;
-        
-        for (ElasticService es : listOfElasticServices) {
-            if (es.getActionID().equals(actionID)) {
-                if (es.getRequest() < noOfRequest) {
-                    noOfRequest = es.getRequest()-1;
-                }
-            }
-        }
-        
-        if (noOfRequest==Integer.MAX_VALUE){
-            noOfRequest=0;
-        }
-        return noOfRequest;
-    }
-    
-    private static boolean isServiceExist(String uri) {
-        
-        for (ElasticService elasticService : listOfElasticServices) {
-            if (elasticService.getUri().equals(uri)) {
-                return true;
-            }            
-        }        
-        return false;
-    }
-    
-    private static boolean isServiceRemoved(String uri, List<ElasticService> updatedElasticServices) {
-        
-        for (ElasticService elasticService : updatedElasticServices) {
-            if (elasticService.getUri().equals(uri)) {
-                return false;
-            }            
-        }        
-        return true;
-    }
 
-//    private int randomInt(int min, int max){
-//        
-//        Random random = new Random();
-//        
-//        int randomNumber = random.nextInt(max+1 - min) + min;
-//        return randomNumber;
-//    }
-//    
+
+
 }

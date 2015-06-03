@@ -7,11 +7,7 @@ package at.ac.tuwien.dsg.depic.depictool.repository;
 
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DeployAction;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveAction;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
-
-import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.MySqlConnectionManager;
 
 import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
@@ -22,9 +18,6 @@ import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.bind.JAXBException;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -43,13 +36,6 @@ public class ElasticProcessRepositoryManager {
         String username = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.USERNAME");
         String password = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.PASSWORD");
         
-//        String ip = "localhost";
-//        String port = "3306";
-//        String database = "ElasticityProcess";
-//        String username = "root";
-//        String password = "123";
-        
-        
         connectionManager = new MySqlConnectionManager(ip, port, database, username, password);
 
     }
@@ -67,9 +53,7 @@ public class ElasticProcessRepositoryManager {
         
         String sql = "INSERT INTO InputSpecification (name, qor, elasticity_process_config, type) VALUES ('"+edaas+"',?,?,'"+type.getDBType()+"')";
         connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
-        
-        
-        
+
         
     }
     
@@ -115,7 +99,7 @@ public class ElasticProcessRepositoryManager {
 
             rs.close();
         } catch (Exception ex) {
-
+            System.err.println(ex);
         }
 
         return elProcessXML;
@@ -142,63 +126,7 @@ public class ElasticProcessRepositoryManager {
         connectionManager.ExecuteUpdate(sql);
     }
     
-   
-    
-//    
-//    public List<ActionDependency> getActionDependencyDB(String actionID){
-//        String sql = "select * from ActionDependency where actionID='" + actionID+"'";
-//        
-//        List<ActionDependency> listOfActionDependencies = new ArrayList<ActionDependency>();
-//        
-//        ResultSet rs = connectionManager.ExecuteQuery(sql);
-//
-//        try {
-//
-//            while (rs.next()) {
-//            
-//                String prerequisiteActionID = rs.getString("prerequisiteActionID");     
-//                ActionDependency actionDependency = new ActionDependency(actionID, prerequisiteActionID);
-//                listOfActionDependencies.add(actionDependency);
-//
-//            }
-//            
-//            rs.close();
-//
-//        } catch (Exception ex) {
-//
-//        }
-//        
-//        return listOfActionDependencies;
-//    }
-//    
-//    
-//    public List<ActionDependency> getAllActionDependencies(){
-//        String sql = "select * from ActionDependency";
-//        
-//        List<ActionDependency> listOfActionDependencies = new ArrayList<ActionDependency>();
-//        
-//        ResultSet rs = connectionManager.ExecuteQuery(sql);
-//
-//        try {
-//
-//            while (rs.next()) {
-//                String actionID = rs.getString("actionID");
-//                String prerequisiteActionID = rs.getString("prerequisiteActionID");     
-//                ActionDependency actionDependency = new ActionDependency(actionID, prerequisiteActionID);
-//                listOfActionDependencies.add(actionDependency);
-//
-//            }
-//            
-//            rs.close();
-//
-//        } catch (Exception ex) {
-//
-//        }
-//        
-//        return listOfActionDependencies;
-//    }
-    
-    
+  
     public DeployAction getPrimitiveAction(String actionName){
         String sql = "select * from PrimitiveAction where actionName='" + actionName+"'";
         DeployAction deployAction=null;
@@ -222,34 +150,7 @@ public class ElasticProcessRepositoryManager {
         
         return deployAction;
     }
-    
-//    
-//    public PrimitiveAction getPrimitiveActions(){
-//        String sql = "select * from PrimitiveAction";
-//        List<DeployAction> listOfDeployActions = new ArrayList<DeployAction>();
-//        
-//        ResultSet rs = connectionManager.ExecuteQuery(sql);
-//        try {
-//            while (rs.next()) {
-//            
-//                String actionName = rs.getString("actionName"); 
-//                String artifact = rs.getString("artifact"); 
-//                String type = rs.getString("type"); 
-//                String restapi = rs.getString("restapi"); 
-//                DeployAction deployAction = new DeployAction(actionName, actionName, type, artifact, restapi);
-//                listOfDeployActions.add(deployAction);
-//            }
-//            rs.close();
-//
-//        } catch (Exception ex) {
-//
-//        }
-//        
-//        PrimitiveAction primitiveAction = new PrimitiveAction(listOfDeployActions);
-//        
-//        return primitiveAction;
-//    }
-    
+  
     public List<String> getElasticDaasNames(){
         String sql = "select name from InputSpecification";
         
