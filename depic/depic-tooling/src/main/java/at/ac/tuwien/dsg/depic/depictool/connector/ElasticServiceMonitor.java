@@ -12,12 +12,11 @@ import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.comot.client.DefaultSalsaClient;
 import at.ac.tuwien.dsg.comot.orchestrator.interraction.salsa.SalsaInterraction;
-import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManager;
 import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import javax.xml.bind.JAXBException;
+
 
 /**
  *
@@ -51,7 +50,7 @@ public class ElasticServiceMonitor implements Runnable {
             // ElasticServices elasticServices = new ElasticServices(listOfElasticServices);
             if (listOfElasticServices != null) {
 
-                System.out.println("Check Elastic Services ... ");
+                System.err.println("Check Elastic Services ... ");
 
                 if (listOfElasticServices.size()!= 0) {
 
@@ -67,7 +66,7 @@ public class ElasticServiceMonitor implements Runnable {
                 Thread.sleep(10000);
 
             } catch (InterruptedException ex) {
-
+                System.err.println(ex);
             }
         } while (true);
     }
@@ -79,32 +78,6 @@ public class ElasticServiceMonitor implements Runnable {
         }
     }
 
-//    private void startGettingElasticServicesOrchestrator() {
-////        String eSXML = "";
-////        try {
-////            eSXML = JAXBUtils.marshal(elasticServices, ElasticServices.class);
-////        } catch (JAXBException ex) {
-////            java.util.logging.Logger.getLogger(ElasticServiceMonitor.class.getName()).log(Level.SEVERE, null, ex);
-////        }
-//        
-//        
-//        
-//        
-//        
-//        Configuration configuration = new Configuration();
-//        String ip = configuration.getConfig("ORCHESTRATOR.IP");
-//        String port = configuration.getConfig("ORCHESTRATOR.PORT");
-//        String resource = configuration.getConfig("ORCHESTRATOR.ELASTIC.SERVICE.RESOURCE");
-//
-//        RestfulWSClient ws = new RestfulWSClient(ip, port, resource);
-//        ws.callPutMethod("");
-//        
-//        
-//        
-//        
-//
-//    }
-    
     private void saveElasticityServicesInfo(List<ElasticService> listOfElasticServices){
         try {
            
@@ -114,9 +87,9 @@ public class ElasticServiceMonitor implements Runnable {
                 
                 if (es.getRequest()!=-1){
                     updateList.add(es);
-                    System.out.println("PASS CASE: " + es.getUri());
+                    System.err.println("PASS CASE: " + es.getUri());
                 } else {
-                    System.out.println("FAILED CASE: " + es.getUri());
+                    System.err.println("FAILED CASE: " + es.getUri());
                 }
             }
             
@@ -129,7 +102,7 @@ public class ElasticServiceMonitor implements Runnable {
             IOUtils iou = new IOUtils(elasticServiceConfigPath);
             iou.overWriteData(xml, "depic_elasticservice.xml");
             
-            System.out.println("\n" + xml);
+            System.err.println("\n" + xml);
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(ElasticServiceMonitor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -143,24 +116,24 @@ public class ElasticServiceMonitor implements Runnable {
         
     private void configureElasticityServices(List<ElasticService> listOfElasticServices) {
 
-        System.out.println("CONFIGURE_EDAAS: " + threadName);
+        System.err.println("CONFIGURE_EDAAS: " + threadName);
 
         for (ElasticService elasticService : listOfElasticServices) {
 
-            System.out.println("CONFIGURE SERVICE: " + elasticService.getActionID());
+            System.err.println("CONFIGURE SERVICE: " + elasticService.getActionID());
             Configuration cfg = new Configuration();
             String daLoaderIp = cfg.getConfig("DATA.ASSET.LOADER.IP.LOCAL");
             String orchestratorIp = cfg.getConfig("ORCHESTRATOR.IP.LOCAL");
             
             
-            System.out.println("DATA LOADER IP : " + daLoaderIp);
-            System.out.println("ORCHESTRATOR IP : " + orchestratorIp);
+            System.err.println("DATA LOADER IP : " + daLoaderIp);
+            System.err.println("ORCHESTRATOR IP : " + orchestratorIp);
             
             if (elasticService.getActionID().equals(threadName)) {
                 String configureDataAssetLoaderUri = elasticService.getUri() + "/eDaaS/rest/dataasset/dataassetloaderip";
                 String configureOrchestratorrUri = elasticService.getUri() + "/eDaaS/rest/dataasset/orchestratorip";
-                System.out.println("uri: -" + configureDataAssetLoaderUri + "-");
-                System.out.println("uri: -" + configureOrchestratorrUri + "-");
+                System.err.println("uri: -" + configureDataAssetLoaderUri + "-");
+                System.err.println("uri: -" + configureOrchestratorrUri + "-");
 
                 RestfulWSClient ws1 = new RestfulWSClient(configureDataAssetLoaderUri);
                 ws1.callPutMethod(daLoaderIp);
@@ -177,8 +150,8 @@ public class ElasticServiceMonitor implements Runnable {
                 RestfulWSClient ws = new RestfulWSClient(configureUri);
                 int responseCode =  ws.callPutMethodRC(daLoaderIp);
                 
-                System.out.println("CONFIGURE URI: " + configureUri);
-                System.out.println("RESPONSE CODE: " + responseCode);
+                System.err.println("CONFIGURE URI: " + configureUri);
+                System.err.println("RESPONSE CODE: " + responseCode);
                 
                 
                 if (responseCode!=204){

@@ -129,7 +129,7 @@ public class DaaSGenerator {
 
         List<QoRMetric> listOfMetrics = qoRModel.getListOfMetrics();
         String templateConstraintClass = loadTemplateClass("ConsumerRequirement");
-        System.out.println("class: " + templateConstraintClass);
+        System.err.println("class: " + templateConstraintClass);
 
         String declarationContent = "";
         String getContent = "";
@@ -221,7 +221,7 @@ public class DaaSGenerator {
             fstream = new FileInputStream(filePath);
             // FileInputStream fstream = new FileInputStream("covertype.csv");
         } catch (FileNotFoundException ex) {
-            Logger.logInfo(ex.toString());
+            System.err.println(ex);
         }
 
         DataInputStream in = new DataInputStream(fstream);
@@ -253,7 +253,7 @@ public class DaaSGenerator {
             Logger.logInfo(ex.toString());
         }
 
-        System.out.println("Project Path: -" + path + "-");
+        System.err.println("Project Path: -" + path + "-");
         rootPath = path;
     }
     

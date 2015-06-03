@@ -27,7 +27,6 @@ import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
-import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 import at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller.DataElasticityController;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 
@@ -37,7 +36,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import javax.xml.bind.JAXBException;
-import sun.java2d.pipe.BufferedMaskBlit;
+
 
 /**
  *
@@ -94,7 +93,7 @@ public class DataElasticityMonitor{
                         Thread.sleep(10000);
 
                     } catch (InterruptedException ex) {
-
+                        System.err.println(ex);
                     }
                     
                     
@@ -114,7 +113,7 @@ public class DataElasticityMonitor{
             try {
                 requestXML = JAXBUtils.marshal(request, DataPartitionRequest.class);
             } catch (JAXBException ex) {
-              
+                System.err.println(ex);
             }
 
             double monitoringValue = 0;

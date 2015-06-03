@@ -59,7 +59,7 @@
                     }
 
                 } catch (Exception ex) {
-
+                        System.err.println(ex);
                 }
             %>
 

@@ -5,15 +5,8 @@
  */
 package at.ac.tuwien.dsg.orchestrator.restws;
 
-import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
-import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticServices;
-import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringSession;
-import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor.DataElasticityMonitor;
-import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
+
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceMonitor;
-import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
@@ -24,7 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.JAXBException;
+
 
 /**
  *

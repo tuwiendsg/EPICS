@@ -168,8 +168,7 @@ public class CassandraDataAssetStore  {
         try {
             resultSet = session.execute(sql);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            log.error("Exception cause: " + sql);
+            System.err.println(e);
         }
         ExecutionInfo info = resultSet.getExecutionInfo();
 
@@ -181,18 +180,12 @@ public class CassandraDataAssetStore  {
                 
                 data = row.getString("data");
 
-//                System.out.println("ID: " + id + " - data: " + data);
+                System.out.println("data: " + data);
             }
 
         }
         
-//        DataAsset dataAsset=null;
-//    try {
-//        dataAsset = JAXBUtils.unmarshal(data, DataAsset.class);
-//    } catch (JAXBException ex) {
-//        Logger.getLogger(CassandraDataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
-//    }
-//        
+     
         
         return data;
 
@@ -241,8 +234,7 @@ public class CassandraDataAssetStore  {
         try {
             resultSet = session.execute(sql);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            log.error("Exception cause: " + sql);
+            System.err.println(e);
         }
 
         
@@ -302,8 +294,7 @@ public class CassandraDataAssetStore  {
         try {
             resultSet = session.execute(sql);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            log.error("Exception cause: " + sql);
+            System.err.println(e);
         }
         ExecutionInfo info = resultSet.getExecutionInfo();
 
@@ -332,8 +323,7 @@ public class CassandraDataAssetStore  {
         try {
             resultSet = session.execute(sql);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            log.error("Exception cause: " + sql);
+            System.err.println(e);
         }
         ExecutionInfo info = resultSet.getExecutionInfo();
 
@@ -368,29 +358,6 @@ public class CassandraDataAssetStore  {
         noOfPartition = String.valueOf(dafs.getNoOfPartitions(request.getDataAssetID()));
         
         
-//     String sql = "SELECT COUNT(*) FROM " + keyspace + ".ProcessingDataAsset "
-//                + " WHERE id='" + id + "' ALLOW FILTERING;";
-//     
-//        ResultSet resultSet = null;
-//        try {
-//            resultSet = session.execute(sql);
-//        } catch (Exception e) {
-//            log.error(e.getMessage(), e);
-//            log.error("Exception cause: " + sql);
-//        }
-//        ExecutionInfo info = resultSet.getExecutionInfo();
-//
-//        if (!(resultSet == null || resultSet.isExhausted())) {
-//
-//            List<Row> rows = resultSet.all();
-//
-//            for (Row row : rows) {
-//        
-//                noOfPartition = String.valueOf(row.getLong("count"));
-//
-//            }
-//
-//        }
         
         return noOfPartition;
     }

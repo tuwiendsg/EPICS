@@ -146,7 +146,7 @@ public class ComotConnector {
 
     private boolean isDeployActionExisting(List<DeployAction> listOfDeployActions, String deployActionID) {
 
-        System.out.println("CHECK: " + deployActionID);
+        System.err.println("CHECK: " + deployActionID);
         
         
         

@@ -6,15 +6,9 @@
 package at.ac.tuwien.dsg.dataassetloader.util;
 
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DataPartitionRequest;
-import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *

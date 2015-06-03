@@ -7,21 +7,18 @@ package at.ac.tuwien.dsg.depic.depictool.connector;
 
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
-import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.CloudService;
-import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.ServiceTopology;
-import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.ServiceUnit;
+
 import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.rSYBL.deploymentDescription.AssociatedVM;
 import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.rSYBL.deploymentDescription.DeploymentDescription;
 import at.ac.tuwien.dsg.cloud.salsa.common.cloudservice.model.rSYBL.deploymentDescription.DeploymentUnit;
-import at.ac.tuwien.dsg.cloud.salsa.tosca.extension.SalsaInstanceDescription_VM;
+
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DeployAction;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
-import groovy.lang.ListWithDefault;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import javax.xml.bind.JAXBException;
 
 
@@ -51,7 +48,7 @@ public class SalsaConnector {
             try {
                 deploymentDescription = JAXBUtils.unmarshal(salsaSpecs, DeploymentDescription.class);
             } catch (JAXBException ex) {
-                Logger.logInfo(ex.toString());
+                System.err.println(ex);
             }
         } else {
             Logger.logInfo("ON SCALING ...");

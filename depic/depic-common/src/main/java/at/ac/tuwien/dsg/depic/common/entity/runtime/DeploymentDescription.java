@@ -61,7 +61,7 @@ public class DeploymentDescription {
            xmlString = objWriter.toString();
 
         } catch (JAXBException e) {
-            System.out.println("Ex: " + e.toString());
+            System.err.println("Ex: " + e.toString());
         }
 
         return xmlString;
@@ -78,7 +78,7 @@ public class DeploymentDescription {
 		javaObj = (DeploymentDescription) jaxbUnmarshaller.unmarshal(reader);	
  
 	  } catch (JAXBException e) {
-	
+              System.err.println(e);
 	  } 
          return javaObj;
     }

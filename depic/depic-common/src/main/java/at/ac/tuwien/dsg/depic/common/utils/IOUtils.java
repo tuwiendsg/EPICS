@@ -86,7 +86,7 @@ public class IOUtils {
             data = sb.toString();
             br.close();
         } catch (Exception e) {
-
+            System.err.println(e);
         }
         return data;
     }

@@ -125,7 +125,7 @@ public class DataElasticityController {
             try {
                 requestXML = JAXBUtils.marshal(controlRequest, ExternalServiceRequest.class);
             } catch (JAXBException ex) {
-
+                System.err.println(ex);
             }
 
             String uri = "";
@@ -144,7 +144,7 @@ public class DataElasticityController {
                     Thread.sleep(10000);
 
                 } catch (InterruptedException ex) {
-
+                    System.err.println(ex);
                 }
 
             } while (uri.equals(""));

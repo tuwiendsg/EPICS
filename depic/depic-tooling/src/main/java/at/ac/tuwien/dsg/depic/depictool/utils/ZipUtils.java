@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
-import java.util.zip.ZipInputStream;
 
 public class ZipUtils {
 
@@ -41,7 +40,7 @@ public class ZipUtils {
             addDir(dirObj, out);
             out.close();
         } catch (Exception ex) {
-            Logger.logInfo(ex.toString());
+            System.err.println(ex);
         }
     }
 
@@ -57,7 +56,6 @@ public class ZipUtils {
                     continue;
                 }
                 FileInputStream in = new FileInputStream(files[i].getAbsolutePath());
-             //   Logger.logInfo(" Adding: " + files[i].getAbsolutePath());
 
                 out.putNextEntry(new ZipEntry(files[i].getAbsolutePath().replaceAll(parentDir, "")));
                 int len;
@@ -68,7 +66,7 @@ public class ZipUtils {
                 in.close();
             }
         } catch (Exception ex) {
-            Logger.logInfo(ex.toString());
+            System.err.println(ex);
         }
     }
 
@@ -119,7 +117,7 @@ public class ZipUtils {
                     is = new BufferedInputStream(zip
                             .getInputStream(entry));
                 } catch (IOException ex) {
-                    Logger.logInfo(ex.toString());
+                    System.err.println(ex);
                 }
                 int currentByte;
                 // establish buffer for writing file
@@ -130,7 +128,7 @@ public class ZipUtils {
                 try {
                     fos = new FileOutputStream(destFile);
                 } catch (FileNotFoundException ex) {
-                    Logger.logInfo(ex.toString());
+                    System.err.println(ex);
                 }
                 BufferedOutputStream dest = new BufferedOutputStream(fos,
                         BUFFER);

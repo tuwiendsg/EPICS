@@ -233,7 +233,7 @@ public class ElasticityProcessesStore {
             }
 
         } catch (Exception ex) {
-
+            System.err.println(ex);
         }
 
         
@@ -260,7 +260,7 @@ public class ElasticityProcessesStore {
             IOUtils.copy(inputStream, writer, encoding);
             primitiveXML = writer.toString();
         } catch (Exception ex) {
-
+            System.err.println(ex);
         }
 
         PrimitiveActionMetadata primitiveActionMetadata = YamlUtils.unmarshallYaml(PrimitiveActionMetadata.class, primitiveXML);
@@ -288,7 +288,7 @@ public class ElasticityProcessesStore {
 
             rs.close();
         } catch (Exception ex) {
-
+            System.err.println(ex);
         }
 
         return elProcessXML;

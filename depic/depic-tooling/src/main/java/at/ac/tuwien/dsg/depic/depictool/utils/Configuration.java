@@ -67,7 +67,7 @@ public class Configuration {
         try {
             path = URLDecoder.decode(path, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            Logger.logInfo(ex.toString());
+            System.err.println(ex);
         }
         
         return path;
@@ -82,7 +82,7 @@ public class Configuration {
         try {
             path = URLDecoder.decode(path, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            Logger.logInfo(ex.toString());
+            System.err.println(ex);
         }
         
         return path;
@@ -100,7 +100,7 @@ public class Configuration {
         try {
             path = URLDecoder.decode(path, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-           
+           System.err.println(ex);
         }
 
         path = path + "/classes/artifact";

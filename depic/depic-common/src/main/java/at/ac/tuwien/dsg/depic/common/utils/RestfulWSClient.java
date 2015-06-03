@@ -116,9 +116,9 @@ public class RestfulWSClient {
             }
 
             rs = result.toString();
-            // System.out.println("Response String: " + result.toString());
+          
         } catch (Exception ex) {
-
+            System.err.println(ex);
         }
         return rs;
     }
@@ -147,7 +147,7 @@ public class RestfulWSClient {
             
             // System.out.println("Response String: " + result.toString());
         } catch (Exception ex) {
-
+            System.err.println(ex);
         }
         return statusCode;
     }
@@ -184,7 +184,7 @@ public class RestfulWSClient {
 
             System.out.println("Response String: " + result.toString());
         } catch (Exception ex) {
-            System.out.println("Exception: " + ex.toString());
+            System.err.println("Exception: " + ex.toString());
         }
 
     }
@@ -222,7 +222,7 @@ public class RestfulWSClient {
             rs=result.toString();
             //System.out.println("Response String: " + result.toString());
         } catch (Exception ex) {
-            System.out.println("Exception: " + ex.toString());
+            System.err.println("Exception: " + ex.toString());
         }
         
         return rs;

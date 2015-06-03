@@ -14,8 +14,6 @@ import java.io.FileReader;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.file.Files;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,8 +25,8 @@ import java.util.logging.Logger;
  */
 public class YamlUtils {
     
-    static String filePath="/home/ubuntu/log";
-//static String filePath="/Volumes/DATA/Temp";
+    static String filePath;
+
     public static String getFilePath() {
         return filePath;
     }

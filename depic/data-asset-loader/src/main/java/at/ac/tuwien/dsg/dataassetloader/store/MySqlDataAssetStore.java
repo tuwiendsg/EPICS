@@ -89,7 +89,7 @@ public class MySqlDataAssetStore implements DataStore{
 
                 rs.close();
             } catch (SQLException ex) {
-
+                System.err.println(ex);
             }
 
             StringWriter writer = new StringWriter();
@@ -105,54 +105,7 @@ public class MySqlDataAssetStore implements DataStore{
         return dafStr;
     }
     
-   /*
-
-    public DataAsset getDataAsset(String dafName) {
-  
-        List<DataItem>  dataItemList = new ArrayList<DataItem>();
-        MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
-        String sql = "SELECT * FROM " + dafName;
-        ResultSet rs = connectionManager.ExecuteQuery(sql);
-        
-        List<String> colsList = new ArrayList<String>();
-        try {
-            ResultSetMetaData metaData = rs.getMetaData();
-            int noOfColumn = metaData.getColumnCount();
-            
-            for (int i=0;i<noOfColumn;i++){
-                String colName = metaData.getColumnName(i+1);
-                colsList.add(colName);
-            }   
-        } catch (SQLException ex) {
-            Logger.getLogger(MySqlDataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        try {
-            while (rs.next()){
-                
-                List<DataAttribute> attsList = new ArrayList<DataAttribute>();
-                for (String colName : colsList) {
-                    String colVal = rs.getString(colName);
-                    DataAttribute dataAttribute = new DataAttribute(colName, colVal);
-                    attsList.add(dataAttribute);
-                }
-                
-                DataItem dataItem = new DataItem(attsList);
-                dataItemList.add(dataItem);
-                
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(MySqlDataAssetStore.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        DataAsset da = new DataAsset(dafName,dataItemList);
-        
-        
-        return da;
-    }
-*/
+ 
      
      
     public String copyDataAssetRepo(DataPartitionRequest request){
@@ -203,7 +156,7 @@ public class MySqlDataAssetStore implements DataStore{
 
             rs.close();
             } catch (Exception ex) {
-
+                System.err.println(ex);
             }
             return  String.valueOf(noOfPartitions);
     }
@@ -221,35 +174,7 @@ public class MySqlDataAssetStore implements DataStore{
         at.ac.tuwien.dsg.depic.common.utils.IOUtils iou = new at.ac.tuwien.dsg.depic.common.utils.IOUtils("/home/ubuntu/mydb");
         daPartitionStr = iou.readData(fileName);
         
-        
-        
-        
-//            InputStream inputStream = null;
-//
-//            MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
-//            
-//            String sql = "Select * from ProcessingDataAsset where edaas='"+edaas+"' AND customerID='"+customerID+"' AND daw_name='"+dawID+"' AND partitionID='"+paritionID+"' ";
-//            
-//           
-//            ResultSet rs = connectionManager.ExecuteQuery(sql);
-//
-//            try {
-//                while (rs.next()) {
-//                    inputStream = rs.getBinaryStream("da");
-//                    StringWriter writer = new StringWriter();
-//                    String encoding = StandardCharsets.UTF_8.name();
-//
-//                    IOUtils.copy(inputStream, writer, encoding);
-//                    daPartitionStr = writer.toString();
-//                    
-//                 
-//                    }
-//
-//                rs.close();
-//            } catch (Exception ex) {
-//
-//            }
-            
+
             return daPartitionStr;
     }
     

@@ -5,9 +5,7 @@
  */
 package at.ac.tuwien.dsg.dataassetloader.store;
 
-import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
-import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.MySqlConnectionManager;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import java.io.IOException;
@@ -18,7 +16,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.bind.JAXBException;
 import org.apache.commons.io.IOUtils;
 
 /**

@@ -145,7 +145,7 @@ public class ElasticProcessRepositoryManager {
             rs.close();
 
         } catch (Exception ex) {
-
+            System.err.println(ex);
         }
         
         return deployAction;
@@ -167,7 +167,7 @@ public class ElasticProcessRepositoryManager {
             rs.close();
 
         } catch (Exception ex) {
-
+            System.err.println(ex);
         }
         
         return listOfEDaases;
