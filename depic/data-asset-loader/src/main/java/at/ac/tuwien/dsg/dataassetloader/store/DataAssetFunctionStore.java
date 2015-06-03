@@ -120,7 +120,7 @@ public class DataAssetFunctionStore {
 
             rs.close();
         } catch (Exception ex) {
-
+            System.err.println(ex);
         }
 
         return eDaaSType;
@@ -151,7 +151,7 @@ public class DataAssetFunctionStore {
 
             rs.close();
         } catch (Exception ex) {
-
+            System.err.println(ex);
         }
         
         System.out.println("Return Type: " + eDaaSType.getDBType());

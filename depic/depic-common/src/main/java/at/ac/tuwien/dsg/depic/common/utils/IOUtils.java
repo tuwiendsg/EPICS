@@ -46,6 +46,7 @@ public class IOUtils {
 
             out.close();
         } catch (IOException ex) {
+            System.err.println(ex);
         }
     }
     
@@ -60,6 +61,7 @@ public class IOUtils {
 
             out.close();
         } catch (IOException ex) {
+            System.err.println(ex);
         }
     }
 

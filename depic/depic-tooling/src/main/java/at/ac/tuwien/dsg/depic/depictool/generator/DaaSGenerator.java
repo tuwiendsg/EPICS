@@ -187,6 +187,7 @@ public class DaaSGenerator {
 
             out.close();
         } catch (IOException ex) {
+            System.err.println(ex);
         }
 
     }

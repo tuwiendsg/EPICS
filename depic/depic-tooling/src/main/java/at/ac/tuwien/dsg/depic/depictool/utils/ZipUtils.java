@@ -90,7 +90,7 @@ public class ZipUtils {
         try {
             zip = new ZipFile(file);
         } catch (IOException ex) {
-            Logger.logInfo(ex.toString());
+            System.err.println(ex);
         }
         
         
@@ -141,22 +141,22 @@ public class ZipUtils {
                         dest.write(data, 0, currentByte);
                     }
                 } catch (IOException ex) {
-                    Logger.logInfo(ex.toString());
+                   System.err.println(ex);
                 }
                 try {
                     dest.flush();
                 } catch (IOException ex) {
-                    Logger.logInfo(ex.toString());
+                    System.err.println(ex);
                 }
                 try {
                     dest.close();
                 } catch (IOException ex) {
-                    Logger.logInfo(ex.toString());
+                    System.err.println(ex);
                 }
                 try {
                     is.close();
                 } catch (IOException ex) {
-                    Logger.logInfo(ex.toString());
+                    System.err.println(ex);
                 }
             }
 

@@ -6,8 +6,6 @@
 package at.ac.tuwien.dsg.dataassetloader.store;
 
 import at.ac.tuwien.dsg.depic.common.entity.eda.dataasset.DataAsset;
-import at.ac.tuwien.dsg.depic.common.entity.eda.dataasset.DataAttribute;
-import at.ac.tuwien.dsg.depic.common.entity.eda.dataasset.DataItem;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DataPartitionRequest;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.MySqlConnectionManager;
@@ -19,7 +17,6 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +99,7 @@ public class MySqlDataAssetStore implements DataStore{
             dafStr = writer.toString();
 
         } catch (IOException ex) {
-
+            System.err.println(ex);
         }
 
         return dafStr;
@@ -161,7 +158,7 @@ public class MySqlDataAssetStore implements DataStore{
     public String copyDataAssetRepo(DataPartitionRequest request){
         
        
-        System.out.println("Staring Copying Data ...");
+        System.err.println("Staring Copying Data ...");
             
             InputStream inputStream = null;
 

@@ -46,13 +46,13 @@ public class Configuration {
             configString = prop.getProperty(configureName);
 
         } catch (IOException ex) {
-            ex.printStackTrace();
+            System.err.println(ex);
         } finally {
             if (input != null) {
                 try {
                     input.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.err.println(e);
                 }
             }
         }
