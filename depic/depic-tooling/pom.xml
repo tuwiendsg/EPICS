@@ -56,20 +56,11 @@
             <type>jar</type>
         </dependency>
         
-        
-        
-
    
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.3.1</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -80,6 +71,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>depic-elastic-process-generator</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>depic-daas-generator</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

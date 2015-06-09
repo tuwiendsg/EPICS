@@ -13,5 +13,6 @@
     <module>depic-common</module>
     <module>depic-test</module>
     <module>depic-elastic-process-generator</module>
+    <module>depic-daas-generator</module>
   </modules>
 </project>

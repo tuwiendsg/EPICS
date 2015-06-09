@@ -171,15 +171,16 @@ public class ComotConnector {
         ServiceTopology controlServicesTopology = ServiceTopology("Control_Services_Topology");
 
         // edaas_topology
-        //      ServiceTopology edaasServiceTopology = ServiceTopology("eDaaS_Services_Topology");
+        ServiceTopology edaasServiceTopology = ServiceTopology("eDaaS_Services_Topology");
+        
         // add topology
         Configuration cfg = new Configuration();
         String compositionRules = cfg.getConfigPath() + "/compositionRules.xml";
         CloudService cloudService = ServiceTemplate(eDaaSDeployAction.getActionID() + "CloudService")
                 .consistsOfTopologies(monitoringServicesTopology)
                 .consistsOfTopologies(controlServicesTopology)
-                //   .consistsOfTopologies(edaasServiceTopology)
-                //             .withDefaultMetrics();
+                .consistsOfTopologies(edaasServiceTopology)
+    //            .withDefaultMetrics();
                 .withMetricCompositonRulesFile(compositionRules);
 
         int i = 0;
@@ -194,9 +195,6 @@ public class ComotConnector {
                             .addSoftwarePackage("gmetad")
                     );
             monitoringServicesTopology.addServiceUnit(monitoringVM);
-
-//            ElasticityCapability eventProcessingUnitScaleIn = ElasticityCapability.ScaleIn().withPrimitiveOperations("scalein");
-//            ElasticityCapability eventProcessingUnitScaleOut = ElasticityCapability.ScaleOut().withPrimitiveOperations("scaleout");
 
             ElasticityCapability eventProcessingUnitScaleIn = ElasticityCapability.ScaleIn();
             ElasticityCapability eventProcessingUnitScaleOut = ElasticityCapability.ScaleOut();
@@ -264,21 +262,21 @@ public class ComotConnector {
         }
 
         // add VM + eDaaS
-//        OperatingSystemUnit vm_edaas = OperatingSystemUnit(eDaaSDeployAction.getActionID() + "_VM")
-//                .providedBy(OpenstackSmall()
-//                        .addSoftwarePackage("openjdk-7-jre")
-//                        .addSoftwarePackage("ganglia-monitor")
-//                        .addSoftwarePackage("gmetad")
-//                );
-//        ServiceUnit serviceUnit_edaas = SingleSoftwareUnit(eDaaSDeployAction.getActionID() + "_SU")
-//                .deployedBy(SingleScriptArtifact(eDaaSDeployAction.getActionID(), eDaaSDeployAction.getArtifact()));
-//
-//        edaasServiceTopology.addServiceUnit(serviceUnit_edaas);
-//        edaasServiceTopology.addServiceUnit(vm_edaas);
-//
-//        cloudService.andRelationships(HostedOnRelation(serviceUnit_edaas.getId() + "To" + vm_edaas.getId())
-//                .from(serviceUnit_edaas)
-//                .to(vm_edaas));
+        OperatingSystemUnit vm_edaas = OperatingSystemUnit(eDaaSDeployAction.getActionID() + "_VM")
+                .providedBy(OpenstackSmall()
+                        .addSoftwarePackage("openjdk-7-jre")
+                        .addSoftwarePackage("ganglia-monitor")
+                        .addSoftwarePackage("gmetad")
+                );
+        ServiceUnit serviceUnit_edaas = SingleSoftwareUnit(eDaaSDeployAction.getActionID() + "_SU")
+                .deployedBy(SingleScriptArtifact(eDaaSDeployAction.getActionID(), eDaaSDeployAction.getArtifact()));
+
+        edaasServiceTopology.addServiceUnit(serviceUnit_edaas);
+        edaasServiceTopology.addServiceUnit(vm_edaas);
+
+        cloudService.andRelationships(HostedOnRelation(serviceUnit_edaas.getId() + "To" + vm_edaas.getId())
+                .from(serviceUnit_edaas)
+                .to(vm_edaas));
         // deployment
         COMOTOrchestrator orchestrator = new COMOTOrchestrator()
                 //we have SALSA as cloud management tool
@@ -331,9 +329,6 @@ public class ComotConnector {
                     );
             monitoringServicesTopology.addServiceUnit(monitoringVM);
 
-//            ElasticityCapability eventProcessingUnitScaleIn = ElasticityCapability.ScaleIn().withPrimitiveOperations("scalein");
-//            ElasticityCapability eventProcessingUnitScaleOut = ElasticityCapability.ScaleOut().withPrimitiveOperations("scaleout");
-
             ElasticityCapability eventProcessingUnitScaleIn = ElasticityCapability.ScaleIn();
             ElasticityCapability eventProcessingUnitScaleOut = ElasticityCapability.ScaleOut();
 
@@ -341,15 +336,7 @@ public class ComotConnector {
             Logger.logInfo("DEPLOY: Monitoring Action: " + dpa.getActionID());
             ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
                     .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"))
-                    .withMinInstances(0)
-                    .provides(eventProcessingUnitScaleIn, eventProcessingUnitScaleOut)
-                    .controlledBy(
-                            Strategy("EP_ST1_" + (i++))
-                            .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric("cpuUsage", "%")).lessThan("20"))
-                            .enforce(eventProcessingUnitScaleIn),
-                            Strategy("EP_ST2_" + (i++))
-                            .when(Constraint.MetricConstraint("EP_ST1_CO2_" + (i++), new Metric("cpuUsage", "%")).greaterThan("50"))
-                            .enforce(eventProcessingUnitScaleOut));
+                    .withMinInstances(0);
 
             monitoringServicesTopology.addServiceUnit(serviceUnit);
             cloudService.andRelationships(HostedOnRelation(serviceUnit.getId() + "To" + monitoringVM.getId())
@@ -361,7 +348,6 @@ public class ComotConnector {
         for (DeployAction dpa : controlServices) {
 
 
-            
             // add VM + control service units
             OperatingSystemUnit controlVM = OperatingSystemUnit(dpa.getActionID() + "_VM")
                     .providedBy(OpenstackSmall()
@@ -372,20 +358,11 @@ public class ComotConnector {
                     );
             controlServicesTopology.addServiceUnit(controlVM);
 
-            ElasticityCapability eventProcessingUnitScaleIn = ElasticityCapability.ScaleIn();
-            ElasticityCapability eventProcessingUnitScaleOut = ElasticityCapability.ScaleOut();
-
             Logger.logInfo("DEPLOY: Control Action: " + dpa.getActionID());
             ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
                     .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"))
                     .withMinInstances(0)
-                    .provides(eventProcessingUnitScaleIn, eventProcessingUnitScaleOut)
-                    .controlledBy(Strategy("EP_ST1_" + (i++))
-                            .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric("cpuUsage", "%")).lessThan("20"))
-                            .enforce(eventProcessingUnitScaleIn),
-                            Strategy("EP_ST2_" + (i++))
-                            .when(Constraint.MetricConstraint("EP_ST1_CO2_" + (i++), new Metric("cpuUsage", "%")).greaterThan("50"))
-                            .enforce(eventProcessingUnitScaleOut));
+                    
             ;
 
             controlServicesTopology.addServiceUnit(serviceUnit);
@@ -423,7 +400,7 @@ public class ComotConnector {
 
         //deploy, monitor and control
         //orchestrator.deployAndControl(cloudService);
-        orchestrator.deployAndControl(cloudService);
+        orchestrator.deploy(cloudService);
 
         //   orchestrator.controlExisting(cloudService);
         //  return cloudService.getId();

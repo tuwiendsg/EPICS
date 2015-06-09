@@ -5,6 +5,7 @@
  */
 package at.ac.tuwien.dsg.depic.depictool.generator;
 
+
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
 
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
@@ -28,7 +29,8 @@ import at.ac.tuwien.dsg.depic.depictool.connector.ComotConnector;
 import at.ac.tuwien.dsg.depic.depictool.connector.ElasticServiceMonitor;
 import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManager;
 import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
-import at.ac.tuwien.dsg.depic.depictool.utils.ZipUtils;
+import at.ac.tuwien.dsg.depic.common.utils.ZipUtils;
+import at.ac.tuwien.dsg.depic.daas.generator.DaaSGenerator;
 import at.ac.tuwien.dsg.depic.elastic.process.generator.ElasticProcessesGenerator;
 import java.util.List;
 import java.util.logging.Level;

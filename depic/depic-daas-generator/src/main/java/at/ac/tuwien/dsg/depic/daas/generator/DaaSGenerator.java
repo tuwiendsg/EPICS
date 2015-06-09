@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.depic.depictool.generator;
+package at.ac.tuwien.dsg.depic.daas.generator;
 
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRMetric;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
-import at.ac.tuwien.dsg.depic.depictool.utils.ZipUtils;
+import at.ac.tuwien.dsg.depic.common.utils.ZipUtils;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
