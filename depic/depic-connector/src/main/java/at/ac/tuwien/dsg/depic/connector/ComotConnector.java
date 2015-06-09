@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.depic.depictool.connector;
+package at.ac.tuwien.dsg.depic.connector;
 
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DeployAction;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
@@ -36,13 +36,14 @@ import static at.ac.tuwien.dsg.comot.common.model.OperatingSystemUnit.OperatingS
 import at.ac.tuwien.dsg.comot.common.model.ServiceTopology;
 import at.ac.tuwien.dsg.comot.common.model.ServiceUnit;
 
-import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManager;
-import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
+import at.ac.tuwien.dsg.depic.repository.ElasticProcessRepositoryManager;
+
 import at.ac.tuwien.dsg.comot.orchestrator.interraction.COMOTOrchestrator;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ResourceControlPlan;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy;
+import at.ac.tuwien.dsg.depic.common.utils.Configuration;
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 
 import java.util.ArrayList;

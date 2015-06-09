@@ -19,16 +19,16 @@ import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DeployAction;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticServices;
+import at.ac.tuwien.dsg.depic.common.utils.Configuration;
 import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 
 
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
-import at.ac.tuwien.dsg.depic.depictool.connector.ComotConnector;
-import at.ac.tuwien.dsg.depic.depictool.connector.ElasticServiceMonitor;
-import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManager;
-import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
+import at.ac.tuwien.dsg.depic.connector.ComotConnector;
+import at.ac.tuwien.dsg.depic.connector.ElasticServiceMonitor;
+import at.ac.tuwien.dsg.depic.repository.ElasticProcessRepositoryManager;
 import at.ac.tuwien.dsg.depic.common.utils.ZipUtils;
 import at.ac.tuwien.dsg.depic.daas.generator.DaaSGenerator;
 import at.ac.tuwien.dsg.depic.elastic.process.generator.ElasticProcessesGenerator;

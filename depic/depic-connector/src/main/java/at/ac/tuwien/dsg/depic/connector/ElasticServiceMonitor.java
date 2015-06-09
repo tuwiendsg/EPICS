@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.depic.depictool.connector;
+package at.ac.tuwien.dsg.depic.connector;
 
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticServices;
@@ -12,7 +12,8 @@ import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.comot.client.DefaultSalsaClient;
 import at.ac.tuwien.dsg.comot.orchestrator.interraction.salsa.SalsaInterraction;
-import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
+import at.ac.tuwien.dsg.depic.common.utils.Configuration;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;

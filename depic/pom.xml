@@ -14,5 +14,7 @@
     <module>depic-test</module>
     <module>depic-elastic-process-generator</module>
     <module>depic-daas-generator</module>
+    <module>depic-connector</module>
+    <module>depic-repository</module>
   </modules>
 </project>

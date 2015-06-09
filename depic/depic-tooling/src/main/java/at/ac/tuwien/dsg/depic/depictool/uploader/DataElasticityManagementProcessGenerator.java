@@ -9,10 +9,10 @@ import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsF
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
+import at.ac.tuwien.dsg.depic.common.utils.Configuration;
 import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
 import at.ac.tuwien.dsg.depic.depictool.generator.Generator;
-import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManager;
-import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
+import at.ac.tuwien.dsg.depic.repository.ElasticProcessRepositoryManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,8 +36,8 @@ import org.apache.commons.io.IOUtils;
  *
  * @author Jun
  */
-@WebServlet(name = "InputSpecificationUploader", urlPatterns = {"/InputSpecificationUploader"})
-public class InputSpecificationUploader extends HttpServlet {
+@WebServlet(name = "DataElasticityManagementProcessGenerator", urlPatterns = {"/DataElasticityManagementProcessGenerator"})
+public class DataElasticityManagementProcessGenerator extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -197,7 +197,7 @@ public class InputSpecificationUploader extends HttpServlet {
         
         log = log + "CHECK CHECK CHECK: " + pam.getListOfAdjustmentActions().get(0).getActionName() + "\n";
         
-        Logger.getLogger(InputSpecificationUploader.class.getName()).log(Level.INFO, log);
+        Logger.getLogger(DataElasticityManagementProcessGenerator.class.getName()).log(Level.INFO, log);
         
         Generator generator = new Generator(dataAnalyticsFunction, qorModel, pam, eDaaSName, dbType);
         generator.startGenerator();

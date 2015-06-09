@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.depic.depictool.repository;
+package at.ac.tuwien.dsg.depic.repository;
 
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
+import at.ac.tuwien.dsg.depic.common.utils.Configuration;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
-import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
+
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
 
