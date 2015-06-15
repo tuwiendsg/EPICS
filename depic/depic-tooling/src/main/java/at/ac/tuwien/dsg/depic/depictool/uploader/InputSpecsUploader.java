@@ -36,8 +36,8 @@ import org.apache.commons.io.IOUtils;
  *
  * @author Jun
  */
-@WebServlet(name = "DataElasticityManagementProcessGenerator", urlPatterns = {"/DataElasticityManagementProcessGenerator"})
-public class DataElasticityManagementProcessGenerator extends HttpServlet {
+@WebServlet(name = "InputSpecsUploader", urlPatterns = {"/InputSpecsUploader"})
+public class InputSpecsUploader extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -197,7 +197,7 @@ public class DataElasticityManagementProcessGenerator extends HttpServlet {
         
         log = log + "CHECK CHECK CHECK: " + pam.getListOfAdjustmentActions().get(0).getActionName() + "\n";
         
-        Logger.getLogger(DataElasticityManagementProcessGenerator.class.getName()).log(Level.INFO, log);
+        Logger.getLogger(InputSpecsUploader.class.getName()).log(Level.INFO, log);
         
         Generator generator = new Generator(dataAnalyticsFunction, qorModel, pam, eDaaSName, dbType);
         generator.startGenerator();

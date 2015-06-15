@@ -6,11 +6,14 @@
 package at.ac.tuwien.dsg.depic.repository;
 
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
+
 import at.ac.tuwien.dsg.depic.common.utils.Configuration;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
+import at.ac.tuwien.dsg.depic.common.utils.MySqlConnectionManager;
 import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
+
 
 /**
  *
@@ -18,6 +21,7 @@ import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
  */
 public class DataAssetRepositoryManager {
     
+    MySqlConnectionManager connectionManager;
     
     public String requestToGetDataAsset(DataAnalyticsFunction daf){
         
@@ -38,6 +42,7 @@ public class DataAssetRepositoryManager {
    
         return noOfDataPartitions;
     }
+    
     
     
     

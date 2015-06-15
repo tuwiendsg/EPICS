@@ -20,19 +20,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ResourceControlAction implements PrimitiveAction{
     
-    @XmlElement(name = "associatedQoRMetric", required = true)
+    @XmlElement(name = "resourceControlActionName", required = false)
+    String actionName;
+    
+    @XmlElement(name = "associatedQoRMetric", required = false)
     String associatedQoRMetric; 
     
-    @XmlElement(name = "listOfResourceControlStrategies", required = true)
-    List<ResourceControlCase> listOfResourceControlStrategies;
+    @XmlElement(name = "listOfResourceControlStrategies", required = false)
+    List<ResourceControlCase> listOfResourceControlCases;
 
     public ResourceControlAction() {
     }
 
-    public ResourceControlAction(String associatedQoRMetric, List<ResourceControlCase> listOfResourceControlStrategies) {
+    public ResourceControlAction(String associatedQoRMetric, List<ResourceControlCase> listOfResourceControlCases) {
         this.associatedQoRMetric = associatedQoRMetric;
-        this.listOfResourceControlStrategies = listOfResourceControlStrategies;
+        this.listOfResourceControlCases = listOfResourceControlCases;
     }
+
+    public ResourceControlAction(String actionName, String associatedQoRMetric, List<ResourceControlCase> listOfResourceControlCases) {
+        this.actionName = actionName;
+        this.associatedQoRMetric = associatedQoRMetric;
+        this.listOfResourceControlCases = listOfResourceControlCases;
+    }
+    
+    
 
     public String getAssociatedQoRMetric() {
         return associatedQoRMetric;
@@ -42,12 +53,20 @@ public class ResourceControlAction implements PrimitiveAction{
         this.associatedQoRMetric = associatedQoRMetric;
     }
 
-    public List<ResourceControlCase> getListOfResourceControlStrategies() {
-        return listOfResourceControlStrategies;
+    public List<ResourceControlCase> getListOfResourceControlCases() {
+        return listOfResourceControlCases;
     }
 
-    public void setListOfResourceControlStrategies(List<ResourceControlCase> listOfResourceControlStrategies) {
-        this.listOfResourceControlStrategies = listOfResourceControlStrategies;
+    public void setListOfResourceControlCases(List<ResourceControlCase> listOfResourceControlStrategies) {
+        this.listOfResourceControlCases = listOfResourceControlStrategies;
+    }
+
+    public String getActionName() {
+        return actionName;
+    }
+
+    public void setActionName(String actionName) {
+        this.actionName = actionName;
     }
 
     

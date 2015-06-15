@@ -18,20 +18,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Artifact {
     
-    @XmlElement(name = "name", required = true)
+    @XmlElement(name = "name", required = false)
     String name;
     
-    @XmlElement(name = "description", required = true)
+    @XmlElement(name = "description", required = false)
     String description;
     
-    @XmlElement(name = "location", required = true)
+    @XmlElement(name = "location", required = false)
     String location;
     
-    @XmlElement(name = "type", required = true)
+    @XmlElement(name = "type", required = false)
     String type;
     
-    @XmlElement(name = "restfulAPI", required = true)
+    @XmlElement(name = "restfulAPI", required = false)
     String restfulAPI;
+    
+    @XmlElement(name = "httpMethod", required = false)
+    String httpMethod;
 
     public Artifact() {
     }
@@ -84,6 +87,14 @@ public class Artifact {
 
     public void setRestfulAPI(String restfulAPI) {
         this.restfulAPI = restfulAPI;
+    }
+
+    public String getHttpMethod() {
+        return httpMethod;
+    }
+
+    public void setHttpMethod(String httpMethod) {
+        this.httpMethod = httpMethod;
     }
     
     

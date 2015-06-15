@@ -61,7 +61,9 @@ public class Configuration {
     
     public String getCurrentPath(){
         String path = Configuration.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-
+        
+        
+        
         int index = path.indexOf("/WEB-INF/classes/at/ac");
         path = path.substring(0, index);
         try {
@@ -76,15 +78,16 @@ public class Configuration {
     
     public String getConfigPath(){
         String path = Configuration.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-
-        int index = path.indexOf("/classes/at/ac");
+        
+        int index = path.indexOf("/depic/");
         path = path.substring(0, index);
+        path = path + "/depic/config" ;
         try {
             path = URLDecoder.decode(path, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
             System.err.println(ex);
         }
-        
+        System.out.println(path);
         return path;
     }
     

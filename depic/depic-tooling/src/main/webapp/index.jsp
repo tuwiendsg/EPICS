@@ -24,7 +24,7 @@
             <div class="nav">
                 <ul>
                     <li class="tool"><a class="active" href="index.jsp">Depic Tooling</a></li>
-                    <li class="daf"><a href="runtime.jsp">Runtime</a></li>
+                    <li class="daf"><a href="pam.jsp">PAM</a></li>
                 </ul>
             </div>
 
