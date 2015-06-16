@@ -36,6 +36,7 @@ import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import static at.ac.tuwien.dsg.depic.common.utils.YamlUtils.toYaml;
+import at.ac.tuwien.dsg.depic.repository.PrimitiveActionMetadataManager;
 
 import java.util.ArrayList;
 
@@ -60,22 +61,38 @@ public class DataElasticityManagementProcessesGenerator {
 
     public DataElasticityManagementProcessesGenerator() {
     }
+    
+    
 
-    public DataElasticityManagementProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository) {
+/**
+ * 
+ * @param daf Data Analytics Function
+ * @param qorModel Quality of Results
+ */    
+    public DataElasticityManagementProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel) {
         this.daf = daf;
         this.qorModel = qorModel;
-        this.primitiveActionRepository = primitiveActionRepository;
-        errorLog = "";
+        config();
     }
     
+    /**
+     * 
+     * @param daf
+     * @param qorModel
+     * @param primitiveActionRepository
+     * @param rooPath 
+     */
     public DataElasticityManagementProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository, String rooPath) {
         this.daf = daf;
         this.qorModel = qorModel;
         this.primitiveActionRepository = primitiveActionRepository;
-        errorLog = "";
-        this.rootPath = rooPath;
+        config();
     }
 
+    /**
+     * 
+     * @return Data Elasticity Management Process includes Monitoring Process, Adjustment Processes and Resource Control Plans
+     */
     public DataElasticityManagementProcess generateElasticProcesses() {
         Logger.logInfo("Start generate Elastic Processes ... ");
 
@@ -91,12 +108,12 @@ public class DataElasticityManagementProcessesGenerator {
         List<ResourceControlPlan> listOfResourceControlPlans = generateResourceControlPlan(finalElasticStates);
         toYaml(listOfResourceControlPlans, "listOfResourceControlPlans.yml");
 
-        DataElasticityManagementProcess elasticProcess = new DataElasticityManagementProcess(monitorProcess, listOfAdjustmentProcesses, listOfResourceControlPlans);
+        DataElasticityManagementProcess depProcess = new DataElasticityManagementProcess(monitorProcess, listOfAdjustmentProcesses, listOfResourceControlPlans);
 
         IOUtils iou = new IOUtils(rootPath);
         iou.writeData(errorLog, "errorLog.txt");
 
-        return elasticProcess;
+        return depProcess;
     }
 
     public List<ElasticState> getFinalElasticStates() {
@@ -108,6 +125,8 @@ public class DataElasticityManagementProcessesGenerator {
     /// Monitoring Process              ///
     ///                                 ///
     ///////////////////////////////////////
+    
+    
     private MonitoringProcess generateMonitoringProcess() {
 
         List<MonitoringAction> listOfMonitoringActions = new ArrayList<MonitoringAction>();
@@ -225,6 +244,8 @@ public class DataElasticityManagementProcessesGenerator {
     /// Final EState Set                ///
     ///                                 ///
     ///////////////////////////////////////
+    
+    
     public List<ElasticState> generateFinalElasticStateSet() {
 
         List<ElasticState> listOfFinalElasticStates = new ArrayList<ElasticState>();
@@ -988,6 +1009,23 @@ public class DataElasticityManagementProcessesGenerator {
         }
 
         return copyList;
+    }
+    
+    private void config(){
+        errorLog = "";
+        loadPrimitiveActionMetadata();
+        
+    }
+    
+    private void loadPrimitiveActionMetadata(){
+        
+        PrimitiveActionMetadataManager pamm = new PrimitiveActionMetadataManager();
+        List<MonitoringAction> listOfMonitoringActions = pamm.getMonitoringActionList();
+        List<AdjustmentAction> listOfAdjustmentActions = pamm.getAdjustmentActionList();
+        List<ResourceControlAction> listOfResourceControlActions = pamm.getResourceControlActionList();
+        
+        PrimitiveActionMetadata pam = new PrimitiveActionMetadata(listOfAdjustmentActions, listOfMonitoringActions, listOfResourceControlActions);
+        
     }
 
 }
