@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.depic.elastic.process.generator;
+package at.ac.tuwien.dsg.depic.process.generator;
 
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action;
@@ -12,7 +12,7 @@ import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DirectedAcyclicalGraph;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
 
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
@@ -49,7 +49,7 @@ import javax.xml.bind.JAXBException;
  *
  * @author Jun
  */
-public class ElasticProcessesGenerator {
+public class DataElasticityManagementProcessesGenerator {
 
     DataAnalyticsFunction daf;
     QoRModel qorModel;
@@ -58,17 +58,17 @@ public class ElasticProcessesGenerator {
     String errorLog;
     String rootPath;
 
-    public ElasticProcessesGenerator() {
+    public DataElasticityManagementProcessesGenerator() {
     }
 
-    public ElasticProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository) {
+    public DataElasticityManagementProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository) {
         this.daf = daf;
         this.qorModel = qorModel;
         this.primitiveActionRepository = primitiveActionRepository;
         errorLog = "";
     }
     
-    public ElasticProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository, String rooPath) {
+    public DataElasticityManagementProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository, String rooPath) {
         this.daf = daf;
         this.qorModel = qorModel;
         this.primitiveActionRepository = primitiveActionRepository;
@@ -76,7 +76,7 @@ public class ElasticProcessesGenerator {
         this.rootPath = rooPath;
     }
 
-    public ElasticProcess generateElasticProcesses() {
+    public DataElasticityManagementProcess generateElasticProcesses() {
         Logger.logInfo("Start generate Elastic Processes ... ");
 
         MonitoringProcess monitorProcess = generateMonitoringProcess();
@@ -91,7 +91,7 @@ public class ElasticProcessesGenerator {
         List<ResourceControlPlan> listOfResourceControlPlans = generateResourceControlPlan(finalElasticStates);
         toYaml(listOfResourceControlPlans, "listOfResourceControlPlans.yml");
 
-        ElasticProcess elasticProcess = new ElasticProcess(monitorProcess, listOfAdjustmentProcesses, listOfResourceControlPlans);
+        DataElasticityManagementProcess elasticProcess = new DataElasticityManagementProcess(monitorProcess, listOfAdjustmentProcesses, listOfResourceControlPlans);
 
         IOUtils iou = new IOUtils(rootPath);
         iou.writeData(errorLog, "errorLog.txt");
@@ -867,7 +867,7 @@ public class ElasticProcessesGenerator {
             analyticTask = JAXBUtils.unmarshal(analyticTasksStr, AnalyticTask.class);
 
         } catch (JAXBException ex) {
-            java.util.logging.Logger.getLogger(ElasticProcessesGenerator.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DataElasticityManagementProcessesGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         boolean rs = true;

@@ -7,14 +7,15 @@ package at.ac.tuwien.dsg.depic.test;
 
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAssetForm;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
 import static at.ac.tuwien.dsg.depic.common.utils.YamlUtils.toYaml;
-import at.ac.tuwien.dsg.depic.elastic.process.generator.ElasticProcessesGenerator;
+import at.ac.tuwien.dsg.depic.process.generator.DataElasticityManagementProcessesGenerator;
+import at.ac.tuwien.dsg.depic.process.generator.DataElasticityManagementProcessesGenerator;
 
 
 /**
@@ -63,8 +64,8 @@ public class ElasticProcessesGeneratorTester {
        PrimitiveActionMetadata pam = YamlUtils.unmarshallYaml(PrimitiveActionMetadata.class, primitiveAction_str);
 
 
-       ElasticProcessesGenerator elasticProcessesGenerator = new ElasticProcessesGenerator(daf, qor, pam, rootFolder);
-       ElasticProcess elasticProcess = elasticProcessesGenerator.generateElasticProcesses();
+        DataElasticityManagementProcessesGenerator elasticProcessesGenerator = new DataElasticityManagementProcessesGenerator(daf, qor, pam, rootFolder);
+       DataElasticityManagementProcess elasticProcess = elasticProcessesGenerator.generateElasticProcesses();
        toYaml(elasticProcess, "elastic_process.yml");
         
         

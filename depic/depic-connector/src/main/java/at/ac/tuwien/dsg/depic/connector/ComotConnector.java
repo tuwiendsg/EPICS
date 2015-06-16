@@ -9,7 +9,7 @@ import at.ac.tuwien.dsg.depic.common.entity.runtime.DeployAction;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
 
@@ -58,7 +58,7 @@ public class ComotConnector {
 
     private String cloudServiceID;
     private String artifactRepo;
-    private ElasticProcess elasticityProcess;
+    private DataElasticityManagementProcess depProcess;
     private DeployAction eDaaSDeployAction;
     private List<DeployAction> monitoringServices;
     private List<DeployAction> controlServices;
@@ -66,8 +66,8 @@ public class ComotConnector {
     public ComotConnector() {
     }
 
-    public ComotConnector(ElasticProcess elasticityProcesses, DeployAction eDaaSDeployAction) {
-        this.elasticityProcess = elasticityProcesses;
+    public ComotConnector(DataElasticityManagementProcess depProcess, DeployAction eDaaSDeployAction) {
+        this.depProcess = depProcess;
         this.eDaaSDeployAction = eDaaSDeployAction;
         config();
         prepareSoftwareArtifact();
@@ -96,7 +96,7 @@ public class ComotConnector {
 
         ElasticProcessRepositoryManager epStore = new ElasticProcessRepositoryManager();
 
-        MonitoringProcess monitorProcess = elasticityProcess.getMonitoringProcess();
+        MonitoringProcess monitorProcess = depProcess.getMonitoringProcess();
         List<MonitoringAction> monitoringActions = monitorProcess.getListOfMonitoringActions();
 
         for (MonitoringAction ma : monitoringActions) {
@@ -120,7 +120,7 @@ public class ComotConnector {
 
         ElasticProcessRepositoryManager epStore = new ElasticProcessRepositoryManager();
 
-        List<AdjustmentProcess> listOfAdjustmentProcesses = elasticityProcess.getListOfAdjustmentProcesses();
+        List<AdjustmentProcess> listOfAdjustmentProcesses = depProcess.getListOfAdjustmentProcesses();
 
         for (AdjustmentProcess adjustmentProcess : listOfAdjustmentProcesses) {
 
@@ -423,7 +423,7 @@ public class ComotConnector {
     
     private String getControlMetric(String serviceName){
         String rs = "";
-        ResourceControlPlan resourceControlPlan = elasticityProcess.getListOfResourceControlPlans().get(0);
+        ResourceControlPlan resourceControlPlan = depProcess.getListOfResourceControlPlans().get(0);
         List<ResourceControlStrategy> listOfResourceControlStrategys = resourceControlPlan.getListOfResourceControlStrategies();
         
         for (ResourceControlStrategy rcs : listOfResourceControlStrategys){
@@ -437,7 +437,7 @@ public class ComotConnector {
     
     private double getScaleInCondition(String serviceName){
         double rs =0;
-        ResourceControlPlan resourceControlPlan = elasticityProcess.getListOfResourceControlPlans().get(0);
+        ResourceControlPlan resourceControlPlan = depProcess.getListOfResourceControlPlans().get(0);
         List<ResourceControlStrategy> listOfResourceControlStrategys = resourceControlPlan.getListOfResourceControlStrategies();
         
         for (ResourceControlStrategy rcs : listOfResourceControlStrategys){
@@ -453,7 +453,7 @@ public class ComotConnector {
     
     private double getScaleOutCondition(String serviceName){
         double rs =0;
-        ResourceControlPlan resourceControlPlan = elasticityProcess.getListOfResourceControlPlans().get(0);
+        ResourceControlPlan resourceControlPlan = depProcess.getListOfResourceControlPlans().get(0);
         List<ResourceControlStrategy> listOfResourceControlStrategys = resourceControlPlan.getListOfResourceControlStrategies();
         
         for (ResourceControlStrategy rcs : listOfResourceControlStrategys){

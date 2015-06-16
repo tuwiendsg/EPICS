@@ -13,7 +13,7 @@ import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DataPartitionRequest;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
@@ -245,7 +245,7 @@ public class DataElasticityMonitor{
         ElasticityProcessesStore elasticityProcessesStore = new ElasticityProcessesStore(); 
         ElasticDataAsset eda = elasticityProcessesStore.getElasticDataAsset(monitoringSession.getEdaasName());
         
-        ElasticProcess elasticityProcess= eda.getElasticProcess();
+        DataElasticityManagementProcess elasticityProcess= eda.getElasticProcess();
    
         eDaaSType = DBType.MYSQL;
         

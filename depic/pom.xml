@@ -12,9 +12,9 @@
     <module>orchestrator</module>
     <module>depic-common</module>
     <module>depic-test</module>
-    <module>depic-elastic-process-generator</module>
     <module>depic-daas-generator</module>
     <module>depic-connector</module>
     <module>depic-repository</module>
+    <module>depic-dep-process-generator</module>
   </modules>
 </project>

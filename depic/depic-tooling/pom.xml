@@ -65,11 +65,6 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>depic-elastic-process-generator</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>depic-daas-generator</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -81,6 +76,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>depic-connector</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>depic-dep-process-generator</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

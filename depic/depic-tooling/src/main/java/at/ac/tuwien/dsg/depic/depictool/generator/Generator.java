@@ -11,7 +11,7 @@ import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsF
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 
 import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
 
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
@@ -31,7 +31,7 @@ import at.ac.tuwien.dsg.depic.connector.ElasticServiceMonitor;
 import at.ac.tuwien.dsg.depic.repository.ElasticProcessRepositoryManager;
 import at.ac.tuwien.dsg.depic.common.utils.ZipUtils;
 import at.ac.tuwien.dsg.depic.daas.generator.DaaSGenerator;
-import at.ac.tuwien.dsg.depic.elastic.process.generator.ElasticProcessesGenerator;
+import at.ac.tuwien.dsg.depic.process.generator.DataElasticityManagementProcessesGenerator;
 import java.util.List;
 import java.util.logging.Level;
 import javax.xml.bind.JAXBException;
@@ -69,9 +69,9 @@ public class Generator {
     public void startGenerator() {
         long t1 = System.currentTimeMillis();
         
-        ElasticProcessesGenerator elasticProcessesGenerator = new ElasticProcessesGenerator(daf, qorModel, primitiveActionRepository,"/home/ubuntu/log");
+        DataElasticityManagementProcessesGenerator elasticProcessesGenerator = new DataElasticityManagementProcessesGenerator(daf, qorModel, primitiveActionRepository,"/home/ubuntu/log");
         
-        ElasticProcess elasticProcess = elasticProcessesGenerator.generateElasticProcesses();
+        DataElasticityManagementProcess elasticProcess = elasticProcessesGenerator.generateElasticProcesses();
         
         long t2 = System.currentTimeMillis();
         DaaSGenerator daaSGenerator = new DaaSGenerator(qorModel);
@@ -127,7 +127,7 @@ public class Generator {
         
         String elasticityProcessesXML = "";
         try {
-            elasticityProcessesXML = JAXBUtils.marshal(elasticDataAsset.getElasticProcess(), ElasticProcess.class);
+            elasticityProcessesXML = JAXBUtils.marshal(elasticDataAsset.getElasticProcess(), DataElasticityManagementProcessesGenerator.class);
         } catch (JAXBException ex) {
             java.util.logging.Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
         }
