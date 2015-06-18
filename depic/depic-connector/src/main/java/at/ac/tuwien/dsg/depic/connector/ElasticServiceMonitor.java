@@ -10,8 +10,8 @@ import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticServices;
 import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
-import at.ac.tuwien.dsg.comot.client.DefaultSalsaClient;
-import at.ac.tuwien.dsg.comot.orchestrator.interraction.salsa.SalsaInterraction;
+//import at.ac.tuwien.dsg.comot.client.DefaultSalsaClient;
+//import at.ac.tuwien.dsg.comot.orchestrator.interraction.salsa.SalsaInterraction;
 import at.ac.tuwien.dsg.depic.common.utils.Configuration;
 
 import java.util.ArrayList;
@@ -37,15 +37,17 @@ public class ElasticServiceMonitor implements Runnable {
     public void run() {
 
         do {
-            Configuration cfg = new Configuration();
+            
+            
+            /*Configuration cfg = new Configuration();
             DefaultSalsaClient defaultSalsaClient = new DefaultSalsaClient();
             defaultSalsaClient.getConfiguration().setHost(cfg.getConfig("SALSA.IP"));
             defaultSalsaClient.getConfiguration().setPort(Integer.parseInt(cfg.getConfig("SALSA.PORT")));
             SalsaInterraction salsaInterraction = new SalsaInterraction().withDefaultSalsaClient(defaultSalsaClient);
-
+*/
             String cloudServiceID = comotConnector.getCloudServiceID();
 
-            salsaInterraction.waitUntilRunning(cloudServiceID);
+        //    salsaInterraction.waitUntilRunning(cloudServiceID);
 
             List<ElasticService> listOfElasticServices = comotConnector.getCloudServiceInfo();
             // ElasticServices elasticServices = new ElasticServices(listOfElasticServices);

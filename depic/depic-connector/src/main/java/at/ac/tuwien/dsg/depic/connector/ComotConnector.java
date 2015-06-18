@@ -12,7 +12,7 @@ import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
-
+/*
 import static at.ac.tuwien.dsg.comot.common.model.ArtifactTemplate.SingleScriptArtifact;
 
 import static at.ac.tuwien.dsg.comot.common.model.CloudService.ServiceTemplate;
@@ -36,9 +36,13 @@ import static at.ac.tuwien.dsg.comot.common.model.OperatingSystemUnit.OperatingS
 import at.ac.tuwien.dsg.comot.common.model.ServiceTopology;
 import at.ac.tuwien.dsg.comot.common.model.ServiceUnit;
 
+import at.ac.tuwien.dsg.comot.orchestrator.interraction.COMOTOrchestrator;
+
+*/
+
 import at.ac.tuwien.dsg.depic.repository.ElasticProcessRepositoryManager;
 
-import at.ac.tuwien.dsg.comot.orchestrator.interraction.COMOTOrchestrator;
+
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ResourceControlPlan;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
@@ -164,7 +168,7 @@ public class ComotConnector {
 
 
     public void deployCloudSevices2() {
-
+/*
         // monitoring_services_topology 
         ServiceTopology monitoringServicesTopology = ServiceTopology("Monitoring_Services_Topology");
 
@@ -294,11 +298,12 @@ public class ComotConnector {
 
         //   orchestrator.controlExisting(cloudService);
         //  return cloudService.getId();
+        */
     }
     
     
  public void deployCloudSevices() {
-
+/*
         // monitoring_services_topology 
         ServiceTopology monitoringServicesTopology = ServiceTopology("Monitoring_Services_Topology");
 
@@ -405,6 +410,7 @@ public class ComotConnector {
 
         //   orchestrator.controlExisting(cloudService);
         //  return cloudService.getId();
+        */
     }
 
     public List<ElasticService> getCloudServiceInfo() {
