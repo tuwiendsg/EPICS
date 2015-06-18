@@ -45,24 +45,14 @@
             <groupId>at.ac.tuwien.dsg.comot</groupId>
             <artifactId>comot-fluent-client</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>at.ac.tuwien.mela</groupId>
-                    <artifactId>MELA-Common</artifactId>
-                </exclusion>
-            </exclusions>
+
         </dependency>
 
         <dependency>
             <groupId>at.ac.tuwien.dsg.comot</groupId>
             <artifactId>comot-fluent-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>at.ac.tuwien.mela</groupId>
-                    <artifactId>MELA-Common</artifactId>
-                </exclusion>
-            </exclusions>
+      
         </dependency>
         
         <dependency>
