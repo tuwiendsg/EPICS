@@ -219,9 +219,12 @@ public class MySqlDataAssetStore implements DataStore{
         String paritionID = request.getPartitionID();
         String daPartitionStr="";
         
+        Configuration cfg = new Configuration();
+        String dataPath = cfg.getConfig("DATA.REPO.PATH");
+        
         String fileName = request.getDataAssetID()+".data";
         
-        at.ac.tuwien.dsg.depic.common.utils.IOUtils iou = new at.ac.tuwien.dsg.depic.common.utils.IOUtils("/home/ubuntu/mydb");
+        at.ac.tuwien.dsg.depic.common.utils.IOUtils iou = new at.ac.tuwien.dsg.depic.common.utils.IOUtils(dataPath);
         daPartitionStr = iou.readData(fileName);
         
         
