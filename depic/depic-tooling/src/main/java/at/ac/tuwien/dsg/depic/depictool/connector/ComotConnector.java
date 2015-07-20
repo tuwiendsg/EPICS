@@ -162,7 +162,7 @@ public class ComotConnector {
     }
 
    
-      public void deployCloudSevices() {
+      public void deployCloudSevices2() {
 
         // monitoring_services_topology 
         ServiceTopology monitoringServicesTopology = ServiceTopology("Monitoring_Services_Topology");
@@ -205,7 +205,7 @@ public class ComotConnector {
             Logger.logInfo("DEPLOY: Monitoring Action: " + dpa.getActionID());
             ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
                     .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"))
-                    .withMinInstances(0)
+                  //  .withMinInstances(0)
                     .provides(eventProcessingUnitScaleIn, eventProcessingUnitScaleOut)
                     .controlledBy(
                             Strategy("EP_ST1_" + (i++))
@@ -242,7 +242,7 @@ public class ComotConnector {
             Logger.logInfo("DEPLOY: Control Action: " + dpa.getActionID());
             ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
                     .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"))
-                    .withMinInstances(0)
+                  //  .withMinInstances(0)
                     .provides(eventProcessingUnitScaleIn, eventProcessingUnitScaleOut)
                     .controlledBy(Strategy("EP_ST1_" + (i++))
                             .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric("cpuUsage", "%")).lessThan("20"))
@@ -286,7 +286,7 @@ public class ComotConnector {
         //  return cloudService.getId();
     }
 
-    public void deployCloudSevices2() {
+    public void deployCloudSevices() {
 
         // monitoring_services_topology 
         ServiceTopology monitoringServicesTopology = ServiceTopology("Monitoring_Services_Topology");
@@ -329,7 +329,7 @@ public class ComotConnector {
             Logger.logInfo("DEPLOY: Monitoring Action: " + dpa.getActionID());
             ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
                     .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"))
-                    .withMinInstances(0)
+               //     .withMinInstances(0)
                     .provides(eventProcessingUnitScaleIn, eventProcessingUnitScaleOut)
                     .controlledBy(
                             Strategy("EP_ST1_" + (i++))
@@ -368,7 +368,7 @@ public class ComotConnector {
             Logger.logInfo("DEPLOY: Control Action: " + dpa.getActionID());
             ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
                     .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"))
-                    .withMinInstances(0)
+               //     .withMinInstances(0)
                     .provides(eventProcessingUnitScaleIn, eventProcessingUnitScaleOut)
                     .controlledBy(Strategy("EP_ST1_" + (i++))
                             .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric(getControlMetric(dpa.getActionID()), "%"))
@@ -404,17 +404,17 @@ public class ComotConnector {
 //                .from(serviceUnit_edaas)
 //                .to(vm_edaas));
         // deployment
-        COMOTOrchestrator orchestrator = new COMOTOrchestrator()
+        COMOTOrchestrator orchestrator = new COMOTOrchestrator(cfg.getConfig("SALSA.IP"));
                 //we have SALSA as cloud management tool
                 //curently deployed separately
 
-                .withSalsaIP(cfg.getConfig("SALSA.IP"))
-                .withSalsaPort(Integer.parseInt(cfg.getConfig("SALSA.PORT")))
-                .withRsyblIP(cfg.getConfig("RSYBL.IP"))
-                .withRsyblPort(Integer.parseInt(cfg.getConfig("RSYBL.PORT")));
-
-        //deploy, monitor and control
-        //orchestrator.deployAndControl(cloudService);
+//                .withSalsaIP(cfg.getConfig("SALSA.IP"))
+//                .withSalsaPort(Integer.parseInt(cfg.getConfig("SALSA.PORT")))
+//                .withRsyblIP(cfg.getConfig("RSYBL.IP"))
+//                .withRsyblPort(Integer.parseInt(cfg.getConfig("RSYBL.PORT")));
+//
+//        //deploy, monitor and control
+//        //orchestrator.deployAndControl(cloudService);
         orchestrator.deployAndControl(cloudService);
 
         //   orchestrator.controlExisting(cloudService);
