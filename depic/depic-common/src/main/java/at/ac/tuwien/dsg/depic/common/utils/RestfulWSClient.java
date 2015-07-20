@@ -5,17 +5,13 @@
  */
 package at.ac.tuwien.dsg.depic.common.utils;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.logging.Level;
+
 import java.util.logging.Logger;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import com.sun.jersey.api.client.Client;  
+import com.sun.jersey.api.client.ClientResponse;  
+import com.sun.jersey.api.client.WebResource; 
+import javax.ws.rs.core.MediaType;
+
 
 /**
  *
@@ -23,7 +19,7 @@ import org.apache.http.impl.client.HttpClients;
  */
 public class RestfulWSClient {
 
-    private CloseableHttpClient httpClient = HttpClients.createDefault();
+  
     private String ip;
     private String port;
     private String resource;
@@ -42,17 +38,6 @@ public class RestfulWSClient {
         this.url = url;
     }
     
-    
-    
-    
-
-    public CloseableHttpClient getHttpClient() {
-        return httpClient;
-    }
-
-    public void setHttpClient(CloseableHttpClient httpClient) {
-        this.httpClient = httpClient;
-    }
 
     public String getIp() {
         return ip;
@@ -86,147 +71,78 @@ public class RestfulWSClient {
         this.url = url;
     }
 
-    public String callPutMethod(String xmlString) {
-        String rs="";
-        
-        try {
+    public <T> T callPutMethod(Object object, Class<T> configurationClass) {
 
-            //HttpGet method = new HttpGet(url);
-            StringEntity inputKeyspace = new StringEntity(xmlString);
-
-            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO, "Connection .. " + url);
-
-            HttpPut request = new HttpPut(url);
-            request.addHeader("content-type", "application/xml; charset=utf-8");
-            request.addHeader("Accept", "application/xml, multipart/related");
-            request.setEntity(inputKeyspace);
-
-            HttpResponse methodResponse = this.getHttpClient().execute(request);
-
-            int statusCode = methodResponse.getStatusLine().getStatusCode();
-
-            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO, "Status Code: " + statusCode);
-            BufferedReader rd = new BufferedReader(
-                    new InputStreamReader(methodResponse.getEntity().getContent()));
-
-            StringBuilder result = new StringBuilder();
-            String line;
-            while ((line = rd.readLine()) != null) {
-                result.append(line);
-            }
-
-            rs = result.toString();
-          
-        } catch (Exception ex) {
-            System.err.println(ex);
+        //put get response data
+        Client client = Client.create();
+        WebResource webResource = client.resource(url);
+        ClientResponse response = webResource.type("application/xml").accept("application/xml").put(ClientResponse.class, object);
+        if (response.getStatus() != 200) {
+            throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
         }
-        return rs;
+
+        T output = (T) response.getEntity(configurationClass);
+
+        return output;
     }
     
     
     public int callPutMethodRC(String xmlString) {
-        int statusCode =0;
         
-        try {
+        //put get response code
 
-            //HttpGet method = new HttpGet(url);
-            StringEntity inputKeyspace = new StringEntity(xmlString);
-
-            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO, "Connection .. " + url);
-
-            HttpPut request = new HttpPut(url);
-            request.addHeader("content-type", "application/xml; charset=utf-8");
-            request.addHeader("Accept", "application/xml, multipart/related");
-            request.setEntity(inputKeyspace);
-
-            HttpResponse methodResponse = this.getHttpClient().execute(request);
-
-            statusCode = methodResponse.getStatusLine().getStatusCode();
-
-            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO, "Status Code: " + statusCode);
-            
-            // System.out.println("Response String: " + result.toString());
-        } catch (Exception ex) {
-            System.err.println(ex);
+        Client client = Client.create();
+        WebResource webResource = client.resource(url);
+        ClientResponse response = webResource.type("application/xml").accept("application/xml").put(ClientResponse.class, xmlString);
+        if (response.getStatus() != 200) {
+            throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
         }
-        return statusCode;
+      
+        return response.getStatus();
     }
 
     public void callPostMethod(String xmlString) {
 
-        try {
-
-            //HttpGet method = new HttpGet(url);
-            StringEntity inputKeyspace = new StringEntity(xmlString);
-            System.out.println("Connection .. " + url);
-            //HttpPut request = new HttpPut(url);
-
-            HttpPost request = new HttpPost(url);
-            request.addHeader("content-type", "application/json");
-          // request.addHeader("content-type", "application/x-www-form-urlencoded");
-
-            // request.addHeader("Accept", "application/json, multipart/related");
-            request.setEntity(inputKeyspace);
-
-            HttpResponse methodResponse = this.getHttpClient().execute(request);
-
-            int statusCode = methodResponse.getStatusLine().getStatusCode();
-
-            System.out.println("Status Code: " + statusCode);
-            BufferedReader rd = new BufferedReader(
-                    new InputStreamReader(methodResponse.getEntity().getContent()));
-
-            StringBuilder result = new StringBuilder();
-            String line;
-            while ((line = rd.readLine()) != null) {
-                result.append(line);
-            }
-
-            System.out.println("Response String: " + result.toString());
-        } catch (Exception ex) {
-            System.err.println("Exception: " + ex.toString());
-        }
+        
 
     }
     
     
     public String callGetMethod() {
         String rs="";
-        try {
-
-            //HttpGet method = new HttpGet(url);
-          
-            System.out.println("Connection .. " + url);
-            //HttpPut request = new HttpPut(url);
-
-            HttpGet request = new HttpGet(url);
-            request.addHeader("content-type", "application/json");
-          // request.addHeader("content-type", "application/x-www-form-urlencoded");
-
-            // request.addHeader("Accept", "application/json, multipart/related");
         
-
-            HttpResponse methodResponse = this.getHttpClient().execute(request);
-
-            int statusCode = methodResponse.getStatusLine().getStatusCode();
-
-            System.out.println("Status Code: " + statusCode);
-            BufferedReader rd = new BufferedReader(
-                    new InputStreamReader(methodResponse.getEntity().getContent()));
-
-            StringBuilder result = new StringBuilder();
-            String line;
-            while ((line = rd.readLine()) != null) {
-                result.append(line);
-            }
-            rs=result.toString();
-            //System.out.println("Response String: " + result.toString());
-        } catch (Exception ex) {
-            System.err.println("Exception: " + ex.toString());
-        }
-        
+        try {  
+            Client client = Client.create();  
+            WebResource webResource = client.resource(url);  
+            ClientResponse response = webResource.type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML).get(ClientResponse.class);  
+            if (response.getStatus() != 200) {  
+                throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());  
+            }  
+   
+            String output = response.getEntity(String.class);  
+            System.out.println("\n============getCResponse============");  
+            System.out.println(output);  
+   
+        } catch (Exception e) {  
+            e.printStackTrace();  
+        }  
+      
         return rs;
 
+    }
+
+    public String callPutMethod(String xmlStr) {
+        //put get response data
+        Client client = Client.create();
+        WebResource webResource = client.resource(url);
+        ClientResponse response = webResource.type("application/xml").accept("application/xml").put(ClientResponse.class, xmlStr);
+        if (response.getStatus() != 200) {
+            throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+        }
+
+        String output =  response.getEntity(String.class);
+        
+        return output;
     }
 
 }

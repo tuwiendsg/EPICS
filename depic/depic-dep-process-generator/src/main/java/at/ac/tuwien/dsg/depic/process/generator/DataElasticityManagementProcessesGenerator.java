@@ -61,27 +61,16 @@ public class DataElasticityManagementProcessesGenerator {
 
     public DataElasticityManagementProcessesGenerator() {
     }
-    
-    
 
-/**
- * 
- * @param daf Data Analytics Function
- * @param qorModel Quality of Results
- */    
+
+    
     public DataElasticityManagementProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel) {
         this.daf = daf;
         this.qorModel = qorModel;
         config();
     }
-    
-    /**
-     * 
-     * @param daf
-     * @param qorModel
-     * @param primitiveActionRepository
-     * @param rooPath 
-     */
+
+
     public DataElasticityManagementProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository, String rooPath) {
         this.daf = daf;
         this.qorModel = qorModel;
@@ -89,23 +78,24 @@ public class DataElasticityManagementProcessesGenerator {
         config();
     }
 
-    /**
-     * 
-     * @return Data Elasticity Management Process includes Monitoring Process, Adjustment Processes and Resource Control Plans
-     */
+
+    
     public DataElasticityManagementProcess generateElasticProcesses() {
         Logger.logInfo("Start generate Elastic Processes ... ");
 
-        MonitoringProcess monitorProcess = generateMonitoringProcess();
+        MonitoringProcessGenerator mpg = new MonitoringProcessGenerator();
+        MonitoringProcess monitorProcess = mpg.generateMonitoringProcess();
         toYaml(monitorProcess, "monitorProcess.yml");
 
         finalElasticStates = generateFinalElasticStateSet();
         toYaml(finalElasticStates, "finalElasticStates.yml");
 
-        List<AdjustmentProcess> listOfAdjustmentProcesses = generateAdjustmentProcesses(finalElasticStates);
+        AdjustmentProcessGenerator apg = new AdjustmentProcessGenerator();
+        List<AdjustmentProcess> listOfAdjustmentProcesses = apg.generateAdjustmentProcesses(finalElasticStates);
         toYaml(listOfAdjustmentProcesses, "listOfAdjustmentProcesses.yml");
 
-        List<ResourceControlPlan> listOfResourceControlPlans = generateResourceControlPlan(finalElasticStates);
+        ResourceControlPlanGenerator rcpg = new ResourceControlPlanGenerator();
+        List<ResourceControlPlan> listOfResourceControlPlans = rcpg.generateResourceControlPlan(finalElasticStates);
         toYaml(listOfResourceControlPlans, "listOfResourceControlPlans.yml");
 
         DataElasticityManagementProcess depProcess = new DataElasticityManagementProcess(monitorProcess, listOfAdjustmentProcesses, listOfResourceControlPlans);
@@ -120,132 +110,6 @@ public class DataElasticityManagementProcessesGenerator {
         return finalElasticStates;
     }
 
-    ///////////////////////////////////////
-    ///                                 ///
-    /// Monitoring Process              ///
-    ///                                 ///
-    ///////////////////////////////////////
-    
-    
-    private MonitoringProcess generateMonitoringProcess() {
-
-        List<MonitoringAction> listOfMonitoringActions = new ArrayList<MonitoringAction>();
-
-        List<QoRMetric> listOfQoRMetrics = qorModel.getListOfMetrics();
-
-        for (QoRMetric metric : listOfQoRMetrics) {
-            String qorMetricName = metric.getName();
-            MonitoringAction monitoringAction = findCorrespondingMonitoringActionFromQoRMetric(qorMetricName);
-            if (monitoringAction != null) {
-                listOfMonitoringActions.add(monitoringAction);
-            }
-        }
-        System.err.println("No of monitoring actions: " + listOfMonitoringActions.size());
-        MonitoringProcess monitorProcess = parallelizeMonitoringActions(listOfMonitoringActions);
-
-        return monitorProcess;
-    }
-
-    private MonitoringAction findCorrespondingMonitoringActionFromQoRMetric(String qorMetricName) {
-        List<MonitoringAction> listOfMonitoringActions = primitiveActionRepository.getListOfMonitoringActions();
-
-        MonitoringAction foundMonitoringAction = null;
-        for (MonitoringAction ma : listOfMonitoringActions) {
-            if (qorMetricName.equals(ma.getAssociatedQoRMetric())) {
-                foundMonitoringAction = copyMonitoringActionInstance(ma);
-            }
-        }
-
-        return foundMonitoringAction;
-    }
-
-    private MonitoringAction copyMonitoringActionInstance(MonitoringAction ma) {
-
-        Artifact artifact = new Artifact(
-                ma.getArtifact().getName(),
-                ma.getArtifact().getDescription(),
-                ma.getArtifact().getLocation(),
-                ma.getArtifact().getType(),
-                ma.getArtifact().getRestfulAPI());
-
-        List<Parameter> listOfParameters = new ArrayList<Parameter>();
-
-        for (Parameter param : ma.getListOfParameters()) {
-
-            Parameter paramI = new Parameter(
-                    param.getParameterName(),
-                    param.getType(),
-                    param.getValue());
-
-            listOfParameters.add(paramI);
-
-        }
-
-        MonitoringAction monitoringAction = new MonitoringAction(
-                ma.getMonitorActionID(),
-                ma.getMonitoringActionName(),
-                artifact,
-                ma.getAssociatedQoRMetric(),
-                listOfParameters);
-
-        return monitoringAction;
-    }
-
-    private MonitoringProcess parallelizeMonitoringActions(List<MonitoringAction> listOfMonitoringActions) {
-
-        List<Action> listOfAction = new ArrayList<Action>();
-
-        for (MonitoringAction ma : listOfMonitoringActions) {
-
-            String actionID = getUDID();
-            ma.setMonitorActionID(actionID);
-
-            Action action = new Action(actionID, ma.getMonitoringActionName());
-            listOfAction.add(action);
-        }
-
-        String parallelGatewayInId = getUDID();
-        String parallelGatewayOutId = getUDID();
-        List<String> inputListOfIncommings = new ArrayList<String>();
-        List<String> inputlistOfOutgoings = new ArrayList<String>();
-        List<String> outputListOfIncommings = new ArrayList<String>();
-        List<String> outListOfOutgoings = new ArrayList<String>();
-
-        for (Action action : listOfAction) {
-            action.setIncomming(parallelGatewayInId);
-            action.setOutgoing(parallelGatewayOutId);
-            inputlistOfOutgoings.add(action.getActionID());
-            outputListOfIncommings.add(action.getActionID());
-        }
-
-        ParallelGateway pg_in = new ParallelGateway(parallelGatewayInId, inputListOfIncommings, inputlistOfOutgoings);
-        ParallelGateway pg_out = new ParallelGateway(parallelGatewayOutId, outputListOfIncommings, outListOfOutgoings);
-
-        List<ParallelGateway> listOfParallelGateways = new ArrayList<ParallelGateway>();
-        listOfParallelGateways.add(pg_in);
-        listOfParallelGateways.add(pg_out);
-
-        DirectedAcyclicalGraph dag = new DirectedAcyclicalGraph();
-        dag.setListOfActions(listOfAction);
-        dag.setListOfParallelGateways(listOfParallelGateways);
-
-        MonitoringProcess monitoringProcess = new MonitoringProcess(listOfMonitoringActions, dag);
-
-        return monitoringProcess;
-    }
-
-    private String getUDID() {
-        UUID actionID = UUID.randomUUID();
-        return actionID.toString();
-    }
-
-    ///////////////////////////////////////
-    ///                                 ///
-    /// Final EState Set                ///
-    ///                                 ///
-    ///////////////////////////////////////
-    
-    
     public List<ElasticState> generateFinalElasticStateSet() {
 
         List<ElasticState> listOfFinalElasticStates = new ArrayList<ElasticState>();
@@ -426,14 +290,11 @@ public class DataElasticityManagementProcessesGenerator {
                 break;
             }
         }
-        
-        
-        if (listOfAdjustmentCases==null && !isAssociatedWithResourceControlAction(qorMetric.getName())) {      
-            errorLog = errorLog + "\n No adjustment action found for metric " + qorMetric.getName() + ". Conditions of this metric are not added to eState.";                        
+
+        if (listOfAdjustmentCases == null && !isAssociatedWithResourceControlAction(qorMetric.getName())) {
+            errorLog = errorLog + "\n No adjustment action found for metric " + qorMetric.getName() + ". Conditions of this metric are not added to eState.";
             System.err.println(errorLog);
         }
-        
-        
 
         List<MetricCondition> listOfConditions = new ArrayList<MetricCondition>();
 
@@ -531,34 +392,6 @@ public class DataElasticityManagementProcessesGenerator {
         return randomNumber;
     }
 
-    ///////////////////////////////////////
-    ///                                 ///
-    /// Adjustment Process              ///
-    ///                                 ///
-    ///////////////////////////////////////
-    public List<AdjustmentProcess> generateAdjustmentProcesses(List<ElasticState> listOfFinalElasticStates) {
-
-        List<AdjustmentProcess> listOfAdjustmentProcesses = new ArrayList<AdjustmentProcess>();
-
-        for (ElasticState elasticState : listOfFinalElasticStates) {
-            List<MetricCondition> listOfConditions = elasticState.getListOfConditions();
-
-            List<AdjustmentAction> listOfAdjustmentActions = new ArrayList<AdjustmentAction>();
-            for (MetricCondition metricCondition : listOfConditions) {
-                AdjustmentAction adjustmentAction = findAdjustmentAction(metricCondition);
-                if (adjustmentAction != null) {
-                    listOfAdjustmentActions.add(adjustmentAction);
-                }
-            }
-
-            AdjustmentProcess adjustmentProcess = new AdjustmentProcess(elasticState, listOfAdjustmentActions, null);
-            buildWorkflowForAdjustmentProcess(adjustmentProcess);
-            listOfAdjustmentProcesses.add(adjustmentProcess);
-
-        }
-
-        return listOfAdjustmentProcesses;
-    }
 
     private boolean isAssociatedWithResourceControlAction(String metricName) {
         boolean rs = false;
@@ -588,444 +421,25 @@ public class DataElasticityManagementProcessesGenerator {
         return rs;
     }
 
-    private AdjustmentAction findAdjustmentAction(MetricCondition metricCondition) {
-        List<AdjustmentAction> listOfAdjustmentActions = primitiveActionRepository.getListOfAdjustmentActions();
-
-        AdjustmentAction foundAdjustmentAction = null;
-        for (AdjustmentAction adjustmentAction : listOfAdjustmentActions) {
-            if (metricCondition.getMetricName().equals(adjustmentAction.getAssociatedQoRMetric())) {
-                List<AdjustmentCase> listOfAdjustmentCases = adjustmentAction.getListOfAdjustmentCases();
-
-                for (AdjustmentCase adjustmentCase : listOfAdjustmentCases) {
-
-                    if (adjustmentCase.getEstimatedResult() == null) {
-                        
-
-                    } else {
-
-                        if (adjustmentCase.getEstimatedResult().getLowerBound() >= metricCondition.getLowerBound()
-                                && adjustmentCase.getEstimatedResult().getUpperBound() <= metricCondition.getUpperBound()) {
-
-                            if (adjustmentCase.getAnalyticTask() == null) {
-                                MetricCondition estimatedResult = adjustmentCase.getEstimatedResult();
-                                MetricCondition estimatedResult_c = new MetricCondition(estimatedResult.getMetricName(), estimatedResult.getConditionID(), estimatedResult.getLowerBound(), estimatedResult.getUpperBound());
-                                List<Parameter> listOfParams = adjustmentCase.getListOfParameters();
-                                List<Parameter> listOfParams_c = new ArrayList<Parameter>();
-                                for (Parameter param : listOfParams) {
-                                    Parameter param_c = new Parameter(param.getParameterName(), param.getType(), param.getValue());
-                                    listOfParams_c.add(param_c);
-                                }
-
-                                AdjustmentCase foundAdjustmentCase = new AdjustmentCase(
-                                        estimatedResult_c,
-                                        adjustmentCase.getAnalyticTask(),
-                                        listOfParams_c);
-
-                                List<AdjustmentCase> listOfFoundAdjustmentCases = new ArrayList<AdjustmentCase>();
-                                listOfFoundAdjustmentCases.add(foundAdjustmentCase);
-
-                                foundAdjustmentAction = new AdjustmentAction(
-                                        adjustmentAction.getActionID(),
-                                        adjustmentAction.getActionName(),
-                                        adjustmentAction.getArtifact(),
-                                        adjustmentAction.getAssociatedQoRMetric(),
-                                        adjustmentAction.getListOfPrerequisiteActionIDs(),
-                                        listOfFoundAdjustmentCases);
-
-                                System.err.println("Found Action: " + adjustmentAction.getActionName());
-                                System.err.println("Metric Condtidion: " + metricCondition.getMetricName() + " - " + metricCondition.getLowerBound() + " - " + metricCondition.getUpperBound());
-                                System.err.println("Estimated Result: " + estimatedResult.getLowerBound() + " - " + estimatedResult.getUpperBound());
-                            } else {
-                                if (matchingAnalyticTaskFromDAF(adjustmentCase.getAnalyticTask())) {
-                                    MetricCondition estimatedResult = adjustmentCase.getEstimatedResult();
-                                    MetricCondition estimatedResult_c = new MetricCondition(estimatedResult.getMetricName(), estimatedResult.getConditionID(), estimatedResult.getLowerBound(), estimatedResult.getUpperBound());
-                                    List<Parameter> listOfParams = adjustmentCase.getListOfParameters();
-                                    List<Parameter> listOfParams_c = new ArrayList<Parameter>();
-                                    for (Parameter param : listOfParams) {
-                                        Parameter param_c = new Parameter(param.getParameterName(), param.getType(), param.getValue());
-                                        listOfParams_c.add(param_c);
-                                    }
-
-                                    AdjustmentCase foundAdjustmentCase = new AdjustmentCase(
-                                            estimatedResult_c,
-                                            adjustmentCase.getAnalyticTask(),
-                                            listOfParams_c);
-
-                                    List<AdjustmentCase> listOfFoundAdjustmentCases = new ArrayList<AdjustmentCase>();
-                                    listOfFoundAdjustmentCases.add(foundAdjustmentCase);
-
-                                    foundAdjustmentAction = new AdjustmentAction(
-                                            adjustmentAction.getActionID(),
-                                            adjustmentAction.getActionName(),
-                                            adjustmentAction.getArtifact(),
-                                            adjustmentAction.getAssociatedQoRMetric(),
-                                            adjustmentAction.getListOfPrerequisiteActionIDs(),
-                                            listOfFoundAdjustmentCases);
-                                } else {
-                                    errorLog = errorLog + "\n Analytic Task " + adjustmentCase.getAnalyticTask().getTaskName() 
-                                            + " in daf does not match. Please customize elasticity actions for metric "+metricCondition.getMetricName();
-                                    System.err.println(errorLog);
-                                }
-                            }
-
-                        }
-                    }
-
-                }
-
-            }
-        }
-        
-        
-        
-
-        return foundAdjustmentAction;
-
-    }
-
-    private void buildWorkflowForAdjustmentProcess(AdjustmentProcess adjustmentProcess) {
-
-        Logger.logInfo("BUILDING WORKFLOW FOR CONTROL PROCESS ................ ");
-
-        int numberOfActionConnection = 0;
-
-        List<AdjustmentAction> listOfAdjustmentActions = adjustmentProcess.getListOfAdjustmentActions();
-        List<Action> listOfActions = new ArrayList<Action>();
-
-        List<ParallelGateway> listOfParallelGateways = new ArrayList<ParallelGateway>();
-
-        for (AdjustmentAction adjustmentAction : listOfAdjustmentActions) {
-            String actionID = getUDID();
-            adjustmentAction.setActionID(actionID);
-            Action action = new Action(actionID, adjustmentAction.getActionName());
-            listOfActions.add(action);
-        }
-
-        for (Action action : listOfActions) {
-
-            List<String> listOfActionDependencies = findDependencyActions(action);
-
-            Logger.logInfo("No of Dependency Actions: " + listOfActionDependencies.size());
-            if (listOfActionDependencies.size() > 1) {
-
-                ParallelGateway parallelGateway = new ParallelGateway();
-                List<String> incomingList = new ArrayList<String>();
-                List<String> outgoingList = new ArrayList<String>();
-
-                outgoingList.add(action.getActionID());
-
-                UUID parallelGatewayID = UUID.randomUUID();
-                parallelGateway.setGatewayID(parallelGatewayID.toString());
-                action.setIncomming(parallelGateway.getGatewayID());
-                numberOfActionConnection++;
-
-                Logger.logInfo("NEW Parallel Gateway ID: " + parallelGateway.getGatewayID());
-                Logger.logInfo("PG set outgoing ID : " + action.getActionID());
-
-                for (String actionDependency : listOfActionDependencies) {
-
-                    int prerequisiteActionIndex = findActionIndex(listOfActions, actionDependency);
-                    Action prerequisiteAction = listOfActions.get(prerequisiteActionIndex);
-
-                    Logger.logInfo("ActionDependency Name: " + prerequisiteAction.getActionName());
-                    Logger.logInfo("ActionDependency ID: " + prerequisiteAction.getActionID());
-
-                    prerequisiteAction.setOutgoing(parallelGateway.getGatewayID());
-                    incomingList.add(prerequisiteAction.getActionID());
-                    numberOfActionConnection++;
-
-                }
-
-                parallelGateway.setIncomming(incomingList);
-                parallelGateway.setOutgoing(outgoingList);
-                listOfParallelGateways.add(parallelGateway);
-
-            } else if (listOfActionDependencies.size() == 1) {
-                String actionDependency = listOfActionDependencies.get(0);
-                int prerequisiteActionIndex = findActionIndex(listOfActions, actionDependency);
-                Action prerequisiteAction = listOfActions.get(prerequisiteActionIndex);
-
-                if (!prerequisiteAction.getActionID().equals(action.getOutgoing())) {
-                    action.setIncomming(prerequisiteAction.getActionID());
-                    prerequisiteAction.setOutgoing(action.getActionID());
-                    numberOfActionConnection++;
-                }
-            }
-
-        }
-
-        // MAKE START ACTIVITY
-        List<Action> nullIncommingAdjustmentActions = new ArrayList<Action>();
-        List<ParallelGateway> nullIncommingParallelGateways = new ArrayList<ParallelGateway>();
-
-        for (Action ca : listOfActions) {
-            if (ca.getIncomming() == null) {
-                nullIncommingAdjustmentActions.add(ca);
-            }
-
-        }
-
-        for (ParallelGateway pg : listOfParallelGateways) {
-            if (pg.getIncomming().isEmpty()) {
-                nullIncommingParallelGateways.add(pg);
-            }
-        }
-
-        if (nullIncommingAdjustmentActions.size() >= 2) {
-            List<String> startPGIncomingList = new ArrayList<String>();
-            List<String> startPGOutgoingList = new ArrayList<String>();
-            ParallelGateway startPG = new ParallelGateway();
-
-            UUID startParallelGatewayID = UUID.randomUUID();
-            startPG.setGatewayID(startParallelGatewayID.toString());
-
-            for (Action ca : nullIncommingAdjustmentActions) {
-                startPGOutgoingList.add(ca.getActionID());
-                ca.setIncomming(startPG.getGatewayID());
-                numberOfActionConnection++;
-            }
-
-            for (ParallelGateway pg : nullIncommingParallelGateways) {
-                startPGOutgoingList.add(pg.getGatewayID());
-                pg.getIncomming().add(startPG.getGatewayID());
-            }
-            startPG.setIncomming(startPGIncomingList);
-            startPG.setOutgoing(startPGOutgoingList);
-            listOfParallelGateways.add(startPG);
-        }
-
-        // MAKE END ACTIVITY
-        List<Action> nullOutgoingAdjustmentActions = new ArrayList<Action>();
-        List<ParallelGateway> nullOutgoingParallelGateways = new ArrayList<ParallelGateway>();
-        for (Action ca : listOfActions) {
-            if (ca.getOutgoing() == null) {
-                nullOutgoingAdjustmentActions.add(ca);
-            }
-
-        }
-
-        for (ParallelGateway pg : listOfParallelGateways) {
-            if (pg.getOutgoing().isEmpty()) {
-                nullOutgoingParallelGateways.add(pg);
-            }
-        }
-        if (nullOutgoingAdjustmentActions.size() >= 2) {
-
-            List<String> endPGIncomingList = new ArrayList<String>();
-            List<String> endPGOutgoingList = new ArrayList<String>();
-            ParallelGateway endPG = new ParallelGateway();
-
-            UUID endParallelGatewayID = UUID.randomUUID();
-            endPG.setGatewayID(endParallelGatewayID.toString());
-
-            for (Action ca : nullOutgoingAdjustmentActions) {
-                endPGIncomingList.add(ca.getActionID());
-                ca.setOutgoing(endPG.getGatewayID());
-                numberOfActionConnection++;
-            }
-
-            for (ParallelGateway pg : nullOutgoingParallelGateways) {
-                endPGIncomingList.add(pg.getGatewayID());
-                pg.getOutgoing().add(endPG.getGatewayID());
-            }
-            endPG.setIncomming(endPGIncomingList);
-            endPG.setOutgoing(endPGOutgoingList);
-            listOfParallelGateways.add(endPG);
-        }
-
-        DirectedAcyclicalGraph dag = new DirectedAcyclicalGraph();
-        dag.setListOfActions(listOfActions);
-        dag.setListOfParallelGateways(listOfParallelGateways);
-        numberOfActionConnection += 2;
-        int noOfActions = listOfActions.size();
-        adjustmentProcess.setDirectedAcyclicalGraph(dag);
-
-        Logger.logInfo("no_of_connection: " + numberOfActionConnection);
-        Logger.logInfo("no_of_action: " + noOfActions);
-
-    }
-
-    private int findActionIndex(List<Action> listOfActions, String prerequisiteAction) {
-
-        int index = 0;
-
-        for (Action ca : listOfActions) {
-            if (ca.getActionName().equals(prerequisiteAction)) {
-                index = listOfActions.indexOf(ca);
-                break;
-            }
-
-        }
-
-        return index;
-    }
-
-    private List<String> findDependencyActions(Action action) {
-
-        List<String> prerequisiteActionNames = new ArrayList<String>();
-        List<AdjustmentAction> listOfAdjustmentActions = primitiveActionRepository.getListOfAdjustmentActions();
-
-        for (AdjustmentAction adjustmentAction : listOfAdjustmentActions) {
-            if (adjustmentAction.getActionName().endsWith(action.getActionName())) {
-                prerequisiteActionNames = adjustmentAction.getListOfPrerequisiteActionIDs();
-                break;
-            }
-        }
-
-        return prerequisiteActionNames;
-    }
-
-    private boolean matchingAnalyticTaskFromDAF(AnalyticTask pamAnalyticTask) {
-        AnalyticTask analyticTask = null;
-        try {
-            String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>";
-
-            String daw = daf.getDaw();
-
-            int beginIndex = daw.indexOf("<depic>");
-            int endIndex = daw.indexOf("</depic>");
-            String analyticTasksStr = header + daw.substring(beginIndex + 7, endIndex);
-            analyticTask = JAXBUtils.unmarshal(analyticTasksStr, AnalyticTask.class);
-
-        } catch (JAXBException ex) {
-            java.util.logging.Logger.getLogger(DataElasticityManagementProcessesGenerator.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        boolean rs = true;
-        if (pamAnalyticTask != null && analyticTask != null) {
-
-            if (pamAnalyticTask.getTaskName().equals(analyticTask.getTaskName())) {
-
-                List<Parameter> listOfParameters1 = analyticTask.getParameters();
-                List<Parameter> listOfParameters2 = pamAnalyticTask.getParameters();
-
-                for (Parameter pam1 : listOfParameters1) {
-                    for (Parameter pam2 : listOfParameters2) {
-                        if (pam1.getParameterName().equals(pam2.getParameterName())) {
-                            if (!pam1.getValue().equals(pam2.getValue())) {
-                                rs = false;
-                            }
-                        }
-
-                    }
-
-                }
-
-            } else {
-                rs = false;
-            }
-
-        } else {
-            rs = false;
-        }
-
-        return rs;
-
-    }
-
-    ///////////////////////////////////////
-    ///                                 ///
-    /// Resource Control PLan           ///
-    ///                                 ///
-    ///////////////////////////////////////
-    private List<ResourceControlPlan> generateResourceControlPlan(List<ElasticState> listOfFinalElasticStates) {
-
-        List<ResourceControlPlan> listOfFoundResourceControlPlans = new ArrayList<ResourceControlPlan>();
-
-        for (ElasticState elasticState : listOfFinalElasticStates) {
-            List<MetricCondition> listOfConditions = elasticState.getListOfConditions();
-            
-            List<ResourceControlStrategy> resourceControlStrategiesForEState = new ArrayList<ResourceControlStrategy>();
-            
-            for (MetricCondition metricCondition : listOfConditions) {
-                List<ResourceControlStrategy> listOfFoundResourceControlStrategies = findResourceControlStrategy(metricCondition);
-                if (listOfFoundResourceControlStrategies.size() > 0) {
-                    resourceControlStrategiesForEState.addAll(listOfFoundResourceControlStrategies);
-                } 
-            }
-            
-            for (int i=0; i<resourceControlStrategiesForEState.size();i++){
-                for (int j=0; j<resourceControlStrategiesForEState.size();j++) {
-                    if (i!=j) {
-                        if (resourceControlStrategiesForEState.get(i).getPrimitiveAction().equals(resourceControlStrategiesForEState.get(j).getPrimitiveAction())){
-                            errorLog = errorLog + "\n Duplicate resource strategy for primitive action " + resourceControlStrategiesForEState.get(i).getPrimitiveAction();
-                            System.err.println(errorLog);
-                        }
-                    }  
-                }
-            }
-            
-            
-            
-            ResourceControlPlan resourceControlPlan = new ResourceControlPlan(elasticState, resourceControlStrategiesForEState);
-                    listOfFoundResourceControlPlans.add(resourceControlPlan);
-
-        }
-
-        return listOfFoundResourceControlPlans;
-    }
-
-    private List<ResourceControlStrategy> findResourceControlStrategy(MetricCondition metricCondition) {
-        List<ResourceControlAction> listOfResourceControls = primitiveActionRepository.getListOfResourceControls();
-
-        List<ResourceControlStrategy> foundListOfResourceControlStrategies = new ArrayList<ResourceControlStrategy>();
-        for (ResourceControlAction rc : listOfResourceControls) {
-            if (metricCondition.getMetricName().equals(rc.getAssociatedQoRMetric())) {
-
-                List<ResourceControlCase> listOfResourceControlCases = rc.getListOfResourceControlCases();
-
-                for (ResourceControlCase resourceControlCase : listOfResourceControlCases) {
-                    if (resourceControlCase.getEstimatedResult().getLowerBound() == metricCondition.getLowerBound()
-                            && resourceControlCase.getEstimatedResult().getUpperBound() == metricCondition.getUpperBound()) {
-
-                        foundListOfResourceControlStrategies.addAll(copyListOfResourceControlStrategy(resourceControlCase.getListOfResourceControlStrategies()));
-
-                        break;
-
-                    }
-
-                }
-
-            }
-        }
-
-        return foundListOfResourceControlStrategies;
-
-    }
-
-    private List<ResourceControlStrategy> copyListOfResourceControlStrategy(List<ResourceControlStrategy> originalList) {
-
-        List<ResourceControlStrategy> copyList = new ArrayList<ResourceControlStrategy>();
-
-        for (ResourceControlStrategy rca : originalList) {
-            MetricCondition scaleOutCo = rca.getScaleOutCondition();
-            MetricCondition scaleOutCo_c = new MetricCondition(scaleOutCo.getMetricName(), scaleOutCo.getConditionID(), scaleOutCo.getLowerBound(), scaleOutCo.getUpperBound());
-            MetricCondition scaleInCo = rca.getScaleInCondition();
-            MetricCondition scaleInCo_c = new MetricCondition(scaleInCo.getMetricName(), scaleInCo.getConditionID(), scaleInCo.getLowerBound(), scaleInCo.getUpperBound());
-            String controlMetric = rca.getControlMetric();
-            String primitiveAction = rca.getPrimitiveAction();
-            ResourceControlStrategy rca_copy = new ResourceControlStrategy(scaleInCo_c, scaleOutCo_c, controlMetric, primitiveAction);
-            copyList.add(rca_copy);
-        }
-
-        return copyList;
-    }
-    
-    private void config(){
+    private void config() {
         errorLog = "";
         loadPrimitiveActionMetadata();
-        
+
     }
-    
-    private void loadPrimitiveActionMetadata(){
-        
+
+    private String getUDID() {
+        UUID actionID = UUID.randomUUID();
+        return actionID.toString();
+    }
+
+    private void loadPrimitiveActionMetadata() {
+
         PrimitiveActionMetadataManager pamm = new PrimitiveActionMetadataManager();
         List<MonitoringAction> listOfMonitoringActions = pamm.getMonitoringActionList();
         List<AdjustmentAction> listOfAdjustmentActions = pamm.getAdjustmentActionList();
         List<ResourceControlAction> listOfResourceControlActions = pamm.getResourceControlActionList();
-        
-        PrimitiveActionMetadata pam = new PrimitiveActionMetadata(listOfAdjustmentActions, listOfMonitoringActions, listOfResourceControlActions);
-        
-    }
 
+        PrimitiveActionMetadata pam = new PrimitiveActionMetadata(listOfAdjustmentActions, listOfMonitoringActions, listOfResourceControlActions);
+
+    }
 }
