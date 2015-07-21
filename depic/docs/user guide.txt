@@ -8,29 +8,59 @@
 
 1. 	Purpose: 
 	
-	This document describes how to set up and configure DEPIC installation.
+	This document describes how to set up and run a demo of DEPIC - alpha version.ß
 	
-2. 	Configuration:
+2. 	Getting Started:
 	
-	i. Setup database for elasticity processes repository by importing DEPIC/db/ElasticityProcess.sql
-	ii. Setup the deployment service by following the SALSA installation guide (http://tuwiendsg.github.io/SALSA/) 
-	iii. Setup external service for data asset function management
-	iv. Configure connections to the elasticity processes repository, data asset loader, orchestrator and deployment data asset function management in DEPIC/config/config.properties. 	
-	v. Setup a repository for control/monitoring processes to store .war artifact and modify their locations in ElasticityProcess database.
-	
-3. 	Installation:
-	
-	It is recommended to deploy DEPIC and external services on Apache Tomcat 7.x
-	
-4. 	Getting Started:
-	
-	i. Browse the web interface of DEPIC at http://[ip]:8080/DepicTooling/ 
-	ii. Using the interface to import data asset functions, elasticity processes and QoR models, and generate eDaaS. Examples of data asset functions, elasticity processes and QoR models can be found in DEPIC/Example
+	i. Create a virtual machine
+		- minimum configuration: m1.small | 1GB RAM | 1 VCPU | 40GB Disk
+		- OS: Ubuntu 14.04 LTS
+	ii. Install core services
+		- download script to install depic service: wget http://128.130.172.215/salsa/upload/files/jun/artifact_sh/depic_install.sh 
+		- configure $DEPIC_IP in the second line of the above script (Depic needs a floating IP address, so monitoring/adjustment services can interact with Depic after their deployment): vi depic_install.sh
+		- grant execution permission for the script: sudo chmod 777 depic_install.sh
+		- execute the install script: sudo ./depic_install.sh
 
-5. 	Development of monitoring/control services for DePIC:
 	
-	To add other control/monitoring services for depic, it is necessary to put their deployment artifacts in a repository, and add their metadata into ElasticityProcess repository.
+3. 	Generating Data Elasticity Management Process:ßß
+	i. Go to user interface of depic: http://[IP]:8080//depic-tooling/
+	ii. Generate data elasticity management process from the following inputs:
+		- eDaaS Name: edaas1
+		- Quality of Results: https://github.com/tuwiendsg/EPICS/blob/alpha/depic/examples/experiment2/qor_xml.yml
+		- Data Analytics Function: https://github.com/tuwiendsg/EPICS/blob/alpha/depic/examples/experiment2/daf_gps_1.t2flow
+		- DataBase Type: MySql
+		- Click button: Generate eDaaS
+	iii. Verify the result:
+		- log folder: cd /home/ubuntu/log/
+		- Data Elasticity Management Process 
+			- Monitoring Process: vi monitorProcess.yml
+			- Adjustment Process: vi listOfAdjustmentProcesses.yml 
+			- Resource Control Plan: vi listOfResourceControlPlans.yml
 
+4. 	Deployment of Monitoring/Adjustment Services:
+	i. Go to COMOT user interface: http://128.130.172.215:8080/iCOMOT/
+	ii. Goto Deployment And Management tab:
+	iii. click on “edaas1CloudService”
+	iv. Wait until state of services changes to DEPLOYED
+	v. Checking tomcat log: tail -f /var/log/tomcat7/catalina.out
+	vi. Wait until you see number “4” appears every 10 seconds. It’s important because it indicates that 4 adjustment/monitoring services are deployed successful. 
+
+
+5. 	Operation
+	i. Start eDaaS client to simulate the requests from 5 DaaS customers, go to browser and type: http://[IP]:8080/ElasticDaaSClient/rest/test 
+	ii. You should see the following displayed on the browsers:
+		c00 is running !
+		c01 is running !
+		c02 is running !
+		c03 is running !
+		c04 is running !
+	iii. Checking tomcat log to see the operation: tail -f /var/log/tomcat7/catalina.out
+	iv. Go to Comot - tab Elasticity Monitoring to see the scaling out/in of Adjustment/Monitoring services
+	v. Logging: you can check the following logs:
+		- execution time: /home/ubuntu/log/logClient_c0*.txt 
+		- number of used VM: /home/ubuntu/log/vm_log.xml
+
+	
 
 
 
