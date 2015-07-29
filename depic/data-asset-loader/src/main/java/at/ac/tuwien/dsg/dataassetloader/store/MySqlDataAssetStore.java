@@ -222,7 +222,7 @@ public class MySqlDataAssetStore implements DataStore{
         Configuration cfg = new Configuration();
         String dataPath = cfg.getConfig("DATA.REPO.PATH");
         
-        String fileName = request.getDataAssetID()+".data";
+        String fileName = "kmeans-" + request.getDataAssetID()+".data";
         
         at.ac.tuwien.dsg.depic.common.utils.IOUtils iou = new at.ac.tuwien.dsg.depic.common.utils.IOUtils(dataPath);
         daPartitionStr = iou.readData(fileName);
@@ -322,7 +322,7 @@ public class MySqlDataAssetStore implements DataStore{
     
     public void insertDataPartitionRepo(DataAsset dataAssetPartition){
     
-         System.out.println("Insert data asset");
+        System.out.println("Insert data asset");
         String daXML="";
         try {
             daXML = JAXBUtils.marshal(dataAssetPartition, DataAsset.class);

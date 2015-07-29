@@ -206,7 +206,7 @@ public class ComotConnector {
             Logger.logInfo("DEPLOY: Monitoring Action: " + dpa.getActionID());
             ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
                     .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"))
-               //     .withMinInstances(0)
+                    .withMinInstances(0)
                     .provides(eventProcessingUnitScaleIn, eventProcessingUnitScaleOut)
                     .controlledBy(
                             Strategy("EP_ST1_" + (i++))
@@ -245,7 +245,7 @@ public class ComotConnector {
             Logger.logInfo("DEPLOY: Control Action: " + dpa.getActionID());
             ServiceUnit serviceUnit = SingleSoftwareUnit(dpa.getActionID() + "_SU")
                     .deployedBy(SingleScriptArtifact(dpa.getActionID() + "Artifact", artifactRepo + dpa.getActionID() + ".sh"))
-               //     .withMinInstances(0)
+                    .withMinInstances(0)
                     .provides(eventProcessingUnitScaleIn, eventProcessingUnitScaleOut)
                     .controlledBy(Strategy("EP_ST1_" + (i++))
                             .when(Constraint.MetricConstraint("EP_ST1_CO1_" + (i++), new Metric(getControlMetric(dpa.getActionID()), "%"))
