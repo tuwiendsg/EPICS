@@ -227,7 +227,7 @@ public class MySqlDataAssetStore implements DataStore{
         at.ac.tuwien.dsg.depic.common.utils.IOUtils iou = new at.ac.tuwien.dsg.depic.common.utils.IOUtils(dataPath);
         daPartitionStr = iou.readData(fileName);
         
-        
+        System.out.println("DATA: " + daPartitionStr);
         
         
 //            InputStream inputStream = null;
