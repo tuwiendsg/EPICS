@@ -25,12 +25,52 @@ public class TestDEPExecutionEngine {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        AdjustmentProcess adjustmentProcess = sampleData3();
-        DEPExecutionEngine dEPExecutionEngine = new DEPExecutionEngine(adjustmentProcess);
-        dEPExecutionEngine.executeAdjustmentProcess();
+        AdjustmentProcess adjustmentProcess = sampleDataX();
+        DEPExecutionPlanning dEPExecutionEngine = new DEPExecutionPlanning(adjustmentProcess);
+        dEPExecutionEngine.planningExecution();
         
     }
     
+    private static AdjustmentProcess sampleDataX(){
+        
+        
+        DirectedAcyclicalGraph dag = new DirectedAcyclicalGraph();
+        
+        Action a1 = new Action("a1", "a1");      
+        Action a2 = new Action("a2", "a2");
+        Action a3 = new Action("a3", "a3");
+        
+        
+        a1.setIncomming(null);
+        a1.setOutgoing("a2");
+        
+        a2.setIncomming("a1");
+        a2.setOutgoing("a3");
+        
+        a3.setIncomming("a2");
+        a3.setOutgoing(null);
+        
+ 
+     
+        
+       
+        List<Action> listOfActions = new ArrayList<Action>();
+        listOfActions.add(a1);
+        listOfActions.add(a2);
+        listOfActions.add(a3);
+      
+        
+        List<ParallelGateway> listOfParallelGateways = new ArrayList<ParallelGateway>();
+      
+        
+        dag.setListOfActions(listOfActions);
+        dag.setListOfParallelGateways(listOfParallelGateways);
+      
+        
+        AdjustmentProcess adjustmentProcess = new AdjustmentProcess(null, null, dag);
+        
+        return adjustmentProcess;
+    }
     
     private static AdjustmentProcess sampleData1(){
         

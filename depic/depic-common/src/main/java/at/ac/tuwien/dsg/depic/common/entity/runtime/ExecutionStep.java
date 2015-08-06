@@ -14,6 +14,9 @@ import java.util.List;
 public class ExecutionStep {
     List<String> listOfPrerequisiteActions;
     List<String> listOfExecutionActions;
+    List<String> waitingActions;
+    List<String> executingActions;
+    List<String> finishedActions;
 
     public ExecutionStep() {
     }
@@ -33,6 +36,33 @@ public class ExecutionStep {
     public void setListOfExecutionActions(List<String> listOfExecutionActions) {
         this.listOfExecutionActions = listOfExecutionActions;
     }
+
+    public List<String> getWaitingActions() {
+        return waitingActions;
+    }
+
+    public void setWaitingActions(List<String> waitingActions) {
+        this.waitingActions = waitingActions;
+    }
+
+    public List<String> getExecutingActions() {
+        return executingActions;
+    }
+
+    public void setExecutingActions(List<String> executingActions) {
+        this.executingActions = executingActions;
+    }
+
+    public List<String> getFinishedActions() {
+        return finishedActions;
+    }
+
+    public void setFinishedActions(List<String> finishedActions) {
+        this.finishedActions = finishedActions;
+    }
+
+    
+
     
     
     
