@@ -5,6 +5,7 @@
  */
 package at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller;
 
+import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ExecutionSession;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ExecutionStep;
 import java.util.ArrayList;
@@ -96,8 +97,9 @@ public class DEPExecutionEngine {
 
                     } else if (executionStep.getExecutingActions().isEmpty() && !executionStep.getWaitingActions().isEmpty()){
                          for (String nextExeAction : executionStep.getWaitingActions()){
-                             ActionExecutor actionExecutor = new ActionExecutor("ip", "port", "resource", sessionID, "xmlStr", nextExeAction);
+                             ActionExecutor actionExecutor = new ActionExecutor(executionSession, nextExeAction);
                              actionExecutor.start();
+                             
                          }
                         
                       
@@ -118,6 +120,24 @@ public class DEPExecutionEngine {
         
     }
     
+    
+    public static void actionExecuting(String sessionID, String actionID){
+        for (ExecutionSession executionSession : listOfExecutionSessions){
+            
+            
+            if (executionSession.getMonitoringSession().getSessionID().equals(sessionID)){
+                
+                List<ExecutionStep> listOfExecutionSteps = executionSession.getListOfExecutionSteps();
+                
+                for (ExecutionStep executionStep : listOfExecutionSteps){
+                    executionStep.getWaitingActions().remove(actionID);
+                    executionStep.getExecutingActions().add(actionID);
+                    
+                }      
+            }
+   
+        }
+    }
     
     
     
@@ -142,15 +162,6 @@ public class DEPExecutionEngine {
         }
 
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+       
     
 }

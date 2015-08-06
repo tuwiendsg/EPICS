@@ -30,17 +30,15 @@ public class ProcessExecutor implements Runnable{
     private ExecutionSession executionSession;
     private List<ElasticState> listOfExpectedElasticStates;
     private List<AdjustmentProcess> listOfAdjustmentProcesses;
-    private DBType eDaaSType;
     private MonitoringSession monitoringSession;
     private ElasticState currentElasticState;
     
     
-    public ProcessExecutor(List<ElasticState> listOfExpectedElasticStates, List<AdjustmentProcess> listOfAdjustmentProcesses, MonitoringSession monitoringSession, DBType eDaaSType,ElasticState currentElasticState) {
+    public ProcessExecutor(List<ElasticState> listOfExpectedElasticStates, List<AdjustmentProcess> listOfAdjustmentProcesses, MonitoringSession monitoringSession,ElasticState currentElasticState) {
        
         this.listOfExpectedElasticStates = listOfExpectedElasticStates;
         this.listOfAdjustmentProcesses = listOfAdjustmentProcesses;
         this.monitoringSession = monitoringSession;
-        this.eDaaSType = eDaaSType;
         this.currentElasticState = currentElasticState;
     }
     
@@ -179,7 +177,7 @@ public class ProcessExecutor implements Runnable{
 
             do {
 
-                uri = ElasticServiceRegistry.getElasticServiceURI(controlAction.getActionName(), eDaaSType);
+                uri = ElasticServiceRegistry.getElasticServiceURI(controlAction.getActionName(), monitoringSession.geteDaaSType());
                 if (uri.equals("")) {
                   //  Logger.logInfo("Waiting_for_Active_Elastic_Serivce ... " + monitoringSession.getSessionID() + " - " + controlAction.getActionName());
                 } else {

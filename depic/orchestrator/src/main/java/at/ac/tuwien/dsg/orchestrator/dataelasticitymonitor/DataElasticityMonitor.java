@@ -27,6 +27,7 @@ import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller.DataElasticityController;
+import at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller.ProcessExecutor;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
@@ -49,7 +50,6 @@ public class DataElasticityMonitor{
     MonitoringSession monitoringSession;
     MonitoringProcess monitorProcess;
     List<AdjustmentProcess> listOfAdjustmentProcess;
-    DBType eDaaSType;
     PrimitiveActionMetadata primitiveActionMetadata;
  
 
@@ -77,7 +77,7 @@ public class DataElasticityMonitor{
 
                 do {
 
-                    uri = ElasticServiceRegistry.getElasticServiceURI(monitoringServiceName, eDaaSType);
+                    uri = ElasticServiceRegistry.getElasticServiceURI(monitoringServiceName, monitoringSession.geteDaaSType());
                     if (uri.equals("")) {
                         Logger.logInfo("Waiting_for_Active_Elastic_Serivce ... " + monitoringSession.getSessionID() +" - " +monitoringServiceName);
                     } else {
@@ -140,8 +140,12 @@ public class DataElasticityMonitor{
             
                 Logger.logInfo("FAIL VALIDATION");
                 log  = log + "FAIL" + "\t";
-                DataElasticityController controller = new DataElasticityController(listOfElasticStates, listOfAdjustmentProcess, monitoringSession, eDaaSType);
+                DataElasticityController controller = new DataElasticityController(listOfElasticStates, listOfAdjustmentProcess, monitoringSession,  monitoringSession.geteDaaSType());
                 controller.startControlElasticState(currentElasticState);
+                
+                ProcessExecutor processExecutor = new ProcessExecutor(listOfElasticStates, listOfAdjustmentProcess, monitoringSession, currentElasticState);
+                
+                
             
         } else {
             Logger.logInfo("PASS VALIDATION");
@@ -247,7 +251,8 @@ public class DataElasticityMonitor{
         
         DataElasticityManagementProcess elasticityProcess= eda.getElasticProcess();
    
-        eDaaSType = DBType.MYSQL;
+        monitoringSession.seteDaaSType(DBType.MYSQL);
+ 
         
         listOfElasticStates = eda.getListOfFinalElasticState();
        
