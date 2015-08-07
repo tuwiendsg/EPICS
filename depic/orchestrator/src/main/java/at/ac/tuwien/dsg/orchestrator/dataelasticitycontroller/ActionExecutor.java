@@ -11,8 +11,11 @@ import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ExecutionSession;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ExternalServiceRequest;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
+
+
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -32,7 +35,6 @@ public class ActionExecutor implements Runnable {
     private ExecutionSession executionSession;
 
     private String actionID;
-
 
     public ActionExecutor(ExecutionSession executionSession, String actionID) {
         this.executionSession = executionSession;
@@ -90,13 +92,26 @@ public class ActionExecutor implements Runnable {
         do {
 
             uri = ElasticServiceRegistry.getElasticServiceURI(
-                    adjustmentAction.getActionName(), 
+                    adjustmentAction.getActionName(),
                     executionSession.getMonitoringSession().geteDaaSType());
             if (uri.equals("")) {
-                //  Logger.logInfo("Waiting_for_Active_Elastic_Serivce ... " + monitoringSession.getSessionID() + " - " + controlAction.getActionName());
+                Logger.logInfo("Waiting_for_Active_Elastic_Serivce ... "
+                        + executionSession.getMonitoringSession().getSessionID() + " - " + adjustmentAction.getActionName());
             } else {
-                // Logger.logInfo("Ready_Service: " + monitoringSession.getSessionID() + " - " + uri);
+                Logger.logInfo("Ready_Service: " + executionSession.getMonitoringSession().getSessionID() + " - " + uri);
                 ElasticServiceRegistry.occupyElasticService(uri);
+
+                Logger.logInfo("RUN: " + uri);
+                this.url = uri;
+
+                DEPExecutionEngine.actionExecuting(executionSession.getMonitoringSession().getSessionID(), actionID);
+
+                callPutMethod(requestXML);
+
+                ElasticServiceRegistry.releaseElasticService(uri);
+
+                DEPExecutionEngine.actionExecutionFinished(executionSession.getMonitoringSession().getSessionID(), actionID);
+
             }
 
             try {
@@ -107,17 +122,6 @@ public class ActionExecutor implements Runnable {
             }
 
         } while (uri.equals(""));
-
-        //Logger.logInfo("RUN: " + uri);
-        this.url = uri;
-
-        DEPExecutionEngine.actionExecuting(executionSession.getMonitoringSession().getSessionID(), actionID);
-
-        callPutMethod(requestXML);
-
-        ElasticServiceRegistry.releaseElasticService(uri);
-
-        DEPExecutionEngine.actionExecutionFinished(executionSession.getMonitoringSession().getSessionID(), actionID);
 
     }
 

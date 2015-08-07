@@ -8,7 +8,7 @@ package at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
-import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
+
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ExecutionSession;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ExecutionStep;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ExternalServiceRequest;
@@ -16,6 +16,8 @@ import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringSession;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
+
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBException;
@@ -73,7 +75,8 @@ public class ProcessExecutor implements Runnable{
 
             }
         } while (!isFinished);
-
+        
+        System.out.println("PROCESS EXECUTION FINISHED !!!");
     }
 
     public void start() {
