@@ -40,30 +40,26 @@
         
         
         <dependency>
-            <groupId>at.ac.tuwien.dsg.comot</groupId>
-            <artifactId>comot-fluent-platform</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
         </dependency>
+       
 
         <dependency>
-            <groupId>at.ac.tuwien.dsg.comot</groupId>
-            <artifactId>comot-fluent-client</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>at.ac.tuwien.dsg.comot</groupId>
-            <artifactId>comot-fluent-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        
-        
-        <dependency>
-            <groupId>com.esotericsoftware.yamlbeans</groupId>
-            <artifactId>yamlbeans</artifactId>
-            <version>1.08</version>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.0.1</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>depic-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+ 
+    
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
@@ -72,13 +68,7 @@
         </dependency>
         
         
-   
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.3.1</version>
-            <type>jar</type>
-        </dependency>
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>depic-common</artifactId>
@@ -86,37 +76,12 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>depic-daas-generator</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>depic-repository</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>depic-connector</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>depic-dep-process-generator</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version>6.0</version>
-            <scope>provided</scope>
-        </dependency>
         
-        <dependency>
-            <groupId>at.ac.tuwien.dsg</groupId>
-            <artifactId>tosca-description</artifactId>
-            <version>1.0</version>
-            <type>jar</type>
-        </dependency>
+        
+     
 
     
         

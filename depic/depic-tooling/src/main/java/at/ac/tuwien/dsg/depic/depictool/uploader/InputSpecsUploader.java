@@ -183,24 +183,26 @@ public class InputSpecsUploader extends HttpServlet {
         //DataAssetRepositoryManager das = new DataAssetRepositoryManager();
         //das.requestToGetDataAsset(dataAnalyticsFunction);
         
-        Configuration configuration = new Configuration();
-        String primitiveAction = configuration.getPrimitiveActionMetadata();
-        log = log + "primitive actions: " + primitiveAction + "\n";
-        
-        ElasticProcessRepositoryManager elasticityProcessStore = new ElasticProcessRepositoryManager();
-        elasticityProcessStore.storeQoRAndPrimitiveActionMeatadata(eDaaSName, qor, primitiveAction, dbType);
-  
-        
-        QoRModel qorModel = YamlUtils.unmarshallYaml(QoRModel.class, qor);       
-        PrimitiveActionMetadata pam = YamlUtils.unmarshallYaml(PrimitiveActionMetadata.class, primitiveAction);
- 
-        
-        log = log + "CHECK CHECK CHECK: " + pam.getListOfAdjustmentActions().get(0).getActionName() + "\n";
-        
-        Logger.getLogger(InputSpecsUploader.class.getName()).log(Level.INFO, log);
-        
-        Generator generator = new Generator(dataAnalyticsFunction, qorModel, pam, eDaaSName, dbType);
-        generator.startGenerator();
+//        Configuration configuration = new Configuration(
+//                getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+//        String primitiveAction = configuration.getPrimitiveActionMetadata();
+//        log = log + "primitive actions: " + primitiveAction + "\n";
+//        
+//        ElasticProcessRepositoryManager elasticityProcessStore = new ElasticProcessRepositoryManager(
+//                getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+//        elasticityProcessStore.storeQoRAndPrimitiveActionMeatadata(eDaaSName, qor, primitiveAction, dbType);
+//  
+//        
+//        QoRModel qorModel = YamlUtils.unmarshallYaml(QoRModel.class, qor);       
+//        PrimitiveActionMetadata pam = YamlUtils.unmarshallYaml(PrimitiveActionMetadata.class, primitiveAction);
+// 
+//        
+//        log = log + "CHECK CHECK CHECK: " + pam.getListOfAdjustmentActions().get(0).getActionName() + "\n";
+//        
+//        Logger.getLogger(InputSpecsUploader.class.getName()).log(Level.INFO, log);
+//        
+//        Generator generator = new Generator(dataAnalyticsFunction, qorModel, pam, eDaaSName, dbType);
+//        generator.startGenerator();
        
         //  
         

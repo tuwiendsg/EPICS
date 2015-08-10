@@ -79,7 +79,7 @@ public class ComotConnector {
 
     private void config() {
 
-        Configuration cfg = new Configuration();
+        Configuration cfg = new Configuration("");
         artifactRepo = cfg.getConfig("ARTIFACT.REPO");
         cloudServiceID = eDaaSDeployAction.getActionID() + "CloudService";
     }
@@ -98,7 +98,7 @@ public class ComotConnector {
 
         monitoringServices = new ArrayList<DeployAction>();
 
-        ElasticProcessRepositoryManager epStore = new ElasticProcessRepositoryManager();
+        ElasticProcessRepositoryManager epStore = new ElasticProcessRepositoryManager("");
 
         MonitoringProcess monitorProcess = depProcess.getMonitoringProcess();
         List<MonitoringAction> monitoringActions = monitorProcess.getListOfMonitoringActions();
@@ -122,7 +122,7 @@ public class ComotConnector {
 
         controlServices = new ArrayList<DeployAction>();
 
-        ElasticProcessRepositoryManager epStore = new ElasticProcessRepositoryManager();
+        ElasticProcessRepositoryManager epStore = new ElasticProcessRepositoryManager("");
 
         List<AdjustmentProcess> listOfAdjustmentProcesses = depProcess.getListOfAdjustmentProcesses();
 

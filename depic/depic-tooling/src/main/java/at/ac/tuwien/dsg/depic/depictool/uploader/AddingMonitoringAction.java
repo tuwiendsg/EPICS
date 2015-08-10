@@ -176,7 +176,8 @@ public class AddingMonitoringAction extends HttpServlet {
                 monitoringAction.setArtifact(artifact);
                 monitoringAction.setListOfParameters(listOfParameters);
                 
-                PrimitiveActionMetadataManager pamm = new PrimitiveActionMetadataManager();
+                PrimitiveActionMetadataManager pamm = new PrimitiveActionMetadataManager(
+                        getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
                 pamm.storeMonitoringAction(monitoringAction);
                 
                 request.setAttribute("message", "File Uploaded Successfully");

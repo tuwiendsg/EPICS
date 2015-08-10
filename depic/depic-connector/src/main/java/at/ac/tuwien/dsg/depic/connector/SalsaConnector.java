@@ -37,7 +37,7 @@ public class SalsaConnector {
 
     public boolean updateCloudServiceInfo(String cloudServiceID){
         
-        Configuration cfg = new Configuration();
+        Configuration cfg = new Configuration("");
         String deploymentDescriptionRest = cfg.getConfig("SALSA.DEPLOYMENT.REST");
         RestfulWSClient ws = new RestfulWSClient(deploymentDescriptionRest.replaceAll("cloudServiceID", cloudServiceID));
 

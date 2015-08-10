@@ -21,11 +21,20 @@ import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
  */
 public class DataAssetRepositoryManager {
     
-    MySqlConnectionManager connectionManager;
+  
+    String classPath;
+
+    public DataAssetRepositoryManager(String classPath) {
+        this.classPath = classPath;
+       
+    }
+    
+    
+    
     
     public String requestToGetDataAsset(DataAnalyticsFunction daf){
         
-        Configuration configuration  = new Configuration();
+        Configuration configuration  = new Configuration(classPath);
         String ip = configuration.getConfig("DATA.ASSET.LOADER.IP");
         String port = configuration.getConfig("DATA.ASSET.LOADER.PORT");
         String resource = configuration.getConfig("DATA.ASSET.LOADER.RESOURCE.REQUEST");

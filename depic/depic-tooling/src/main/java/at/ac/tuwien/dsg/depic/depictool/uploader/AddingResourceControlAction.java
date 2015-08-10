@@ -152,7 +152,8 @@ public class AddingResourceControlAction extends HttpServlet {
                 
                 
                
-                PrimitiveActionMetadataManager pamm = new PrimitiveActionMetadataManager();
+                PrimitiveActionMetadataManager pamm = new PrimitiveActionMetadataManager(
+                        getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
                 pamm.storeResourceControlAction(resourceControlAction);
                 
                 request.setAttribute("message", "File Uploaded Successfully");

@@ -26,12 +26,12 @@ import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
-import at.ac.tuwien.dsg.depic.connector.ComotConnector;
-import at.ac.tuwien.dsg.depic.connector.ElasticServiceMonitor;
+//import at.ac.tuwien.dsg.depic.connector.ComotConnector;
+//import at.ac.tuwien.dsg.depic.connector.ElasticServiceMonitor;
 import at.ac.tuwien.dsg.depic.repository.ElasticProcessRepositoryManager;
 import at.ac.tuwien.dsg.depic.common.utils.ZipUtils;
-import at.ac.tuwien.dsg.depic.daas.generator.DaaSGenerator;
-import at.ac.tuwien.dsg.depic.process.generator.DataElasticityManagementProcessesGenerator;
+//import at.ac.tuwien.dsg.depic.daas.generator.DaaSGenerator;
+//import at.ac.tuwien.dsg.depic.process.generator.DataElasticityManagementProcessesGenerator;
 import java.util.List;
 import java.util.logging.Level;
 import javax.xml.bind.JAXBException;
@@ -67,27 +67,27 @@ public class Generator {
 
 
     public void startGenerator() {
-        long t1 = System.currentTimeMillis();
-        
-        DataElasticityManagementProcessesGenerator elasticProcessesGenerator = new DataElasticityManagementProcessesGenerator(daf, qorModel, primitiveActionRepository,"/home/ubuntu/log");
-        
-        DataElasticityManagementProcess elasticProcess = elasticProcessesGenerator.generateElasticProcesses();
-        
-        long t2 = System.currentTimeMillis();
-        DaaSGenerator daaSGenerator = new DaaSGenerator(qorModel);
-        daaSGenerator.generateDaaS();
-        
-         
-        elasticDataAsset = new ElasticDataAsset(daf.getName(), elasticProcess, elasticProcessesGenerator.getFinalElasticStates());
-        
-        long t3 = System.currentTimeMillis();
-        prepareDeployment(elasticDataAsset);
-        long t4 = System.currentTimeMillis();
-    
-        
-        Logger.logInfo("GENERATE_ELASTICITY_PROCESSES_TIME: " + (t2-t1));
-        Logger.logInfo("GENERATE_EDAAS_PROCESSES_TIME: " + (t3-t2));
-        Logger.logInfo("DEPLOYMENT_TIME: " + (t4-t3));
+//        long t1 = System.currentTimeMillis();
+//        
+//        DataElasticityManagementProcessesGenerator elasticProcessesGenerator = new DataElasticityManagementProcessesGenerator(daf, qorModel, primitiveActionRepository,"/home/ubuntu/log");
+//        
+//        DataElasticityManagementProcess elasticProcess = elasticProcessesGenerator.generateElasticProcesses();
+//        
+//        long t2 = System.currentTimeMillis();
+//        DaaSGenerator daaSGenerator = new DaaSGenerator(qorModel);
+//        daaSGenerator.generateDaaS();
+//        
+//         
+//        elasticDataAsset = new ElasticDataAsset(daf.getName(), elasticProcess, elasticProcessesGenerator.getFinalElasticStates());
+//        
+//        long t3 = System.currentTimeMillis();
+//        prepareDeployment(elasticDataAsset);
+//        long t4 = System.currentTimeMillis();
+//    
+//        
+//        Logger.logInfo("GENERATE_ELASTICITY_PROCESSES_TIME: " + (t2-t1));
+//        Logger.logInfo("GENERATE_EDAAS_PROCESSES_TIME: " + (t3-t2));
+//        Logger.logInfo("DEPLOYMENT_TIME: " + (t4-t3));
 
         
        
@@ -100,9 +100,9 @@ public class Generator {
 
     public void prepareDeployment(ElasticDataAsset elasticDataAsset) {
 
-        ElasticProcessRepositoryManager elStore = new ElasticProcessRepositoryManager();
-        Configuration config = new Configuration();
-        String parentPath = config.getCurrentPath();
+        ElasticProcessRepositoryManager elStore = new ElasticProcessRepositoryManager("");
+        Configuration config = new Configuration("");
+        String parentPath =""; // config.getCurrentPath();
         
         String edaasPath = parentPath + "/WEB-INF/classes/project/eDaaS";
         String edaasZipFile  = parentPath + "/edaasproject/" + eDaaSName + ".zip";
@@ -124,47 +124,47 @@ public class Generator {
         fileWriter.writeData(edaasArtifactTemplate, eDaaSName+".sh");
         String edaasShArtifactURL = config.getConfig("EDAAS.URL") + "/edaasproject/" + eDaaSName + ".sh";
         
-        
-        String elasticityProcessesXML = "";
-        try {
-            elasticityProcessesXML = JAXBUtils.marshal(elasticDataAsset.getElasticProcess(), DataElasticityManagementProcessesGenerator.class);
-        } catch (JAXBException ex) {
-            java.util.logging.Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        
+//        String elasticityProcessesXML = "";
+//        try {
+//            elasticityProcessesXML = JAXBUtils.marshal(elasticDataAsset.getElasticProcess(), DataElasticityManagementProcessesGenerator.class);
+//        } catch (JAXBException ex) {
+//            java.util.logging.Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
    
         DeployAction eDaaSDA = new DeployAction(eDaaSName, eDaaSName, "sh", edaasShArtifactURL);
         Logger.logInfo("EDAAS ARTIFACT URL: " + edaasShArtifactURL);
        
-        ComotConnector comotConnector = new ComotConnector(elasticDataAsset.getElasticProcess(), eDaaSDA);
+     //   ComotConnector comotConnector = new ComotConnector(elasticDataAsset.getElasticProcess(), eDaaSDA);
   
         //comotConnector.deployCloudSevices2();
-        comotConnector.deployCloudSevices();
+     //   comotConnector.deployCloudSevices();
         
-        
-        Logger.logInfo("On Deployment Process: ..." + comotConnector.getCloudServiceID() );
-        
-        List<ElasticService> listOfElasticServices = comotConnector.getCloudServiceInfo();
-        ElasticServices elasticServices = new ElasticServices(listOfElasticServices);
-        configElasticServices(elasticServices);
-        
-        ElasticServiceMonitor elasticServiceMonitor = new ElasticServiceMonitor(eDaaSName, comotConnector);
-        elasticServiceMonitor.start();
-                
-        String elasticStateSetXML ="";
-        
-        ElasticStateSet elasticStateSet = new ElasticStateSet(elasticDataAsset.getListOfFinalElasticState());
-        
-        try {
-            elasticStateSetXML = JAXBUtils.marshal(elasticStateSet, ElasticStateSet.class);
-        } catch (JAXBException ex) {
-            java.util.logging.Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
-       elStore.storeElasticityProcesses(eDaaSName,elasticStateSetXML, elasticityProcessesXML, "", dbType.getDBType());
-        
+//        
+//        Logger.logInfo("On Deployment Process: ..." + comotConnector.getCloudServiceID() );
+//        
+//        List<ElasticService> listOfElasticServices = comotConnector.getCloudServiceInfo();
+//        ElasticServices elasticServices = new ElasticServices(listOfElasticServices);
+//        configElasticServices(elasticServices);
+//        
+//        ElasticServiceMonitor elasticServiceMonitor = new ElasticServiceMonitor(eDaaSName, comotConnector);
+//        elasticServiceMonitor.start();
+//                
+//        String elasticStateSetXML ="";
+//        
+//        ElasticStateSet elasticStateSet = new ElasticStateSet(elasticDataAsset.getListOfFinalElasticState());
+//        
+//        try {
+//            elasticStateSetXML = JAXBUtils.marshal(elasticStateSet, ElasticStateSet.class);
+//        } catch (JAXBException ex) {
+//            java.util.logging.Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        
+//        
+//       elStore.storeElasticityProcesses(eDaaSName,elasticStateSetXML, elasticityProcessesXML, "", dbType.getDBType());
+//        
         
    
        // configureElasticityServices(listOfElasticServices);
@@ -179,7 +179,7 @@ public class Generator {
         } catch (JAXBException ex) {
             java.util.logging.Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Configuration configuration  = new Configuration();
+        Configuration configuration  = new Configuration("");
         String ip = configuration.getConfig("ORCHESTRATOR.IP");
         String port = configuration.getConfig("ORCHESTRATOR.PORT");
         String resource = configuration.getConfig("ORCHESTRATOR.ELASTIC.SERVICE.RESOURCE");
@@ -199,10 +199,10 @@ public class Generator {
 
     private void generateElasticDaaS() {
 
-        Logger.logInfo("Start generate APIs ...");
-
-        DaaSGenerator daaSGenerator = new DaaSGenerator(qorModel);
-        daaSGenerator.generateDaaS();
+//        Logger.logInfo("Start generate APIs ...");
+//
+//        DaaSGenerator daaSGenerator = new DaaSGenerator(qorModel);
+//        daaSGenerator.generateDaaS();
 
     }
 

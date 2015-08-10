@@ -1,43 +1,51 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Copyright 2013 Technische Universitat Wien (TUW), Distributed SystemsGroup
+  E184.  This work was partially supported by the European Commission in terms
+ * of the CELAR FP7 project (FP7-ICT-2011-8 #317790).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package at.ac.tuwien.dsg.depic.common.utils;
 
 
-import java.util.logging.Logger;
+
+import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringMetric;
 import com.sun.jersey.api.client.Client;  
 import com.sun.jersey.api.client.ClientResponse;  
 import com.sun.jersey.api.client.WebResource; 
-import javax.ws.rs.core.MediaType;
 
 
-/**
- *
- * @author Jun
- */
+
+
 public class RestfulWSClient {
 
-  
+    
     private String ip;
     private String port;
     private String resource;
     private String url;
-    private Logger logger;
-
+  
     public RestfulWSClient(String ip, String port, String resource) {
         this.ip = ip;
         this.port = port;
         this.resource = resource;
         url = "http://" + ip + ":" + port + resource;
-        logger = Logger.getLogger(this.getClass().getName());
+      
     }
 
     public RestfulWSClient(String url) {
         this.url = url;
     }
-    
 
     public String getIp() {
         return ip;
@@ -71,78 +79,77 @@ public class RestfulWSClient {
         this.url = url;
     }
 
-    public <T> T callPutMethod(Object object, Class<T> configurationClass) {
+    public String callPutMethod(String xmlString) {
+        String rs="";
+          try {  
+      
+        
+            Client client = Client.create();  
+            WebResource webResource = client.resource(url);  
 
-        //put get response data
-        Client client = Client.create();
-        WebResource webResource = client.resource(url);
-        ClientResponse response = webResource.type("application/xml").accept("application/xml").put(ClientResponse.class, object);
-        if (response.getStatus() != 200) {
-            throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+            ClientResponse response = webResource.type("application/xml").accept("application/xml").put(ClientResponse.class, xmlString);
+            if (response.getStatus() != 200) {  
+                throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());  
+            }  
+   
+        
+            String output = response.getEntity(String.class);  
+            System.out.println("\n============getCResponse============");  
+            System.out.println(output);  
+   
+    
+          
+        } catch (Exception ex) {
+            System.err.println(ex);
         }
+        return rs;
+    }
+    
+    public MonitoringMetric callMonitoringService(String xmlString) {
+        MonitoringMetric output = null;
+          try {  
+      
+        
+            Client client = Client.create();  
+            WebResource webResource = client.resource(url);  
 
-        T output = (T) response.getEntity(configurationClass);
-
+            ClientResponse response = webResource.type("application/xml").accept("application/xml").put(ClientResponse.class, xmlString);
+            if (response.getStatus() != 200) {  
+                throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());  
+            }  
+   
+        
+               output = response.getEntity(MonitoringMetric.class);  
+            System.out.println("\n============getCResponse============");  
+ 
+   
+    
+          
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
         return output;
     }
     
     
+    
     public int callPutMethodRC(String xmlString) {
+        int statusCode =0;
         
-        //put get response code
 
-        Client client = Client.create();
-        WebResource webResource = client.resource(url);
-        ClientResponse response = webResource.type("application/xml").accept("application/xml").put(ClientResponse.class, xmlString);
-        if (response.getStatus() != 200) {
-            throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-        }
-      
-        return response.getStatus();
+        return statusCode;
     }
 
     public void callPostMethod(String xmlString) {
 
-        
 
     }
     
     
     public String callGetMethod() {
-        String rs="";
-        
-        try {  
-            Client client = Client.create();  
-            WebResource webResource = client.resource(url);  
-            ClientResponse response = webResource.type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML).get(ClientResponse.class);  
-            if (response.getStatus() != 200) {  
-                throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());  
-            }  
-   
-            String output = response.getEntity(String.class);  
-            System.out.println("\n============getCResponse============");  
-            System.out.println(output);  
-   
-        } catch (Exception e) {  
-            e.printStackTrace();  
-        }  
-      
+      String rs ="";
         return rs;
 
-    }
-
-    public String callPutMethod(String xmlStr) {
-        //put get response data
-        Client client = Client.create();
-        WebResource webResource = client.resource(url);
-        ClientResponse response = webResource.type("application/xml").accept("application/xml").put(ClientResponse.class, xmlStr);
-        if (response.getStatus() != 200) {
-            throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-        }
-
-        String output =  response.getEntity(String.class);
-        
-        return output;
     }
 
 }

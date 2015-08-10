@@ -26,11 +26,13 @@ import org.apache.commons.io.IOUtils;
  * @author Jun
  */
 public class ElasticProcessRepositoryManager {
-
+    String classPath;
     MySqlConnectionManager connectionManager;
     
-    public ElasticProcessRepositoryManager() {
-        Configuration config = new Configuration();
+    public ElasticProcessRepositoryManager(String classPath) {
+        this.classPath = classPath;
+        Configuration config = new Configuration(classPath);
+        
         String ip = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.IP");
         String port = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.PORT");
         String database = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.DATABASE");
@@ -40,6 +42,8 @@ public class ElasticProcessRepositoryManager {
         connectionManager = new MySqlConnectionManager(ip, port, database, username, password);
 
     }
+    
+    
     
     
     
@@ -211,5 +215,57 @@ public class ElasticProcessRepositoryManager {
         connectionManager.ExecuteUpdate(sql_in);
         
 
+    }
+    
+    
+    
+    /////////////////////////////
+    ///     Table: InputSpecification
+    ////////////////////////////
+    
+    public void insertDaaS(String edaas){
+        
+        
+      
+        
+        String sql = "INSERT INTO InputSpecification (name) VALUES ('"+edaas+"')";
+        connectionManager.ExecuteUpdate(sql);
+
+        
+    }
+    
+    
+    public void storeQoR(String edaas, String qor){
+        InputStream qorStream = new ByteArrayInputStream(qor.getBytes(StandardCharsets.UTF_8));
+        
+        List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
+        listOfInputStreams.add(qorStream);
+        
+        String sql = "UPDATE InputSpecification SET qor=? WHERE name='"+edaas+"'";
+        connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
+
+        
+    }
+    
+    public void storeDBType(String edaas, String type){
+       
+        String sql = "UPDATE InputSpecification SET dbtype='"+type+"' WHERE name='"+edaas+"'";
+        connectionManager.ExecuteUpdate(sql);
+        
+    }
+    public void storeDAF(String edaas, String daf){
+        
+   
+        InputStream dafStream = new ByteArrayInputStream(daf.getBytes(StandardCharsets.UTF_8));
+        
+        
+        List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
+        listOfInputStreams.add(dafStream);
+
+        
+        String sql = "UPDATE InputSpecification SET daf=? WHERE name='"+edaas+"'";
+        connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
+
+        
     }
 }

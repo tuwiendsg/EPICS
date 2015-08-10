@@ -5,8 +5,9 @@
  */
 package at.ac.tuwien.dsg.orchestrator.restws;
 
-import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 
+
+import at.ac.tuwien.dsg.depic.common.utils.Configuration;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +46,7 @@ public class ElasticityprocessesResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String getXml() {
         //TODO return proper representation object
-        Configuration cfg = new Configuration();
+        Configuration cfg = new Configuration(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
         String configStr = "ORCHESTRATOR: " + cfg.getConfig("DB.ELASTICITY.PROCESSES.REPO.IP");
         return configStr;
     }

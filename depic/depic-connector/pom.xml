@@ -49,12 +49,12 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         
-        <dependency>
+<!--        <dependency>
             <groupId>at.ac.tuwien.dsg.cloud.salsa</groupId>
             <artifactId>salsa-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <type>jar</type>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>depic-common</artifactId>

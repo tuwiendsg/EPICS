@@ -46,6 +46,15 @@ public class Artifact {
         this.type = type;
         this.restfulAPI = restfulAPI;
     }
+
+    public Artifact(String name, String description, String location, String type, String restfulAPI, String httpMethod) {
+        this.name = name;
+        this.description = description;
+        this.location = location;
+        this.type = type;
+        this.restfulAPI = restfulAPI;
+        this.httpMethod = httpMethod;
+    }
     
     
 

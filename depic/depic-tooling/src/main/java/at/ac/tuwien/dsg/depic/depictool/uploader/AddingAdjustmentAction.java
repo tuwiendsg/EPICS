@@ -199,7 +199,8 @@ public class AddingAdjustmentAction extends HttpServlet {
                 adjustmentAction.setListOfPrerequisiteActionIDs(listOfPrerequisiteActions);
                adjustmentAction.setListOfAdjustmentCases(listOfAdjustmentCases);
   
-                PrimitiveActionMetadataManager pamm = new PrimitiveActionMetadataManager();
+                PrimitiveActionMetadataManager pamm = new PrimitiveActionMetadataManager(
+                        getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
                 pamm.storeAdjustmentAction(adjustmentAction);
                 
                 request.setAttribute("message", "File Uploaded Successfully");

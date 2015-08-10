@@ -13,10 +13,11 @@ import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityMan
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
+import at.ac.tuwien.dsg.depic.common.utils.Configuration;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.MySqlConnectionManager;
 import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
-import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -39,7 +40,7 @@ public class ElasticityProcessesStore {
     MySqlConnectionManager connectionManager;
     
     public ElasticityProcessesStore() {
-        Configuration config = new Configuration();
+        Configuration config = new Configuration(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
         String ip = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.IP");
         String port = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.PORT");
         String database = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.DATABASE");

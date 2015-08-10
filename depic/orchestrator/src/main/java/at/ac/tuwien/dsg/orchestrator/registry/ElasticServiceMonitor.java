@@ -7,9 +7,10 @@ package at.ac.tuwien.dsg.orchestrator.registry;
 
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticServices;
+import at.ac.tuwien.dsg.depic.common.utils.Configuration;
 import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
+
 
 import java.util.List;
 import java.util.logging.Level;
@@ -69,7 +70,7 @@ public class ElasticServiceMonitor implements Runnable {
     private List<ElasticService>  getUpdatedElasticService(){
         
         List<ElasticService> listOfElasticServices = null;
-        Configuration cfg = new Configuration();
+        Configuration cfg = new Configuration(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
         
         String elasticServiceUpdatePath = cfg.getConfig("DB.ELASTIC.SERVICES.UPDATE");
         

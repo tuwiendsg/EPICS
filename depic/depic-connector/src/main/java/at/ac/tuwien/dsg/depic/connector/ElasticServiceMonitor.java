@@ -99,7 +99,7 @@ public class ElasticServiceMonitor implements Runnable {
             
             ElasticServices elasticServices = new ElasticServices(updateList);
             String xml = JAXBUtils.marshal(elasticServices, ElasticServices.class);
-            Configuration cfg = new Configuration();
+            Configuration cfg = new Configuration("");
             String elasticServiceConfigPath = cfg.getConfig("DB.ELASTIC.SERVICES.UPDATE");
             
             IOUtils iou = new IOUtils(elasticServiceConfigPath);
@@ -124,7 +124,7 @@ public class ElasticServiceMonitor implements Runnable {
         for (ElasticService elasticService : listOfElasticServices) {
 
             System.err.println("CONFIGURE SERVICE: " + elasticService.getActionID());
-            Configuration cfg = new Configuration();
+            Configuration cfg = new Configuration("");
             String daLoaderIp = cfg.getConfig("DATA.ASSET.LOADER.IP.LOCAL");
             String orchestratorIp = cfg.getConfig("ORCHESTRATOR.IP.LOCAL");
             

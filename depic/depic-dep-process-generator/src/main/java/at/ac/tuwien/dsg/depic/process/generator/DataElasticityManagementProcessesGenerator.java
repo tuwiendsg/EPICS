@@ -57,24 +57,14 @@ public class DataElasticityManagementProcessesGenerator {
     PrimitiveActionMetadata primitiveActionRepository;
     List<ElasticState> finalElasticStates;
     String errorLog;
-    String rootPath;
-
-    public DataElasticityManagementProcessesGenerator() {
-    }
-
+    String classPath;
 
     
-    public DataElasticityManagementProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel) {
+    
+    public DataElasticityManagementProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, String classPath) {
+        this.classPath = classPath;
         this.daf = daf;
         this.qorModel = qorModel;
-        config();
-    }
-
-
-    public DataElasticityManagementProcessesGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository, String rooPath) {
-        this.daf = daf;
-        this.qorModel = qorModel;
-        this.primitiveActionRepository = primitiveActionRepository;
         config();
     }
 
@@ -100,7 +90,7 @@ public class DataElasticityManagementProcessesGenerator {
 
         DataElasticityManagementProcess depProcess = new DataElasticityManagementProcess(monitorProcess, listOfAdjustmentProcesses, listOfResourceControlPlans);
 
-        IOUtils iou = new IOUtils(rootPath);
+        IOUtils iou = new IOUtils(classPath);
         iou.writeData(errorLog, "errorLog.txt");
 
         return depProcess;
@@ -434,12 +424,12 @@ public class DataElasticityManagementProcessesGenerator {
 
     private void loadPrimitiveActionMetadata() {
 
-        PrimitiveActionMetadataManager pamm = new PrimitiveActionMetadataManager();
+        PrimitiveActionMetadataManager pamm = new PrimitiveActionMetadataManager(classPath);
         List<MonitoringAction> listOfMonitoringActions = pamm.getMonitoringActionList();
         List<AdjustmentAction> listOfAdjustmentActions = pamm.getAdjustmentActionList();
         List<ResourceControlAction> listOfResourceControlActions = pamm.getResourceControlActionList();
 
-        PrimitiveActionMetadata pam = new PrimitiveActionMetadata(listOfAdjustmentActions, listOfMonitoringActions, listOfResourceControlActions);
+        primitiveActionRepository = new PrimitiveActionMetadata(listOfAdjustmentActions, listOfMonitoringActions, listOfResourceControlActions);
 
     }
 }
