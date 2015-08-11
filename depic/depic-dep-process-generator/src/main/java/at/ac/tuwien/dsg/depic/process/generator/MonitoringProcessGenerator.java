@@ -1,12 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Copyright 2013 Technische Universitat Wien (TUW), Distributed SystemsGroup
+  E184.  This work was partially supported by the European Commission in terms
+ * of the CELAR FP7 project (FP7-ICT-2011-8 #317790).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package at.ac.tuwien.dsg.depic.process.generator;
 
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DirectedAcyclicalGraph;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Artifact;
@@ -19,19 +33,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- *
- * @author Jun
- */
+
 public class MonitoringProcessGenerator {
-    
+    DataAnalyticsFunction daf;
     QoRModel qorModel;
     PrimitiveActionMetadata primitiveActionRepository;
+    List<ElasticState> finalElasticStates;
+    String errorLog;
+    String rootPath;
 
-    public MonitoringProcessGenerator() {
+    public MonitoringProcessGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository, List<ElasticState> finalElasticStates, String errorLog, String rootPath) {
+        this.daf = daf;
+        this.qorModel = qorModel;
+        this.primitiveActionRepository = primitiveActionRepository;
+        this.finalElasticStates = finalElasticStates;
+        this.errorLog = errorLog;
+        this.rootPath = rootPath;
     }
-    
-    
+
+   
     
     public MonitoringProcess generateMonitoringProcess() {
 
@@ -46,14 +66,12 @@ public class MonitoringProcessGenerator {
                 listOfMonitoringActions.add(monitoringAction);
             }
         }
-        System.err.println("No of monitoring actions: " + listOfMonitoringActions.size());
+       
         MonitoringProcess monitorProcess = parallelizeMonitoringActions(listOfMonitoringActions);
 
         return monitorProcess;
     }
-    
-    
-    
+
     private MonitoringAction findCorrespondingMonitoringActionFromQoRMetric(String qorMetricName) {
         List<MonitoringAction> listOfMonitoringActions = primitiveActionRepository.getListOfMonitoringActions();
 
@@ -66,7 +84,7 @@ public class MonitoringProcessGenerator {
 
         return foundMonitoringAction;
     }
-    
+
     private MonitoringAction copyMonitoringActionInstance(MonitoringAction ma) {
 
         Artifact artifact = new Artifact(
@@ -107,7 +125,8 @@ public class MonitoringProcessGenerator {
 
             String actionID = getUDID();
             ma.setMonitorActionID(actionID);
-
+          
+            
             Action action = new Action(actionID, ma.getMonitoringActionName());
             listOfAction.add(action);
         }
@@ -138,10 +157,11 @@ public class MonitoringProcessGenerator {
         dag.setListOfParallelGateways(listOfParallelGateways);
 
         MonitoringProcess monitoringProcess = new MonitoringProcess(listOfMonitoringActions, dag);
-
+        
+    
         return monitoringProcess;
     }
-    
+
     private String getUDID() {
         UUID actionID = UUID.randomUUID();
         return actionID.toString();

@@ -5,18 +5,25 @@
  */
 package at.ac.tuwien.dsg.depic.process.generator;
 
+import at.ac.tuwien.dsg.csdg.elasticityInformation.elasticityRequirements.BinaryRestriction;
+import at.ac.tuwien.dsg.csdg.elasticityInformation.elasticityRequirements.BinaryRestrictionsConjunction;
+import at.ac.tuwien.dsg.csdg.elasticityInformation.elasticityRequirements.Condition;
+import at.ac.tuwien.dsg.csdg.elasticityInformation.elasticityRequirements.Constraint;
+import at.ac.tuwien.dsg.csdg.elasticityInformation.elasticityRequirements.LeftHandSide;
+import at.ac.tuwien.dsg.csdg.elasticityInformation.elasticityRequirements.Monitoring;
+import at.ac.tuwien.dsg.csdg.elasticityInformation.elasticityRequirements.RightHandSide;
+import at.ac.tuwien.dsg.csdg.elasticityInformation.elasticityRequirements.SYBLSpecification;
+import at.ac.tuwien.dsg.csdg.elasticityInformation.elasticityRequirements.Strategy;
+import at.ac.tuwien.dsg.csdg.elasticityInformation.elasticityRequirements.ToEnforce;
 import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ResourceControlPlan;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlAction;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlCase;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
-import at.ac.tuwien.dsg.depic.repository.PrimitiveActionMetadataManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +40,15 @@ public class ResourceControlPlanGenerator {
     String errorLog;
     String rootPath;
     
+    public ResourceControlPlanGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository, List<ElasticState> finalElasticStates, String errorLog, String rootPath) {
+        this.daf = daf;
+        this.qorModel = qorModel;
+        this.primitiveActionRepository = primitiveActionRepository;
+        this.finalElasticStates = finalElasticStates;
+        this.errorLog = errorLog;
+        this.rootPath = rootPath;
+    }
+
     
     public List<ResourceControlPlan> generateResourceControlPlan(List<ElasticState> listOfFinalElasticStates) {
 
@@ -70,10 +86,166 @@ public class ResourceControlPlanGenerator {
 
         return listOfFoundResourceControlPlans;
     }
+    
+    
+    public SYBLSpecification generateResourceControlPlanSYBL(List<ElasticState> listOfFinalElasticStates) {
+
+        SYBLSpecification sYBLSpecification = new SYBLSpecification();
+      
+        for (ElasticState elasticState : listOfFinalElasticStates) {
+            List<MetricCondition> listOfConditions = elasticState.getListOfConditions();
+            
+            for (MetricCondition metricCondition : listOfConditions) {
+                List<ResourceControlStrategy> listOfFoundResourceControlStrategies = findResourceControlStrategy(metricCondition);
+                
+                if (listOfFoundResourceControlStrategies.size() > 0) {
+                    
+                    
+                    for (ResourceControlStrategy rcs : listOfFoundResourceControlStrategies){
+                        
+                        Strategy scaleInStrategy = mappingResourceControlStrategyToSYBLScaleInStrategy(rcs);
+                        Strategy scaleOutStrategy = mappingResourceControlStrategyToSYBLScaleOutStrategy(rcs);
+                        
+                        sYBLSpecification.addStrategy(scaleInStrategy);
+                        sYBLSpecification.addStrategy(scaleOutStrategy);
+                        
+                    }             
+                } 
+            }
+         
+            
+         
+        }
+
+        return sYBLSpecification;
+    }
+    
+
+    
+    
+    
+    
+    
+      
+        
+    private Strategy mappingResourceControlStrategyToSYBLScaleInStrategy(ResourceControlStrategy rcs){
+        Strategy strategy = new Strategy();
+
+        ToEnforce toEnforce = new ToEnforce();
+        toEnforce.setActionName("scaleIn");
+        toEnforce.setParameter(rcs.getPrimitiveAction());
+        
+        strategy.setToEnforce(toEnforce);
+        
+
+        Condition cond = new Condition();
+
+        BinaryRestrictionsConjunction binaryRestrictions = new BinaryRestrictionsConjunction();
+        
+            {
+                // binary restriction 1
+                BinaryRestriction binaryRestr1 = new BinaryRestriction();
+                binaryRestr1.setType("lessThan");
+
+                LeftHandSide leftHandSide1 = new LeftHandSide();
+                leftHandSide1.setMetric(rcs.getControlMetric());
+
+                RightHandSide rightHandSide1 = new RightHandSide();
+                rightHandSide1.setNumber(String.valueOf(rcs.getScaleInCondition().getUpperBound()));
+
+                binaryRestr1.setLeftHandSide(leftHandSide1);
+                binaryRestr1.setRightHandSide(rightHandSide1);
+                binaryRestrictions.add(binaryRestr1);
+            }
+      
+            {
+                // binary restriction 2
+                BinaryRestriction binaryRestr2 = new BinaryRestriction();
+                binaryRestr2.setType("greaterThan");
+
+                LeftHandSide leftHandSide2 = new LeftHandSide();
+                leftHandSide2.setMetric(rcs.getControlMetric());
+
+                RightHandSide rightHandSide2 = new RightHandSide();
+                rightHandSide2.setNumber(String.valueOf(rcs.getScaleInCondition().getLowerBound()));
+
+                binaryRestr2.setLeftHandSide(leftHandSide2);
+                binaryRestr2.setRightHandSide(rightHandSide2);
+                binaryRestrictions.add(binaryRestr2);
+            }
+        
+        cond.addBinaryRestrictionConjunction(binaryRestrictions);
+        
+        
+        strategy.setCondition(cond);
+        
+        return strategy;
+    }    
+       
+    
+    private Strategy mappingResourceControlStrategyToSYBLScaleOutStrategy(ResourceControlStrategy rcs){
+        Strategy strategy = new Strategy();
+
+        ToEnforce toEnforce = new ToEnforce();
+        toEnforce.setActionName("scaleOut");
+        toEnforce.setParameter(rcs.getPrimitiveAction());
+        
+        strategy.setToEnforce(toEnforce);
+        
+
+        Condition cond = new Condition();
+
+        BinaryRestrictionsConjunction binaryRestrictions = new BinaryRestrictionsConjunction();
+        
+            {
+                // binary restriction 1
+                BinaryRestriction binaryRestr1 = new BinaryRestriction();
+                binaryRestr1.setType("lessThan");
+
+                LeftHandSide leftHandSide1 = new LeftHandSide();
+                leftHandSide1.setMetric(rcs.getControlMetric());
+
+                RightHandSide rightHandSide1 = new RightHandSide();
+                rightHandSide1.setNumber(String.valueOf(rcs.getScaleOutCondition().getUpperBound()));
+
+                binaryRestr1.setLeftHandSide(leftHandSide1);
+                binaryRestr1.setRightHandSide(rightHandSide1);
+                binaryRestrictions.add(binaryRestr1);
+            }
+      
+            {
+                // binary restriction 2
+                BinaryRestriction binaryRestr2 = new BinaryRestriction();
+                binaryRestr2.setType("greaterThan");
+
+                LeftHandSide leftHandSide2 = new LeftHandSide();
+                leftHandSide2.setMetric(rcs.getControlMetric());
+
+                RightHandSide rightHandSide2 = new RightHandSide();
+                rightHandSide2.setNumber(String.valueOf(rcs.getScaleOutCondition().getLowerBound()));
+
+                binaryRestr2.setLeftHandSide(leftHandSide2);
+                binaryRestr2.setRightHandSide(rightHandSide2);
+                binaryRestrictions.add(binaryRestr2);
+            }
+        
+        cond.addBinaryRestrictionConjunction(binaryRestrictions);
+        
+        
+        strategy.setCondition(cond);
+        
+        return strategy;
+    }  
 
     private List<ResourceControlStrategy> findResourceControlStrategy(MetricCondition metricCondition) {
+        
+        
+        
+        
         List<ResourceControlAction> listOfResourceControls = primitiveActionRepository.getListOfResourceControls();
 
+        
+       
         List<ResourceControlStrategy> foundListOfResourceControlStrategies = new ArrayList<ResourceControlStrategy>();
         for (ResourceControlAction rc : listOfResourceControls) {
             if (metricCondition.getMetricName().equals(rc.getAssociatedQoRMetric())) {
@@ -116,6 +288,10 @@ public class ResourceControlPlanGenerator {
 
         return copyList;
     }
+
+    
+    
+    
     
     
     

@@ -1,7 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Copyright 2013 Technische Universitat Wien (TUW), Distributed SystemsGroup
+  E184.  This work was partially supported by the European Commission in terms
+ * of the CELAR FP7 project (FP7-ICT-2011-8 #317790).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package at.ac.tuwien.dsg.depic.process.generator;
 
@@ -17,6 +29,7 @@ import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AnalyticTask;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlAction;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
@@ -26,11 +39,9 @@ import java.util.UUID;
 import java.util.logging.Level;
 import javax.xml.bind.JAXBException;
 
-/**
- *
- * @author Jun
- */
+
 public class AdjustmentProcessGenerator {
+    
     
     DataAnalyticsFunction daf;
     QoRModel qorModel;
@@ -39,8 +50,15 @@ public class AdjustmentProcessGenerator {
     String errorLog;
     String rootPath;
 
-    public AdjustmentProcessGenerator() {
+    public AdjustmentProcessGenerator(DataAnalyticsFunction daf, QoRModel qorModel, PrimitiveActionMetadata primitiveActionRepository, List<ElasticState> finalElasticStates, String errorLog, String rootPath) {
+        this.daf = daf;
+        this.qorModel = qorModel;
+        this.primitiveActionRepository = primitiveActionRepository;
+        this.finalElasticStates = finalElasticStates;
+        this.errorLog = errorLog;
+        this.rootPath = rootPath;
     }
+    
     
     
     
@@ -68,7 +86,24 @@ public class AdjustmentProcessGenerator {
 
         return listOfAdjustmentProcesses;
     }
-      private AdjustmentAction findAdjustmentAction(MetricCondition metricCondition) {
+
+    
+
+    private boolean isAssociatedWithAdjustmentAction(String metricName) {
+        boolean rs = false;
+        List<AdjustmentAction> listOfAdjustmentActions = primitiveActionRepository.getListOfAdjustmentActions();
+
+        for (AdjustmentAction adjustmentAction : listOfAdjustmentActions) {
+            if (metricName.equals(adjustmentAction.getAssociatedQoRMetric())) {
+                rs = true;
+                break;
+            }
+        }
+
+        return rs;
+    }
+
+    private AdjustmentAction findAdjustmentAction(MetricCondition metricCondition) {
         List<AdjustmentAction> listOfAdjustmentActions = primitiveActionRepository.getListOfAdjustmentActions();
 
         AdjustmentAction foundAdjustmentAction = null;
@@ -324,8 +359,6 @@ public class AdjustmentProcessGenerator {
         Logger.logInfo("no_of_action: " + noOfActions);
 
     }
-    
-    
 
     private int findActionIndex(List<Action> listOfActions, String prerequisiteAction) {
 
@@ -404,6 +437,7 @@ public class AdjustmentProcessGenerator {
         return rs;
 
     }
+    
     
     private String getUDID() {
         UUID actionID = UUID.randomUUID();

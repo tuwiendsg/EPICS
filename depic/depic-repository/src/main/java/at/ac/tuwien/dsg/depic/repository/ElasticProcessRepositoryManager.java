@@ -235,6 +235,8 @@ public class ElasticProcessRepositoryManager {
     }
     
     
+    
+    
     public void storeQoR(String edaas, String qor){
         InputStream qorStream = new ByteArrayInputStream(qor.getBytes(StandardCharsets.UTF_8));
         
@@ -267,5 +269,82 @@ public class ElasticProcessRepositoryManager {
         connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
 
         
+    }
+    
+    public String getQoR (String edaas){
+     
+        String sql = "SELECT * FROM InputSpecification WHERE name='" + edaas + "'";
+        String qorStr = "";
+       
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        try {
+            while (rs.next()) {
+                InputStream inputStream = rs.getBinaryStream("qor");
+                StringWriter writer = new StringWriter();
+                String encoding = StandardCharsets.UTF_8.name();
+                IOUtils.copy(inputStream, writer, encoding);
+                qorStr = writer.toString();          
+                
+            }
+
+            rs.close();
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+
+        return qorStr;
+
+    }
+    
+    public String getDAF (String edaas){
+     
+        String sql = "SELECT * FROM InputSpecification WHERE name='" + edaas + "'";
+        String dafStr = "";
+       
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        try {
+            while (rs.next()) {
+                InputStream inputStream = rs.getBinaryStream("daf");
+                StringWriter writer = new StringWriter();
+                String encoding = StandardCharsets.UTF_8.name();
+                IOUtils.copy(inputStream, writer, encoding);
+                dafStr = writer.toString();          
+            }
+
+            rs.close();
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+
+        return dafStr;
+
+    }
+    
+    
+    public String getDBType (String edaas){
+     
+        String sql = "SELECT * FROM InputSpecification WHERE name='" + edaas + "'";
+        String dbType = "";
+       
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        try {
+            while (rs.next()) {
+                dbType = rs.getString("dbtype");
+                
+            }
+
+            rs.close();
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+
+        return dbType;
+
     }
 }

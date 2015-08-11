@@ -13,6 +13,7 @@ import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DirectedAcyclicalGraph;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
 
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
@@ -35,7 +36,9 @@ import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
+import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
 import static at.ac.tuwien.dsg.depic.common.utils.YamlUtils.toYaml;
+import at.ac.tuwien.dsg.depic.repository.ElasticProcessRepositoryManager;
 import at.ac.tuwien.dsg.depic.repository.PrimitiveActionMetadataManager;
 
 import java.util.ArrayList;
@@ -72,26 +75,29 @@ public class DataElasticityManagementProcessesGenerator {
     
     public DataElasticityManagementProcess generateElasticProcesses() {
         Logger.logInfo("Start generate Elastic Processes ... ");
-
-        MonitoringProcessGenerator mpg = new MonitoringProcessGenerator();
-        MonitoringProcess monitorProcess = mpg.generateMonitoringProcess();
-        toYaml(monitorProcess, "monitorProcess.yml");
-
+        
+        
         finalElasticStates = generateFinalElasticStateSet();
-        toYaml(finalElasticStates, "finalElasticStates.yml");
-
-        AdjustmentProcessGenerator apg = new AdjustmentProcessGenerator();
+        
+        MonitoringProcessGenerator monitoringProcessGenerator = new MonitoringProcessGenerator(
+                daf, qorModel, primitiveActionRepository, finalElasticStates, errorLog, classPath);
+        MonitoringProcess monitoringProcess= monitoringProcessGenerator.generateMonitoringProcess();
+        
+        AdjustmentProcessGenerator apg = new AdjustmentProcessGenerator(
+                daf, qorModel, primitiveActionRepository, finalElasticStates, errorLog, classPath);
+        
         List<AdjustmentProcess> listOfAdjustmentProcesses = apg.generateAdjustmentProcesses(finalElasticStates);
-        toYaml(listOfAdjustmentProcesses, "listOfAdjustmentProcesses.yml");
-
-        ResourceControlPlanGenerator rcpg = new ResourceControlPlanGenerator();
+        
+        ResourceControlPlanGenerator rcpg = new ResourceControlPlanGenerator(daf, qorModel, primitiveActionRepository, finalElasticStates, errorLog, classPath);       
         List<ResourceControlPlan> listOfResourceControlPlans = rcpg.generateResourceControlPlan(finalElasticStates);
-        toYaml(listOfResourceControlPlans, "listOfResourceControlPlans.yml");
 
-        DataElasticityManagementProcess depProcess = new DataElasticityManagementProcess(monitorProcess, listOfAdjustmentProcesses, listOfResourceControlPlans);
+        DataElasticityManagementProcess depProcess = new DataElasticityManagementProcess(monitoringProcess, listOfAdjustmentProcesses, listOfResourceControlPlans);
+        
+       
+       storeDEP(depProcess);
+        
 
-        IOUtils iou = new IOUtils(classPath);
-        iou.writeData(errorLog, "errorLog.txt");
+      
 
         return depProcess;
     }
@@ -432,4 +438,25 @@ public class DataElasticityManagementProcessesGenerator {
         primitiveActionRepository = new PrimitiveActionMetadata(listOfAdjustmentActions, listOfMonitoringActions, listOfResourceControlActions);
 
     }
+    
+    private void storeDEP(DataElasticityManagementProcess depProcess){
+
+        String elasticStateSetXML ="";
+        
+        ElasticStateSet elasticStateSet = new ElasticStateSet(finalElasticStates);
+        
+        try {
+            elasticStateSetXML = JAXBUtils.marshal(elasticStateSet, ElasticStateSet.class);
+        } catch (JAXBException ex) {
+           
+        }
+        
+        String elasticityProcessesXML = YamlUtils.marshallYaml(DataElasticityManagementProcess.class, depProcess);
+            
+        
+        
+        ElasticProcessRepositoryManager elStore = new ElasticProcessRepositoryManager(classPath);
+        elStore.storeElasticityProcesses(daf.getName(),elasticStateSetXML, elasticityProcessesXML, "", daf.getDbType().toString());
+    }
+
 }

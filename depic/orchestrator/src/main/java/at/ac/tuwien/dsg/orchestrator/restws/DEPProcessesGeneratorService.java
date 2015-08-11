@@ -17,15 +17,19 @@
  */
 package at.ac.tuwien.dsg.orchestrator.restws;
 
+import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsFunction;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlAction;
+import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
 import at.ac.tuwien.dsg.depic.common.utils.Configuration;
 import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
+import at.ac.tuwien.dsg.depic.process.generator.DataElasticityManagementProcessesGenerator;
 import at.ac.tuwien.dsg.depic.repository.ElasticProcessRepositoryManager;
 import at.ac.tuwien.dsg.depic.repository.PrimitiveActionMetadataManager;
 import java.util.List;
@@ -130,16 +134,33 @@ public class DEPProcessesGeneratorService {
     @Consumes(MediaType.APPLICATION_XML)
     public void requestToGenerateDEPProcess(@PathParam("daasName") String daasName) {
 
-        System.out.println("DaaS Name: " + daasName);
+        System.out.println("GENERATE DaaS: " + daasName);
+        
+        ElasticProcessRepositoryManager eprm = new ElasticProcessRepositoryManager(
+                getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+        
+        String qorStr = eprm.getQoR(daasName);
+        String dafStr = eprm.getDAF(daasName);
+        String dbtype = eprm.getDBType(daasName);
+        
+        DataAnalyticsFunction daf = new DataAnalyticsFunction(daasName, null, DBType.valueOf(dbtype), dafStr);
+        YamlUtils.setFilePath("/Volumes/DATA/Temp");
+        QoRModel qoRModel = YamlUtils.unmarshallYaml(QoRModel.class, qorStr);
+        
+//        System.out.println(qorStr);
+//        System.out.println(dafStr);
+//        System.out.println(dbtype);
+        
+        DataElasticityManagementProcessesGenerator dempg = new DataElasticityManagementProcessesGenerator(
+                daf, qoRModel, 
+                getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+        
+        DataElasticityManagementProcess dataElasticityMangementProcesses = dempg.generateElasticProcesses();
+      
+        
 
     }
 
-    @GET
-    @Path("/start")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String startDepicService() {
-
-        return "ok";
-    }
+    
 
 }
