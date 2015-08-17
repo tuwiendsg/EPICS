@@ -1,0 +1,65 @@
+!at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess
+directedAcyclicalGraph: 
+   listOfActions: 
+   - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
+      actionID: 2c2bad6c-c35b-4b6d-8b30-0b0183677371
+      actionName: SAM
+      incomming: ef1b162e-5189-431a-b88d-4f8563c0aa43
+      outgoing: 741f0bd9-d673-4771-9756-0897f9193f64
+   - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action
+      actionID: fa651e92-1fd7-4831-99cf-4d7e2f9c17b3
+      actionName: VAM
+      incomming: ef1b162e-5189-431a-b88d-4f8563c0aa43
+      outgoing: 741f0bd9-d673-4771-9756-0897f9193f64
+   listOfParallelGateways: 
+   - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway
+      gatewayID: ef1b162e-5189-431a-b88d-4f8563c0aa43
+      incomming: []
+      outgoing: 
+      - 2c2bad6c-c35b-4b6d-8b30-0b0183677371
+      - fa651e92-1fd7-4831-99cf-4d7e2f9c17b3
+   - !at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway
+      gatewayID: 741f0bd9-d673-4771-9756-0897f9193f64
+      incomming: 
+      - 2c2bad6c-c35b-4b6d-8b30-0b0183677371
+      - fa651e92-1fd7-4831-99cf-4d7e2f9c17b3
+      outgoing: []
+listOfMonitoringActions: 
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+   artifact: 
+      name: SAM
+      description: measure speed accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/SAM.sh
+      restfulAPI: /SAM/rest/monitor
+      type: sh
+   associatedQoRMetric: speedArc
+   listOfParameters: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: speedIndex
+      type: int
+      value: 2
+   monitorActionID: 2c2bad6c-c35b-4b6d-8b30-0b0183677371
+   monitoringActionName: SAM
+- !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction
+   artifact: 
+      name: VAM
+      description: monitor vehicle accuracy
+      location: http://128.130.172.215/salsa/upload/files/jun/artifact_sh/VAM.sh
+      restfulAPI: /VAM/rest/monitor
+      type: sh
+   associatedQoRMetric: vehicleArc
+   listOfParameters: 
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: longtitudeIndex
+      type: int
+      value: 0
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: latitudeIndex
+      type: int
+      value: 1
+   - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter
+      parameterName: speedIndex
+      type: int
+      value: 2
+   monitorActionID: fa651e92-1fd7-4831-99cf-4d7e2f9c17b3
+   monitoringActionName: VAM

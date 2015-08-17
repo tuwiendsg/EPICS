@@ -1,0 +1,66 @@
+************************
+***                  ***
+*** DEPIC User Guide ***
+***                  ***
+************************
+
+
+
+1. 	Purpose: 
+	
+	This document describes how to set up and run a demo of DEPIC - alpha version.ß
+	
+2. 	Getting Started:
+	
+	i. Create a virtual machine
+		- minimum configuration: m1.small | 1GB RAM | 1 VCPU | 40GB Disk
+		- OS: Ubuntu 14.04 LTS
+	ii. Install core services
+		- download script to install depic service: wget http://128.130.172.215/salsa/upload/files/jun/artifact_sh/depic_install.sh 
+		- configure $DEPIC_IP in the second line of the above script (Depic needs a floating IP address, so monitoring/adjustment services can interact with Depic after their deployment): vi depic_install.sh
+		- grant execution permission for the script: sudo chmod 777 depic_install.sh
+		- execute the install script: sudo ./depic_install.sh
+
+	
+3. 	Generating Data Elasticity Management Process:ßß
+	i. Go to user interface of depic: http://[IP]:8080//depic-tooling/
+	ii. Generate data elasticity management process from the following inputs:
+		- eDaaS Name: edaas1
+		- Quality of Results: https://github.com/tuwiendsg/EPICS/blob/alpha/depic/examples/experiment2/qor_xml.yml
+		- Data Analytics Function: https://github.com/tuwiendsg/EPICS/blob/alpha/depic/examples/experiment2/daf_gps_1.t2flow
+		- DataBase Type: MySql
+		- Click button: Generate eDaaS
+	iii. Verify the result:
+		- log folder: cd /home/ubuntu/log/
+		- Data Elasticity Management Process 
+			- Monitoring Process: vi monitorProcess.yml
+			- Adjustment Process: vi listOfAdjustmentProcesses.yml 
+			- Resource Control Plan: vi listOfResourceControlPlans.yml
+
+4. 	Deployment of Monitoring/Adjustment Services:
+	i. Go to COMOT user interface: http://128.130.172.215:8080/iCOMOT/
+	ii. Goto Deployment And Management tab:
+	iii. click on “edaas1CloudService”
+	iv. Wait until state of services changes to DEPLOYED
+	v. Checking tomcat log: tail -f /var/log/tomcat7/catalina.out
+	vi. Wait until you see number “4” appears every 10 seconds. It’s important because it indicates that 4 adjustment/monitoring services are deployed successful. 
+
+
+5. 	Operation
+	i. Start eDaaS client to simulate the requests from 5 DaaS customers, go to browser and type: http://[IP]:8080/ElasticDaaSClient/rest/test 
+	ii. You should see the following displayed on the browsers:
+		c00 is running !
+		c01 is running !
+		c02 is running !
+		c03 is running !
+		c04 is running !
+	iii. Checking tomcat log to see the operation: tail -f /var/log/tomcat7/catalina.out
+	iv. Go to Comot - tab Elasticity Monitoring to see the scaling out/in of Adjustment/Monitoring services
+	v. Logging: you can check the following logs:
+		- execution time: /home/ubuntu/log/logClient_c0*.txt 
+		- number of used VM: /home/ubuntu/log/vm_log.xml
+
+	
+
+
+

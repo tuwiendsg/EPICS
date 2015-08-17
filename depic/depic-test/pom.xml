@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>at.ac.tuwien.dsg</groupId>
+        <artifactId>depic</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>depic-test</artifactId>
+    <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>depic-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>depic-elastic-process-generator</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+    </properties>
+    
+    <build>  
+        <plugins>  
+            <plugin>  
+                <groupId>org.codehaus.mojo</groupId>  
+                <artifactId>exec-maven-plugin</artifactId>  
+                <version>1.1.1</version>  
+                <executions>  
+                    <execution>  
+                        <phase>test</phase>  
+                        <goals>  
+                            <goal>java</goal>  
+                        </goals>  
+                        <configuration>  
+                            <mainClass>at.ac.tuwien.dsg.depic.test.ElasticProcessesGeneratorTester</mainClass>  
+                            <arguments>  
+                                <argument>/home/ubuntu/depic/EPICS/depic/examples/experiment/case1/inputs</argument>  
+                                <argument>qor_xml.yml</argument>
+                                <argument>daf_gps_1.t2flow</argument>
+                                <argument>primitiveActionRepository.yml</argument>  
+                            </arguments>  
+                        </configuration>  
+                    </execution>  
+                </executions>  
+            </plugin>  
+        </plugins>  
+    </build>
+
+    
+</project>
