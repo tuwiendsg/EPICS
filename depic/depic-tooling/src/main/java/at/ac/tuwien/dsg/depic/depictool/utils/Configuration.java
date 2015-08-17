@@ -51,13 +51,7 @@ public class Configuration {
         return configString;
     }
     
-    public String getPrimitiveActionMetadata(){
-        String path = getConfigPath();
-        IOUtils iou = new IOUtils(path);
   
-        String primitiveAction_str = iou.readData("primitiveActionRepository.yml");
-        return primitiveAction_str;
-    }
     
     public String getCurrentPath(){
         String path = Configuration.class.getProtectionDomain().getCodeSource().getLocation().getPath();

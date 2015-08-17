@@ -12,12 +12,16 @@ import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlAction;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DeployAction;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticServices;
+import at.ac.tuwien.dsg.depic.common.repository.PrimitiveActionMetadataManager;
 import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 
@@ -54,12 +58,30 @@ public class Generator {
     public Generator() {
     }
 
-    public Generator(DataAnalyticsFunction daf, QoRModel qorModel,PrimitiveActionMetadata primitiveActionRepository, String eDaaSName, DBType dbType) {
+    public Generator(DataAnalyticsFunction daf, QoRModel qorModel) {
         this.daf = daf;
         this.qorModel = qorModel;
-        this.eDaaSName = eDaaSName;
-        this.dbType = dbType;
-        this.primitiveActionRepository = primitiveActionRepository;
+        config();
+    }
+    
+    private void config(){
+        eDaaSName = daf.getName();
+        this.dbType = daf.getDbType();
+        
+        loadPrimitiveActionMetadata();
+        
+    }
+    
+    private void loadPrimitiveActionMetadata() {
+
+        PrimitiveActionMetadataManager pamm = new PrimitiveActionMetadataManager(
+                getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+        List<MonitoringAction> listOfMonitoringActions = pamm.getMonitoringActionList();
+        List<AdjustmentAction> listOfAdjustmentActions = pamm.getAdjustmentActionList();
+        List<ResourceControlAction> listOfResourceControlActions = pamm.getResourceControlActionList();
+
+        primitiveActionRepository = new PrimitiveActionMetadata(listOfAdjustmentActions, listOfMonitoringActions, listOfResourceControlActions);
+
     }
 
 

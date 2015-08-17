@@ -44,6 +44,7 @@ import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ResourceControlPlan;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlStrategy;
+import at.ac.tuwien.dsg.depic.common.repository.PrimitiveActionMetadataManager;
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 
 import java.util.ArrayList;
@@ -94,7 +95,8 @@ public class ComotConnector {
 
         monitoringServices = new ArrayList<DeployAction>();
 
-        ElasticProcessRepositoryManager epStore = new ElasticProcessRepositoryManager();
+        PrimitiveActionMetadataManager pamm = new PrimitiveActionMetadataManager(
+                getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
 
         MonitoringProcess monitorProcess = elasticityProcess.getMonitoringProcess();
         List<MonitoringAction> monitoringActions = monitorProcess.getListOfMonitoringActions();
@@ -102,7 +104,7 @@ public class ComotConnector {
         for (MonitoringAction ma : monitoringActions) {
 
             if (!isDeployActionExisting(monitoringServices, ma.getMonitoringActionName())) {
-                DeployAction deployAction = epStore.getPrimitiveAction(ma.getMonitoringActionName());
+                DeployAction deployAction = pamm.getPrimitiveAction(ma.getMonitoringActionName());
                 
                 if (deployAction != null) {
                         monitoringServices.add(deployAction);
@@ -118,7 +120,8 @@ public class ComotConnector {
 
         controlServices = new ArrayList<DeployAction>();
 
-        ElasticProcessRepositoryManager epStore = new ElasticProcessRepositoryManager();
+        PrimitiveActionMetadataManager pamm = new PrimitiveActionMetadataManager(
+                getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
 
         List<AdjustmentProcess> listOfAdjustmentProcesses = elasticityProcess.getListOfAdjustmentProcesses();
 
@@ -129,7 +132,7 @@ public class ComotConnector {
             for (AdjustmentAction ca : controlActions) {
 
                 if (!isDeployActionExisting(controlServices, ca.getActionName())) {
-                    DeployAction deployAction = epStore.getPrimitiveAction(ca.getActionName());
+                    DeployAction deployAction = pamm.getPrimitiveAction(ca.getActionName());
 
                     if (deployAction != null) {
                         controlServices.add(deployAction);

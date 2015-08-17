@@ -3,18 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.depic.depictool.repository;
+package at.ac.tuwien.dsg.depic.common.repository;
 
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DeployAction;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveAction;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
-
-import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
+import at.ac.tuwien.dsg.depic.common.utils.Configuration;
 import at.ac.tuwien.dsg.depic.common.utils.MySqlConnectionManager;
 
-import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -22,9 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.bind.JAXBException;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -32,27 +26,24 @@ import org.apache.commons.io.IOUtils;
  * @author Jun
  */
 public class ElasticProcessRepositoryManager {
-
+    String classPath;
     MySqlConnectionManager connectionManager;
     
-    public ElasticProcessRepositoryManager() {
-        Configuration config = new Configuration();
+    public ElasticProcessRepositoryManager(String classPath) {
+        this.classPath = classPath;
+        Configuration config = new Configuration(classPath);
+        
         String ip = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.IP");
         String port = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.PORT");
         String database = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.DATABASE");
         String username = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.USERNAME");
         String password = config.getConfig("DB.ELASTICITY.PROCESSES.REPO.PASSWORD");
         
-//        String ip = "localhost";
-//        String port = "3306";
-//        String database = "ElasticityProcess";
-//        String username = "root";
-//        String password = "123";
-        
-        
         connectionManager = new MySqlConnectionManager(ip, port, database, username, password);
 
     }
+    
+    
     
     
     
@@ -67,9 +58,7 @@ public class ElasticProcessRepositoryManager {
         
         String sql = "INSERT INTO InputSpecification (name, qor, elasticity_process_config, type) VALUES ('"+edaas+"',?,?,'"+type.getDBType()+"')";
         connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
-        
-        
-        
+
         
     }
     
@@ -115,7 +104,7 @@ public class ElasticProcessRepositoryManager {
 
             rs.close();
         } catch (Exception ex) {
-
+            System.err.println(ex);
         }
 
         return elProcessXML;
@@ -142,92 +131,31 @@ public class ElasticProcessRepositoryManager {
         connectionManager.ExecuteUpdate(sql);
     }
     
-   
-    
-//    
-//    public List<ActionDependency> getActionDependencyDB(String actionID){
-//        String sql = "select * from ActionDependency where actionID='" + actionID+"'";
-//        
-//        List<ActionDependency> listOfActionDependencies = new ArrayList<ActionDependency>();
-//        
-//        ResultSet rs = connectionManager.ExecuteQuery(sql);
-//
-//        try {
-//
-//            while (rs.next()) {
-//            
-//                String prerequisiteActionID = rs.getString("prerequisiteActionID");     
-//                ActionDependency actionDependency = new ActionDependency(actionID, prerequisiteActionID);
-//                listOfActionDependencies.add(actionDependency);
-//
-//            }
-//            
-//            rs.close();
-//
-//        } catch (Exception ex) {
-//
-//        }
-//        
-//        return listOfActionDependencies;
-//    }
-//    
-//    
-//    public List<ActionDependency> getAllActionDependencies(){
-//        String sql = "select * from ActionDependency";
-//        
-//        List<ActionDependency> listOfActionDependencies = new ArrayList<ActionDependency>();
-//        
-//        ResultSet rs = connectionManager.ExecuteQuery(sql);
-//
-//        try {
-//
-//            while (rs.next()) {
-//                String actionID = rs.getString("actionID");
-//                String prerequisiteActionID = rs.getString("prerequisiteActionID");     
-//                ActionDependency actionDependency = new ActionDependency(actionID, prerequisiteActionID);
-//                listOfActionDependencies.add(actionDependency);
-//
-//            }
-//            
-//            rs.close();
-//
-//        } catch (Exception ex) {
-//
-//        }
-//        
-//        return listOfActionDependencies;
-//    }
-    
-    
-    
-    
-//    
-//    public PrimitiveAction getPrimitiveActions(){
-//        String sql = "select * from PrimitiveAction";
-//        List<DeployAction> listOfDeployActions = new ArrayList<DeployAction>();
-//        
-//        ResultSet rs = connectionManager.ExecuteQuery(sql);
-//        try {
-//            while (rs.next()) {
-//            
-//                String actionName = rs.getString("actionName"); 
-//                String artifact = rs.getString("artifact"); 
-//                String type = rs.getString("type"); 
-//                String restapi = rs.getString("restapi"); 
-//                DeployAction deployAction = new DeployAction(actionName, actionName, type, artifact, restapi);
-//                listOfDeployActions.add(deployAction);
-//            }
-//            rs.close();
-//
-//        } catch (Exception ex) {
-//
-//        }
-//        
-//        PrimitiveAction primitiveAction = new PrimitiveAction(listOfDeployActions);
-//        
-//        return primitiveAction;
-//    }
-    
+  
+    public DeployAction getPrimitiveAction(String actionName){
+        String sql = "select * from PrimitiveAction where actionName='" + actionName+"'";
+        DeployAction deployAction=null;
+  
+        
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+        try {
+            while (rs.next()) {
+            
+            
+                String artifact = rs.getString("artifact"); 
+                String type = rs.getString("type"); 
+                String restapi = rs.getString("restapi"); 
+                deployAction = new DeployAction(actionName,actionName, type, artifact, restapi);          
+            }
+            rs.close();
+
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+        
+        return deployAction;
+    }
+  
     public List<String> getElasticDaasNames(){
         String sql = "select name from InputSpecification";
         
@@ -244,7 +172,7 @@ public class ElasticProcessRepositoryManager {
             rs.close();
 
         } catch (Exception ex) {
-
+            System.err.println(ex);
         }
         
         return listOfEDaases;
@@ -286,6 +214,137 @@ public class ElasticProcessRepositoryManager {
         connectionManager.ExecuteUpdate(sql_ed);
         connectionManager.ExecuteUpdate(sql_in);
         
+
+    }
+    
+    
+    
+    /////////////////////////////
+    ///     Table: InputSpecification
+    ////////////////////////////
+    
+    public void insertDaaS(String edaas){
+        
+        
+      
+        
+        String sql = "INSERT INTO InputSpecification (name) VALUES ('"+edaas+"')";
+        connectionManager.ExecuteUpdate(sql);
+
+        
+    }
+    
+    
+    
+    
+    public void storeQoR(String edaas, String qor){
+        InputStream qorStream = new ByteArrayInputStream(qor.getBytes(StandardCharsets.UTF_8));
+        
+        List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
+        listOfInputStreams.add(qorStream);
+        
+        String sql = "UPDATE InputSpecification SET qor=? WHERE name='"+edaas+"'";
+        connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
+
+        
+    }
+    
+    public void storeDBType(String edaas, String type){
+       
+        String sql = "UPDATE InputSpecification SET dbtype='"+type+"' WHERE name='"+edaas+"'";
+        connectionManager.ExecuteUpdate(sql);
+        
+    }
+    public void storeDAF(String edaas, String daf){
+        
+   
+        InputStream dafStream = new ByteArrayInputStream(daf.getBytes(StandardCharsets.UTF_8));
+        
+        
+        List<InputStream> listOfInputStreams = new ArrayList<InputStream>();
+        listOfInputStreams.add(dafStream);
+
+        
+        String sql = "UPDATE InputSpecification SET daf=? WHERE name='"+edaas+"'";
+        connectionManager.ExecuteUpdateBlob(sql, listOfInputStreams);
+
+        
+    }
+    
+    public String getQoR (String edaas){
+     
+        String sql = "SELECT * FROM InputSpecification WHERE name='" + edaas + "'";
+        String qorStr = "";
+       
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        try {
+            while (rs.next()) {
+                InputStream inputStream = rs.getBinaryStream("qor");
+                StringWriter writer = new StringWriter();
+                String encoding = StandardCharsets.UTF_8.name();
+                IOUtils.copy(inputStream, writer, encoding);
+                qorStr = writer.toString();          
+                
+            }
+
+            rs.close();
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+
+        return qorStr;
+
+    }
+    
+    public String getDAF (String edaas){
+     
+        String sql = "SELECT * FROM InputSpecification WHERE name='" + edaas + "'";
+        String dafStr = "";
+       
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        try {
+            while (rs.next()) {
+                InputStream inputStream = rs.getBinaryStream("daf");
+                StringWriter writer = new StringWriter();
+                String encoding = StandardCharsets.UTF_8.name();
+                IOUtils.copy(inputStream, writer, encoding);
+                dafStr = writer.toString();          
+            }
+
+            rs.close();
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+
+        return dafStr;
+
+    }
+    
+    
+    public String getDBType (String edaas){
+     
+        String sql = "SELECT * FROM InputSpecification WHERE name='" + edaas + "'";
+        String dbType = "";
+       
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        try {
+            while (rs.next()) {
+                dbType = rs.getString("dbtype");
+                
+            }
+
+            rs.close();
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+
+        return dbType;
 
     }
 }

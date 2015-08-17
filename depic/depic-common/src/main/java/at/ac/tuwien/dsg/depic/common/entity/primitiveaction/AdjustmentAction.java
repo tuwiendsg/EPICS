@@ -21,10 +21,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AdjustmentAction implements PrimitiveAction{
     
-    @XmlElement(name = "controlActionID", required = true)
+    @XmlElement(name = "adjustmentActionID", required = true)
     String actionID;
     
-    @XmlElement(name = "controlActionName", required = true)
+    @XmlElement(name = "adjustmentActionName", required = true)
     String actionName;
     
     @XmlElement(name = "artifact", required = true)

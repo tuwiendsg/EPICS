@@ -461,7 +461,7 @@ public class ElasticProcessesGenerator {
 
         for (ResourceControlAction resourceControlAction : listOfResourceControlActions) {
             if (qorMetric.getName().equals(resourceControlAction.getAssociatedQoRMetric())) {
-                listOfResourceControlCases = resourceControlAction.getListOfResourceControlStrategies();
+                listOfResourceControlCases = resourceControlAction.getListOfResourceControlCases();
             }
         }
 
@@ -972,7 +972,7 @@ public class ElasticProcessesGenerator {
         for (ResourceControlAction rc : listOfResourceControls) {
             if (metricCondition.getMetricName().equals(rc.getAssociatedQoRMetric())) {
 
-                List<ResourceControlCase> listOfResourceControlCases = rc.getListOfResourceControlStrategies();
+                List<ResourceControlCase> listOfResourceControlCases = rc.getListOfResourceControlCases();
 
                 for (ResourceControlCase resourceControlCase : listOfResourceControlCases) {
                     if (resourceControlCase.getEstimatedResult().getLowerBound() == metricCondition.getLowerBound()

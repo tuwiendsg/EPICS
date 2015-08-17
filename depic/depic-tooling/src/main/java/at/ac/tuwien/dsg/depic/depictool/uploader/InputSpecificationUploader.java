@@ -183,27 +183,12 @@ public class InputSpecificationUploader extends HttpServlet {
         
         
         QoRModel qoRModel = YamlUtils.unmarshallYaml(QoRModel.class, qor);
-        DataAnalyticsFunction dataAnalyticsFunction = new DataAnalyticsFunction("daf-gps", qoRModel.getDataAssetForm(), dbType, daw);
-        
-        //DataAssetRepositoryManager das = new DataAssetRepositoryManager();
-        //das.requestToGetDataAsset(dataAnalyticsFunction);
-        
-        Configuration configuration = new Configuration();
-        String primitiveAction = configuration.getPrimitiveActionMetadata();
-        log = log + "primitive actions: " + primitiveAction + "\n";
-        
-        ElasticProcessRepositoryManager elasticityProcessStore = new ElasticProcessRepositoryManager();
-        elasticityProcessStore.storeQoRAndPrimitiveActionMeatadata(eDaaSName, qor, primitiveAction, dbType);
-  
-   
-        PrimitiveActionMetadata pam = YamlUtils.unmarshallYaml(PrimitiveActionMetadata.class, primitiveAction);
- 
-        
-        log = log + "CHECK CHECK CHECK: " + pam.getListOfAdjustmentActions().get(0).getActionName() + "\n";
+        DataAnalyticsFunction dataAnalyticsFunction = new DataAnalyticsFunction(eDaaSName, qoRModel.getDataAssetForm(), dbType, daw);
+     
         
         Logger.getLogger(InputSpecificationUploader.class.getName()).log(Level.INFO, log);
         
-        Generator generator = new Generator(dataAnalyticsFunction, qoRModel, pam, eDaaSName, dbType);
+        Generator generator = new Generator(dataAnalyticsFunction, qoRModel);
         generator.startGenerator();
        
         //  
