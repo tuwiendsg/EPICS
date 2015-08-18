@@ -13,7 +13,7 @@ import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DirectedAcyclicalGraph;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
 
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
@@ -80,7 +80,7 @@ public class ElasticProcessesGenerator {
         this.rootPath = rooPath;
     }
 
-    public ElasticProcess generateElasticProcesses() {
+    public DataElasticityManagementProcess generateElasticProcesses() {
         Logger.logInfo("Start generate Elastic Processes ... ");
 
         MonitoringProcess monitorProcess = generateMonitoringProcess();
@@ -95,7 +95,7 @@ public class ElasticProcessesGenerator {
         List<ResourceControlPlan> listOfResourceControlPlans = generateResourceControlPlan(finalElasticStates);
         toYaml(listOfResourceControlPlans, "listOfResourceControlPlans.yml");
 
-        ElasticProcess elasticProcess = new ElasticProcess(monitorProcess, listOfAdjustmentProcesses, listOfResourceControlPlans);
+        DataElasticityManagementProcess elasticProcess = new DataElasticityManagementProcess(monitorProcess, listOfAdjustmentProcesses, listOfResourceControlPlans);
 
         IOUtils iou = new IOUtils(rootPath);
         iou.writeData(errorLog, "errorLog.txt");

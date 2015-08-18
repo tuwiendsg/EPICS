@@ -10,11 +10,11 @@ package at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DataPartitionRequest;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
@@ -27,8 +27,9 @@ import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
-import at.ac.tuwien.dsg.orchestrator.configuration.Configuration;
 import at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller.DataElasticityController;
+
+import at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller.ProcessExecutor;
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
@@ -37,7 +38,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import javax.xml.bind.JAXBException;
-import sun.java2d.pipe.BufferedMaskBlit;
+
 
 /**
  *
@@ -51,7 +52,6 @@ public class DataElasticityMonitor{
     MonitoringSession monitoringSession;
     MonitoringProcess monitorProcess;
     List<AdjustmentProcess> listOfAdjustmentProcess;
-    DBType eDaaSType;
     PrimitiveActionMetadata primitiveActionMetadata;
  
 
@@ -79,7 +79,7 @@ public class DataElasticityMonitor{
 
                 do {
 
-                    uri = ElasticServiceRegistry.getElasticServiceURI(monitoringServiceName, eDaaSType);
+                    uri = ElasticServiceRegistry.getElasticServiceURI(monitoringServiceName, monitoringSession.geteDaaSType());
                     if (uri.equals("")) {
                         Logger.logInfo("Waiting_for_Active_Elastic_Serivce ... " + monitoringSession.getSessionID() +" - " +monitoringServiceName);
                     } else {
@@ -87,18 +87,12 @@ public class DataElasticityMonitor{
                         ElasticServiceRegistry.occupyElasticService(uri);
                     }
                     
-                    
-                    
-                    
                     try {
                         Thread.sleep(10000);
 
                     } catch (InterruptedException ex) {
-
+                        System.err.println(ex);
                     }
-                    
-                    
-                    
 
                 } while (uri.equals(""));
 
@@ -114,7 +108,7 @@ public class DataElasticityMonitor{
             try {
                 requestXML = JAXBUtils.marshal(request, DataPartitionRequest.class);
             } catch (JAXBException ex) {
-              
+                System.err.println(ex);
             }
 
             double monitoringValue = 0;
@@ -146,22 +140,19 @@ public class DataElasticityMonitor{
 
         if (currentElasticState == null) {
             
-         
                 Logger.logInfo("FAIL VALIDATION");
-                //log = log + "FAIL VALIDATION" + "\n";
                 log  = log + "FAIL" + "\t";
-                DataElasticityController controller = new DataElasticityController(listOfElasticStates, listOfAdjustmentProcess, monitoringSession, eDaaSType);
+                DataElasticityController controller = new DataElasticityController(listOfElasticStates, listOfAdjustmentProcess, monitoringSession,  monitoringSession.geteDaaSType());
                 controller.startControlElasticState(currentElasticState);
-            
+                
+                ProcessExecutor processExecutor = new ProcessExecutor(listOfElasticStates, listOfAdjustmentProcess, monitoringSession, currentElasticState);
+                
                 
             
-           
-
         } else {
             Logger.logInfo("PASS VALIDATION");
                 log = log + "PASS" + "\t";
             Logger.logInfo("Current Elastic State ...");
-          //  log = log + "Current Elastic State ..." + currentElasticState.geteStateID() + "\n";
 
             logElasticState(currentElasticState);
             
@@ -260,29 +251,21 @@ public class DataElasticityMonitor{
         ElasticityProcessesStore elasticityProcessesStore = new ElasticityProcessesStore(); 
         ElasticDataAsset eda = elasticityProcessesStore.getElasticDataAsset(monitoringSession.getEdaasName());
         
-        ElasticProcess elasticityProcess= eda.getElasticProcess();
+        DataElasticityManagementProcess elasticityProcess= eda.getElasticProcess();
    
-        eDaaSType = DBType.MYSQL;
+        monitoringSession.seteDaaSType(DBType.MYSQL);
+ 
         
         listOfElasticStates = eda.getListOfFinalElasticState();
        
         monitorProcess = elasticityProcess.getMonitoringProcess();
         listOfAdjustmentProcess = elasticityProcess.getListOfAdjustmentProcesses();
- 
-        
-        
-        
+
         //List<String> expectElasticStateIDs = monitoringSession.getListOfExpectedElasticStates();
         //mappingExpectedEStateIDs(expectElasticStateIDs);
         
         primitiveActionMetadata = elasticityProcessesStore.getPrimitiveActionMetadata(monitoringSession.getEdaasName());
-        
-      
 
-        
-        
-                
-       
     }
     
     private void mappingExpectedEStateIDs(List<String> expectElasticStateIDs){

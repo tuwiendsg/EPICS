@@ -10,10 +10,11 @@ import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAssetForm;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
+import at.ac.tuwien.dsg.depic.common.repository.ElasticProcessRepositoryManager;
+import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
 import at.ac.tuwien.dsg.depic.depictool.generator.Generator;
-import at.ac.tuwien.dsg.depic.depictool.repository.DataAssetRepositoryManager;
-import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManager;
+
 import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
 
 import java.io.File;
@@ -29,6 +30,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -187,6 +189,26 @@ public class InputSpecificationUploader extends HttpServlet {
      
         
         Logger.getLogger(InputSpecificationUploader.class.getName()).log(Level.INFO, log);
+        
+        
+        
+        ElasticProcessRepositoryManager eprm = new ElasticProcessRepositoryManager(
+                getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+        
+        String dafStr = "";
+        
+        try {
+            dafStr = JAXBUtils.marshal(dataAnalyticsFunction, DataAnalyticsFunction.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(InputSpecificationUploader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        eprm.insertDaaS(eDaaSName);
+        eprm.storeDAF(eDaaSName, dafStr);
+        eprm.storeQoR(eDaaSName, qor);
+        eprm.storeDBType(eDaaSName, dbType.getDBType());
+        
+        
         
         Generator generator = new Generator(dataAnalyticsFunction, qoRModel);
         generator.startGenerator();

@@ -10,7 +10,7 @@ import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsF
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 
 import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MonitoringAction;
@@ -21,6 +21,7 @@ import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DeployAction;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticServices;
+import at.ac.tuwien.dsg.depic.common.repository.ElasticProcessRepositoryManager;
 import at.ac.tuwien.dsg.depic.common.repository.PrimitiveActionMetadataManager;
 import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
@@ -30,7 +31,7 @@ import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.depic.depictool.connector.ComotConnector;
 import at.ac.tuwien.dsg.depic.depictool.connector.ElasticServiceMonitor;
-import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManager;
+
 import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
 import at.ac.tuwien.dsg.depic.depictool.utils.ZipUtils;
 import at.ac.tuwien.dsg.depic.elastic.process.generator.ElasticProcessesGenerator;
@@ -91,7 +92,7 @@ public class Generator {
         
         ElasticProcessesGenerator elasticProcessesGenerator = new ElasticProcessesGenerator(daf, qorModel, primitiveActionRepository);
         
-        ElasticProcess elasticProcess = elasticProcessesGenerator.generateElasticProcesses();
+        DataElasticityManagementProcess elasticProcess = elasticProcessesGenerator.generateElasticProcesses();
         
         long t2 = System.currentTimeMillis();
         DaaSGenerator daaSGenerator = new DaaSGenerator(qorModel);
@@ -120,7 +121,8 @@ public class Generator {
 
     public void prepareDeployment(ElasticDataAsset elasticDataAsset) {
 
-        ElasticProcessRepositoryManager elStore = new ElasticProcessRepositoryManager();
+        ElasticProcessRepositoryManager elStore = new ElasticProcessRepositoryManager(
+                getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
         Configuration config = new Configuration();
         String parentPath = config.getCurrentPath();
         
@@ -147,7 +149,7 @@ public class Generator {
         
         String elasticityProcessesXML = "";
         try {
-            elasticityProcessesXML = JAXBUtils.marshal(elasticDataAsset.getElasticProcess(), ElasticProcess.class);
+            elasticityProcessesXML = JAXBUtils.marshal(elasticDataAsset.getElasticProcess(), DataElasticityManagementProcess.class);
         } catch (JAXBException ex) {
             java.util.logging.Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
         }

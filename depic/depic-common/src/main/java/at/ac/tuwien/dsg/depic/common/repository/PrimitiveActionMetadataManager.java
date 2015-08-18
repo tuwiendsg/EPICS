@@ -47,11 +47,7 @@ public class PrimitiveActionMetadataManager {
         String database = config.getConfig("DB.PAM.DATABASE");
         String username = config.getConfig("DB.PAM.USERNAME");
         String password = config.getConfig("DB.PAM.PASSWORD");
-        
-        System.out.println("ip: " + ip);
-        System.out.println("port: " + port);
-        System.out.println("database: " + database);
-  
+
 
         connectionManager = new MySqlConnectionManager(ip, port, database, username, password);
 
@@ -63,7 +59,7 @@ public class PrimitiveActionMetadataManager {
     
     }
     
-    public DeployAction getPrimitiveAction(String actionName){
+      public DeployAction getPrimitiveAction(String actionName){
         String sql = "select * from Artifact where ActionName='" + actionName+"'";
         DeployAction deployAction=null;
   
@@ -86,7 +82,6 @@ public class PrimitiveActionMetadataManager {
         
         return deployAction;
     }
-    
     
 
     public void storeMonitoringAction(MonitoringAction monitoringAction) {

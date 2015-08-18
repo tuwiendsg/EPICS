@@ -11,7 +11,7 @@ import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.MonitoringProcess;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringSession;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway;
@@ -37,7 +37,7 @@ public class LoggerProcess {
     public void config(){
         ElasticityProcessesStore elasticityProcessesStore = new ElasticityProcessesStore(); 
         ElasticDataAsset eda = elasticityProcessesStore.getElasticDataAsset("daf2");
-   //     ElasticProcess elasticityProcess= eda.getElasticityProcess();
+   //     DataElasticityManagementProcess elasticityProcess= eda.getElasticityProcess();
      
        listOfFinalState = eda.getListOfFinalElasticState();
       //  monitorProcess = elasticityProcess.getMonitorProcess(); 

@@ -12,12 +12,12 @@ import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.comot.client.DefaultSalsaClient;
 import at.ac.tuwien.dsg.comot.orchestrator.interraction.salsa.SalsaInterraction;
-import at.ac.tuwien.dsg.depic.depictool.repository.ElasticProcessRepositoryManager;
+
 import at.ac.tuwien.dsg.depic.depictool.utils.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import javax.xml.bind.JAXBException;
+
 
 /**
  *

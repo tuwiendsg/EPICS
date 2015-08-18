@@ -6,17 +6,18 @@
 package at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller;
 
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
-import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.MetricCondition;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
+
+import at.ac.tuwien.dsg.depic.common.entity.runtime.ExecutionSession;
+import at.ac.tuwien.dsg.depic.common.entity.runtime.ExecutionStep;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ExternalServiceRequest;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringSession;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
-import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
+
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBException;
@@ -25,23 +26,76 @@ import javax.xml.bind.JAXBException;
  *
  * @author Jun
  */
-public class DataElasticityController {
-
-    List<ElasticState> listOfExpectedElasticStates;
-    List<AdjustmentProcess> listOfAdjustmentProcesses;
-    List<String> traversedGatewayList;
-    DBType eDaaSType;
-    MonitoringSession monitoringSession;
-
-    public DataElasticityController(List<ElasticState> listOfExpectedElasticStates, List<AdjustmentProcess> listOfAdjustmentProcesses, MonitoringSession monitoringSession, DBType eDaaSType) {
+public class ProcessExecutor implements Runnable{
+    
+    private Thread t;
+    private ExecutionSession executionSession;
+    private List<ElasticState> listOfExpectedElasticStates;
+    private List<AdjustmentProcess> listOfAdjustmentProcesses;
+    private MonitoringSession monitoringSession;
+    private ElasticState currentElasticState;
+    
+    
+    public ProcessExecutor(List<ElasticState> listOfExpectedElasticStates, List<AdjustmentProcess> listOfAdjustmentProcesses, MonitoringSession monitoringSession,ElasticState currentElasticState) {
+       
         this.listOfExpectedElasticStates = listOfExpectedElasticStates;
         this.listOfAdjustmentProcesses = listOfAdjustmentProcesses;
-        traversedGatewayList = new ArrayList<String>();
         this.monitoringSession = monitoringSession;
-        this.eDaaSType = eDaaSType;
+        this.currentElasticState = currentElasticState;
+    }
+    
+    public void run() {
+
+        AdjustmentProcess adjustmentProcess = findAppropriateAdjustmentProcess();
+        
+        DEPExecutionPlanning depep = new DEPExecutionPlanning(adjustmentProcess);
+        List<ExecutionStep> executionPlan = depep.planningExecution();
+        
+        executionSession = new ExecutionSession(monitoringSession, executionPlan, adjustmentProcess);
+        
+        
+        
+        boolean isFinished = false;
+        DEPExecutionEngine.addExecutionSession(executionSession);
+
+
+        do {
+            
+            DEPExecutionEngine.checkExecution(executionSession.getMonitoringSession().getSessionID());
+            
+            isFinished = DEPExecutionEngine.isFinished(executionSession.getMonitoringSession().getSessionID());
+            
+            
+            
+            
+            try {
+                Thread.sleep(2000);
+
+            } catch (InterruptedException ex) {
+
+            }
+        } while (!isFinished);
+        
+        System.out.println("PROCESS EXECUTION FINISHED !!!");
     }
 
-    public void startControlElasticState(ElasticState currentElasticState) {
+    public void start() {
+
+        if (t == null) {
+            t = new Thread(this, "");
+            t.start();
+        }
+    
+    }
+    
+    
+    
+    
+    ///////
+    ///////
+    //////
+    
+    private AdjustmentProcess findAppropriateAdjustmentProcess() {
 
         List<AdjustmentProcess> listOfPotentialControlProcesses = new ArrayList<AdjustmentProcess>();
 
@@ -49,30 +103,27 @@ public class DataElasticityController {
 
             AdjustmentProcess cp = determineAppropriateControlProcess(expectedElasticState.geteStateID());
             if (cp != null) {
-                Logger.logInfo("Potential Next eState FOUND");
+                
                 listOfPotentialControlProcesses.add(cp);
             }
 
         }
 
         AdjustmentProcess adjustmentProcess = determineTheBestControlProcess(listOfPotentialControlProcesses);
-        Logger.logInfo("BEST ADJUSTMENT PROCESS FOUND");
-        Logger.logInfo("FINAL Elastic STATE");
 
-        String log = "";
-        log += "FINAL Elastic STATE: " + adjustmentProcess.getFinalEState().geteStateID();
 
-        logElasticState(adjustmentProcess.getFinalEState());
+     
+     
+//
+//        long t1 = System.currentTimeMillis();
+//
+//        startControlProcess(adjustmentProcess);
+//
+//        long t2 = System.currentTimeMillis();
 
-        long t1 = System.currentTimeMillis();
-
-        startControlProcess(adjustmentProcess);
-
-        long t2 = System.currentTimeMillis();
-
-        System.err.println("ADJUSTMENT_PROCESS_RUNTIME: " + monitoringSession.getSessionID() + "  -  " + (t2 - t1));
-        log = log + "ADJUSTMENT_PROCESS_RUNTIME: " + monitoringSession.getSessionID() + "  -  " + (t2 - t1);
-        System.err.println("\n" + log);
+       
+       return adjustmentProcess;
+    
 
     }
 
@@ -103,9 +154,9 @@ public class DataElasticityController {
         return potentialControlProcesses.get(cpIndex);
     }
 
-    private void startControlProcess(AdjustmentProcess cp) {
+    public void startControlProcess(AdjustmentProcess cp) {
 
-        Logger.logInfo("EXECUTE Control Process ...");
+      
         executeControlProcess(cp);
 
     }
@@ -116,10 +167,7 @@ public class DataElasticityController {
 
         for (AdjustmentAction controlAction : listOfControlActions) {
 
-            List<Parameter> listOfParams = new ArrayList<Parameter>();
-            Parameter p = new Parameter("attributeIndex", "int", "3");
-            listOfParams.add(p);
-            ExternalServiceRequest controlRequest = new ExternalServiceRequest(monitoringSession.getEdaasName(), monitoringSession.getSessionID(), monitoringSession.getDataAssetID(), listOfParams);
+            ExternalServiceRequest controlRequest = new ExternalServiceRequest(monitoringSession.getEdaasName(), monitoringSession.getSessionID(), monitoringSession.getDataAssetID(), null);
 
             String requestXML = "";
             try {
@@ -132,11 +180,11 @@ public class DataElasticityController {
 
             do {
 
-                uri = ElasticServiceRegistry.getElasticServiceURI(controlAction.getActionName(), eDaaSType);
+                uri = ElasticServiceRegistry.getElasticServiceURI(controlAction.getActionName(), monitoringSession.geteDaaSType());
                 if (uri.equals("")) {
-                    Logger.logInfo("Waiting_for_Active_Elastic_Serivce ... " + monitoringSession.getSessionID() + " - " + controlAction.getActionName());
+                  //  Logger.logInfo("Waiting_for_Active_Elastic_Serivce ... " + monitoringSession.getSessionID() + " - " + controlAction.getActionName());
                 } else {
-                    Logger.logInfo("Ready_Service: " + monitoringSession.getSessionID() + " - " + uri);
+                   // Logger.logInfo("Ready_Service: " + monitoringSession.getSessionID() + " - " + uri);
                     ElasticServiceRegistry.occupyElasticService(uri);
                 }
 
@@ -149,7 +197,7 @@ public class DataElasticityController {
 
             } while (uri.equals(""));
 
-            Logger.logInfo("RUN: " + uri);
+            //Logger.logInfo("RUN: " + uri);
             RestfulWSClient ws = new RestfulWSClient(uri);
             ws.callPutMethod(requestXML);
 
@@ -159,32 +207,9 @@ public class DataElasticityController {
 
     }
 
-    private boolean isTraversed(String gatewayID) {
-        boolean rs = false;
+   
 
-        for (String traversedPG : traversedGatewayList) {
-            if (traversedPG.equals(gatewayID)) {
-                rs = true;
-            }
-        }
 
-        return rs;
-    }
-
-    private void logElasticState(ElasticState elasticState) {
-
-        Logger.logInfo("\n***");
-        Logger.logInfo("eState ID: " + elasticState.geteStateID());
-        List<MetricCondition> conditions = elasticState.getListOfConditions();
-        for (MetricCondition condition : conditions) {
-            Logger.logInfo("\n---");
-            System.err.print("    metric: " + condition.getMetricName());
-            System.err.print("    id: " + condition.getConditionID());
-            System.err.print("    lower: " + condition.getLowerBound());
-            System.err.print("    uppper: " + condition.getUpperBound());
-
-        }
-
-    }
-
+    
+    
 }

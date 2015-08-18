@@ -16,9 +16,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jun
  */
 
-@XmlRootElement(name = "ElasticProcess")
+@XmlRootElement(name = "DataElasticityManagementProcess")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ElasticProcess {
+public class DataElasticityManagementProcess {
 
     @XmlElement(name = "monitoringProcess", required = true)
     MonitoringProcess monitoringProcess;
@@ -29,10 +29,10 @@ public class ElasticProcess {
     @XmlElement(name = "listOfResourceControlPlans", required = true)
     List<ResourceControlPlan> listOfResourceControlPlans;
 
-    public ElasticProcess() {
+    public DataElasticityManagementProcess() {
     }
 
-    public ElasticProcess(MonitoringProcess monitoringProcess, List<AdjustmentProcess> listOfAdjustmentProcesses, List<ResourceControlPlan> listOfResourceControlPlans) {
+    public DataElasticityManagementProcess(MonitoringProcess monitoringProcess, List<AdjustmentProcess> listOfAdjustmentProcesses, List<ResourceControlPlan> listOfResourceControlPlans) {
         this.monitoringProcess = monitoringProcess;
         this.listOfAdjustmentProcesses = listOfAdjustmentProcesses;
         this.listOfResourceControlPlans = listOfResourceControlPlans;

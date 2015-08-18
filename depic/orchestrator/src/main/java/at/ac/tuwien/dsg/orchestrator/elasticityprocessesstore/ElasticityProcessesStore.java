@@ -9,7 +9,7 @@ import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.PrimitiveActionMetadata;
 
 import at.ac.tuwien.dsg.depic.common.entity.qor.QoRModel;
@@ -143,9 +143,9 @@ public class ElasticityProcessesStore {
                 Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
             }
         
-        ElasticProcess elasticityProcess = null;
+        DataElasticityManagementProcess elasticityProcess = null;
         try {
-            elasticityProcess = JAXBUtils.unmarshal(elasticityProcessesXML, ElasticProcess.class);
+            elasticityProcess = JAXBUtils.unmarshal(elasticityProcessesXML, DataElasticityManagementProcess.class);
         } catch (JAXBException ex) {
             Logger.getLogger(ElasticityProcessesStore.class.getName()).log(Level.SEVERE, null, ex);
         }

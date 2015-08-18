@@ -28,16 +28,20 @@ public class MonitoringSession {
     @XmlElement(name = "dataAssetID", required = true)
     String dataAssetID;
     
+    @XmlElement(name = "eDaaSType", required = true)
+    private DBType eDaaSType;
+    
     @XmlElement(name = "listOfExpectedElasticStates", required = true)
     List<String> listOfExpectedElasticStates;
 
     public MonitoringSession() {
     }
 
-    public MonitoringSession(String sessionID, String edaasName, String dataAssetID, List<String> listOfExpectedElasticStates) {
+    public MonitoringSession(String sessionID, String edaasName, String dataAssetID, DBType eDaaSType, List<String> listOfExpectedElasticStates) {
         this.sessionID = sessionID;
         this.edaasName = edaasName;
         this.dataAssetID = dataAssetID;
+        this.eDaaSType = eDaaSType;
         this.listOfExpectedElasticStates = listOfExpectedElasticStates;
     }
 
@@ -63,6 +67,14 @@ public class MonitoringSession {
 
     public void setDataAssetID(String dataAssetID) {
         this.dataAssetID = dataAssetID;
+    }
+
+    public DBType geteDaaSType() {
+        return eDaaSType;
+    }
+
+    public void seteDaaSType(DBType eDaaSType) {
+        this.eDaaSType = eDaaSType;
     }
 
     public List<String> getListOfExpectedElasticStates() {

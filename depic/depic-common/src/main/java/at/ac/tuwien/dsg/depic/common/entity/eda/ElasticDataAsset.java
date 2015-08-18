@@ -8,8 +8,8 @@ package at.ac.tuwien.dsg.depic.common.entity.eda;
 
 
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
-import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
+import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticStateSet;
 import java.util.List;
@@ -31,7 +31,7 @@ public class ElasticDataAsset {
     String dataAssetID;
   
     @XmlElement(name = "elasticProcess", required = true)
-    ElasticProcess elasticProcess;
+    DataElasticityManagementProcess elasticProcess;
     
     @XmlElement(name = "listOfFinalElasticState", required = true)
     List<ElasticState> listOfFinalElasticState;
@@ -39,7 +39,7 @@ public class ElasticDataAsset {
     public ElasticDataAsset() {
     }
 
-    public ElasticDataAsset(String dataAssetID, ElasticProcess elasticProcess, List<ElasticState> listOfFinalElasticState) {
+    public ElasticDataAsset(String dataAssetID, DataElasticityManagementProcess elasticProcess, List<ElasticState> listOfFinalElasticState) {
         this.dataAssetID = dataAssetID;
         this.elasticProcess = elasticProcess;
         this.listOfFinalElasticState = listOfFinalElasticState;
@@ -53,11 +53,11 @@ public class ElasticDataAsset {
         this.dataAssetID = dataAssetID;
     }
 
-    public ElasticProcess getElasticProcess() {
+    public DataElasticityManagementProcess getElasticProcess() {
         return elasticProcess;
     }
 
-    public void setElasticProcess(ElasticProcess elasticProcess) {
+    public void setElasticProcess(DataElasticityManagementProcess elasticProcess) {
         this.elasticProcess = elasticProcess;
     }
 
