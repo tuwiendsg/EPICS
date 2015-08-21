@@ -50,8 +50,15 @@ public class DataAssetQueue {
     }
 
     public int getDataAssetCounter() {
-        return dataAssetCounter++;
+        return dataAssetCounter;
     }
+    
+    public void increaseCounter(){
+        
+        dataAssetCounter++;
+    }
+    
+    
 
    
     

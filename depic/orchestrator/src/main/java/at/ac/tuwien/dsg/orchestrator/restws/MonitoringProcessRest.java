@@ -67,7 +67,7 @@ public class MonitoringProcessRest {
         }
         
       DataElasticityMonitor dataElasticityMonitor = new DataElasticityMonitor(monitoringSession);
-      dataElasticityMonitor.startMonitoringService();
+      dataElasticityMonitor.start();
         
     }
     

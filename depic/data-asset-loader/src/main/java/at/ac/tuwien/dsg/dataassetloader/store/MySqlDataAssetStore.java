@@ -211,14 +211,16 @@ public class MySqlDataAssetStore implements DataStore {
 //        at.ac.tuwien.dsg.depic.common.utils.IOUtils iou = new at.ac.tuwien.dsg.depic.common.utils.IOUtils(dataPath);
 //        daPartitionStr = iou.readData(fileName);
 
-        System.out.println("GET DATA PARTITION ... ");
+            System.out.println("GET DATA PARTITION ... ");
 
             InputStream inputStream = null;
 
             MySqlConnectionManager connectionManager = new MySqlConnectionManager(ip, port, db, user, pass);
             
-            String sql = "Select * from ProcessingDataAsset where edaas='"+edaas+"' AND customerID='"+customerID+"' AND daw_name='"+dawID+"' AND partitionID='"+paritionID+"' ";
+            String sql = "Select * from ProcessingDataAsset where edaas='"+edaas+"' AND customerID='"+customerID+"'  AND partitionID='"+paritionID+"' ";
             
+           System.out.println(sql);
+           
            
             ResultSet rs = connectionManager.ExecuteQuery(sql);
 

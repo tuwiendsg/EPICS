@@ -115,27 +115,31 @@ public class DataassetResource {
     @Produces("application/xml")
     public String copyDataAsset(String monitoringSessionXML) {
 
-        String log ="Start Copying Data Asset: ";
-        Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO,  log);
-        
-        MonitoringSession monitoringSession=null;
+        String log = "Start Copying Data Asset: ";
+        Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO, log);
+
+        MonitoringSession monitoringSession = null;
         try {
             monitoringSession = JAXBUtils.unmarshal(monitoringSessionXML, MonitoringSession.class);
         } catch (JAXBException ex) {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-       
+
         DataAssetQueue daq = DataAssetRepositoryMetadata.getDataAssetQueueFromEDaaSName(monitoringSession.getEdaasName());
-        
+
         String dataAssetCounter = String.valueOf(daq.getDataAssetCounter());
-        
-        DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
-        DBType eDaaSType = dafStore.gEDaaSTypeFromEDaaSName(monitoringSession.getEdaasName());
-        
-        GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
-        dataLoader.copyDataAssetRepo(monitoringSession,Integer.parseInt(dataAssetCounter));
-        
+
+        if (dataAssetCounter.equals(monitoringSession.getDataAssetIndex())) {
+            System.out.println("WAITING ... FOR NEXT WINDOW");
+        } else {
+            System.out.println("STARTING COPYING DATA WINDOW");
+
+            DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
+            DBType eDaaSType = dafStore.gEDaaSTypeFromEDaaSName(monitoringSession.getEdaasName());
+
+            GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
+            dataLoader.copyDataAssetRepo(monitoringSession, Integer.parseInt(dataAssetCounter));
+        }
 
         return dataAssetCounter;
     }
@@ -259,6 +263,7 @@ public class DataassetResource {
         
 
         DataAssetQueue dataAssetQueue = DataAssetRepositoryMetadata.getDataAssetQueueFromEDaaSName(dataAsset.getDataAssetID());
+        dataAssetQueue.increaseCounter();
         
         dataAsset.setPartition(dataAssetQueue.getDataAssetCounter());
         
@@ -268,6 +273,7 @@ public class DataassetResource {
         dataLoader.storeDataPartitionfromDAFM(dataAsset);
       
         
+      
         
         return "";
     }

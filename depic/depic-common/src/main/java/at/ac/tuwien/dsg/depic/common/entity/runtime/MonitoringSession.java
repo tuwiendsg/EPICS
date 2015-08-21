@@ -28,6 +28,9 @@ public class MonitoringSession {
     @XmlElement(name = "dataAssetID", required = true)
     String dataAssetID;
     
+    @XmlElement(name = "dataAssetIndex")
+    String dataAssetIndex;
+    
     @XmlElement(name = "eDaaSType", required = true)
     private DBType eDaaSType;
     
@@ -83,6 +86,14 @@ public class MonitoringSession {
 
     public void setListOfExpectedElasticStates(List<String> listOfExpectedElasticStates) {
         this.listOfExpectedElasticStates = listOfExpectedElasticStates;
+    }
+
+    public String getDataAssetIndex() {
+        return dataAssetIndex;
+    }
+
+    public void setDataAssetIndex(String dataAssetIndex) {
+        this.dataAssetIndex = dataAssetIndex;
     }
 
     

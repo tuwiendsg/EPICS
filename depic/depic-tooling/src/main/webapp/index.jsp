@@ -62,7 +62,7 @@
                     <td>Database Type</td>
                     <td><select name="dbtype" id="type">
                             <option value="MYSQL" selected>MySql</option>
-                            <option value="CASSANDRA" selected>Cassandra</option>
+                          
                         </select></td> 
                 </tr>
                   <tr>
