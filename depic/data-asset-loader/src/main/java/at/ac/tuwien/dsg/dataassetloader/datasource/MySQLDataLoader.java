@@ -14,6 +14,7 @@ import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetloader.store.MySqlDataAssetStore;
+import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringSession;
 import at.ac.tuwien.dsg.depic.common.utils.YamlUtils;
 
 import java.util.logging.Level;
@@ -50,7 +51,7 @@ public class MySQLDataLoader implements DataLoader{
             for (int i = 0; i < numberOfPartitions; i++) {
                 String dataAssetXml = getDataPartition(dataAssetID, String.valueOf(i));
                 
-                System.out.println("DATA ASSET: " + dataAssetXml);
+                System.out.println("DATA ASSET LOADING ... ");
                 DataAsset da = JAXBUtils.unmarshal(dataAssetXml, DataAsset.class);
                 
                 
@@ -58,7 +59,8 @@ public class MySQLDataLoader implements DataLoader{
                 dataAssetXml = JAXBUtils.marshal(da, DataAsset.class);   
                 
                 MySqlDataAssetStore das = new MySqlDataAssetStore();
-                das.saveDataAsset(dataAssetXml, daf.getName()+"-"+dataAssetID, String.valueOf(i));
+              
+               // das.saveDataAsset(dataAssetXml, daf.getName()+"-"+dataAssetID, String.valueOf(i));
                 
             }
             
@@ -116,10 +118,10 @@ public class MySQLDataLoader implements DataLoader{
     
     
     
-    public String copyDataAssetRepo(DataPartitionRequest request){
+    public String copyDataAssetRepo(MonitoringSession monitoringSession, int dataAssetCounter){
         
         MySqlDataAssetStore das = new MySqlDataAssetStore();
-        return das.copyDataAssetRepo(request);
+        return das.copyDataAssetRepo(monitoringSession, dataAssetCounter);
         
         
     }
@@ -140,6 +142,23 @@ public class MySQLDataLoader implements DataLoader{
         MySqlDataAssetStore das = new MySqlDataAssetStore();
         das.saveDataPartitionRepo(dataAsset);
         
+    }
+    
+    
+    public void storeDataPartitionRepo(DataAsset dataAsset){
+        
+        String dataAssetXML = "";
+        
+        try {
+            dataAssetXML = JAXBUtils.marshal(dataAsset, DataAsset.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(MySQLDataLoader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+        MySqlDataAssetStore das = new MySqlDataAssetStore();
+        das.storeDataAsset(dataAssetXML, dataAsset.getDataAssetID(), String.valueOf(dataAsset.getPartition()));
     }
  
 }

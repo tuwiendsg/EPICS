@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor;
+package at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller;
 
 import at.ac.tuwien.dsg.depic.common.entity.eda.ElasticDataAsset;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ElasticState;

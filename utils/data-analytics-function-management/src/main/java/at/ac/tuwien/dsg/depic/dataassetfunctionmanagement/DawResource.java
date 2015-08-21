@@ -33,7 +33,7 @@ import javax.xml.bind.JAXBException;
  *
  * @author bolobala
  */
-@Path("daw")
+@Path("daf")
 public class DawResource {
 
     @Context
@@ -52,7 +52,7 @@ public class DawResource {
      * @return an instance of java.lang.String
      */
     @GET
-    @Path("MYSQL")
+    @Path("ip")
     @Produces(MediaType.TEXT_PLAIN)
     public String getXml() {
         //TODO return proper representation object
@@ -66,124 +66,33 @@ public class DawResource {
      * @return an HTTP response with content of the updated or created resource.
      */
     @PUT
-    @Path("MYSQL")
+    @Path("start")
     @Consumes("application/xml")
     @Produces("application/xml")
-    public String executeDataAssetFunction(String dafYaml) {
+    public String executeDataAssetFunction(String dafXML) {
 
-        Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + dafYaml);
+        Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "DAFM STARTING ...");
+       
+        DataAnalyticsFunction daf = null;
+        
+        try {
+            daf = JAXBUtils.unmarshal(dafXML, DataAnalyticsFunction.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DawResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
         UUID dafID = UUID.randomUUID();
-
-        MySqlDataAssetStore das = new MySqlDataAssetStore();
-//        das.cleanTempStore();
-//
-//        DataAnalyticsFunction daf = YamlUtils.unmarshallYaml(DataAnalyticsFunction.class, dafYaml);
-//      
-//        WorkflowEngine wf = new WorkflowEngine(daf, dafID.toString());
-//
-//        wf.startWFEngine();
-
-        int noOfPartitions = das.getNumberOfPartitionsByDataAssetID(dafID.toString());
-
-        String returnString = dafID.toString() + ";" + String.valueOf(noOfPartitions);
-        return returnString;
+        
+        WorkflowEngine workflowEngine = new WorkflowEngine(daf, dafID.toString());
+        workflowEngine.startWFEngine();
+        
+       
+        return "";
         
         
     }
 
-    @PUT
-    @Path("dataasset/MYSQL")
-    @Consumes("application/xml")
-    @Produces("application/xml")
-    public String getData(String requestDataPartition) {
-
-        Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + requestDataPartition);
-
-        DataPartitionRequest dataPartition = null;
-        try {
-            dataPartition = JAXBUtils.unmarshal(requestDataPartition, DataPartitionRequest.class);
-        } catch (JAXBException ex) {
-            Logger.getLogger(DawResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        String dataAssetID = dataPartition.getDataAssetID();
-        String partitionID = dataPartition.getPartitionID();
-
-        MySqlDataAssetStore das = new MySqlDataAssetStore();
-        String daXML = das.getDataPartition(dataAssetID, partitionID);
-
-        return daXML;
-    }
-
-    @PUT
-    @Path("CASSANDRA")
-    @Consumes("application/xml")
-    @Produces("application/xml")
-    public String executeDataAssetFunctionCassandra(String dafYaml) {
-
-        Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + dafYaml);
-        UUID dafID = UUID.randomUUID();
-
-        CassandraDataAssetStore.truncateDataAssetTable();
-
-        DataAnalyticsFunction daf = YamlUtils.unmarshallYaml(DataAnalyticsFunction.class, dafYaml);
-
-        WorkflowEngine wf = new WorkflowEngine(daf, dafID.toString());
-        wf.startWFEngine();
-
-        int noOfPartitions = CassandraDataAssetStore.getNoOfParitionDataAsset(dafID.toString());
-
-        String returnString = dafID.toString() + ";" + String.valueOf(noOfPartitions);
-        return returnString;
-    }
-
-    @PUT
-    @Path("connection/open/CASSANDRA")
-    @Consumes("application/xml")
-    @Produces("application/xml")
-    public String openConnection(String xml) {
-
-        CassandraDataAssetStore.openConnection();
-        return "";
-
-    }
-
-    @PUT
-    @Path("connection/close/CASSANDRA")
-    @Consumes("application/xml")
-    @Produces("application/xml")
-    public String closeConnection(String xml) {
-        CassandraDataAssetStore.closeConnection();
-        return "";
-
-    }
-
-    @PUT
-    @Path("dataasset/CASSANDRA")
-    @Consumes("application/xml")
-    @Produces("application/xml")
-    public String getDataCassandra(String requestDataPartition) {
-
-        Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "Recieved: " + requestDataPartition);
-
-        DataPartitionRequest dataPartition = null;
-        try {
-            dataPartition = JAXBUtils.unmarshal(requestDataPartition, DataPartitionRequest.class);
-        } catch (JAXBException ex) {
-            Logger.getLogger(DawResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        DataAsset dataAsset = CassandraDataAssetStore.getDataAsset(dataPartition);
-
-        String daXML = "";
-
-        try {
-            daXML = JAXBUtils.marshal(dataAsset, DataAsset.class);
-        } catch (JAXBException ex) {
-            Logger.getLogger(DawResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return daXML;
-    }
+   
 
 }

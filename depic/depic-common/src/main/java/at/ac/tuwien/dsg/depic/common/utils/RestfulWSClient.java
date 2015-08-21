@@ -105,7 +105,7 @@ public class RestfulWSClient {
 
             int statusCode = methodResponse.getStatusLine().getStatusCode();
 
-            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO, "Status Code: " + statusCode);
+            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO, "Status Code - PUT: " + statusCode);
             BufferedReader rd = new BufferedReader(
                     new InputStreamReader(methodResponse.getEntity().getContent()));
 
@@ -116,7 +116,7 @@ public class RestfulWSClient {
             }
 
             rs = result.toString();
-            // System.out.println("Response String: " + result.toString());
+            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO, "Result - PUT: " + rs);
         } catch (Exception ex) {
 
         }

@@ -1,12 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Copyright 2013 Technische Universitat Wien (TUW), Distributed SystemsGroup
+ E184.  This work was partially supported by the European Commission in terms
+ * of the CELAR FP7 project (FP7-ICT-2011-8 #317790).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
+
 package at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller;
 
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
 import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.AdjustmentAction;
+import at.ac.tuwien.dsg.depic.common.entity.primitiveaction.Parameter;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ExecutionSession;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ExternalServiceRequest;
@@ -14,14 +28,12 @@ import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.Logger;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
+import java.util.ArrayList;
 
 import java.util.List;
 import javax.xml.bind.JAXBException;
 
-/**
- *
- * @author Jun
- */
+
 public class ActionExecutor implements Runnable {
 
     private String url;
@@ -31,13 +43,15 @@ public class ActionExecutor implements Runnable {
     private ExecutionSession executionSession;
 
     private String actionID;
+    
+    private String dataAssetIndex;
 
-    public ActionExecutor(ExecutionSession executionSession, String actionID) {
+    public ActionExecutor(ExecutionSession executionSession, String actionID, String dataAssetIndex) {
         this.executionSession = executionSession;
         this.actionID = actionID;
+        this.dataAssetIndex = dataAssetIndex;
     }
 
-    
 
     private AdjustmentAction findAdjustmentActionFromID() {
 
@@ -59,11 +73,16 @@ public class ActionExecutor implements Runnable {
 
         AdjustmentAction adjustmentAction = findAdjustmentActionFromID();
 
+        List<Parameter> listOfParameters = new ArrayList<Parameter>();
+        
         ExternalServiceRequest controlRequest = new ExternalServiceRequest(
                 executionSession.getMonitoringSession().getEdaasName(),
                 executionSession.getMonitoringSession().getSessionID(),
-                executionSession.getMonitoringSession().getDataAssetID(), null);
-
+                executionSession.getMonitoringSession().getDataAssetID(), 
+                dataAssetIndex,
+                listOfParameters);
+        
+        
         String requestXML = "";
         try {
             requestXML = JAXBUtils.marshal(controlRequest, ExternalServiceRequest.class);
@@ -92,6 +111,7 @@ public class ActionExecutor implements Runnable {
 
                 RestfulWSClient ws = new RestfulWSClient(url);
                 ws.callPutMethod(requestXML);
+            
 
                 ElasticServiceRegistry.releaseElasticService(uri);
 

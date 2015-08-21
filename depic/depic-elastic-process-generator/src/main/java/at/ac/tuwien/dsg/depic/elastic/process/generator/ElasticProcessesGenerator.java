@@ -738,12 +738,19 @@ public class ElasticProcessesGenerator {
             } else if (listOfActionDependencies.size() == 1) {
                 String actionDependency = listOfActionDependencies.get(0);
                 int prerequisiteActionIndex = findActionIndex(listOfActions, actionDependency);
-                Action prerequisiteAction = listOfActions.get(prerequisiteActionIndex);
 
-                if (!prerequisiteAction.getActionID().equals(action.getOutgoing())) {
-                    action.setIncomming(prerequisiteAction.getActionID());
-                    prerequisiteAction.setOutgoing(action.getActionID());
-                    numberOfActionConnection++;
+                if (prerequisiteActionIndex != -1) {
+                    Action prerequisiteAction = listOfActions.get(prerequisiteActionIndex);
+
+                    Logger.logInfo("INVESTIGATING action: " + action.getActionName());
+                    if (action.getIncomming() == null && prerequisiteAction.getOutgoing() == null) {
+
+                        Logger.logInfo("set incomming: " + action.getActionName() + "- " + prerequisiteAction.getActionID());
+                        Logger.logInfo("set setOutgoing: " + prerequisiteAction.getActionName() + "- " + action.getActionID());
+                        action.setIncomming(prerequisiteAction.getActionID());
+                        prerequisiteAction.setOutgoing(action.getActionID());
+                        numberOfActionConnection++;
+                    }
                 }
             }
 
@@ -842,7 +849,7 @@ public class ElasticProcessesGenerator {
 
     private int findActionIndex(List<Action> listOfActions, String prerequisiteAction) {
 
-        int index = 0;
+        int index = -1;
 
         for (Action ca : listOfActions) {
             if (ca.getActionName().equals(prerequisiteAction)) {
@@ -861,10 +868,13 @@ public class ElasticProcessesGenerator {
         List<AdjustmentAction> listOfAdjustmentActions = primitiveActionRepository.getListOfAdjustmentActions();
 
         for (AdjustmentAction adjustmentAction : listOfAdjustmentActions) {
-            if (adjustmentAction.getActionName().endsWith(action.getActionName())) {
+            
+            if (adjustmentAction.getActionName().equals(action.getActionName())){
                 prerequisiteActionNames = adjustmentAction.getListOfPrerequisiteActionIDs();
                 break;
             }
+            
+           
         }
 
         return prerequisiteActionNames;

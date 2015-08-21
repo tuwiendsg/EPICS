@@ -13,6 +13,7 @@ import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
 import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetloader.store.CassandraDataAssetStore;
+import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -165,7 +166,7 @@ public class CassandraDataLoader implements DataLoader {
         rs_close.callPutMethod("");
     }
 
-    @Override
+   
     public String copyDataAssetRepo(DataPartitionRequest request) {
         
         CassandraDataAssetStore cassandraDataAssetStore = getCassandraObject(request.getCustomerID());
@@ -236,6 +237,11 @@ public class CassandraDataLoader implements DataLoader {
         String dataParstitionXML = rs.callPutMethod(dataPartitionXML);
 
         return dataParstitionXML;
+    }
+
+    @Override
+    public String copyDataAssetRepo(MonitoringSession monitoringSession, int dataAssetCounter) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

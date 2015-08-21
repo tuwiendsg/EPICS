@@ -7,6 +7,7 @@ package at.ac.tuwien.dsg.dataassetloader.store;
 
 import at.ac.tuwien.dsg.depic.common.entity.eda.dataasset.DataAsset;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DataPartitionRequest;
+import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringSession;
 
 /**
  *
@@ -20,7 +21,7 @@ public interface DataStore {
 
     public String getDataAssetXML(String dafName, String partitionID);
 
-    public String copyDataAssetRepo(DataPartitionRequest request);
+    public String copyDataAssetRepo(MonitoringSession monitoringSession, int dataAssetCounter);
 
     public String getDataPartitionRepo(DataPartitionRequest request);
 

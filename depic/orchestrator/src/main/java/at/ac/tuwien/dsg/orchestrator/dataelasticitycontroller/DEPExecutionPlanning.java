@@ -1,8 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Copyright 2013 Technische Universitat Wien (TUW), Distributed SystemsGroup
+ E184.  This work was partially supported by the European Commission in terms
+ * of the CELAR FP7 project (FP7-ICT-2011-8 #317790).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
+
 package at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller;
 
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.Action;
@@ -10,13 +23,13 @@ import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DirectedAcyclicalGraph;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.ParallelGateway;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ExecutionStep;
+import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.bind.JAXBException;
 
-/**
- *
- * @author Jun
- */
 public class DEPExecutionPlanning {
 
     private AdjustmentProcess adjustmentProcess;
@@ -32,13 +45,41 @@ public class DEPExecutionPlanning {
     public List<ExecutionStep> planningExecution() {
 
         //find start point
+        
+        
+        
+        
+        if (adjustmentProcess==null){
+            
+            System.out.println("Adjustment Process: NULL " );
+        } else {
+            
+            String adStr="";
+            try {
+                adStr = JAXBUtils.marshal(adjustmentProcess, AdjustmentProcess.class);
+            } catch (JAXBException ex) {
+                Logger.getLogger(DEPExecutionPlanning.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println("Adjustment Process: NOT NULL \n" + adStr);
+            
+            
+        }
+        
+        
+        System.out.println("CHECK 1");
         DirectedAcyclicalGraph dag = adjustmentProcess.getDirectedAcyclicalGraph();
+        
+        System.out.println("CHECK 2");
         List<Action> listOfActions = dag.getListOfActions();
+        
+        System.out.println("CHECK 3");
         List<ParallelGateway> listOfParallelGateways = dag.getListOfParallelGateways();
 
         Action startAction = null;
         ParallelGateway startParallelGateway = null;
 
+        
+        System.out.println("CHECK 4");
         for (Action action : listOfActions) {
 
             if (action.getIncomming() == null) {
@@ -47,11 +88,19 @@ public class DEPExecutionPlanning {
 
         }
 
-        for (ParallelGateway parallelGateway : listOfParallelGateways) {
-            if (parallelGateway.getIncomming().isEmpty()) {
-                startParallelGateway = parallelGateway;
+        
+        System.out.println("CHECK 5");
+
+        if (listOfParallelGateways != null) {
+
+            for (ParallelGateway parallelGateway : listOfParallelGateways) {
+                if (parallelGateway.getIncomming().isEmpty()) {
+                    startParallelGateway = parallelGateway;
+                }
             }
         }
+
+        System.out.println("CHECK 6");
 
         // if start point is action => add this action to exectution plan
         // call recursive to get next step from outgoing; ending condition: 
@@ -64,7 +113,7 @@ public class DEPExecutionPlanning {
             listOfExecutionActions1.add(startAction.getActionID());
             executionStepStart.setListOfExecutionActions(listOfExecutionActions1);
             executionStepStart.setListOfPrerequisiteActions(listOfPrerequisiteActions1);
-
+            System.out.println("CHECK 7");
             executionPlan.add(executionStepStart);
 
             if (startAction.getOutgoing() != null) {
@@ -126,6 +175,8 @@ public class DEPExecutionPlanning {
             }
         }
 
+        
+        System.out.println("CHECK 8");
         // if start point is pg => add all outgoing actions to exection plan
         // call recuresive ...
         if (startParallelGateway != null) {
@@ -166,9 +217,13 @@ public class DEPExecutionPlanning {
 
         }
 
+        
+        System.out.println("CHECK 9");
         // refine => group action from pg
         refineExecutionStep();
         
+        
+        System.out.println("CHECK 10");
         System.out.println("No:" +executionPlan.size());
         
         log();

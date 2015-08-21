@@ -9,7 +9,7 @@ import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticServices;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringSession;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor.DataElasticityMonitor;
+
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceMonitor;
 import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;

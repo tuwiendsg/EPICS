@@ -9,6 +9,7 @@ import at.ac.tuwien.dsg.depic.common.entity.dataanalyticsfunction.DataAnalyticsF
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DBType;
 import at.ac.tuwien.dsg.depic.common.entity.eda.dataasset.DataAsset;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.DataPartitionRequest;
+import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringSession;
 
 /**
  *
@@ -36,34 +37,22 @@ public class GenericDataLoader implements DataLoader{
         } else if (eDaaSType.equals(DBType.CASSANDRA)) {
             CassandraDataLoader cdl = new CassandraDataLoader();
             xml = cdl.loadDataAsset(dataAssetFunction);
-        } else if (eDaaSType.equals(DBType.CASSANDRA_NEAR_REAL_TIME)) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        } else if (eDaaSType.equals(DBType.MONGODB)) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        } else if (eDaaSType.equals(DBType.MONGODB_NEAR_REAL_TIME)) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+        } 
         
         return xml;
     }
 
     @Override
-    public String copyDataAssetRepo(DataPartitionRequest request) {
+    public String copyDataAssetRepo(MonitoringSession monitoringSession, int dataAssetCounter) {
         String xml="";
         
         if (eDaaSType.equals(DBType.MYSQL)) {
             MySQLDataLoader msqldl = new MySQLDataLoader();
-            xml = msqldl.copyDataAssetRepo(request);
+            xml = msqldl.copyDataAssetRepo(monitoringSession, dataAssetCounter);
         } else if (eDaaSType.equals(DBType.CASSANDRA)) {
             CassandraDataLoader cdl = new CassandraDataLoader();
-            xml = cdl.copyDataAssetRepo(request);
-        } else if (eDaaSType.equals(DBType.CASSANDRA_NEAR_REAL_TIME)) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        } else if (eDaaSType.equals(DBType.MONGODB)) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        } else if (eDaaSType.equals(DBType.MONGODB_NEAR_REAL_TIME)) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+           
+        } 
         
         return xml;
     }
@@ -78,13 +67,7 @@ public class GenericDataLoader implements DataLoader{
         } else if (eDaaSType.equals(DBType.CASSANDRA)) {
             CassandraDataLoader cdl = new CassandraDataLoader();
             xml = cdl.getNoOfParitionRepo(request);
-        } else if (eDaaSType.equals(DBType.CASSANDRA_NEAR_REAL_TIME)) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        } else if (eDaaSType.equals(DBType.MONGODB)) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        } else if (eDaaSType.equals(DBType.MONGODB_NEAR_REAL_TIME)) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+        } 
         
         return xml;
     }
@@ -99,13 +82,7 @@ public class GenericDataLoader implements DataLoader{
         } else if (eDaaSType.equals(DBType.CASSANDRA)) {
             CassandraDataLoader cdl = new CassandraDataLoader();
             xml = cdl.getDataPartitionRepo(request);
-        } else if (eDaaSType.equals(DBType.CASSANDRA_NEAR_REAL_TIME)) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        } else if (eDaaSType.equals(DBType.MONGODB)) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        } else if (eDaaSType.equals(DBType.MONGODB_NEAR_REAL_TIME)) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+        } 
         
         return xml;
     }
@@ -119,13 +96,19 @@ public class GenericDataLoader implements DataLoader{
         } else if (eDaaSType.equals(DBType.CASSANDRA)) {  
             CassandraDataLoader cdl = new CassandraDataLoader();   
             cdl.saveDataPartitionRepo(dataAsset);
-        } else if (eDaaSType.equals(DBType.CASSANDRA_NEAR_REAL_TIME)) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        } else if (eDaaSType.equals(DBType.MONGODB)) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        } else if (eDaaSType.equals(DBType.MONGODB_NEAR_REAL_TIME)) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+        } 
+    }
+    
+    
+    public void storeDataPartitionfromDAFM(DataAsset dataAsset) {
+        
+       
+        if (eDaaSType.equals(DBType.MYSQL)) {
+            MySQLDataLoader msqldl = new MySQLDataLoader();
+            msqldl.storeDataPartitionRepo(dataAsset);
+        } else if (eDaaSType.equals(DBType.CASSANDRA)) {  
+            CassandraDataLoader cdl = new CassandraDataLoader();   
+        } 
     }
 
    

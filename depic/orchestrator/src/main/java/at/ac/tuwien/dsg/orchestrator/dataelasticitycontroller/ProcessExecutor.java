@@ -1,8 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Copyright 2013 Technische Universitat Wien (TUW), Distributed SystemsGroup
+ E184.  This work was partially supported by the European Commission in terms
+ * of the CELAR FP7 project (FP7-ICT-2011-8 #317790).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
+
+
 package at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller;
 
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.AdjustmentProcess;
@@ -15,17 +29,15 @@ import at.ac.tuwien.dsg.depic.common.entity.runtime.ExternalServiceRequest;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringSession;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
 import at.ac.tuwien.dsg.depic.common.utils.RestfulWSClient;
-import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
 
+import at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller.DEPExecutionEngine;
+import at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller.DEPExecutionPlanning;
+import at.ac.tuwien.dsg.orchestrator.registry.ElasticServiceRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBException;
 
-/**
- *
- * @author Jun
- */
 public class ProcessExecutor implements Runnable{
     
     private Thread t;
@@ -34,14 +46,16 @@ public class ProcessExecutor implements Runnable{
     private List<AdjustmentProcess> listOfAdjustmentProcesses;
     private MonitoringSession monitoringSession;
     private ElasticState currentElasticState;
+    private String dataAssetIndex;
     
     
-    public ProcessExecutor(List<ElasticState> listOfExpectedElasticStates, List<AdjustmentProcess> listOfAdjustmentProcesses, MonitoringSession monitoringSession,ElasticState currentElasticState) {
+    public ProcessExecutor(List<ElasticState> listOfExpectedElasticStates, List<AdjustmentProcess> listOfAdjustmentProcesses, MonitoringSession monitoringSession,ElasticState currentElasticState, String dataAssetIndex) {
        
         this.listOfExpectedElasticStates = listOfExpectedElasticStates;
         this.listOfAdjustmentProcesses = listOfAdjustmentProcesses;
         this.monitoringSession = monitoringSession;
         this.currentElasticState = currentElasticState;
+        this.dataAssetIndex = dataAssetIndex;
     }
     
     public void run() {
@@ -61,7 +75,7 @@ public class ProcessExecutor implements Runnable{
 
         do {
             
-            DEPExecutionEngine.checkExecution(executionSession.getMonitoringSession().getSessionID());
+            DEPExecutionEngine.checkExecution(executionSession.getMonitoringSession().getSessionID(), dataAssetIndex);
             
             isFinished = DEPExecutionEngine.isFinished(executionSession.getMonitoringSession().getSessionID());
             
@@ -109,10 +123,18 @@ public class ProcessExecutor implements Runnable{
 
         }
 
+        
+        System.out.println("NO OF POTENTIAL ADJUSTMENT PROCESS: " + listOfPotentialControlProcesses.size());
         AdjustmentProcess adjustmentProcess = determineTheBestControlProcess(listOfPotentialControlProcesses);
 
 
-     
+        if (adjustmentProcess==null) {
+         System.out.println("BEST ADJUSTMENT PROCESS: NULL");   
+        } else{
+            System.out.println("BEST ADJUSTMENT PROCESS: NOT NULL");   
+        }
+        
+        
      
 //
 //        long t1 = System.currentTimeMillis();
@@ -154,58 +176,7 @@ public class ProcessExecutor implements Runnable{
         return potentialControlProcesses.get(cpIndex);
     }
 
-    public void startControlProcess(AdjustmentProcess cp) {
-
-      
-        executeControlProcess(cp);
-
-    }
-
-    private void executeControlProcess(AdjustmentProcess cp) {
-
-        List<AdjustmentAction> listOfControlActions = cp.getListOfAdjustmentActions();
-
-        for (AdjustmentAction controlAction : listOfControlActions) {
-
-            ExternalServiceRequest controlRequest = new ExternalServiceRequest(monitoringSession.getEdaasName(), monitoringSession.getSessionID(), monitoringSession.getDataAssetID(), null);
-
-            String requestXML = "";
-            try {
-                requestXML = JAXBUtils.marshal(controlRequest, ExternalServiceRequest.class);
-            } catch (JAXBException ex) {
-                System.err.println(ex);
-            }
-
-            String uri = "";
-
-            do {
-
-                uri = ElasticServiceRegistry.getElasticServiceURI(controlAction.getActionName(), monitoringSession.geteDaaSType());
-                if (uri.equals("")) {
-                  //  Logger.logInfo("Waiting_for_Active_Elastic_Serivce ... " + monitoringSession.getSessionID() + " - " + controlAction.getActionName());
-                } else {
-                   // Logger.logInfo("Ready_Service: " + monitoringSession.getSessionID() + " - " + uri);
-                    ElasticServiceRegistry.occupyElasticService(uri);
-                }
-
-                try {
-                    Thread.sleep(10000);
-
-                } catch (InterruptedException ex) {
-                    System.err.println(ex);
-                }
-
-            } while (uri.equals(""));
-
-            //Logger.logInfo("RUN: " + uri);
-            RestfulWSClient ws = new RestfulWSClient(uri);
-            ws.callPutMethod(requestXML);
-
-            ElasticServiceRegistry.releaseElasticService(uri);
-
-        }
-
-    }
+   
 
    
 

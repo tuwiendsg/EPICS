@@ -30,20 +30,22 @@ public class ExternalServiceRequest {
     @XmlElement(name = "dataAssetID", required = true)
     String dataAssetID;
     
+    @XmlElement(name = "dataAssetIndex", required = true)
+    String dataAssetIndex;
+    
     @XmlElement(name = "listOfParameters", required = true)
     List<Parameter> listOfParameters;
 
     public ExternalServiceRequest() {
     }
 
-    public ExternalServiceRequest(String edaas, String customerID, String dataAssetID, List<Parameter> listOfParameters) {
+    public ExternalServiceRequest(String edaas, String customerID, String dataAssetID, String dataAssetIndex, List<Parameter> listOfParameters) {
         this.edaas = edaas;
         this.customerID = customerID;
         this.dataAssetID = dataAssetID;
+        this.dataAssetIndex = dataAssetIndex;
         this.listOfParameters = listOfParameters;
     }
-    
-    
 
     public String getEdaas() {
         return edaas;
@@ -69,6 +71,14 @@ public class ExternalServiceRequest {
         this.dataAssetID = dataAssetID;
     }
 
+    public String getDataAssetIndex() {
+        return dataAssetIndex;
+    }
+
+    public void setDataAssetIndex(String dataAssetIndex) {
+        this.dataAssetIndex = dataAssetIndex;
+    }
+
     public List<Parameter> getListOfParameters() {
         return listOfParameters;
     }
@@ -76,9 +86,7 @@ public class ExternalServiceRequest {
     public void setListOfParameters(List<Parameter> listOfParameters) {
         this.listOfParameters = listOfParameters;
     }
-    
-    
-    
+
     
     
 }

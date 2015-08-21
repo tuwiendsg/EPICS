@@ -100,6 +100,48 @@ public class DataAssetFunctionStore {
     }
     
     
+    public DataAnalyticsFunction getDAFFromEDaaSName(String eDaaSName){
+        
+        String sql = "SELECT * FROM InputSpecification WHERE name='" + eDaaSName + "'";
+        DataAnalyticsFunction dataAnalyticsFunction = null;
+       
+
+        ResultSet rs = connectionManager.ExecuteQuery(sql);
+
+        InputStream inputStream = null;
+        
+        
+        
+            try {
+                while (rs.next()) {
+                    inputStream = rs.getBinaryStream("daf");
+                }
+                
+                rs.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DataAssetFunctionStore.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            StringWriter writer = new StringWriter();
+            String encoding = StandardCharsets.UTF_8.name();
+
+        try {
+            IOUtils.copy(inputStream, writer, encoding);
+            String dafXML = writer.toString();
+            
+            dataAnalyticsFunction = JAXBUtils.unmarshal(dafXML, DataAnalyticsFunction.class);
+        } catch (IOException ex) {
+            Logger.getLogger(DataAssetFunctionStore.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataAssetFunctionStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+
+        return dataAnalyticsFunction;
+
+        
+    }
+    
     public DBType gEDaaSTypeFromEDaaSName(String eDaaSName){
         
         String sql = "SELECT * FROM ElasticDaaS WHERE name='" + eDaaSName + "'";
@@ -110,11 +152,8 @@ public class DataAssetFunctionStore {
 
         try {
             while (rs.next()) {
-                InputStream inputStream = rs.getBinaryStream("type");
-                StringWriter writer = new StringWriter();
-                String encoding = StandardCharsets.UTF_8.name();
-                IOUtils.copy(inputStream, writer, encoding);
-                String type = writer.toString();          
+
+                String type = rs.getString("type");
                 eDaaSType = DBType.valueOf(type);
             }
 

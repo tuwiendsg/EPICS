@@ -13,7 +13,8 @@ package at.ac.tuwien.dsg.orchestrator.restws;
 import at.ac.tuwien.dsg.depic.common.entity.eda.elasticprocess.DataElasticityManagementProcess;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.MonitoringSession;
 import at.ac.tuwien.dsg.depic.common.utils.JAXBUtils;
-import at.ac.tuwien.dsg.orchestrator.dataelasticitymonitor.DataElasticityMonitor;
+import at.ac.tuwien.dsg.orchestrator.dataelasticitycontroller.DataElasticityMonitor;
+
 import at.ac.tuwien.dsg.orchestrator.elasticityprocessesstore.ElasticityProcessesStore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
