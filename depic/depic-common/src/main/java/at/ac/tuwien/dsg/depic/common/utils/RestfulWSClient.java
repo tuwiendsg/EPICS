@@ -116,7 +116,7 @@ public class RestfulWSClient {
             }
 
             rs = result.toString();
-            Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO, "Result - PUT: " + rs);
+            //Logger.getLogger(RestfulWSClient.class.getName()).log(Level.INFO, "Result - PUT: " + rs);
         } catch (Exception ex) {
 
         }

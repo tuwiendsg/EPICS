@@ -312,14 +312,14 @@ public class ComotConnector {
         ServiceTopology controlServicesTopology = ServiceTopology("Control_Services_Topology");
 
         // edaas_topology
-        //      ServiceTopology edaasServiceTopology = ServiceTopology("eDaaS_Services_Topology");
+        ServiceTopology edaasServiceTopology = ServiceTopology("eDaaS_Services_Topology");
         // add topology
         Configuration cfg = new Configuration();
         String compositionRules = cfg.getConfigPath() + "/compositionRules.xml";
         CloudService cloudService = ServiceTemplate(eDaaSDeployAction.getActionID() + "CloudService")
                 .consistsOfTopologies(monitoringServicesTopology)
                 .consistsOfTopologies(controlServicesTopology)
-                //   .consistsOfTopologies(edaasServiceTopology)
+                   .consistsOfTopologies(edaasServiceTopology)
                 //             .withDefaultMetrics();
                 .withMetricCompositonRulesFile(compositionRules);
 
@@ -405,21 +405,21 @@ public class ComotConnector {
         }
 
         // add VM + eDaaS
-//        OperatingSystemUnit vm_edaas = OperatingSystemUnit(eDaaSDeployAction.getActionID() + "_VM")
-//                .providedBy(OpenstackSmall()
-//                        .addSoftwarePackage("openjdk-7-jre")
-//                        .addSoftwarePackage("ganglia-monitor")
-//                        .addSoftwarePackage("gmetad")
-//                );
-//        ServiceUnit serviceUnit_edaas = SingleSoftwareUnit(eDaaSDeployAction.getActionID() + "_SU")
-//                .deployedBy(SingleScriptArtifact(eDaaSDeployAction.getActionID(), eDaaSDeployAction.getArtifact()));
-//
-//        edaasServiceTopology.addServiceUnit(serviceUnit_edaas);
-//        edaasServiceTopology.addServiceUnit(vm_edaas);
-//
-//        cloudService.andRelationships(HostedOnRelation(serviceUnit_edaas.getId() + "To" + vm_edaas.getId())
-//                .from(serviceUnit_edaas)
-//                .to(vm_edaas));
+        OperatingSystemUnit vm_edaas = OperatingSystemUnit(eDaaSDeployAction.getActionID() + "_VM")
+                .providedBy(OpenstackSmall()
+                        .addSoftwarePackage("openjdk-7-jre")
+                        .addSoftwarePackage("ganglia-monitor")
+                        .addSoftwarePackage("gmetad")
+                );
+        ServiceUnit serviceUnit_edaas = SingleSoftwareUnit(eDaaSDeployAction.getActionID() + "_SU")
+                .deployedBy(SingleScriptArtifact(eDaaSDeployAction.getActionID(), eDaaSDeployAction.getArtifact()));
+
+        edaasServiceTopology.addServiceUnit(serviceUnit_edaas);
+        edaasServiceTopology.addServiceUnit(vm_edaas);
+
+        cloudService.andRelationships(HostedOnRelation(serviceUnit_edaas.getId() + "To" + vm_edaas.getId())
+                .from(serviceUnit_edaas)
+                .to(vm_edaas));
         // deployment
         COMOTOrchestrator orchestrator = new COMOTOrchestrator(cfg.getConfig("SALSA.IP"));
                 //we have SALSA as cloud management tool
