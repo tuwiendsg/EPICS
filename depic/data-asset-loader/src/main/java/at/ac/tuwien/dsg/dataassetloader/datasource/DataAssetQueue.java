@@ -16,13 +16,13 @@ public class DataAssetQueue {
     String eDaaS;
     String dataAssetID;
     int dataAssetCounter;
-    List<String> listOfDataAssetWindows;
+    
 
-    public DataAssetQueue(String eDaaS, String dataAssetID, List<String> listOfDataAssetWindows) {
+    public DataAssetQueue(String eDaaS, String dataAssetID) {
         this.eDaaS = eDaaS;
         this.dataAssetID = dataAssetID;
-        this.listOfDataAssetWindows = listOfDataAssetWindows;
         dataAssetCounter=0;
+       
     }
 
     public String geteDaaS() {
@@ -41,14 +41,6 @@ public class DataAssetQueue {
         this.dataAssetID = dataAssetID;
     }
 
-    public List<String> getListOfDataAssetWindows() {
-        return listOfDataAssetWindows;
-    }
-
-    public void setListOfDataAssetWindows(List<String> listOfDataAssetWindows) {
-        this.listOfDataAssetWindows = listOfDataAssetWindows;
-    }
-
     public int getDataAssetCounter() {
         return dataAssetCounter;
     }
@@ -57,9 +49,9 @@ public class DataAssetQueue {
         
         dataAssetCounter++;
     }
-    
-    
 
+    
+    
    
     
     

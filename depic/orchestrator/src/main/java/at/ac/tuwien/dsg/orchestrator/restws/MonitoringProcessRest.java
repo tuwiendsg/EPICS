@@ -56,8 +56,7 @@ public class MonitoringProcessRest {
     @Consumes(MediaType.APPLICATION_XML)
     public void startMonitoringService(String monitoringSessionXML) {
         
-        Logger.getLogger(MonitoringProcessRest.class.getName()).log(Level.INFO, "START Monitoring Session ... :" + monitoringSessionXML);
-        
+       
         MonitoringSession monitoringSession=null;
         
         try {
@@ -65,6 +64,9 @@ public class MonitoringProcessRest {
         } catch (JAXBException ex) {
             Logger.getLogger(MonitoringProcessRest.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+      Logger.getLogger(MonitoringProcessRest.class.getName()).log(Level.INFO, "START Monitoring Session ... :" + monitoringSession.getSessionID());
+           
         
       DataElasticityMonitor dataElasticityMonitor = new DataElasticityMonitor(monitoringSession);
       dataElasticityMonitor.start();

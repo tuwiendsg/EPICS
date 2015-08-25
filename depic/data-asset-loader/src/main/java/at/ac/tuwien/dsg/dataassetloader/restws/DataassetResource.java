@@ -14,6 +14,7 @@ import at.ac.tuwien.dsg.dataassetloader.configuration.Configuration;
 import at.ac.tuwien.dsg.dataassetloader.datasource.CassandraDataLoader;
 import at.ac.tuwien.dsg.dataassetloader.datasource.DataAssetQueue;
 import at.ac.tuwien.dsg.dataassetloader.datasource.DataAssetRepositoryMetadata;
+import at.ac.tuwien.dsg.dataassetloader.datasource.DataBufferSession;
 
 import at.ac.tuwien.dsg.dataassetloader.datasource.GenericDataLoader;
 import at.ac.tuwien.dsg.dataassetloader.store.CassandraDataAssetStore;
@@ -57,7 +58,9 @@ public class DataassetResource {
     }
 
     /**
-     * Retrieves representation of an instance of at.ac.tuwien.dsg.dataassetloader.restws.DataassetResource
+     * Retrieves representation of an instance of
+     * at.ac.tuwien.dsg.dataassetloader.restws.DataassetResource
+     *
      * @return an instance of java.lang.String
      */
     @GET
@@ -66,7 +69,7 @@ public class DataassetResource {
     public String getXml() {
         //TODO return proper representation object
         Configuration config = new Configuration();
-        return config.getConfig("EDA.REPOSITORY.MYSQL.IP"); 
+        return config.getConfig("EDA.REPOSITORY.MYSQL.IP");
     }
 
     @PUT
@@ -74,41 +77,33 @@ public class DataassetResource {
     @Consumes("application/xml")
     @Produces("application/xml")
     public String requestStartDAFM(String edaasName) {
-        
+
         System.out.println("data asset loader: start edaas " + edaasName);
-        
-         DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
-        
-        
+
+        DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
+
         DataAnalyticsFunction daf = dafStore.getDAFFromEDaaSName(edaasName);
-    
-        List<String> listOfDataAssetWindows = new ArrayList<String>();
-          
-        DataAssetQueue daq = new DataAssetQueue(daf.getName(), daf.getName(), listOfDataAssetWindows);
+
+        DataAssetQueue daq = new DataAssetQueue(daf.getName(), daf.getName());
         DataAssetRepositoryMetadata.addDataAssetQueue(daq);
-        
-        
+
         Configuration cfg = new Configuration();
         String dafmEndpoint = cfg.getConfig("DAFM.ENDPOINT");
-        
-        
+
         String dafXML = "";
-        
+
         try {
             dafXML = JAXBUtils.marshal(daf, DataAnalyticsFunction.class);
         } catch (JAXBException ex) {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
         RestfulWSClient ws = new RestfulWSClient(dafmEndpoint);
         ws.callPutMethod(dafXML);
-        
 
         return "";
     }
-    
-    
+
     @PUT
     @Path("repo/datacopy")
     @Consumes("application/xml")
@@ -125,80 +120,223 @@ public class DataassetResource {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        DataAssetQueue daq = DataAssetRepositoryMetadata.getDataAssetQueueFromEDaaSName(monitoringSession.getEdaasName());
+        if (!DataAssetRepositoryMetadata.existDataBufferSession(monitoringSession.getSessionID())) {
 
-        String dataAssetCounter = String.valueOf(daq.getDataAssetCounter());
+            DataBufferSession dataBufferSession = new DataBufferSession(monitoringSession.getSessionID());
+            DataAssetRepositoryMetadata.addDataBufferSession(dataBufferSession);
 
-        if (dataAssetCounter.equals(monitoringSession.getDataAssetIndex())) {
-            System.out.println("WAITING ... FOR NEXT WINDOW");
-        } else {
-            System.out.println("STARTING COPYING DATA WINDOW");
-
-            DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
-            DBType eDaaSType = dafStore.gEDaaSTypeFromEDaaSName(monitoringSession.getEdaasName());
-
-            GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
-            dataLoader.copyDataAssetRepo(monitoringSession, Integer.parseInt(dataAssetCounter));
         }
 
-        return dataAssetCounter;
+        DataAssetQueue daq = DataAssetRepositoryMetadata.getDataAssetQueueFromEDaaSName(monitoringSession.getEdaasName());
+        int dataAssetCounter = daq.getDataAssetCounter();
+
+        DataBufferSession dataBufferSession = DataAssetRepositoryMetadata.
+                getDataBufferSessionFromSessionID(monitoringSession.getSessionID());
+
+        int readyDataAssetWindowIndex = Integer.parseInt(monitoringSession.getDataAssetIndex()) + 1;
+
+       
+        boolean isRunning = false;
+        
+        boolean isInCopiedList = false;
+        System.out.println("LIST: COPIED WINDOW ");
+        for (String windowID : dataBufferSession.getListOfCopiedDataAssetWindows()){
+            System.out.println(windowID);
+            
+            if (windowID.equals(String.valueOf(readyDataAssetWindowIndex))) {
+                isInCopiedList = true;
+            }  
+        }
+        
+        boolean isInReadyList = false;
+        System.out.println("LIST: READY WINDOW ");
+        for (String windowID : dataBufferSession.getListOfDataAssetWindows()){
+            System.out.println(windowID);
+            if (windowID.equals(String.valueOf(readyDataAssetWindowIndex))) {
+                isInReadyList = true;
+            } 
+        }
+        
+        
+        
+        
+        
+        
+        if (isInCopiedList){
+            System.out.println("COPIED DATA WINDOW DETECT !");
+            if (!isInReadyList){
+                 System.out.println("DATA IS PROCESSING");
+                 isRunning = true;
+            }
+            
+        }
+
+        if (isRunning) {
+            readyDataAssetWindowIndex = Integer.parseInt(monitoringSession.getDataAssetIndex());
+            
+
+        } else {
+
+            boolean isReady = false;
+            if (readyDataAssetWindowIndex < dataAssetCounter) {
+                isReady = true;
+                System.out.println("STARTING COPYING DATA WINDOW");
+
+                DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
+                DBType eDaaSType = dafStore.gEDaaSTypeFromEDaaSName(monitoringSession.getEdaasName());
+
+                GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
+                dataLoader.copyDataAssetRepo(monitoringSession, readyDataAssetWindowIndex);
+                dataBufferSession.getListOfCopiedDataAssetWindows().add(String.valueOf(readyDataAssetWindowIndex));
+            } else {
+                System.out.println("WAITING ... FOR NEXT WINDOW");
+            }
+
+            if (!isReady) {
+                readyDataAssetWindowIndex = Integer.parseInt(monitoringSession.getDataAssetIndex());
+            }
+        }
+
+        return String.valueOf(readyDataAssetWindowIndex);
     }
-    
-    
+
+    @PUT
+    @Path("repo/getlastestda")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String getLatestReadyDataAssetWindow(String monitoringSessionXML) {
+
+        System.out.println("RECEIVED LASTEST DATA ASSET WINDOW");
+
+        MonitoringSession monitoringSession = null;
+        try {
+            monitoringSession = JAXBUtils.unmarshal(monitoringSessionXML, MonitoringSession.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (!DataAssetRepositoryMetadata.existDataBufferSession(monitoringSession.getSessionID())) {
+
+            DataBufferSession dataBufferSession = new DataBufferSession(monitoringSession.getSessionID());
+            DataAssetRepositoryMetadata.addDataBufferSession(dataBufferSession);
+
+        }
+
+        DataBufferSession dataBufferSession = DataAssetRepositoryMetadata.
+                getDataBufferSessionFromSessionID(monitoringSession.getSessionID());
+
+        int retrievedDataAssetIndex = dataBufferSession.getRetrivedDataAssetIndex();
+        int readyDataAssetIndex = retrievedDataAssetIndex + 1;
+        List<String> listOfReadyDataWindow = dataBufferSession.getListOfDataAssetWindows();
+        System.out.println("CHECK READY DATA INDEX: " + readyDataAssetIndex);
+
+        boolean isReady = false;
+        for (String readyDataWindowID : listOfReadyDataWindow) {
+
+            if (readyDataWindowID.equals(String.valueOf(readyDataAssetIndex))) {
+                System.out.println("READY DATA INDEX: " + readyDataWindowID);
+                isReady = true;
+                break;
+            }
+        }
+
+        String readyDataAssetWindow = "";
+
+        if (isReady) {
+            DataPartitionRequest request = new DataPartitionRequest(
+                    monitoringSession.getEdaasName(),
+                    monitoringSession.getSessionID(),
+                    monitoringSession.getDataAssetID(),
+                    String.valueOf(readyDataAssetIndex));
+
+            DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
+            DBType eDaaSType = dafStore.gEDaaSTypeFromEDaaSName(request.getEdaas());
+            GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
+            readyDataAssetWindow = dataLoader.getDataPartitionRepo(request);
+
+            ThroughputMonitor.trackingLoad(request);
+            dataBufferSession.setRetrivedDataAssetIndex(readyDataAssetIndex);
+        }
+
+        return readyDataAssetWindow;
+    }
+
+    @PUT
+    @Path("repo/notifyreadyda")
+    @Consumes("application/xml")
+    @Produces("application/xml")
+    public String notifyReadyDataAssetWindow(String monitoringSessionXML) {
+
+        System.out.println("NOTIFY READY DATA ASSET WINDOW");
+
+        MonitoringSession monitoringSession = null;
+        try {
+            monitoringSession = JAXBUtils.unmarshal(monitoringSessionXML, MonitoringSession.class);
+        } catch (JAXBException ex) {
+            Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        DataBufferSession dataBufferSession = DataAssetRepositoryMetadata.
+                getDataBufferSessionFromSessionID(monitoringSession.getSessionID());
+        System.out.println("ADDING: " + monitoringSession.getDataAssetIndex());
+        dataBufferSession.getListOfDataAssetWindows().add(monitoringSession.getDataAssetIndex());
+
+        return "";
+    }
+
     @PUT
     @Path("repo/getpartition")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String getDataPartition(String dataAssetRequestXML) {
 
-       String log ="RECEIVED DATA PARTITION REQUEST : " + dataAssetRequestXML;
-       
+        String log = "RECEIVED DATA PARTITION REQUEST : " + dataAssetRequestXML;
+
         Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO, log);
-        
-        DataPartitionRequest request=null;
+
+        DataPartitionRequest request = null;
         try {
             request = JAXBUtils.unmarshal(dataAssetRequestXML, DataPartitionRequest.class);
         } catch (JAXBException ex) {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
         DBType eDaaSType = dafStore.gEDaaSTypeFromEDaaSName(request.getEdaas());
         GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
-        String daXML =dataLoader.getDataPartitionRepo(request);
-               
+        String daXML = dataLoader.getDataPartitionRepo(request);
+
         ThroughputMonitor.trackingLoad(request);
-        
+
         return daXML;
     }
-    
+
     @PUT
     @Path("repo/noofpartition")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String getNoOfPartition(String dataAssetRequestXML) {
 
-       String log ="RECEIVED: " + dataAssetRequestXML;
+        String log = "RECEIVED: " + dataAssetRequestXML;
         Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO, log);
-        
-        DataPartitionRequest request=null;
+
+        DataPartitionRequest request = null;
         try {
             request = JAXBUtils.unmarshal(dataAssetRequestXML, DataPartitionRequest.class);
         } catch (JAXBException ex) {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
         DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
         DBType eDaaSType = dafStore.gEDaaSTypeFromEDaaSName(request.getEdaas());
-        
+
         GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
-        String noOfDataPartitionRepo =dataLoader.getNoOfParitionRepo(request);
-        
+        String noOfDataPartitionRepo = dataLoader.getNoOfParitionRepo(request);
+
         return noOfDataPartitionRepo;
-        
+
     }
-    
+
     @PUT
     @Path("repo/savepartition")
     @Consumes("application/xml")
@@ -206,138 +344,118 @@ public class DataassetResource {
     public String saveDataPartition(String dataAssetXML) {
 
         // String log ="RECEIVED: " + dataAssetXML;
-       // Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO,log);
-        
-        DataAsset dataAsset=null;
+        // Logger.getLogger(DataassetResource.class.getName()).log(Level.INFO,log);
+        DataAsset dataAsset = null;
         try {
             dataAsset = JAXBUtils.unmarshal(dataAssetXML, DataAsset.class);
         } catch (JAXBException ex) {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
-        
-        String[] strs = dataAsset.getDataAssetID().split(";");
-        
 
-        
-        for (String str : strs){
+        String[] strs = dataAsset.getDataAssetID().split(";");
+
+        for (String str : strs) {
             System.out.println("strs: " + str);
         }
         String edaasName = strs[0];
         String customerID = strs[1];
         String dawName = strs[2];
-        
-        
+
         DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
         DBType eDaaSType = dafStore.gEDaaSTypeFromEDaaSName(edaasName);
         GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
         dataLoader.saveDataPartitionRepo(dataAsset);
-        
-        DataPartitionRequest request= new DataPartitionRequest(edaasName, customerID, dawName, "");
+
+        DataPartitionRequest request = new DataPartitionRequest(edaasName, customerID, dawName, "");
         ThroughputMonitor.trackingLoad(request);
-       
-        
-        
-        
+
         return "";
     }
-    
-    
+
     @PUT
     @Path("repo/storedataasset")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String storeDataAssetFromDAFM(String dataAssetXML) {
-        
+
         System.out.println("Storing data asset from DAFM");
-        
-        
-        DataAsset dataAsset=null;
+
+        DataAsset dataAsset = null;
         try {
             dataAsset = JAXBUtils.unmarshal(dataAssetXML, DataAsset.class);
         } catch (JAXBException ex) {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
 
         DataAssetQueue dataAssetQueue = DataAssetRepositoryMetadata.getDataAssetQueueFromEDaaSName(dataAsset.getDataAssetID());
         dataAssetQueue.increaseCounter();
-        
+
         dataAsset.setPartition(dataAssetQueue.getDataAssetCounter());
-        
+
         DataAssetFunctionStore dafStore = new DataAssetFunctionStore();
         DBType eDaaSType = dafStore.gEDaaSTypeFromEDaaSName(dataAssetQueue.geteDaaS());
         GenericDataLoader dataLoader = new GenericDataLoader(eDaaSType);
         dataLoader.storeDataPartitionfromDAFM(dataAsset);
-      
-        
-      
-        
+
         return "";
     }
-    
+
     @PUT
     @Path("repo/throughput")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String getThroughput(String dataAssetRequestXML) {
-        DataPartitionRequest request=null;
+        DataPartitionRequest request = null;
         try {
             request = JAXBUtils.unmarshal(dataAssetRequestXML, DataPartitionRequest.class);
         } catch (JAXBException ex) {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
-      
-       double throughput = ThroughputMonitor.calculateThroughput(request);
-        
+
+        double throughput = ThroughputMonitor.calculateThroughput(request);
+
         return String.valueOf(throughput);
-        
+
     }
-    
-    
+
     @PUT
     @Path("repo/cassandra/open")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String openConnection(String xml) {
 
-        DataPartitionRequest request=null;
+        DataPartitionRequest request = null;
         try {
             request = JAXBUtils.unmarshal(xml, DataPartitionRequest.class);
         } catch (JAXBException ex) {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         CassandraDataLoader cdl = new CassandraDataLoader();
         cdl.openConnectionEDARepo(request);
-     
-        
+
         return "";
-        
+
     }
-    
+
     @PUT
     @Path("repo/cassandra/close")
     @Consumes("application/xml")
     @Produces("application/xml")
     public String closeConnection(String xml) {
-       
-        DataPartitionRequest request=null;
+
+        DataPartitionRequest request = null;
         try {
             request = JAXBUtils.unmarshal(xml, DataPartitionRequest.class);
         } catch (JAXBException ex) {
             Logger.getLogger(DataassetResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         CassandraDataLoader cdl = new CassandraDataLoader();
         cdl.closeConnectionEDARepo(request);
-        
+
         return "";
-        
+
     }
-    
 
 }

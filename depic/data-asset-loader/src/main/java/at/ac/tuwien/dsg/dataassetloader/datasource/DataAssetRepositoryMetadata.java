@@ -15,8 +15,68 @@ import java.util.List;
 public class DataAssetRepositoryMetadata {
     
     public static List<DataAssetQueue> listOfDataAssetQueues;
-
+    public static List<DataBufferSession> listOfDataBufferSessions;
     
+    
+    public static void addDataBufferSession(DataBufferSession dataBufferSession){
+        
+        if (listOfDataBufferSessions==null) {
+            listOfDataBufferSessions = new ArrayList<DataBufferSession>();
+        }
+        
+
+        
+        listOfDataBufferSessions.add(dataBufferSession);
+        
+    }
+    
+    
+    public static DataBufferSession getDataBufferSessionFromSessionID(String sessionID){
+        
+        if (listOfDataBufferSessions==null) {
+            listOfDataBufferSessions = new ArrayList<DataBufferSession>();
+        }
+        
+        DataBufferSession foundBufferSession = null;
+        
+        
+        for (DataBufferSession dataBufferSession : listOfDataBufferSessions) {
+            
+            if(dataBufferSession.getSessionID().equals(sessionID)) {
+                foundBufferSession = dataBufferSession;
+                break;
+            }
+            
+        }
+        
+        
+        return foundBufferSession;
+        
+    }
+    
+    
+    public static boolean existDataBufferSession(String sessionID){
+        
+        if (listOfDataBufferSessions==null) {
+            listOfDataBufferSessions = new ArrayList<DataBufferSession>();
+        }
+        
+        boolean rs = false;
+        
+        
+        for (DataBufferSession dataBufferSession : listOfDataBufferSessions) {
+            
+            if(dataBufferSession.getSessionID().equals(sessionID)) {
+                rs = true;
+                break;
+            }
+            
+        }
+        
+        
+        return rs;
+        
+    }
     
     public static void addDataAssetQueue(DataAssetQueue dataAssetQueue){
         

@@ -60,8 +60,15 @@ public class DEPExecutionEngine {
     }
 
     public static boolean isFinished(String sessionID) {
-
+        
         boolean isFinished = true;
+        
+        if (listOfExecutionSessions == null) {
+            listOfExecutionSessions = new ArrayList<ExecutionSession>();
+
+        }
+
+       
 
         for (ExecutionSession executionSession : listOfExecutionSessions) {
 
@@ -84,25 +91,104 @@ public class DEPExecutionEngine {
 
         return isFinished;
     }
+    
+    public static boolean isExisted(String sessionID) {
+        if (listOfExecutionSessions == null) {
+            listOfExecutionSessions = new ArrayList<ExecutionSession>();
 
-    public static void checkExecution(String sessionID, String dataAssetIndex) {
+        }
 
-        boolean isBreak = false;
+        boolean isExisted = false;
 
         for (ExecutionSession executionSession : listOfExecutionSessions) {
 
             if (executionSession.getMonitoringSession().getSessionID().equals(sessionID)) {
 
+                isExisted = true;
+
+            }
+
+        }
+
+        return isExisted;
+    }
+    
+    
+    public static ExecutionSession getExecutionSessionFromID (String sessionID) {
+        
+        
+        if (listOfExecutionSessions == null) {
+            listOfExecutionSessions = new ArrayList<ExecutionSession>();
+
+        }
+        ExecutionSession foundExecutionSession = null;
+        for (ExecutionSession executionSession : listOfExecutionSessions) {
+            if (executionSession.getMonitoringSession().getSessionID().equals(sessionID)) {
+                foundExecutionSession = executionSession;
+                break;
+
+            }
+
+        }
+
+        return foundExecutionSession;
+    }
+
+//    public static boolean executionSeesionRemoved(String sessionID) {
+//
+//        boolean isRemoved = true;
+//        
+//        System.out.println("No of Execution Session: " + listOfExecutionSessions.size());
+//
+//        for (ExecutionSession executionSession : listOfExecutionSessions) {
+//
+//            if (executionSession.getMonitoringSession().getSessionID().equals(sessionID)) {
+//                isRemoved = false;
+//            }
+//
+//        }
+//        
+//        if (isRemoved) {
+//            System.out.println("REMOVED EXECUTION SESSION CONFIM");
+//            
+//        } else {
+//           System.out.println("EXISTING EXECUTION SESSION CONFIM");     
+//        }
+//
+//        return isRemoved;
+//    }
+
+    public static void checkExecution(String sessionID, String dataAssetIndex) {
+        
+        if (listOfExecutionSessions == null) {
+            listOfExecutionSessions = new ArrayList<ExecutionSession>();
+
+        }
+
+        boolean isBreak = false;
+        System.out.println("CHECK_EXECUTION : 1");
+
+        for (ExecutionSession executionSession : listOfExecutionSessions) {
+
+            System.out.println("CHECK_EXECUTION : 2");
+            if (executionSession.getMonitoringSession().getSessionID().equals(sessionID)) {
+
+                System.out.println("CHECK_EXECUTION : 3");
                 List<ExecutionStep> listOfExecutionSteps = executionSession.getListOfExecutionSteps();
 
+                System.out.println("CHECK_EXECUTION : 4");
                 for (ExecutionStep executionStep : listOfExecutionSteps) {
+                    System.out.println("CHECK_EXECUTION : 5");
                 
                     System.out.println("START - Execution Step ----------------------");
                     System.out.println("No of Executing Actions: " + executionStep.getExecutingActions().size());
                     
+                    System.out.println("CHECK_EXECUTION : 6");
                     for (String acc : executionStep.getExecutingActions()){
                         System.out.println(acc);
                     }
+                    
+                    System.out.println("CHECK_EXECUTION : 7");
                     
                     System.out.println("No of Finished Actions: " + executionStep.getFinishedActions().size());
                     
@@ -110,12 +196,15 @@ public class DEPExecutionEngine {
                         System.out.println(acc);
                     }
                     
+                    System.out.println("CHECK_EXECUTION : 8");
+                    
                     System.out.println("No of Waiting Actions: " + executionStep.getWaitingActions().size());
                     
                     
                     for (String acc : executionStep.getWaitingActions()){
                         System.out.println(acc);
                     }
+                    System.out.println("CHECK_EXECUTION : 9");
                     
                      System.out.println("END - Execution Step ----------------------");
 
@@ -158,10 +247,16 @@ public class DEPExecutionEngine {
             }
 
         }
+        System.out.println("CHECK_EXECUTION : 10");
 
     }
 
     public static void actionExecuting(String sessionID, String actionID) {
+        
+        if (listOfExecutionSessions == null) {
+            listOfExecutionSessions = new ArrayList<ExecutionSession>();
+
+        }
         for (ExecutionSession executionSession : listOfExecutionSessions) {
 
             if (executionSession.getMonitoringSession().getSessionID().equals(sessionID)) {
@@ -179,6 +274,11 @@ public class DEPExecutionEngine {
     }
 
     public static void actionExecutionFinished(String sessionID, String actionID) {
+        
+        if (listOfExecutionSessions == null) {
+            listOfExecutionSessions = new ArrayList<ExecutionSession>();
+
+        }
 
         for (ExecutionSession executionSession : listOfExecutionSessions) {
 
@@ -196,5 +296,32 @@ public class DEPExecutionEngine {
         }
 
     }
+    
+    public static void removeExecutionSession(String sessionID){
+        
+        int removedIndex = -1;
+        
+        if (listOfExecutionSessions == null) {
+            listOfExecutionSessions = new ArrayList<ExecutionSession>();
+
+        }
+        
+        for (ExecutionSession executionSession : listOfExecutionSessions) {
+
+            if (executionSession.getMonitoringSession().getSessionID().equals(sessionID)) {
+                removedIndex = listOfExecutionSessions.indexOf(executionSession);
+                
+            }
+
+        }
+        
+        if (removedIndex!=-1){
+            System.out.println("REMOVE EXECUTION SESSION !!!!!");
+            listOfExecutionSessions.remove(removedIndex);
+        }
+        
+        
+    }
+    
 
 }
