@@ -19,7 +19,8 @@
 		- download script to install depic service: wget http://128.130.172.215/salsa/upload/files/jun/artifact_sh/depic_install.sh 
 		- configure $DEPIC_IP in the second line of the above script (Depic needs a floating IP address, so monitoring/adjustment services can interact with Depic after their deployment): vi depic_install.sh
 		- grant execution permission for the script: sudo chmod 777 depic_install.sh
-		- execute the install script: sudo ./depic_install.sh
+		- execute the install script, use password 123 for phd admin: sudo ./depic_install.sh
+			
 
 	
 3. 	Generating Data Elasticity Management Process:ßß
@@ -36,11 +37,7 @@
 			- Monitoring Process: vi /home/ubuntu/log/monitorProcess.yml
 			- Adjustment Process: vi /home/ubuntu/log/listOfAdjustmentProcesses.yml 
 			- Resource Control Plan: vi /home/ubuntu/log/listOfResourceControlPlans.yml
-		- Data Quality: vi /home/ubuntu/log/edaas_quality.txt
-		- DEP execution time: vi /home/ubuntu/log/edaas_process_time.txt
-		- Number of VMs: vi vi /home/ubuntu/log/vm_log.txt
-		- DAFM time: vi /home/ubuntu/log/temp/start.txt
-			     vi /home/ubuntu/log/temp/end.txt	
+		
 
 
 4. 	Deployment of Monitoring/Adjustment Services:
@@ -53,20 +50,45 @@
 
 
 5. 	Operation
-	i. Download and compile Depic Client:  
-	ii. You should see the following displayed on the browsers:
+	i. Download and compile Depic Client:  https://github.com/tuwiendsg/EPICS/tree/master/utils/ElasticDaaSClient
+	ii. Start Data Analytic PLatform: run at.ac.tuwien.dsg.elasticdaasclient.demo.RestClientDAFM
+	iii. Start GPS Data Sensor: run at.ac.tuwien.dsg.elasticdaasclient.demo.RestClientDataSourceEmulator
+	iv. Start eDaaS client: run at.ac.tuwien.dsg.elasticdaasclient.demo.RestClientEDaaS
+ 
+	v. You should see the following displayed on the browsers:
 		c00 is running !
 		c01 is running !
 		c02 is running !
 		c03 is running !
 		c04 is running !
-	iii. Checking tomcat log to see the operation: tail -f /var/log/tomcat7/catalina.out
-	iv. Go to Comot - tab Elasticity Monitoring to see the scaling out/in of Adjustment/Monitoring services
-	v. Logging: you can check the following logs:
-		- execution time: /home/ubuntu/log/logClient_c0*.txt 
-		- number of used VM: /home/ubuntu/log/vm_log.xml
-
+	vi. Checking tomcat log to see the operation: tail -f /var/log/tomcat7/catalina.out
+	vii. Go to Comot - tab Elasticity Monitoring to see the scaling out/in of Adjustment/Monitoring services
+	viii. Logging: you can check the following logs:
+		- Data Quality: vi /home/ubuntu/log/edaas_quality.txt
+		- DEP execution time: vi /home/ubuntu/log/edaas_process_time.txt
+		- Number of VMs: vi vi /home/ubuntu/log/vm_log.txt
+		- DAFM time: vi /home/ubuntu/log/temp/start.txt
+			     vi /home/ubuntu/log/temp/end.txt	
 	
 
+6. 	Customization of EDaaS
+	i. Download source code of eDaaS at: http://128.130.172.214:8080/DepicTooling/edaasproject/edaas1.zip
+	
+
+7. 	Customization of DAF tasks:
+	i. note:
+		- Whenever we start Data Analytic Platform, this method is call to pass the daf to a workflow engine: at.ac.tuwien.dsg.depic.dataassetfunctionmanagement.DawResource.executeDataAssetFunction
+		- Any DAF should have the last task is an outputer. This outputer has to put an object of class DataAsset (https://github.com/tuwiendsg/EPICS/blob/master/depic/depic-common/src/main/java/at/ac/tuwien/dsg/depic/common/entity/eda/dataasset/DataAsset.java) into a REST interface http://localhost:8080/data-asset-loader/rest/dataasset/repo/storedataasset
+		- An example of outputer can be found here: https://github.com/tuwiendsg/EPICS/blob/master/utils/DAFServices/src/main/java/at/ac/tuwien/dsg/task/MySQLOutputer.java
 
 
+
+8. 	REST to query input specification
+	- get QoR
+	- get DAF
+	- get DEP
+
+9. 	REST to query Primitive Action
+	- get Monitoring Action
+	- get Adjustment Action
+	- get Resource Control Action

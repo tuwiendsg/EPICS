@@ -24,9 +24,7 @@ public class RestClientDAFM {
 
         RestClientDAFM client = new RestClientDAFM();
 
-        //client.startRunningDAFM("edaas1");
-        client.startGPSProducer();
-        
+        client.startRunningDAFM("edaas1");
         
      
     }
@@ -41,13 +39,5 @@ public class RestClientDAFM {
       
     }
     
-    private void startGPSProducer(){
-        
-        RestfulWSClient ws = new RestfulWSClient("http://128.130.172.214:8080/DAFServices/rest/daf/producer");
-        ws.callGetMethod();
-              
-        
-    }
-    
- 
+  
 }
