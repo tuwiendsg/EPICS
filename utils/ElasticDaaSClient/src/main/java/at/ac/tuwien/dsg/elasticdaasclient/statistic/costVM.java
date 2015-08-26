@@ -22,7 +22,7 @@ public class costVM {
         // TODO code application logic here
         
         
-        IOUtils iou = new IOUtils("/Volumes/DATA/Research/Cloud Computing/Experiment Result/5RS/81-100");
+        IOUtils iou = new IOUtils("/Volumes/DATA/Research/Cloud Computing/Experiment Result/round 3/81-100");
         String data1 = iou.readData("depic_monitor_5.xml");
         String data2 = iou.readData("vm_log.xml");
         System.out.println("");
@@ -54,6 +54,7 @@ public class costVM {
                 double executionTime = Double.valueOf(strs[executionTimeIndex]);
 
                 if (dataAssetID.equals(calculatedDataAssetID)) {
+                  //  System.out.println("index: " + vnIndex);
                     avgs.add(executionTime);
                     avgVM.add(Integer.parseInt(lines2[vnIndex]));
                 }

@@ -5,6 +5,7 @@
  */
 package at.ac.tuwien.dsg.elasticdaasclient.demo;
 
+import at.ac.tuwien.dsg.depic.common.entity.eda.dataasset.DataAsset;
 import at.ac.tuwien.dsg.depic.common.entity.runtime.ElasticService;
 import at.ac.tuwien.dsg.depic.common.utils.IOUtils;
 import at.ac.tuwien.dsg.edaas.requirement.ConsumerRequirement;
@@ -35,57 +36,83 @@ public class DaaSClient implements Runnable {
 
     @Override
     public void run() {
-      
 
-            String ip = "localhost";
-            // String ip="localhost";
-            String port = "8080";
-            String resource = "/eDaaS/rest/dataasset/request";
-            int velocity = 1;
-            int noOfDataAsset = 100;
+        String ip = "128.130.172.214";
+        // String ip="localhost";
+        String port = "8080";
+        String resource = "/eDaaS/rest/dataasset/request";
 
-            for (int i = 0; i < noOfDataAsset; i++) {
-                
-                long t1 = System.currentTimeMillis();
-                
-                DataAssetRequest dataAssetRequest = sampleDataAssetRequest("daf-gps-"+i);
-                try {
-                    String darequestXML = JAXBUtils.marshal(dataAssetRequest, DataAssetRequest.class);
+        String edaasname = "edaas1";
 
-                    RestfulWSClient ws = new RestfulWSClient(ip, port, resource);
-                    String noOfDataParititons = ws.callPutMethod(darequestXML);
-                    // noPars = Integer.parseInt(noOfDataParititons);
-                  //  System.out.println("Customer:" +threadName+ " - Data asset:" +i+ " - Number of Data Partitions: " + noOfDataParititons);
-                    
-                    
-                    
-                } catch (JAXBException ex) {
-                    Logger.getLogger(demo_0.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        DataAssetRequest dataAssetRequest = sampleDataAssetRequest(edaasname);
+        try {
+            String darequestXML = JAXBUtils.marshal(dataAssetRequest, DataAssetRequest.class);
 
-                try {
-                    Thread.sleep(velocity);
+            RestfulWSClient ws = new RestfulWSClient(ip, port, resource);
+            ws.callPutMethod(darequestXML);
 
-                } catch (InterruptedException ex) {
+        } catch (JAXBException ex) {
+            Logger.getLogger(RestClientEDaaS.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        do {
 
-                }
+            getLatestDataAsset();
+            
+            
+            try {
+                Thread.sleep(30000);
 
-                
-                long t2 = System.currentTimeMillis();
-                    
-                
-                String logMessage =System.currentTimeMillis() + "\t" + threadName+"\t"+ "daf-gps-"+i +"\t" + String.valueOf(t2-t1)+"\n" ;
-                
+            } catch (InterruptedException ex) {
+
+            }
+        } while (true);
+
+    }
+
+    private void getLatestDataAsset() {
+
+        String ip = "128.130.172.214";
+        // String ip="localhost";
+        String port = "8080";
+        String resource = "/eDaaS/rest/dataasset/get";
+        String edaasname = "edaas1";
+
+        long t1 = System.currentTimeMillis();
+        String dataAssetXML = "";
+
+        DataAssetRequest dataAssetRequest = sampleDataAssetRequest(edaasname);
+        try {
+            String darequestXML = JAXBUtils.marshal(dataAssetRequest, DataAssetRequest.class);
+
+            RestfulWSClient ws = new RestfulWSClient(ip, port, resource);
+            dataAssetXML = ws.callPutMethod(darequestXML);
+
+        } catch (JAXBException ex) {
+            Logger.getLogger(RestClientEDaaS.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        long t2 = System.currentTimeMillis();
+
+        if (!dataAssetXML.equals("")) {
+
+            try {
+                DataAsset da = JAXBUtils.unmarshal(dataAssetXML, DataAsset.class);
+                String logMessage = System.currentTimeMillis() + "\t" + threadName + "\t" + "window:" + da.getPartition() + "\t" + String.valueOf(t2 - t1) + "\n";
+
                 System.out.println(logMessage);
-                
-                IOUtils iou = new IOUtils();
-                iou.writeData(logMessage, "logClient_"+ threadName +".txt");
-                    
-                    
-                    
+            } catch (JAXBException ex) {
+                Logger.getLogger(DaaSClient.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-      
+//                
+//                IOUtils iou = new IOUtils("/Volumes/DATA/Temp");
+//                iou.writeData(logMessage, "logClient_"+ threadName +".txt");
+        } else {
+            System.out.println("WAITING");
+        }
+
     }
 
     public void start() {
@@ -98,8 +125,8 @@ public class DaaSClient implements Runnable {
     private DataAssetRequest sampleDataAssetRequest(String dataAssetID) {
 
         CostConstraint costConstraint = new CostConstraint(10, 10);
-        VehicleArcConstraint vehicleArcConstraint = new VehicleArcConstraint(90, 100);
-        SpeedArcConstraint speedArcConstraint = new SpeedArcConstraint(90, 100);
+        VehicleArcConstraint vehicleArcConstraint = new VehicleArcConstraint(81, 100);
+        SpeedArcConstraint speedArcConstraint = new SpeedArcConstraint(81, 100);
         DeliveryTimeConstraint deliveryTimeConstraint = new DeliveryTimeConstraint(0, 0.1);
 
         ConsumerRequirement consumerRequirement = new ConsumerRequirement();

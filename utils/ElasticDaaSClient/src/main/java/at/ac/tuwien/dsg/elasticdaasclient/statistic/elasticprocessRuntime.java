@@ -21,7 +21,7 @@ public class elasticprocessRuntime {
     public static void main(String[] args) {
         // TODO code application logic here
 
-        IOUtils iou = new IOUtils("/Volumes/DATA/Research/Cloud Computing/Experiment Result/5RS/81-100");
+        IOUtils iou = new IOUtils("/Volumes/DATA/Research/Cloud Computing/Experiment Result/round 3/61-100");
         String data = iou.readData("depic_monitor_5.xml");
         System.out.println("");
         String[] lines = data.split("\n");

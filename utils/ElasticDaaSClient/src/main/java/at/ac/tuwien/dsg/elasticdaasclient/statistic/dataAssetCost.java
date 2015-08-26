@@ -22,7 +22,7 @@ public class dataAssetCost {
         // TODO code application logic here
         
         
-        IOUtils iou = new IOUtils("/Volumes/DATA/Research/Cloud Computing/Experiment Result/5RS/61-100");
+        IOUtils iou = new IOUtils("/Volumes/DATA/Research/Cloud Computing/Experiment Result/round 3/61-100");
         String data = iou.readData("metricValues_5.csv");
         
         // index define
@@ -30,14 +30,18 @@ public class dataAssetCost {
         int speedAccuracyIndex = 1;
         int deliveryTimeIndex = 2;
         
-        // cost function define
         
-        double unitCost = 0.002;
+        
+        
+        // cost function define
+        int noOfUser = 5;
+        double unitCost = 0.0002;
+        double dataAnalyticsCost  = unitCost;
         // 2, 3, 5
         // 0.33, 0.33, 0.33
         
-        double vehicleAccuracyWeighFactor = 0.2;
-        double speedAccuracyWeightFactor = 0.3;
+        double vehicleAccuracyWeighFactor = 0.25;
+        double speedAccuracyWeightFactor = 0.25;
         double deliveryTimeWeightFactor = 0.5;
         double rangeUnit = 20;
         
@@ -83,16 +87,16 @@ public class dataAssetCost {
                 
                
                 if (deliveryTime<55000) {
-                    double deliveryTimeCost = unitCost*2*deliveryTimeWeightFactor;
+                    double deliveryTimeCost = (unitCost*2 + dataAnalyticsCost/noOfUser)*deliveryTimeWeightFactor;
                     totalCost = vehicleAccuracyCost + speedAccusracyCost + deliveryTimeCost;
                     
                 } else {
-                    double deliveryTimeCost = unitCost*1*deliveryTimeWeightFactor;
+                    double deliveryTimeCost = (unitCost*1 + dataAnalyticsCost/noOfUser)*deliveryTimeWeightFactor;
                     totalCost = vehicleAccuracyCost + speedAccusracyCost + deliveryTimeCost;
                 }
                 
                 
-                System.out.println(totalCost);
+                System.out.println(String.valueOf(totalCost));
                 
               
             }
