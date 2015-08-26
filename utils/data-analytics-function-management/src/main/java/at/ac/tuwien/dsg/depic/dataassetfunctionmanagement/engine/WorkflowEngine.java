@@ -16,11 +16,14 @@ import br.ufjf.taverna.core.TavernaClient;
 import br.ufjf.taverna.model.output.TavernaOutput;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 //import org.kie.internal.KnowledgeBase;
 //import org.kie.internal.builder.KnowledgeBuilder;
@@ -61,7 +64,17 @@ public class WorkflowEngine {
     public void startWFEngine() {
         
         IOUtils iou = new IOUtils(rootPath);
-        iou.writeData(daf.getDaw(), "daf_file_temp.t2flow");
+        
+        
+        String dawStr = "";
+        byte ptext[] = daf.getDaw().getBytes();
+        try {
+            dawStr = new String(ptext, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(WorkflowEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+        iou.writeData(dawStr, "daf_file_temp.t2flow");
 
         TavernaClient client = new TavernaClient();
 

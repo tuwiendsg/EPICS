@@ -72,11 +72,11 @@
 	vi. Checking tomcat log to see the operation: tail -f /var/log/tomcat7/catalina.out
 	vii. Go to Comot - tab Elasticity Monitoring to see the scaling out/in of Adjustment/Monitoring services
 	viii. Logging: you can check the following logs:
-		- Data Quality: vi /home/ubuntu/log/edaas_quality.txt
-		- DEP execution time: vi /home/ubuntu/log/edaas_process_time.txt
-		- Number of VMs: vi vi /home/ubuntu/log/vm_log.txt
-		- DAFM time: vi /home/ubuntu/log/temp/start.txt
-			     vi /home/ubuntu/log/temp/end.txt	
+		- Data Quality: vi /home/ubuntu/log/edaas_quality_*.txt ; data format (edaasName,customerID,dataAssetWindowID,vehicleAcr before applying DEP,vehicleAcr after applying DEP, speedAcr before applying DEP, speedAcr after applying DEP)
+		- DEP execution time: vi /home/ubuntu/log/edaas_processtime_*.txt; data format (edaasName, customerID,dataAssetWindowID,DEP execution time)
+		- Number of VMs: vi vi /home/ubuntu/log/vm_log.txt ; data format (number of VM every 10 seconds)
+		- DAFM time: vi /home/ubuntu/log/temp/dafStartTime.txt ;data format (dataAssetWindowID; startTime)
+			     vi /home/ubuntu/log/temp/dafEndTime.txt ;data format (dataAssetWindowID; endTime)
 	
 
 6. 	Customization of EDaaS
