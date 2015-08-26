@@ -75,7 +75,7 @@ public class QueueProducer implements Runnable{
             MessageProducer producer = session.createProducer(destination);
             producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
-            for (int fileName = 0; fileName < 1; fileName++) {
+            for (int fileName = 0; fileName < 96; fileName++) {
 
                 // String dataPath = "/Volumes/DATA/BigData/data/2014-09-10";
                 String dataPath = "/home/ubuntu/data/2014-09-10";

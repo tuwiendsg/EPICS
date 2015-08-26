@@ -37,7 +37,7 @@ public class DaaSClient implements Runnable {
     @Override
     public void run() {
 
-        String ip = "128.130.172.214";
+        String ip = "128.130.172.216";
         // String ip="localhost";
         String port = "8080";
         String resource = "/eDaaS/rest/dataasset/request";
@@ -73,7 +73,7 @@ public class DaaSClient implements Runnable {
 
     private void getLatestDataAsset() {
 
-        String ip = "128.130.172.214";
+        String ip = "128.130.172.216";
         // String ip="localhost";
         String port = "8080";
         String resource = "/eDaaS/rest/dataasset/get";

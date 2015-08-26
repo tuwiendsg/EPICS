@@ -8,7 +8,15 @@
 
 1. 	Purpose: 
 	
-	This document describes how to set up and run a demo of DEPIC - alpha version.ß
+	This document describes how to set up and run a demo of DEPIC
+	
+	Scenario: 
+		- DaaS provider has a real time GPS data source 
+		- The provider has a data analytic function to analyze data like this: https://github.com/tuwiendsg/EPICS/blob/master/depic/examples/demo/daf_gps_1.t2flow ; this daf can be viewed using Taverna Workbench (http://www.taverna.org.uk/download/workbench/)
+		- The provider wants to sell the data asset resulted from the daf to the customer with expected quality and performance written in QoR (https://github.com/tuwiendsg/EPICS/blob/master/depic/examples/demo/qor_xml.yml)
+		- The demo shows how to setup depic and use depic to generate data elasticity management process to ensure QoR for this data asset; how to retrieved data asset via eDaaS Client; and how to query input specification (qor, daf), generated data elasticity management process and primitive action.
+		
+	
 	
 2. 	Getting Started:
 	
@@ -20,7 +28,7 @@
 		- configure $DEPIC_IP in the second line of the above script (Depic needs a floating IP address, so monitoring/adjustment services can interact with Depic after their deployment): vi depic_install.sh
 		- grant execution permission for the script: sudo chmod 777 depic_install.sh
 		- execute the install script, use password 123 for phd admin: sudo ./depic_install.sh
-			
+	ii. Install iCOMOT and MOM		
 
 	
 3. 	Generating Data Elasticity Management Process:ßß
@@ -84,11 +92,12 @@
 
 
 8. 	REST to query input specification
-	- get QoR
-	- get DAF
-	- get DEP
+	- get QoR: PUT eDaaSName into /rest/dep/get/qor
+	- get DAF: PUT eDaaSName into /rest/dep/get/daf
+	- get DEP: PUT eDaaSName into /rest/dep/get/dep
+
 
 9. 	REST to query Primitive Action
-	- get Monitoring Action
-	- get Adjustment Action
-	- get Resource Control Action
+	- get Monitoring Action: PUT actionName into /rest/pam/get/monitoringaction
+	- get Adjustment Action: PUT actionName into rest/pam/get/adjustmentaction
+	- get Resource Control Action: PUT actionName into /rest/pam/get/resourcecontrolaction

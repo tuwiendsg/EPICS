@@ -34,7 +34,7 @@ public class RestClientEDaaS {
         // TODO code application logic here
 
         
-        int noOfDaaSConsumers =2;
+        int noOfDaaSConsumers =1;
         
         String str="";
         

@@ -71,8 +71,8 @@ public class DawResource {
     @Produces("application/xml")
     public String executeDataAssetFunction(String dafXML) {
 
-        Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "DAFM STARTING ...");
-       
+        Logger.getLogger(DawResource.class.getName()).log(Level.INFO, "DAFM STARTING ..." + dafXML);
+        
         DataAnalyticsFunction daf = null;
         
         try {

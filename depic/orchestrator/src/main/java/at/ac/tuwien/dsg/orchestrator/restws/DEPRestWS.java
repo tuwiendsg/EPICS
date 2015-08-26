@@ -48,6 +48,48 @@ public class DEPRestWS {
     public DEPRestWS() {
     }
     
+    @PUT
+    @Path("get/qor")
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_XML)
+    public String getQoR(String daasName) {
+
+        System.out.println("DaaS Name: " + daasName);
+        ElasticProcessRepositoryManager eprm = new ElasticProcessRepositoryManager(
+                getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+        String qorStr = eprm.getQoR(daasName);
+
+        return qorStr;
+    }
+    
+    @PUT
+    @Path("get/daf")
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_XML)
+    public String getDAF(String daasName) {
+
+        System.out.println("DaaS Name: " + daasName);
+        ElasticProcessRepositoryManager eprm = new ElasticProcessRepositoryManager(
+                getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+        String dafStr = eprm.getDAF(daasName);
+
+        return dafStr;
+    }
+    
+    @PUT
+    @Path("get/dep")
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_XML)
+    public String getDEP(String daasName) {
+
+        System.out.println("DaaS Name: " + daasName);
+        ElasticProcessRepositoryManager eprm = new ElasticProcessRepositoryManager(
+                getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+        String depStr = eprm.getElasticityProcesses(daasName);
+
+        return depStr;
+    }
+    
     
     @PUT
     @Path("submit/daas")
