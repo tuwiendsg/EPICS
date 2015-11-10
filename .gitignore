@@ -25,3 +25,7 @@
 /external-services/taverna-java-client-master/TavernaClient/nbproject/private/
 /utils/ElasticDaaSClient/target/
 /utils/DAFServices/target/
+
+
+.DS_Store
+/depic/examples/GPSAnalytics/target/
