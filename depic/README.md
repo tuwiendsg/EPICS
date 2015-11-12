@@ -1,9 +1,10 @@
-# DEPIC
-Data Elasticity Programming in the Cloud
+DEPIC - Data Elasticity Programming in the Cloud
 =====
 
-Application as examples: [GPSAnalytics](https://github.com/tuwiendsg/EPICS/tree/master/depic/examples/applications/GPSAnalytics)
-
+### Application as examples:
+ - [GPSAnalytics](https://github.com/tuwiendsg/EPICS/tree/master/depic/examples/applications/GPSAnalytics)
+ - DataPlay
+ 
 ### Main flow of DEPIC:
 
 #### Step 1: Generate the elastic processes and the eDaaS
@@ -44,8 +45,8 @@ An example of process is in the [output folder](https://github.com/tuwiendsg/EPI
       value: 2
   ```
 2. The primitive action gets, enriches and provides data via the [DataAssetLoader](https://github.com/tuwiendsg/EPICS/blob/master/depic/data-asset-loader/src/main/java/at/ac/tuwien/dsg/dataassetloader/restws/DataassetResource.java). The procedure include steps:
-  1. API *repo/datacopy*: Clone a copy of the data from the table *DataAsset* to the table *ProcessingDataAsset*
-  2. API *repo/getpartition*: Load the cloned data and enrich it.
-  3. API *repo/savepartition*: Save the enriched data back *ProcessingDataAsset* 
-  4. When the elastic process execution is done, the data is send back to customer
+  1. API [repo/datacopy](https://github.com/tuwiendsg/EPICS/blob/master/depic/data-asset-loader/src/main/java/at/ac/tuwien/dsg/dataassetloader/restws/DataassetResource.java#L107-L111): Clone a copy of the data from the table *DataAsset* to the table *ProcessingDataAsset*
+  2. API [repo/getpartition](https://github.com/tuwiendsg/EPICS/blob/master/depic/data-asset-loader/src/main/java/at/ac/tuwien/dsg/dataassetloader/restws/DataassetResource.java#L287-L290): Load the cloned data and enrich it.
+  3. API [repo/savepartition](https://github.com/tuwiendsg/EPICS/blob/master/depic/data-asset-loader/src/main/java/at/ac/tuwien/dsg/dataassetloader/restws/DataassetResource.java#L340-L343): Save the enriched data back *ProcessingDataAsset* 
+  4. When the elastic process execution is done, the data is send back to customer.
 
