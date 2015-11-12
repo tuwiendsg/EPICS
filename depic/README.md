@@ -11,7 +11,7 @@ DEPIC - Data Elasticity Programming in the Cloud
 
 1. DaaS provider submits [DAF, QoR and PrimitiveActions](https://github.com/tuwiendsg/EPICS/tree/master/depic/examples/applications/GPSAnalytics/experiment1/case1/inputs). Based on that, the [Generator](https://github.com/tuwiendsg/EPICS/blob/master/depic/depic-tooling/src/main/java/at/ac/tuwien/dsg/depic/depictool/generator/Generator.java) executes the generation algorithm. 
 
-2. The [ElasticProcessGenerator](https://github.com/tuwiendsg/EPICS/tree/master/depic/depic-elastic-process-generator/src/main/java/at/ac/tuwien/dsg/depic/elastic/process/generator) 
+2. The [ElasticProcessGenerator](https://github.com/tuwiendsg/EPICS/blob/master/depic/depic-elastic-process-generator/src/main/java/at/ac/tuwien/dsg/depic/elastic/process/generator/ElasticProcessesGenerator.java#L83-L104) 
 generates a [DataElasticityManagementProcess](https://github.com/tuwiendsg/EPICS/blob/master/depic/depic-common/src/main/java/at/ac/tuwien/dsg/depic/common/entity/eda/elasticprocess/DataElasticityManagementProcess.java).
 An example of process is in the [output folder](https://github.com/tuwiendsg/EPICS/tree/master/depic/examples/applications/GPSAnalytics/experiment1/case1/output)
 
@@ -23,7 +23,7 @@ An example of process is in the [output folder](https://github.com/tuwiendsg/EPI
 
 1. The eDaaS is now running. When receiving a request from a customer, the eDaaS calls the "DataAssetRequestHandler.java" (see in project.zip). It activate the [DataElasticityMonitor](https://github.com/tuwiendsg/EPICS/blob/aa2521dfc706861752b11cf48ee3563e63452a9b/depic/orchestrator/src/main/java/at/ac/tuwien/dsg/orchestrator/dataelasticitycontroller/DataElasticityMonitor.java)
 
-  According to the [Elastic Process](https://github.com/tuwiendsg/EPICS/blob/master/depic/examples/applications/GPSAnalytics/experiment1/case1/output/elastic_process.yml), DEPIC will check the list of the data column in the *listOfParameters*. For example, the parameters belows are *longtitudeIndex, latitude and speedIndex*:
+  According to the [Elastic Process](https://github.com/tuwiendsg/EPICS/blob/master/depic/examples/applications/GPSAnalytics/experiment1/case1/output/elastic_process.yml#L192-L210), DEPIC will check the list of the data column in the *listOfParameters*. For example, the parameters belows are *longtitudeIndex, latitude and speedIndex*:
   ```yaml
    estimatedResult: 
       conditionID: vehicleArc_c1
