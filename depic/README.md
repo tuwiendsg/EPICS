@@ -22,7 +22,7 @@ An example of process is in the [output folder](https://github.com/tuwiendsg/EPI
 
 1. The eDaaS is now running. When receiving a request from a customer, the eDaaS calls the "DataAssetRequestHandler.java" (see in project.zip). It activate the [DataElasticityMonitor](https://github.com/tuwiendsg/EPICS/blob/aa2521dfc706861752b11cf48ee3563e63452a9b/depic/orchestrator/src/main/java/at/ac/tuwien/dsg/orchestrator/dataelasticitycontroller/DataElasticityMonitor.java)
 
-⋅⋅⋅According to the [Elastic Process](https://github.com/tuwiendsg/EPICS/blob/master/depic/examples/experiment1/case1/output/elastic_process.yml), DEPIC will check the list of the data column in the *listOfParameters*. For example, the parameters belows are *longtitudeIndex, latitude and speedIndex*:
+  According to the [Elastic Process](https://github.com/tuwiendsg/EPICS/blob/master/depic/examples/experiment1/case1/output/elastic_process.yml), DEPIC will check the list of the data column in the *listOfParameters*. For example, the parameters belows are *longtitudeIndex, latitude and speedIndex*:
 ```yaml
 estimatedResult: 
             conditionID: vehicleArc_c1
@@ -44,8 +44,8 @@ estimatedResult:
             value: 2
 ```
 2. The primitive action gets, enriches and provides data via the [DataAssetLoader](https://github.com/tuwiendsg/EPICS/blob/master/depic/data-asset-loader/src/main/java/at/ac/tuwien/dsg/dataassetloader/restws/DataassetResource.java). The procedure include steps:
-⋅⋅1. API *repo/datacopy*: Clone a copy of the data from the table *DataAsset* to the table *ProcessingDataAsset*
-⋅⋅2. API *repo/getpartition*: Load the cloned data and enrich it.
-⋅⋅3. API *repo/savepartition*: Save the enriched data back *ProcessingDataAsset* 
-⋅⋅4. When the elastic process execution is done, the data is send back to customer
+  1. API *repo/datacopy*: Clone a copy of the data from the table *DataAsset* to the table *ProcessingDataAsset*
+  2. API *repo/getpartition*: Load the cloned data and enrich it.
+  3. API *repo/savepartition*: Save the enriched data back *ProcessingDataAsset* 
+  4. When the elastic process execution is done, the data is send back to customer
 
