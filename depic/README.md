@@ -17,7 +17,9 @@ An example of process is in the [output folder](https://github.com/tuwiendsg/EPI
 
 3. The [DaaSGenerator](https://github.com/tuwiendsg/EPICS/blob/master/depic/depic-tooling/src/main/java/at/ac/tuwien/dsg/depic/depictool/generator/DaaSGenerator.java) generates the eDaaS based on the [eDaaS Template](https://github.com/tuwiendsg/EPICS/tree/master/depic/depic-tooling/src/main/resources)
 
-4. The **[?]** deploy the eDaaS, primitive actions, control processes and monitoring processes.
+4. The [generated eDaaS artifact](http://128.130.172.214:8080/DepicTooling/edaasproject/edaas1.zip) is deployed manually. The primitive actions, control processes and monitoring processes are deployed via the [COMOT connector](https://github.com/tuwiendsg/EPICS/blob/master/depic/depic-tooling/src/main/java/at/ac/tuwien/dsg/depic/depictool/connector/ComotConnector.java)
+
+5. The [ElasticDaaSClient](https://github.com/tuwiendsg/EPICS/tree/master/depic/examples/utils/ElasticDaaSClient) is used to simulate a number of users to request the eDaaS. [The example of calling REST is here](https://github.com/tuwiendsg/EPICS/blob/master/depic/examples/utils/ElasticDaaSClient/src/main/java/at/ac/tuwien/dsg/elasticdaasclient/demo/RestClientEDaaS.java).
 
 #### Step 2: Provide elastic data asset
 
@@ -48,5 +50,4 @@ An example of process is in the [output folder](https://github.com/tuwiendsg/EPI
   1. API [repo/datacopy](https://github.com/tuwiendsg/EPICS/blob/master/depic/data-asset-loader/src/main/java/at/ac/tuwien/dsg/dataassetloader/restws/DataassetResource.java#L107-L111): Clone a copy of the data from the table *DataAsset* to the table *ProcessingDataAsset*
   2. API [repo/getpartition](https://github.com/tuwiendsg/EPICS/blob/master/depic/data-asset-loader/src/main/java/at/ac/tuwien/dsg/dataassetloader/restws/DataassetResource.java#L287-L290): Load the cloned data and enrich it.
   3. API [repo/savepartition](https://github.com/tuwiendsg/EPICS/blob/master/depic/data-asset-loader/src/main/java/at/ac/tuwien/dsg/dataassetloader/restws/DataassetResource.java#L340-L343): Save the enriched data back *ProcessingDataAsset* 
-  4. When the elastic process execution is done, the data is send back to customer.
 
