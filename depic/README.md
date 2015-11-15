@@ -19,8 +19,6 @@ An example of process is in the [output folder](https://github.com/tuwiendsg/EPI
 
 4. The [generated eDaaS artifact](http://128.130.172.214:8080/DepicTooling/edaasproject/edaas1.zip) is deployed manually. The primitive actions, control processes and monitoring processes are deployed via the [COMOT connector](https://github.com/tuwiendsg/EPICS/blob/master/depic/depic-tooling/src/main/java/at/ac/tuwien/dsg/depic/depictool/connector/ComotConnector.java)
 
-5. The [ElasticDaaSClient](https://github.com/tuwiendsg/EPICS/tree/master/depic/examples/utils/ElasticDaaSClient) is used to simulate a number of users to request the eDaaS. User can configure the IP of the eDaaS in the [DaaSClient](https://github.com/tuwiendsg/EPICS/blob/master/depic/examples/utils/ElasticDaaSClient/src/main/java/at/ac/tuwien/dsg/elasticdaasclient/demo/DaaSClient.java), then run [the example of calling REST is here](https://github.com/tuwiendsg/EPICS/blob/master/depic/examples/utils/ElasticDaaSClient/src/main/java/at/ac/tuwien/dsg/elasticdaasclient/demo/RestClientEDaaS.java)
-
 #### Step 2: Provide elastic data asset
 
 1. The eDaaS is now running. When receiving a request from a customer, the eDaaS calls the "DataAssetRequestHandler.java" (see in project.zip). It activate the [DataElasticityMonitor](https://github.com/tuwiendsg/EPICS/blob/aa2521dfc706861752b11cf48ee3563e63452a9b/depic/orchestrator/src/main/java/at/ac/tuwien/dsg/orchestrator/dataelasticitycontroller/DataElasticityMonitor.java)
@@ -50,4 +48,6 @@ An example of process is in the [output folder](https://github.com/tuwiendsg/EPI
   1. API [repo/datacopy](https://github.com/tuwiendsg/EPICS/blob/master/depic/data-asset-loader/src/main/java/at/ac/tuwien/dsg/dataassetloader/restws/DataassetResource.java#L107-L111): Clone a copy of the data from the table *DataAsset* to the table *ProcessingDataAsset*
   2. API [repo/getpartition](https://github.com/tuwiendsg/EPICS/blob/master/depic/data-asset-loader/src/main/java/at/ac/tuwien/dsg/dataassetloader/restws/DataassetResource.java#L287-L290): Load the cloned data and enrich it.
   3. API [repo/savepartition](https://github.com/tuwiendsg/EPICS/blob/master/depic/data-asset-loader/src/main/java/at/ac/tuwien/dsg/dataassetloader/restws/DataassetResource.java#L340-L343): Save the enriched data back *ProcessingDataAsset* 
+
+3. The [ElasticDaaSClient](https://github.com/tuwiendsg/EPICS/tree/master/depic/examples/utils/ElasticDaaSClient) is used to simulate a number of users to request the eDaaS. User can configure the IP of the eDaaS in the [DaaSClient](https://github.com/tuwiendsg/EPICS/blob/master/depic/examples/utils/ElasticDaaSClient/src/main/java/at/ac/tuwien/dsg/elasticdaasclient/demo/DaaSClient.java), then run [the example of calling REST is here](https://github.com/tuwiendsg/EPICS/blob/master/depic/examples/utils/ElasticDaaSClient/src/main/java/at/ac/tuwien/dsg/elasticdaasclient/demo/RestClientEDaaS.java)
 
