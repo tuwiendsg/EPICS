@@ -19,7 +19,7 @@ An example of process is in the [output folder](https://github.com/tuwiendsg/EPI
 
 4. The [generated eDaaS artifact](http://128.130.172.214:8080/DepicTooling/edaasproject/edaas1.zip) is deployed manually. The primitive actions, control processes and monitoring processes are deployed via the [COMOT connector](https://github.com/tuwiendsg/EPICS/blob/master/depic/depic-tooling/src/main/java/at/ac/tuwien/dsg/depic/depictool/connector/ComotConnector.java)
 
-5. The [ElasticDaaSClient](https://github.com/tuwiendsg/EPICS/tree/master/depic/examples/utils/ElasticDaaSClient) is used to simulate a number of users to request the eDaaS. [The example of calling REST is here](https://github.com/tuwiendsg/EPICS/blob/master/depic/examples/utils/ElasticDaaSClient/src/main/java/at/ac/tuwien/dsg/elasticdaasclient/demo/RestClientEDaaS.java).
+5. The [ElasticDaaSClient](https://github.com/tuwiendsg/EPICS/tree/master/depic/examples/utils/ElasticDaaSClient) is used to simulate a number of users to request the eDaaS. User can configure the IP of the eDaaS in the [DaaSClient](https://github.com/tuwiendsg/EPICS/blob/master/depic/examples/utils/ElasticDaaSClient/src/main/java/at/ac/tuwien/dsg/elasticdaasclient/demo/DaaSClient.java), then run [the example of calling REST is here](https://github.com/tuwiendsg/EPICS/blob/master/depic/examples/utils/ElasticDaaSClient/src/main/java/at/ac/tuwien/dsg/elasticdaasclient/demo/RestClientEDaaS.java)
 
 #### Step 2: Provide elastic data asset
 
