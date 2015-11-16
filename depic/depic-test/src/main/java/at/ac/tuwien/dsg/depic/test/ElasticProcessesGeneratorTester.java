@@ -79,7 +79,7 @@ public class ElasticProcessesGeneratorTester {
         
         String primitiveAction_str = iou.readData(primitiveActionMetadataFile);;
 
-        DataAnalyticsFunction daf = new DataAnalyticsFunction("daf-gps", DataAssetForm.CSV, DBType.CASSANDRA_NEAR_REAL_TIME, daf_str);
+        DataAnalyticsFunction daf = new DataAnalyticsFunction("daf-gps", DataAssetForm.CSV, DBType.MYSQL, daf_str);
         QoRModel qor = YamlUtils.unmarshallYaml(QoRModel.class, qor_str);
         
         System.out.println("QOR Access Form: "  + qor.getDataAssetForm().toString());

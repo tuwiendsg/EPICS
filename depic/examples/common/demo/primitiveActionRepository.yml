@@ -246,7 +246,7 @@ listOfMonitoringActions:
 listOfResourceControls: 
 - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlAction
    associatedQoRMetric: throughput
-   listOfResourceControlStrategies: 
+   listOfResourceControlCases: 
    - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlCase
       estimatedResult: 
          conditionID: throughput_c1
@@ -328,7 +328,7 @@ listOfResourceControls:
             upperBound: 100.0
 - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlAction
    associatedQoRMetric: deliveryTime
-   listOfResourceControlStrategies: 
+   listOfResourceControlCases: 
    - !at.ac.tuwien.dsg.depic.common.entity.primitiveaction.ResourceControlCase
       estimatedResult: 
          conditionID: deliveryTime_c1
