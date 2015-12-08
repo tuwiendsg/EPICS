@@ -1,5 +1,6 @@
 DEPIC - Data Elasticity Programming in the Cloud
 =====
+Contact: truong@dsg.tuwien.ac.at
 
 ### Application as examples:
  - [GPSAnalytics](https://github.com/tuwiendsg/EPICS/tree/master/depic/examples/applications/GPSAnalytics)
